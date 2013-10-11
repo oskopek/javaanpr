@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<comment>Global configuration file for Automatic Number Plate
+		Recognition System</comment>
+
+	<!-- PHOTO -->
+
+	<!-- thresholding mode 0 - plain thresholding N - adaptive thresholding 
+		with radius N (must be greater or equal than 1) -->
+	<entry key="photo_adaptivethresholdingradius">7</entry> <!-- thresholding mode -->
+
+	<!-- SKEW DETECTION -->
+
+	<!-- skew detection 0 - disable 1 - enable -->
+	<entry key="intelligence_skewdetection">0</entry> <!-- skew detection -->
+
+
+	<!-- PLATE CANDIDATES SEARCH -->
+
+	<entry key="intelligence_numberOfBands">3</entry> <!-- how many bands from image should be extracted from image vertical graph -->
+	<entry key="intelligence_numberOfPlates">3</entry> <!-- how many plates from band should be extracted from band horizontal graph -->
+	<entry key="intelligence_numberOfChars">20</entry> <!-- maximum number of chars extracted from plate's horizontal graph -->
+
+	<!-- PLATE HEURISTICS (DETERMINES CONSTRAINTS FOR PLATE ACCEPTANCE) -->
+
+	<entry key="intelligence_minimumChars">5</entry> <!-- minimum number of detected characters -->
+	<entry key="intelligence_maximumChars">15</entry> <!-- maximum number of detected characters -->
+	<entry key="intelligence_maxCharWidthDispersion">0.5</entry> <!-- maximum character width dispersion -->
+	<entry key="intelligence_minPlateWidthHeightRatio">0.5</entry> <!-- plate proportions: minimum plate width/height ratio -->
+	<entry key="intelligence_maxPlateWidthHeightRatio">15.0</entry> <!-- plate proportions: maximum plate width/height ratio -->
+
+	<!-- CHARACTER HEURISTICS (DETERMINES CONSTRAINTS FOR CHARACTERS ACCEPTANCE) -->
+
+	<entry key="intelligence_minCharWidthHeightRatio">0.1</entry> <!-- char proportions: minimum char width/height ratio -->
+	<entry key="intelligence_maxCharWidthHeightRatio">0.92</entry> <!-- char proportions: maximum char width/height ratio -->
+	<entry key="intelligence_maxBrightnessCostDispersion">0.161</entry> <!-- maximum character brightness difference (from other chars) -->
+	<entry key="intelligence_maxContrastCostDispersion">0.1</entry> <!-- maximum character contrast difference (from other chars) -->
+	<entry key="intelligence_maxHueCostDispersion">0.145</entry> <!-- maximum character hue difference (from other chars) -->
+	<entry key="intelligence_maxSaturationCostDispersion">0.24</entry> <!-- maximum character saturation difference (from other chars) -->
+	<entry key="intelligence_maxHeightCostDispersion">0.2</entry> <!-- maximum character height difference (from other chars) -->
+	<entry key="intelligence_maxSimilarityCostDispersion">100.0</entry> <!-- maximum character cost (recognition process) -->
+
+	<!-- CHARACTER NORMALIZATION, FEATURE EXTRACTION AND RECOGNITION MODES -->
+
+	<entry key="char_normalizeddimensions_x">8</entry> <!-- normalized character width (downsampled) -->
+	<entry key="char_normalizeddimensions_y">13</entry> <!-- normalized character height (downsampled) -->
+
+	<!-- path to directory containing already normalized characters. Dimensions 
+		of these characters must match with normalized characters width and height -->
+	<entry key="char_learnAlphabetPath">/alphabets/alphabet_8x13</entry>
+
+	<!-- character downsampling methods 0 - linear resampling (good for preserving 
+		edges (edge detection)) 1 - weighted average (good for direct pixel mapping) -->
+	<entry key="char_resizeMethod">1</entry> <!-- character downsampling method -->
+
+	<!-- feature extraction method 0 - direct pixel mapping (good for blurred 
+		characters) 1 - edge detection (good for skewed/deformed characters) -->
+	<entry key="char_featuresExtractionMethod">0</entry> <!-- feature extraction method. 0=map, 1=edge -->
+
+	<!-- pattern classification methods 0 - euclidean distance pattern matching 
+		1 - feedforward neural network -->
+	<entry key="intelligence_classification_method">0</entry> <!-- classification method. 0=euclidean distance pattern mathing, 1=neural 
+		network -->
+
+	<!-- NEURAL NETWORK LEARNING PARAMETERS -->
+
+	<entry key="char_neuralNetworkPath">/neuralnetworks/network_avgres_813_map.xml</entry> <!-- neural network topology file (caution : dimensions must match with selected 
+		extraction method) -->
+	<entry key="neural_maxk">8000</entry> <!-- maximum number of iterations during learning process -->
+	<entry key="neural_eps">0.07</entry> <!-- expected error ratio -->
+	<entry key="neural_lambda">0.05</entry> <!-- lambda factor : speed of convergence -->
+	<entry key="neural_micro">0.5</entry> <!-- micro factor : persistance ratio -->
+	<entry key="neural_topology">20</entry> <!-- number of neurons in middle nn layer -->
+
+	<!-- SYNTAX ANALYSIS OF RECOGNIZED PLATE -->
+
+	<!-- syntax analysis mode : 0 - do not correct 1 - correct characters only 
+		if character count matchs 2 - correct characters anyway (eliminate redundant 
+		characters) -->
+	<entry key="intelligence_syntaxanalysis">2</entry> <!-- syntax analysis mode -->
+	<entry key="intelligence_syntaxDescriptionFile">/syntax/syntax.xml</entry>
+
+	<!-- CAR SNAPSHOT, BAND, PLATE GRAPH ANALYSIS -->
+
+	<entry key="carsnapshot_graphrankfilter">9</entry>
+	<entry key="carsnapshot_distributormargins">25</entry>
+	<entry key="carsnapshotgraph_peakDiffMultiplicationConstant">0.1</entry>
+	<entry key="carsnapshotgraph_peakfootconstant">0.55</entry>
+
+	<entry key="bandgraph_peakDiffMultiplicationConstant">0.2</entry>
+	<entry key="bandgraph_peakfootconstant">0.55</entry>
+
+	<entry key="platehorizontalgraph_detectionType">1</entry> <!-- 1=edge detection 0=magnitude derivate -->
+	<entry key="platehorizontalgraph_peakfootconstant">0.05</entry>
+	<entry key="plateverticalgraph_peakfootconstant">0.42</entry>
+	<entry key="plategraph_rel_minpeaksize">0.86</entry>
+	<entry key="plategraph_peakfootconstant">0.7</entry>
+
+</properties>

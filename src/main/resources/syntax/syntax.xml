@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="iso-8859-2"?>
+<structure>
+
+	<type name="germany">
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+		<char content="0123456789" />
+		<char content="0123456789" />
+		<char content="0123456789" />
+	</type>
+
+	<type name="slovensko_nova">
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+	</type>
+
+	<type name="ceskoslovenska_novsia">
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+	</type>
+
+	<type name="ceskoslovenska_starsia">
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+		<char content="abcdefghijklmno0pqrstuvwxyz" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+	</type>
+
+	<type name="ceska_nova">
+		<char content="o0123456789" />
+		<char content="cbkhltmepasujz" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+		<char content="o0123456789" />
+	</type>
+
+</structure>

@@ -1,0 +1,128 @@
+body {
+	font-family: arial;
+	font-size: 12px;
+	margin: 20px;
+}
+
+img {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #000000;
+}
+
+img.platesmall,img.bandsmall {
+	display: block;
+}
+
+h4 {
+	display: inline;
+}
+
+h2 {
+	width: 100%;
+	border: 0px;
+	border-bottom: 1px;
+	border-style: solid;
+	text-align: right;
+	clear: left;
+}
+
+h2:first-letter {
+	font-size: 25px;
+}
+
+div.platetxt span,div.bandtxt span {
+	display: block;
+	margin-bottom: 5px;
+}
+
+div.platetxt {
+	border-width: 1px;
+	border-color: #aaaaaa;
+	border-style: solid;
+	background-color: #eeeeee;
+	padding: 4px;
+	margin: 4px 3px 4px 0px;
+	width: auto;
+	float: left;
+}
+
+div.bandtxt {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #999999;
+	background-color: #dddddd;
+	padding: 4px;
+	margin: 4px 3px 4px 0px;
+	width: auto;
+	clear: left;
+	float: left;
+}
+
+img.band,img.bandgraph,img.plate,img.plategraph {
+	margin-top: 1px;
+	display: block;
+}
+
+span {
+	display: block;
+}
+
+span.recognized {
+	margin-top: 40px;
+	font-size: 25px;
+	font-weight: bold;
+	clear: left;
+}
+
+span.errflags {
+	background-color: red;
+	width: auto;
+	color: #fff;
+	text-align: center;
+	word-spacing: 5px;
+}
+
+div.heuristictable {
+	clear: left;
+	padding: 0px;
+	padding-top: 5px;
+	margin: 0px;
+}
+
+div.heuristictable img {
+	clear: left;
+	float: left;
+}
+
+div.heuristictable span {
+	display: block;
+	float: left;
+	font-size: inherit;
+	margin: 0px;
+	padding: 0px;
+	border-style: solid;
+	border-width: 1px 0px 1px 0px;
+	border-color: #999;
+}
+
+div.charsegment {
+	margin-bottom: 20px;
+}
+
+div.heuristictable span.name {
+	color: #000000;
+	width: 35px;
+	text-align: center;
+	border-style: solid;
+	background-color: #ddd;
+}
+
+div.heuristictable span.value {
+	width: 85px;
+}
+
+img.skeleton {
+	position: relative;
+	top: -5px;
+}
