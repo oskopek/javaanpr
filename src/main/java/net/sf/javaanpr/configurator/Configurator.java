@@ -323,7 +323,16 @@ public class Configurator {
 	}
 	
 	public static Configurator getConfigurator() {
-	    return Configurator.configurator;
+		if(configurator==null) {
+			try {
+				configurator = new Configurator();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
+	    return configurator;
 	}
 
 }
