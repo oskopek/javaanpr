@@ -82,10 +82,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 
 
-import javax.xml.parsers.ParserConfigurationException;
-
-
-
 import net.sf.javaanpr.Main;
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
@@ -95,7 +91,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 public class Parser {
 	public class PlateForm {
@@ -156,22 +151,36 @@ public class Parser {
 	Vector<PlateForm> plateForms;
 
 	/** Creates a new instance of Parser */
-	public Parser() throws Exception {
+	public Parser() {
 		plateForms = new Vector<PlateForm>();
 		
-		String fileName = Intelligence.configurator
+		String fileName = Configurator.getConfigurator()
                 .getPathProperty("intelligence_syntaxDescriptionFile");
-		fileName = Configurator.getConfigurator().correctFilepath(fileName);
+		InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
 		
-		plateForms = loadFromXml(getClass().getResourceAsStream(fileName));
+		plateForms = loadFromXml(inStream);
 	}
 
-	public Vector<PlateForm> loadFromXml(String fileName) throws Exception {
+	/**
+	 * Returns null if couldn't load file
+	 * 
+	 * @param fileName
+	 * 
+	 * @return
+	 */
+	public Vector<PlateForm> loadFromXml(String fileName) {
 		Vector<PlateForm> plateForms = new Vector<PlateForm>();
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder parser = factory.newDocumentBuilder();
-		Document doc = parser.parse(fileName);
+		
+		Document doc = null;
+		try {
+			DocumentBuilder parser = factory.newDocumentBuilder();
+			doc = parser.parse(fileName);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		Node structureNode = doc.getDocumentElement();
 		NodeList structureNodeContent = structureNode.getChildNodes();
@@ -197,12 +206,19 @@ public class Parser {
 		return plateForms;
 	}
 	
-	public Vector<PlateForm> loadFromXml(InputStream fileName) throws ParserConfigurationException, SAXException, IOException {
+	public Vector<PlateForm> loadFromXml(InputStream inStream) {
         Vector<PlateForm> plateForms = new Vector<PlateForm>();
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder parser = factory.newDocumentBuilder();
-        Document doc = parser.parse(fileName);
+        
+        Document doc = null;
+        
+        try {
+        	DocumentBuilder parser = factory.newDocumentBuilder();
+        	doc = parser.parse(inStream);
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
 
         Node structureNode = doc.getDocumentElement();
         NodeList structureNodeContent = structureNode.getChildNodes();

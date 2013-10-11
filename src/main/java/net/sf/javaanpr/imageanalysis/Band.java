@@ -73,22 +73,17 @@ import java.awt.image.Kernel;
 //import java.io.IOException;
 import java.util.Vector;
 
-import net.sf.javaanpr.intelligence.Intelligence;
+import net.sf.javaanpr.configurator.Configurator;
 
 //import net.sf.javaanpr.configurator.Configurator;
 
 public class Band extends Photo {
 	static public Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(
 			0, 0, 25, 25);
-	static private int numberOfCandidates = Intelligence.configurator
+	static private int numberOfCandidates = Configurator.getConfigurator()
 			.getIntProperty("intelligence_numberOfPlates");
 
 	private BandGraph graphHandle = null;
-
-	/** Creates a new instance of Band */
-	public Band() {
-		image = null;
-	}
 
 	public Band(BufferedImage bi) {
 		super(bi);

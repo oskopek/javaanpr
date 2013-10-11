@@ -84,21 +84,12 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import net.sf.javaanpr.configurator.Configurator;
-import net.sf.javaanpr.intelligence.Intelligence;
 
-public class Photo {
+public class Photo implements AutoCloseable {
     public BufferedImage image;
-
-    public Photo() {
-        image = null;
-    }
 
     public Photo(BufferedImage bi) {
         image = bi;
-    }
-
-    public Photo(String filepath) throws IOException {
-        loadImage(filepath);
     }
 
     public Photo(InputStream is) throws IOException {
@@ -203,42 +194,12 @@ public class Photo {
         return Photo.getHue(image, x, y);
     }
 
-    public void loadImage(String filename) throws IOException {
-        String correctedFilepath = Configurator.getConfigurator()
-                .correctFilepath(filename);
-
-        BufferedImage image = null;
-
-        if (correctedFilepath == null) {
-            File f = new File(filename);
-
-            image = ImageIO.read(f);
-        } else {
-
-            InputStream imageIn = getClass().getResourceAsStream(
-                    correctedFilepath);
-
-            if (imageIn == null || correctedFilepath == null) {
-                throw new IOException("Failed to load image: "
-                        + correctedFilepath);
-            }
-
-            image = ImageIO.read(imageIn);
-
-        }
+    public void loadImage(InputStream is) throws IOException {
+        BufferedImage image = ImageIO.read(is);
         
         BufferedImage outimage = new BufferedImage(image.getWidth(),
                 image.getHeight(), BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = outimage.createGraphics();
-        g.drawImage(image, 0, 0, null);
-        g.dispose();
-        this.image = outimage;
-    }
-
-    public void loadImage(InputStream is) throws IOException {
-        BufferedImage image = ImageIO.read(is);
-        BufferedImage outimage = new BufferedImage(image.getWidth(),
-                image.getHeight(), BufferedImage.TYPE_INT_RGB);
+        
         Graphics2D g = outimage.createGraphics();
         g.drawImage(image, 0, 0, null);
         g.dispose();
@@ -467,7 +428,7 @@ public class Photo {
     public void adaptiveThresholding() { // jedine pouzitie tejto funkcie by
                                          // malo byt v konstruktore znacky
         Statistics stat = new Statistics(this);
-        int radius = Intelligence.configurator
+        int radius = Configurator.getConfigurator()
                 .getIntProperty("photo_adaptivethresholdingradius");
         if (radius == 0) {
             plainThresholding(stat);
@@ -525,5 +486,10 @@ public class Photo {
         }
         return hough;
     }
+
+	@Override
+	public void close() {
+		image.flush();
+	}
 
 }

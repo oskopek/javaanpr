@@ -71,15 +71,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-import net.sf.javaanpr.intelligence.Intelligence;
+import net.sf.javaanpr.configurator.Configurator;
 
 public class PlateGraph extends Graph {
 
 	Plate handle;
 
-	private static double plategraph_rel_minpeaksize = Intelligence.configurator
+	private static double plategraph_rel_minpeaksize = Configurator.getConfigurator()
 			.getDoubleProperty("plategraph_rel_minpeaksize");
-	private static double peakFootConstant = Intelligence.configurator
+	private static double peakFootConstant = Configurator.getConfigurator()
 			.getDoubleProperty("plategraph_peakfootconstant");
 
 	public PlateGraph(Plate handle) {

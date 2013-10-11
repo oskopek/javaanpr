@@ -71,7 +71,7 @@ package net.sf.javaanpr.imageanalysis;
 //import java.util.Comparator;
 import java.util.Vector;
 
-import net.sf.javaanpr.intelligence.Intelligence;
+import net.sf.javaanpr.configurator.Configurator;
 
 public class PlateHorizontalGraph extends Graph {
 	/*private static double peakFootConstant = // 0.1; //CONSTANT
@@ -79,7 +79,7 @@ public class PlateHorizontalGraph extends Graph {
 			.getDoubleProperty("platehorizontalgraph_peakfootconstant");
 	*/
 	
-	private static int horizontalDetectionType = Intelligence.configurator
+	private static int horizontalDetectionType = Configurator.getConfigurator()
 			.getIntProperty("platehorizontalgraph_detectionType");
 	
 	Plate handle;

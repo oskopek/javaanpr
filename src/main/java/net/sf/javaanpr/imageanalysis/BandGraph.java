@@ -71,14 +71,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-import net.sf.javaanpr.intelligence.Intelligence;
+import net.sf.javaanpr.configurator.Configurator;
 
 public class BandGraph extends Graph {/* TODO - BEGIN */
 	Band handle;
 
-	private static double peakFootConstant = Intelligence.configurator
+	private static double peakFootConstant = Configurator.getConfigurator()
 			.getDoubleProperty("bandgraph_peakfootconstant"); // 0.75
-	private static double peakDiffMultiplicationConstant = Intelligence.configurator
+	private static double peakDiffMultiplicationConstant = Configurator.getConfigurator()
 			.getDoubleProperty("bandgraph_peakDiffMultiplicationConstant"); // 0.2
 
 	public BandGraph(Band handle) {

@@ -75,6 +75,9 @@ import java.util.Vector;
 
 //import javax.sound.midi.MidiChannel;
 
+
+
+
 import net.sf.javaanpr.Main;
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.gui.TimeMeter;
@@ -91,15 +94,18 @@ import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
 
 public class Intelligence {
 	private long lastProcessDuration = 0; // trvanie posledneho procesu v ms
-
-	public static Configurator configurator = new Configurator();
+	private Configurator configurator;
+	
 	public static CharacterRecognizer chrRecog;
 	public static Parser parser;
 	public boolean enableReportGeneration;
 
-	public Intelligence(boolean enableReportGeneration) throws Exception {
+	public Intelligence(boolean enableReportGeneration) {
 		this.enableReportGeneration = enableReportGeneration;
-		int classification_method = Intelligence.configurator
+		
+		this.configurator = Configurator.getConfigurator();
+		
+		int classification_method = configurator
 				.getIntProperty("intelligence_classification_method");
 
 		if (classification_method == 0) {
@@ -116,11 +122,11 @@ public class Intelligence {
 		return lastProcessDuration;
 	}
 
-	public String recognize(CarSnapshot carSnapshot) throws Exception {
+	public String recognize(CarSnapshot carSnapshot) throws Exception { //TODO; remove throws
 		TimeMeter time = new TimeMeter();
-		int syntaxAnalysisMode = Intelligence.configurator
+		int syntaxAnalysisMode = configurator
 				.getIntProperty("intelligence_syntaxanalysis");
-		int skewDetectionMode = Intelligence.configurator
+		int skewDetectionMode = configurator
 				.getIntProperty("intelligence_skewdetection");
 
 		if (enableReportGeneration) {
@@ -198,9 +204,9 @@ public class Intelligence {
 
 				float plateWHratio = (float) plate.getWidth()
 						/ (float) plate.getHeight();
-				if ((plateWHratio < Intelligence.configurator
+				if ((plateWHratio < configurator
 						.getDoubleProperty("intelligence_minPlateWidthHeightRatio"))
-						|| (plateWHratio > Intelligence.configurator
+						|| (plateWHratio > configurator
 								.getDoubleProperty("intelligence_maxPlateWidthHeightRatio"))) {
 					continue;
 				}
@@ -210,14 +216,14 @@ public class Intelligence {
 				// heuristicka analyza znacky z pohladu uniformity a poctu
 				// pismen :
 				// Recognizer.configurator.getIntProperty("intelligence_minimumChars")
-				if ((chars.size() < Intelligence.configurator
+				if ((chars.size() < configurator
 						.getIntProperty("intelligence_minimumChars"))
-						|| (chars.size() > Intelligence.configurator
+						|| (chars.size() > configurator
 								.getIntProperty("intelligence_maximumChars"))) {
 					continue;
 				}
 
-				if (plate.getCharsWidthDispersion(chars) > Intelligence.configurator
+				if (plate.getCharsWidthDispersion(chars) > configurator
 						.getDoubleProperty("intelligence_maxCharWidthDispersion")) {
 					continue;
 				}
@@ -283,9 +289,9 @@ public class Intelligence {
 					float widthHeightRatio = (chr.pieceWidth);
 					widthHeightRatio /= (chr.pieceHeight);
 
-					if ((widthHeightRatio < Intelligence.configurator
+					if ((widthHeightRatio < configurator
 							.getDoubleProperty("intelligence_minCharWidthHeightRatio"))
-							|| (widthHeightRatio > Intelligence.configurator
+							|| (widthHeightRatio > configurator
 									.getDoubleProperty("intelligence_maxCharWidthHeightRatio"))) {
 						errorFlags += "WHR ";
 						ok = false;
@@ -318,7 +324,7 @@ public class Intelligence {
 					float heightCost = (chr.pieceHeight - averageHeight)
 							/ averageHeight;
 
-					if (brightnessCost > Intelligence.configurator
+					if (brightnessCost > configurator
 							.getDoubleProperty("intelligence_maxBrightnessCostDispersion")) {
 						errorFlags += "BRI ";
 						ok = false;
@@ -326,7 +332,7 @@ public class Intelligence {
 							continue;
 						}
 					}
-					if (contrastCost > Intelligence.configurator
+					if (contrastCost > configurator
 							.getDoubleProperty("intelligence_maxContrastCostDispersion")) {
 						errorFlags += "CON ";
 						ok = false;
@@ -334,7 +340,7 @@ public class Intelligence {
 							continue;
 						}
 					}
-					if (hueCost > Intelligence.configurator
+					if (hueCost > configurator
 							.getDoubleProperty("intelligence_maxHueCostDispersion")) {
 						errorFlags += "HUE ";
 						ok = false;
@@ -342,7 +348,7 @@ public class Intelligence {
 							continue;
 						}
 					}
-					if (saturationCost > Intelligence.configurator
+					if (saturationCost > configurator
 							.getDoubleProperty("intelligence_maxSaturationCostDispersion")) {
 						errorFlags += "SAT ";
 						ok = false;
@@ -350,7 +356,7 @@ public class Intelligence {
 							continue;
 						}
 					}
-					if (heightCost < -Intelligence.configurator
+					if (heightCost < -configurator
 							.getDoubleProperty("intelligence_maxHeightCostDispersion")) {
 						errorFlags += "HEI ";
 						ok = false;
@@ -365,7 +371,7 @@ public class Intelligence {
 						rc = chrRecog.recognize(chr);
 						similarityCost = rc.getPatterns().elementAt(0)
 								.getCost();
-						if (similarityCost > Intelligence.configurator
+						if (similarityCost > configurator
 								.getDoubleProperty("intelligence_maxSimilarityCostDispersion")) {
 							errorFlags += "NEU ";
 							ok = false;
@@ -412,7 +418,7 @@ public class Intelligence {
 				// nasledujuci riadok zabezpeci spracovanie dalsieho kandidata
 				// na znacku, v pripade ze charrecognizingu je prilis malo
 				// rozpoznanych pismen
-				if (recognizedPlate.chars.size() < Intelligence.configurator
+				if (recognizedPlate.chars.size() < configurator
 						.getIntProperty("intelligence_minimumChars")) {
 					continue;
 				}

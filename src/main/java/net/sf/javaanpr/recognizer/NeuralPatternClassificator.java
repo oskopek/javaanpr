@@ -71,15 +71,16 @@ package net.sf.javaanpr.recognizer;
 //import java.awt.Graphics2D;
 //import java.awt.Rectangle;
 //import java.awt.image.BufferedImage;
-import java.io.File;
 //import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Vector;
 
-//import net.sf.javaanpr.gui.ReportGenerator;
 
+//import net.sf.javaanpr.gui.ReportGenerator;
+import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.imageanalysis.Char;
-import net.sf.javaanpr.intelligence.Intelligence;
 import net.sf.javaanpr.neuralnetwork.NeuralNetwork;
 //import javax.xml.parsers.ParserConfigurationException;
 //import javax.xml.transform.TransformerException;
@@ -90,9 +91,9 @@ import net.sf.javaanpr.neuralnetwork.NeuralNetwork;
 
 public class NeuralPatternClassificator extends CharacterRecognizer {
 
-	private static int normalize_x = Intelligence.configurator
+	private static int normalize_x = Configurator.getConfigurator()
 			.getIntProperty("char_normalizeddimensions_x");
-	private static int normalize_y = Intelligence.configurator
+	private static int normalize_y = Configurator.getConfigurator()
 			.getIntProperty("char_normalizeddimensions_y");
 
 	// rozmer vstupneho pismena po transformacii : 10 x 16 = 160 neuronov
@@ -100,23 +101,25 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
 	public NeuralNetwork network;
 
 	// do not learn netwotk, but load if from file (default)
-	public NeuralPatternClassificator() throws Exception {
+	public NeuralPatternClassificator() {
 		this(false);
 	}
 
-	public NeuralPatternClassificator(boolean learn) throws Exception {
+	public NeuralPatternClassificator(boolean learn) {
+		Configurator configurator = Configurator.getConfigurator();
+		
 		// zakomentovane dna 2.1.2007
 		// this.normalize_x =
-		// Intelligence.configurator.getIntProperty("char_normalizeddimensions_x");
+		// configurator.getIntProperty("char_normalizeddimensions_x");
 		// this.normalize_y =
-		// Intelligence.configurator.getIntProperty("char_normalizeddimensions_y");
+		// configurator.getIntProperty("char_normalizeddimensions_y");
 
 		Vector<Integer> dimensions = new Vector<Integer>();
 
 		// determine size of input layer according to chosen feature extraction
 		// method.
 		int inputLayerSize;
-		if (Intelligence.configurator
+		if (configurator
 				.getIntProperty("char_featuresExtractionMethod") == 0) {
 			inputLayerSize = NeuralPatternClassificator.normalize_x
 					* NeuralPatternClassificator.normalize_y;
@@ -126,20 +129,29 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
 
 		// construct new neural network with specified dimensions.
 		dimensions.add(inputLayerSize);
-		dimensions.add(Intelligence.configurator
+		dimensions.add(configurator
 				.getIntProperty("neural_topology"));
 		dimensions.add(CharacterRecognizer.alphabet.length);
 		network = new NeuralNetwork(dimensions);
 
 		if (learn) {
 			// learn network
-			learnAlphabet(Intelligence.configurator
-					.getStrProperty("char_learnAlphabetPath"));
+			String learnAlphabetPath = configurator
+					.getStrProperty("char_learnAlphabetPath");
+			try {
+				learnAlphabet(learnAlphabetPath);
+			} catch (IOException e) {
+				System.err.println("Failed to load alphabet.");
+				e.printStackTrace();
+			}
 		} else {
 			// or load network from xml
-			network = new NeuralNetwork(
-					Intelligence.configurator
-							.getPathProperty("char_neuralNetworkPath"));
+			String neuralNetPath = configurator
+					.getPathProperty("char_neuralNetworkPath");
+			
+			InputStream is = configurator.getResourceAsStream(neuralNetPath);
+			
+			network = new NeuralNetwork(is);
 		}
 	}
 
@@ -193,26 +205,26 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
 	}
 
 	// NAUCI NEURONOVU SIET ABECEDE, KTORU NAJDE V ADRESARI PATH
-	public void learnAlphabet(String path) throws IOException {
-		String alphaString = "0123456789abcdefghijklmnopqrstuvwxyz";
-		File folder = new File(path);
+	public void learnAlphabet(String folder) throws IOException {		
 		NeuralNetwork.SetOfIOPairs train = new NeuralNetwork.SetOfIOPairs();
 
-		for (String fileName : folder.list()) {
-			if (alphaString.indexOf(fileName.toLowerCase().charAt(0)) == -1) {
-				continue; // je to nezname meno suboru, skip
-			}
+		ArrayList<String> fileList = (ArrayList<String>) Char.getAlphabetList(folder);
+		
+		for (String fileName : fileList) {			
+			InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
 
-			Char imgChar = new Char(path + File.separator + fileName);
+			Char imgChar = new Char(is);
 			imgChar.normalize();
 			train.addIOPair(createNewPair(fileName.toUpperCase().charAt(0),
 					imgChar));
+			
+			is.close();
 		}
 
 		network.learn(train,
-				Intelligence.configurator.getIntProperty("neural_maxk"),
-				Intelligence.configurator.getDoubleProperty("neural_eps"),
-				Intelligence.configurator.getDoubleProperty("neural_lambda"),
-				Intelligence.configurator.getDoubleProperty("neural_micro"));
+				Configurator.getConfigurator().getIntProperty("neural_maxk"),
+				Configurator.getConfigurator().getDoubleProperty("neural_eps"),
+				Configurator.getConfigurator().getDoubleProperty("neural_lambda"),
+				Configurator.getConfigurator().getDoubleProperty("neural_micro"));
 	}
 }

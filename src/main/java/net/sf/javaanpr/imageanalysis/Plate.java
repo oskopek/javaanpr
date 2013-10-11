@@ -70,28 +70,22 @@ package net.sf.javaanpr.imageanalysis;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
-//import java.io.IOException;
 import java.util.Vector;
 
-import net.sf.javaanpr.intelligence.Intelligence;
+import net.sf.javaanpr.configurator.Configurator;
 
 //import net.sf.javaanpr.imageanalysis.PositionInPlate;
 
 public class Plate extends Photo {
 	static public Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(
 			0, 0, 0, 0);
-	static private int numberOfCandidates = Intelligence.configurator
+	static private int numberOfCandidates = Configurator.getConfigurator()
 			.getIntProperty("intelligence_numberOfChars");
-	private static int horizontalDetectionType = Intelligence.configurator
+	private static int horizontalDetectionType = Configurator.getConfigurator()
 			.getIntProperty("platehorizontalgraph_detectionType");
 
 	private PlateGraph graphHandle = null;
 	public Plate plateCopy;
-
-	/** Creates a new instance of Character */
-	public Plate() {
-		image = null;
-	}
 
 	public Plate(BufferedImage bi) {
 		super(bi);

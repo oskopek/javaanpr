@@ -71,6 +71,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Random;
@@ -110,9 +111,8 @@ public class NeuralNetwork {
 		// System.out.println("Created neural network with "+dimensions.size()+" layers");
 	}
 
-	public NeuralNetwork(String fileName) throws ParserConfigurationException,
-			SAXException, IOException, ParseException {
-		loadFromXml(fileName);
+	public NeuralNetwork(InputStream inStream) {
+		loadFromXml(inStream);
 		randomGenerator = new Random();
 	}
 
@@ -159,21 +159,23 @@ public class NeuralNetwork {
 		return listLayers.size();
 	}
 
-	private void loadFromXml(String fileName)
-			throws ParserConfigurationException, SAXException, IOException,
-			ParseException {
-		System.out
-				.println("NeuralNetwork : loading network topology from file "
-						+ fileName);
+	private void loadFromXml(InputStream inStream)
+			 {
+		System.out.println("NeuralNetwork : loading network topology from InputStream");
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder parser = factory.newDocumentBuilder();
-		Document doc = parser.parse(fileName);
+		Document doc = null;
+		try {
+			DocumentBuilder parser = factory.newDocumentBuilder();
+			doc = parser.parse(inStream);
+		} catch (IllegalArgumentException | IOException e) {
+			
+		} catch (Exception e) {
+			
+		}
 
 		Node nodeNeuralNetwork = doc.getDocumentElement();
 		if (!nodeNeuralNetwork.getNodeName().equals("neuralNetwork")) {
-			throw new ParseException(
-					"[Error] NN-Load: Parse error in XML file, neural network couldn't be loaded.",
-					0);
+			System.err.println("[Error] NN-Load: Parse error in XML file, neural network couldn't be loaded.");
 		}
 		// nodeNeuralNetwork ok
 		// indexNeuralNetworkContent -> indexStructureContent ->

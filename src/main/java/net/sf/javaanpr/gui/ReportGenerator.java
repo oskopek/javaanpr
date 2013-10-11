@@ -69,31 +69,30 @@ package net.sf.javaanpr.gui;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.channels.FileChannel;
 
 import javax.imageio.ImageIO;
 
-import net.sf.javaanpr.intelligence.Intelligence;
+import net.sf.javaanpr.configurator.Configurator;
 
 public class ReportGenerator {
-	private String path;
+	private String directory;
 	private String output;
 	//private BufferedWriter out;
 	private boolean enabled;
 
-	public ReportGenerator(String path) throws IOException {
-		this.path = path;
+	public ReportGenerator(String directory) throws IOException {
+		this.directory = directory;
 		enabled = true;
 
-		File f = new File(path);
-		if (!f.exists()) {
-			throw new IOException("Report directory '" + path
-					+ "' doesn't exists");
+		File f = new File(directory);
+		if (!f.exists() || !f.isDirectory()) {
+			throw new IOException("Report directory '" + directory
+					+ "' doesn't exist or isn't a directory");
 		}
 
 		output = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">"
@@ -118,13 +117,14 @@ public class ReportGenerator {
 		output += "\n";
 	}
 
-	public void insertImage(BufferedImage image, String cls, int w, int h)
-			throws IOException {
+	public void insertImage(BufferedImage image, String cls, int w, int h) throws IllegalArgumentException, IOException {
 		if (!enabled) {
 			return;
 		}
+		
 		String imageName = String.valueOf(image.hashCode()) + ".jpg";
-		saveImage(image, path + File.separator + imageName);
+		saveImage(image, imageName);
+		
 		if ((w != 0) && (h != 0)) {
 			output += "<img src='" + imageName + "' alt='' width='" + w
 					+ "' height='" + h + "' class='" + cls + "'>\n";
@@ -134,58 +134,56 @@ public class ReportGenerator {
 		}
 	}
 
-	public void finish() throws Exception {
+	public void finish() throws IOException {
 		if (!enabled) {
 			return;
 		}
 		output += "</html>";
-		FileOutputStream os = new FileOutputStream(path + File.separator
+		FileOutputStream os = new FileOutputStream(directory + File.separator
 				+ "index.html");
 		Writer writer = new OutputStreamWriter(os);
 		writer.write(output);
 		writer.flush();
 		writer.close();
-		copyFile(
-				new File(
-						Intelligence.configurator
-								.getPathProperty("reportgeneratorcss")),
-				new File(path + File.separator + "style.css"));
+		
+		
+		String cssPath = Configurator.getConfigurator().getPathProperty("reportgeneratorcss");
+		InputStream inStream = Configurator.getConfigurator().getResourceAsStream(cssPath);
+		
+		saveStreamToFile(inStream, new File(directory + File.separator + "style.css"));
 	}
 
-	public void copyFile(File in, File out) throws Exception {
-		FileInputStream inStream = new FileInputStream(in);
+	public void saveStreamToFile(InputStream inStream, File out) throws IOException {
 		FileOutputStream outStream = new FileOutputStream(out);
 		
-		FileChannel sourceChannel = inStream.getChannel();
-		FileChannel destinationChannel = outStream.getChannel();
-		sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
-		// or
-		// destinationChannel.transferFrom
-		// (sourceChannel, 0, sourceChannel.size());
-		sourceChannel.close();
-		destinationChannel.close();
+		int read = 0;
+		byte[] bytes = new byte[1024];
+ 
+		while ((read = inStream.read(bytes)) != -1) {
+			outStream.write(bytes, 0, read);
+		}
+		
 		outStream.close();
 		inStream.close();
 	}
 
-	public void saveImage(BufferedImage bi, String filepath) throws IOException {
+	public void saveImage(BufferedImage bi, String filename) throws IOException, IllegalArgumentException {
 		if (!enabled) {
 			return;
 		}
-		String type = new String(filepath.substring(
-				filepath.lastIndexOf('.') + 1, filepath.length()).toUpperCase());
-		if (!type.equals("BMP") && !type.equals("JPG") && !type.equals("JPEG")
-				&& !type.equals("PNG")) {
-			throw new IOException("Unsupported file format");
+		
+		String type = new String(filename.substring(filename.lastIndexOf('.') + 1, filename.length()).toLowerCase());
+		
+		if (!type.equals("bmp") && !type.equals("jpg") && !type.equals("jpeg")
+				&& !type.equals("png")) {
+			throw new IllegalArgumentException("Unsupported file format");
 		}
 
-		File destination = new File(filepath);
+		File destination = new File(directory + File.separator + filename);
 		try {
 			ImageIO.write(bi, type, destination);
-		} catch (Exception e) {
-			System.out.println("catched " + e.toString());
-			System.exit(1);
-			throw new IOException("Can't open destination report directory");
+		} catch (IOException e) {
+			throw new IOException("Can't open destination report directory", e);
 		}
 	}
 }

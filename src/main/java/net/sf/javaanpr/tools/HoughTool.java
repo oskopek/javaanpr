@@ -67,6 +67,8 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.tools;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import net.sf.javaanpr.imageanalysis.HoughTransformation;
@@ -75,10 +77,17 @@ import net.sf.javaanpr.imageanalysis.Photo;
 public class HoughTool {
 
 	public static void main(String[] args) throws IOException {
-		Photo p = new Photo(args[0]);
+		File file = new File(args[0]);
+		FileInputStream fis = new FileInputStream(file);
+		Photo p = new Photo(fis);
 		HoughTransformation hough = p.getHoughTransformation();
-		new Photo(hough.render(HoughTransformation.RENDER_TRANSFORMONLY,
-				HoughTransformation.COLOR_HUE)).saveImage(args[1]);
+		Photo transformed = new Photo(hough.render(HoughTransformation.RENDER_TRANSFORMONLY,
+				HoughTransformation.COLOR_HUE));
+		
+		transformed.saveImage(args[1]);
+		
+		p.close();
+		transformed.close();
 	}
 
 	public HoughTool() {

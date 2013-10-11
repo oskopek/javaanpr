@@ -74,31 +74,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 
-import net.sf.javaanpr.intelligence.Intelligence;
+import net.sf.javaanpr.configurator.Configurator;
 
 public class CarSnapshot extends Photo {
-	private static int distributor_margins = Intelligence.configurator
+	private static int distributor_margins = Configurator.getConfigurator()
 			.getIntProperty("carsnapshot_distributormargins");
 	// private static int carsnapshot_projectionresize_x =
 	// Main.configurator.getIntProperty("carsnapshot_projectionresize_x");
 	// private static int carsnapshot_projectionresize_y =
 	// Main.configurator.getIntProperty("carsnapshot_projectionresize_y");
-	private static int carsnapshot_graphrankfilter = Intelligence.configurator
+	private static int carsnapshot_graphrankfilter = Configurator.getConfigurator()
 			.getIntProperty("carsnapshot_graphrankfilter");
 
-	static private int numberOfCandidates = Intelligence.configurator
+	static private int numberOfCandidates = Configurator.getConfigurator()
 			.getIntProperty("intelligence_numberOfBands");
 	private CarSnapshotGraph graphHandle = null;
 
 	public static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(
 			0, 0, CarSnapshot.distributor_margins,
 			CarSnapshot.distributor_margins);
-
-	public CarSnapshot() {
-	}
-
-	public CarSnapshot(String filepath) throws IOException {
-		super(filepath);
+	
+	public CarSnapshot(String filename) throws IOException {
+		super(Configurator.getConfigurator().getResourceAsStream(filename));
+		
 	}
 
 	public CarSnapshot(BufferedImage bi) {

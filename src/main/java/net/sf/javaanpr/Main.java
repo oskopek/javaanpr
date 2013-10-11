@@ -135,24 +135,22 @@ public class Main {
 	// adresara
 	public static void newAlphabet(String srcdir, String dstdir)
 			throws Exception { // NOT USED
-		File folder = new File(srcdir);
-		if (!folder.exists()) {
-			throw new IOException("Source folder doesn't exists");
-		}
-		if (!new File(dstdir).exists()) {
-			throw new IOException("Destination folder doesn't exists");
-		}
-		int x = Intelligence.configurator
+		
+		
+		
+		int x = Configurator.getConfigurator()
 				.getIntProperty("char_normalizeddimensions_x");
-		int y = Intelligence.configurator
+		int y = Configurator.getConfigurator()
 				.getIntProperty("char_normalizeddimensions_y");
 		System.out.println("\nCreating new alphabet (" + x + " x " + y
 				+ " px)... \n");
-		for (String fileName : folder.list()) {
-			Char c = new Char(srcdir + File.separator + fileName);
+		
+		for (String fileName : Char.getAlphabetList(srcdir)) {
+			Char c = new Char(fileName);
 			c.normalize();
 			c.saveImage(dstdir + File.separator + fileName);
 			System.out.println(fileName + " done");
+			c.close();
 		}
 	}
 

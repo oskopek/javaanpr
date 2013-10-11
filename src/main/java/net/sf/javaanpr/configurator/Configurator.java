@@ -69,8 +69,6 @@ package net.sf.javaanpr.configurator;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,15 +81,14 @@ public class Configurator {
     private static Configurator configurator;
     
 	/* Default name of configuration file */
-	private String fileName = new String("config.xml");
+	private String fileName = "config.xml";
 	/* Configuration file's comment */
-	private String comment = new String(
-			"This is the global configuration file for Automatic Number Plate Recognition System");
+	private String comment = "This is the global configuration file for Automatic Number Plate Recognition System";
 
 	/* Primary property list containing values from configuration file */
 	private Properties list;
 
-	public Configurator() {
+	public Configurator() throws IOException {
 		list = new Properties();
 		/* ***** BEGIN *** Definition of property defaults ******* */
 
@@ -211,20 +208,20 @@ public class Configurator {
 		setStrProperty("reportgeneratorcss",
 				"/reportgenerator/style.css");
 		
+		InputStream is = getResourceAsStream(fileName);
 		
-		String correctedFilename = correctFilepath(fileName);
-		
-		InputStream is = getClass().getResourceAsStream(correctedFilename);
-		
-		loadConfiguration(is);
-		
+		if(is!=null) {
+			loadConfiguration(is);
+			is.close();
+		}
 		
 		Configurator.configurator = this;
 	}
 
-	public Configurator(String path) {
+	public Configurator(String path) throws IOException {
 		this();
-		loadConfiguration(path);
+
+
 	}
 
 	public void setConfigurationFileName(String name) {
@@ -281,54 +278,31 @@ public class Configurator {
 		list.storeToXML(os, comment);
 	}
 
-	public void loadConfiguration() {
+	public void loadConfiguration() throws InvalidPropertiesFormatException, IOException {
 		loadConfiguration(fileName);
 	}
 
-	public void loadConfiguration(String arg_file) {
-		FileInputStream is = null;
-        try {
-            is = new FileInputStream(arg_file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+	public void loadConfiguration(String arg_file) throws InvalidPropertiesFormatException, IOException {
+		InputStream is = getResourceAsStream(arg_file);
         
-        if(is == null) {
-            list = null;
-            return;
-        }
-        
-		try {
-            list.loadFromXML(is);
-        } catch (IOException e) {
-            e.printStackTrace();
-            list = null;
-        }
+		loadConfiguration(is);
 	}
 	
-	public void loadConfiguration(InputStream arg_stream) {
+	public void loadConfiguration(InputStream arg_stream) throws InvalidPropertiesFormatException, IOException {
 	    if(arg_stream == null) {
-	        list = null;
+	    	list = null;
             return;
         }
 	    
-	    try {
-            list.loadFromXML(arg_stream);
-        } catch (InvalidPropertiesFormatException e) {
-            e.printStackTrace();
-            list = null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            list = null;
-        }
+        list.loadFromXML(arg_stream);
 	}
 	
-	public String correctFilepath(String filename) {
+	public InputStream getResourceAsStream(String filename) {
 	    String corrected = filename;
 	    
 	    URL f = getClass().getResource(corrected);
 	    if(f != null) {
-	        return corrected;
+	        return getClass().getResourceAsStream(corrected);
 	    }
 	    
 	    if (filename.startsWith("/")) {
@@ -342,7 +316,7 @@ public class Configurator {
 	    f = getClass().getResource(corrected);
 	    
 	    if(f != null) {
-	        return corrected;
+	    	return getClass().getResourceAsStream(corrected);
 	    }
 	    
 	    return null;

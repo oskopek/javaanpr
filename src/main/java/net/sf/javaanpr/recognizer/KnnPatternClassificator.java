@@ -67,57 +67,46 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.recognizer;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.imageanalysis.Char;
-import net.sf.javaanpr.intelligence.Intelligence;
 
 public class KnnPatternClassificator extends CharacterRecognizer {
 	Vector<Vector<Double>> learnVectors;
 
-	public KnnPatternClassificator() throws IOException {		
-		String path = Intelligence.configurator
+	public KnnPatternClassificator() {		
+		String path = Configurator.getConfigurator()
 				.getPathProperty("char_learnAlphabetPath");
-		
-		String alphaString = "0123456789abcdefghijklmnopqrstuvwxyz";
 
 		// inicializacia vektora na pozadovanu velkost (nulovanie poloziek)
-		learnVectors = new Vector<Vector<Double>>();
-		for (int i = 0; i < alphaString.length(); i++) {
-			learnVectors.add(null);
-		}
+		learnVectors = new Vector<Vector<Double>>(36);
 		
-		ArrayList<String> filenames = new ArrayList<>();
-		
-		String footer = path.substring(path.indexOf('_'));
-		
-		String s;
-		for(int i = 0; i < alphaString.length(); i++) {
-		    s = alphaString.charAt(i) + footer + ".jpg";
-		    
-		    filenames.add(s);
-		}
+		ArrayList<String> filenames = (ArrayList<String>) Char.getAlphabetList(path);
 		
 		for (String fileName : filenames) {
-			int alphaPosition = alphaString.indexOf(fileName.toLowerCase()
-					.charAt(0));
-			if (alphaPosition == -1) {
-				continue; // je to nezname meno suboru, skip
+			InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
+			
+			Char imgChar = null;
+			
+			try {
+				imgChar = new Char(is);
+			} catch (IOException e) {
+				System.err.println("Failed to load Char: " + fileName);
+				e.printStackTrace();
 			}
-
-			Char imgChar = new Char(path + File.separator + fileName);
 			imgChar.normalize();
 			// zapis na danu poziciu vo vektore
-			learnVectors.set(alphaPosition, imgChar.extractFeatures());
+			learnVectors.add(imgChar.extractFeatures());
 		}
 
 		// kontrola poloziek vektora
-		for (int i = 0; i < alphaString.length(); i++) {
+		for (int i = 0; i < learnVectors.size(); i++) {
 			if (learnVectors.elementAt(i) == null) {
-				throw new IOException("Warning : alphabet in " + path
+				System.err.println("Warning : alphabet in " + path
 						+ " is not complete");
 			}
 		}

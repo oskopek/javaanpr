@@ -68,14 +68,18 @@ for more info about JavaANPR.
 package net.sf.javaanpr.imageanalysis;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 //import java.awt.image.ConvolveOp;
 //import java.awt.image.Kernel;
-import java.io.IOException;
 import java.util.Vector;
 
 //import org.omg.CORBA.TIMEOUT;
 
-import net.sf.javaanpr.intelligence.Intelligence;
+import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.recognizer.CharacterRecognizer;
 
 public class Char extends Photo {
@@ -97,11 +101,6 @@ public class Char extends Photo {
 
 	public BufferedImage thresholdedImage;
 
-	public Char() {
-		image = null;
-		init();
-	}
-
 	public Char(BufferedImage bi, BufferedImage thresholdedImage,
 			PositionInPlate positionInPlate) {
 		super(bi);
@@ -114,15 +113,45 @@ public class Char extends Photo {
 		this(bi, bi, null);
 		init();
 	}
+	
+	/**
+	 * Nacita znak zo suboru a hned vykona aj thresholding
+	 * prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze znaky sa
+	 * vysekavaju
+	 * zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru
+	 * tomuto
+	 * principu nezodpoveda, cize spravime prahovanie zvlast
+	 * 
+	 * @param fileName
+	 * @throws IOException
+	 */
+	public Char(String fileName) throws IOException {		
+		super(Configurator.getConfigurator().getResourceAsStream(fileName));
+		// this.thresholdedImage = this.image; povodny kod, zakomentovany dna
+		// 23.12.2006 2:33 AM
 
-	// nacita znak zo suboru a hned vykona aj thresholding
-	// prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze znaky sa
-	// vysekavaju
-	// zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru
-	// tomuto
-	// principu nezodpoveda, cize spravime prahovanie zvlast :
-	public Char(String filepath) throws IOException {
-		super(filepath);
+		// nasledovne 4 riadky pridane 23.12.2006 2:33 AM
+		BufferedImage origin = Photo.duplicateBufferedImage(image);
+		adaptiveThresholding(); // s ucinnostou nad this.image
+		thresholdedImage = image;
+		image = origin;
+
+		init();
+	}
+
+	/**
+	 * Nacita znak zo suboru a hned vykona aj thresholding
+	 * prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze znaky sa
+	 * vysekavaju
+	 * zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru
+	 * tomuto
+	 * principu nezodpoveda, cize spravime prahovanie zvlast
+	 * 
+	 * @param is
+	 * @throws IOException
+	 */
+	public Char(InputStream is) throws IOException {		
+		super(is);
 		// this.thresholdedImage = this.image; povodny kod, zakomentovany dna
 		// 23.12.2006 2:33 AM
 
@@ -198,16 +227,16 @@ public class Char extends Photo {
 
 	private void normalizeResizeOnly() { // vracia ten isty Char, nie novy
 
-		int x = Intelligence.configurator
+		int x = Configurator.getConfigurator()
 				.getIntProperty("char_normalizeddimensions_x");
-		int y = Intelligence.configurator
+		int y = Configurator.getConfigurator()
 				.getIntProperty("char_normalizeddimensions_y");
 		if ((x == 0) || (y == 0)) {
 			return;// nebude resize
 			// this.linearResize(x,y);
 		}
 
-		if (Intelligence.configurator.getIntProperty("char_resizeMethod") == 0) {
+		if (Configurator.getConfigurator().getIntProperty("char_resizeMethod") == 0) {
 			linearResize(x, y); // radsej weighted average
 		} else {
 			averageResize(x, y);
@@ -339,7 +368,7 @@ public class Char extends Photo {
 	}
 
 	public Vector<Double> extractFeatures() {
-		int featureExtractionMethod = Intelligence.configurator
+		int featureExtractionMethod = Configurator.getConfigurator()
 				.getIntProperty("char_featuresExtractionMethod");
 		if (featureExtractionMethod == 0) {
 			return extractMapFeatures();
@@ -347,5 +376,38 @@ public class Char extends Photo {
 			return extractEdgeFeatures();
 		}
 	}
+	
+
+	private static String getSuffix(String directoryName) {		
+		if(directoryName.endsWith("/")) {
+			directoryName = directoryName.substring(0, directoryName.length()-1); //cuts last char off
+		}
+		
+		String suffix =  "_" + directoryName.substring(directoryName.lastIndexOf('_'));
+		
+		return suffix;
+	}
+	
+	public static List<String> getAlphabetList(String directory) {
+		final String alphaString = "0123456789abcdefghijklmnopqrstuvwxyz";
+		final String suffix = getSuffix(directory);
+		
+		if(directory.endsWith("/")) {
+			directory = directory.substring(0, directory.length()-1);
+		}
+		
+		
+		ArrayList<String> filenames = new ArrayList<>();
+		
+		String s;
+		for(int i = 0; i < alphaString.length(); i++) {
+		    s = directory + File.separator + alphaString.charAt(i) + suffix + ".jpg";
+		    if(Configurator.getConfigurator().getResourceAsStream(s)!=null) {
+		    	filenames.add(s);
+		    }
+		}
+		
+		return filenames;
+	} 
 
 }

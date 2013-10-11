@@ -71,7 +71,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
 
-import net.sf.javaanpr.intelligence.Intelligence;
+import net.sf.javaanpr.configurator.Configurator;
 
 public class FrameHelp extends javax.swing.JFrame {
 	static final long serialVersionUID = 0;
@@ -91,10 +91,10 @@ public class FrameHelp extends javax.swing.JFrame {
 				(screenSize.height - height) / 2);
 		try {
 			if (mode == FrameHelp.SHOW_ABOUT) {
-				editorPane.setPage(new File(Intelligence.configurator
+				editorPane.setPage(new File(Configurator.getConfigurator() //TODO; fix this to actually load the file from jar
 						.getPathProperty("help_file_about")).toURI().toURL());
 			} else {
-				editorPane.setPage(new File(Intelligence.configurator
+				editorPane.setPage(new File(Configurator.getConfigurator()
 						.getPathProperty("help_file_help")).toURI().toURL());
 			}
 		} catch (Exception e) {

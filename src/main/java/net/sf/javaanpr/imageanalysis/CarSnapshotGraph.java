@@ -71,13 +71,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-import net.sf.javaanpr.intelligence.Intelligence;
+import net.sf.javaanpr.configurator.Configurator;
 
 public class CarSnapshotGraph extends Graph {
 	// configuration for searching bands in image !
-	private static double peakFootConstant = Intelligence.configurator
+	private static double peakFootConstant = Configurator.getConfigurator()
 			.getDoubleProperty("carsnapshotgraph_peakfootconstant"); // 0.55
-	private static double peakDiffMultiplicationConstant = Intelligence.configurator
+	private static double peakDiffMultiplicationConstant = Configurator.getConfigurator()
 			.getDoubleProperty("carsnapshotgraph_peakDiffMultiplicationConstant");// 0.1
 
 	CarSnapshot handle;

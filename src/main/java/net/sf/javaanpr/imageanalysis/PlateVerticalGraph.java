@@ -71,11 +71,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
-import net.sf.javaanpr.intelligence.Intelligence;
+import net.sf.javaanpr.configurator.Configurator;
 
 public class PlateVerticalGraph extends Graph {
 	private static double peakFootConstant = // 0.42; /* CONSTANT*/
-	Intelligence.configurator
+			Configurator.getConfigurator()
 			.getDoubleProperty("plateverticalgraph_peakfootconstant");
 
 	Plate handle;
