@@ -94,6 +94,7 @@ public class KnnPatternClassificator extends CharacterRecognizer {
 			
 			try {
 				imgChar = new Char(is);
+				
 			} catch (IOException e) {
 				System.err.println("Failed to load Char: " + fileName);
 				e.printStackTrace();
@@ -114,7 +115,7 @@ public class KnnPatternClassificator extends CharacterRecognizer {
 	}
 
 	@Override
-	public RecognizedChar recognize(Char chr) throws Exception {
+	public RecognizedChar recognize(Char chr) {
 		Vector<Double> tested = chr.extractFeatures();
 		//int minx = 0;
 		//float minfx = Float.POSITIVE_INFINITY;
@@ -140,7 +141,7 @@ public class KnnPatternClassificator extends CharacterRecognizer {
 		return recognized;
 	}
 
-	public float difference(Vector<Double> vectorA, Vector<Double> vectorB) {
+	private float difference(Vector<Double> vectorA, Vector<Double> vectorB) {
 		float diff = 0;
 		for (int x = 0; x < vectorA.size(); x++) {
 			diff += Math.abs(vectorA.elementAt(x) - vectorB.elementAt(x));
@@ -148,7 +149,7 @@ public class KnnPatternClassificator extends CharacterRecognizer {
 		return diff;
 	}
 
-	public float simplifiedEuclideanDistance(Vector<Double> vectorA,
+	private float simplifiedEuclideanDistance(Vector<Double> vectorA,
 			Vector<Double> vectorB) {
 		float diff = 0;
 		float partialDiff;

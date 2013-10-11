@@ -225,9 +225,5 @@ public abstract class CharacterRecognizer {
 		}
 	}
 
-	/** Creates a new instance of CharacterRecognizer */
-	public CharacterRecognizer() {
-	}
-
-	public abstract RecognizedChar recognize(Char chr) throws Exception;
+	public abstract RecognizedChar recognize(Char chr);
 }
