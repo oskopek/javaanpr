@@ -69,14 +69,7 @@ package net.sf.javaanpr.intelligence;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-//import java.io.IOException;
 import java.util.Vector;
-
-
-//import javax.sound.midi.MidiChannel;
-
-
-
 
 import net.sf.javaanpr.Main;
 import net.sf.javaanpr.configurator.Configurator;
@@ -93,17 +86,13 @@ import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
 import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
 
 public class Intelligence {
-	private long lastProcessDuration = 0; // trvanie posledneho procesu v ms
-	private Configurator configurator;
+	private static long lastProcessDuration = 0; // trvanie posledneho procesu v ms
+	private static Configurator configurator = Configurator.getConfigurator();
 	
 	public static CharacterRecognizer chrRecog;
 	public static Parser parser;
-	public boolean enableReportGeneration;
 
-	public Intelligence(boolean enableReportGeneration) {
-		this.enableReportGeneration = enableReportGeneration;
-		
-		this.configurator = Configurator.getConfigurator();
+	public Intelligence() {
 		
 		int classification_method = configurator
 				.getIntProperty("intelligence_classification_method");
@@ -121,8 +110,10 @@ public class Intelligence {
 	public long lastProcessDuration() {
 		return lastProcessDuration;
 	}
-
-	public String recognize(CarSnapshot carSnapshot) throws Exception { //TODO; remove throws
+	
+	public String recognizeWithReport(CarSnapshot carSnapshot) throws Exception {
+		final boolean enableReportGeneration = true;
+		
 		TimeMeter time = new TimeMeter();
 		int syntaxAnalysisMode = configurator
 				.getIntProperty("intelligence_syntaxanalysis");
@@ -171,17 +162,14 @@ public class Intelligence {
 				Plate notNormalizedCopy = null;
 				BufferedImage renderedHoughTransform = null;
 				HoughTransformation hough = null;
-				if (enableReportGeneration || (skewDetectionMode != 0)) { // detekcia
-																			// sa
-																			// robi
-																			// but
-																			// 1)
-																			// koli
-																			// report
-																			// generatoru
-																			// 2)
-																			// koli
-																			// korekcii
+				
+				/*
+				 *  detekcia sa robi bud:
+				 *  1. kvoli report generatoru
+				 *  2. kvoli korekcii
+				 *  
+				 */
+				if (enableReportGeneration) {// || (skewDetectionMode != 0)) {
 					notNormalizedCopy = plate.clone();
 					notNormalizedCopy.horizontalEdgeDetector(notNormalizedCopy
 							.getBi());
@@ -369,8 +357,8 @@ public class Intelligence {
 					RecognizedChar rc = null;
 					if (ok == true) {
 						rc = chrRecog.recognize(chr);
-						similarityCost = rc.getPatterns().elementAt(0)
-								.getCost();
+						similarityCost = rc.getPatterns().elementAt(0).getCost();
+						
 						if (similarityCost > configurator
 								.getDoubleProperty("intelligence_maxSimilarityCostDispersion")) {
 							errorFlags += "NEU ";
@@ -433,6 +421,209 @@ public class Intelligence {
 					Main.rg.insertText("</span>");
 				}
 
+				return parsedOutput;
+
+			} // end for each plate
+
+		}
+
+		lastProcessDuration = time.getTime();
+		// return new String("not available yet ;-)");
+		return null;
+	}
+
+	public String recognize(CarSnapshot carSnapshot) throws Exception { //TODO; remove throws, should be static?
+		TimeMeter time = new TimeMeter();
+		int syntaxAnalysisMode = configurator
+				.getIntProperty("intelligence_syntaxanalysis");
+		int skewDetectionMode = configurator
+				.getIntProperty("intelligence_skewdetection");
+
+		for (Band b : carSnapshot.getBands()) { // doporucene 3
+			
+			for (Plate plate : b.getPlates()) {// doporucene 3
+
+				// SKEW-RELATED
+				Plate notNormalizedCopy = null;
+				BufferedImage renderedHoughTransform = null;
+				HoughTransformation hough = null;
+				if (skewDetectionMode != 0) { // detekcia
+																			// sa
+																			// robi
+																			// but
+																			// 1)
+																			// koli
+																			// report
+																			// generatoru
+																			// 2)
+																			// koli
+																			// korekcii
+					notNormalizedCopy = plate.clone();
+					notNormalizedCopy.horizontalEdgeDetector(notNormalizedCopy
+							.getBi());
+					hough = notNormalizedCopy.getHoughTransformation();
+					renderedHoughTransform = hough.render(
+							HoughTransformation.RENDER_ALL,
+							HoughTransformation.COLOR_BW);
+				}
+				if (skewDetectionMode != 0) { // korekcia sa robi iba ak je
+												// zapnuta
+					AffineTransform shearTransform = AffineTransform
+							.getShearInstance(0, -(double) hough.dy / hough.dx);
+					BufferedImage core = Photo.createBlankBi(plate.getBi());
+					core.createGraphics().drawRenderedImage(plate.getBi(),
+							shearTransform);
+					plate = new Plate(core);
+				}
+
+				plate.normalize();
+
+				float plateWHratio = (float) plate.getWidth()
+						/ (float) plate.getHeight();
+				if ((plateWHratio < configurator
+						.getDoubleProperty("intelligence_minPlateWidthHeightRatio"))
+						|| (plateWHratio > configurator
+								.getDoubleProperty("intelligence_maxPlateWidthHeightRatio"))) {
+					continue;
+				}
+
+				Vector<Char> chars = plate.getChars();
+
+				// heuristicka analyza znacky z pohladu uniformity a poctu
+				// pismen :
+				// Recognizer.configurator.getIntProperty("intelligence_minimumChars")
+				if ((chars.size() < configurator
+						.getIntProperty("intelligence_minimumChars"))
+						|| (chars.size() > configurator
+								.getIntProperty("intelligence_maximumChars"))) {
+					continue;
+				}
+
+				if (plate.getCharsWidthDispersion(chars) > configurator
+						.getDoubleProperty("intelligence_maxCharWidthDispersion")) {
+					continue;
+				}
+
+				/* ZNACKA PRIJATA, ZACINA NORMALIZACIA A HEURISTIKA PISMEN */
+
+				RecognizedPlate recognizedPlate = new RecognizedPlate();
+
+				for (Char chr : chars) {
+					chr.normalize();
+				}
+
+				float averageHeight = plate.getAveragePieceHeight(chars);
+				float averageContrast = plate.getAveragePieceContrast(chars);
+				float averageBrightness = plate
+						.getAveragePieceBrightness(chars);
+				float averageHue = plate.getAveragePieceHue(chars);
+				float averageSaturation = plate
+						.getAveragePieceSaturation(chars);
+
+				for (Char chr : chars) {
+					// heuristicka analyza jednotlivych pismen
+					boolean ok = true;
+					String errorFlags = "";
+
+					// pri normalizovanom pisme musime uvazovat pomer
+					float widthHeightRatio = (chr.pieceWidth);
+					widthHeightRatio /= (chr.pieceHeight);
+
+					if ((widthHeightRatio < configurator
+							.getDoubleProperty("intelligence_minCharWidthHeightRatio"))
+							|| (widthHeightRatio > configurator
+									.getDoubleProperty("intelligence_maxCharWidthHeightRatio"))) {
+						errorFlags += "WHR ";
+						ok = false;
+						continue;
+					}
+
+					if (((chr.positionInPlate.x1 < 2) || (chr.positionInPlate.x2 > (plate
+							.getWidth() - 1))) && (widthHeightRatio < 0.12)) {
+						errorFlags += "POS ";
+						ok = false;
+						continue;
+					}
+
+					// float similarityCost = rc.getSimilarityCost();
+
+					float contrastCost = Math.abs(chr.statisticContrast
+							- averageContrast);
+					float brightnessCost = Math
+							.abs(chr.statisticAverageBrightness
+									- averageBrightness);
+					float hueCost = Math.abs(chr.statisticAverageHue
+							- averageHue);
+					float saturationCost = Math
+							.abs(chr.statisticAverageSaturation
+									- averageSaturation);
+					float heightCost = (chr.pieceHeight - averageHeight)
+							/ averageHeight;
+
+					if (brightnessCost > configurator
+							.getDoubleProperty("intelligence_maxBrightnessCostDispersion")) {
+						errorFlags += "BRI ";
+						ok = false;
+						continue;
+					}
+					if (contrastCost > configurator
+							.getDoubleProperty("intelligence_maxContrastCostDispersion")) {
+						errorFlags += "CON ";
+						ok = false;
+						continue;
+					}
+					if (hueCost > configurator
+							.getDoubleProperty("intelligence_maxHueCostDispersion")) {
+						errorFlags += "HUE ";
+						ok = false;
+						continue;
+					}
+					if (saturationCost > configurator
+							.getDoubleProperty("intelligence_maxSaturationCostDispersion")) {
+						errorFlags += "SAT ";
+						ok = false;
+						continue;
+					}
+					if (heightCost < -configurator
+							.getDoubleProperty("intelligence_maxHeightCostDispersion")) {
+						errorFlags += "HEI ";
+						ok = false;
+						continue;
+					}
+
+					float similarityCost = 0;
+					RecognizedChar rc = null;
+					if (ok == true) {
+						rc = chrRecog.recognize(chr);
+						similarityCost = rc.getPatterns().elementAt(0).getCost();
+						
+						if (similarityCost > configurator
+								.getDoubleProperty("intelligence_maxSimilarityCostDispersion")) {
+							errorFlags += "NEU ";
+							ok = false;
+							continue;
+						}
+
+					}
+
+					if (ok == true) {
+						recognizedPlate.addChar(rc);
+					}
+					
+				} // end for each char
+
+				// nasledujuci riadok zabezpeci spracovanie dalsieho kandidata
+				// na znacku, v pripade ze charrecognizingu je prilis malo
+				// rozpoznanych pismen
+				if (recognizedPlate.chars.size() < configurator
+						.getIntProperty("intelligence_minimumChars")) {
+					continue;
+				}
+
+				lastProcessDuration = time.getTime();
+				String parsedOutput = Intelligence.parser.parse(
+						recognizedPlate, syntaxAnalysisMode);
+				
 				return parsedOutput;
 
 			} // end for each plate

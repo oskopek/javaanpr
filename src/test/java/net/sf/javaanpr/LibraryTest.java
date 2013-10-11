@@ -18,7 +18,7 @@ public class LibraryTest {
     
     @Test
     public void intelligenceTest() throws Exception {
-        Intelligence intel = new Intelligence(false);
+        Intelligence intel = new Intelligence();
         assertNotNull(intel);
         
         CarSnapshot carSnap = new CarSnapshot("snapshots/test_006.jpg");

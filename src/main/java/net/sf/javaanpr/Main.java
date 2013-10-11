@@ -133,8 +133,7 @@ public class Main {
 
 	// normalizuje abecedu v zdrojovom adresari a vysledok ulozi do cieloveho
 	// adresara
-	public static void newAlphabet(String srcdir, String dstdir)
-			throws Exception { // NOT USED
+	public static void newAlphabet(String srcdir, String dstdir) throws IOException { // NOT USED
 		
 		
 		
@@ -176,14 +175,14 @@ public class Main {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			FrameComponentInit frameComponentInit = new FrameComponentInit(); // show
 																				// wait
-			Main.systemLogic = new Intelligence(false);
+			Main.systemLogic = new Intelligence();
 			frameComponentInit.dispose(); // hide wait
 			new FrameMain();
 		} else if ((args.length == 3) && args[0].equals("-recognize")
 				&& args[1].equals("-i")) {
 			// DONE load snapshot args[2] and recognize it
 			try {
-				Main.systemLogic = new Intelligence(false);
+				Main.systemLogic = new Intelligence();
 				System.out.println(Main.systemLogic.recognize(new CarSnapshot(
 						args[2])));
 			} catch (IOException e) {
@@ -195,9 +194,9 @@ public class Main {
 			try {
 				Main.rg = new ReportGenerator(args[4]); // prepare report
 														// generator
-				Main.systemLogic = new Intelligence(true); // prepare
+				Main.systemLogic = new Intelligence(); // prepare
 															// intelligence
-				Main.systemLogic.recognize(new CarSnapshot(args[2]));
+				Main.systemLogic.recognizeWithReport(new CarSnapshot(args[2]));
 				Main.rg.finish();
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
