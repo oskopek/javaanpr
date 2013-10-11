@@ -383,7 +383,7 @@ public class Char extends Photo {
 			directoryName = directoryName.substring(0, directoryName.length()-1); //cuts last char off
 		}
 		
-		String suffix =  "_" + directoryName.substring(directoryName.lastIndexOf('_'));
+		String suffix =  directoryName.substring(directoryName.lastIndexOf('_'));
 		
 		return suffix;
 	}
@@ -396,12 +396,12 @@ public class Char extends Photo {
 			directory = directory.substring(0, directory.length()-1);
 		}
 		
-		
 		ArrayList<String> filenames = new ArrayList<>();
 		
 		String s;
 		for(int i = 0; i < alphaString.length(); i++) {
 		    s = directory + File.separator + alphaString.charAt(i) + suffix + ".jpg";
+
 		    if(Configurator.getConfigurator().getResourceAsStream(s)!=null) {
 		    	filenames.add(s);
 		    }
