@@ -1,15 +1,3 @@
-CarCV - Car recognizing and speed calculating platform
-Copyright (C) 2012-2013, Ondrej Skopek
-
-All rights reserved.
-
-All authors are printed in the AUTHORS file.
-
-This licence is applicable on all files in this directory or any subdirectories.
-
-Used libraries:
-
-JavaANPR (multiple files in this submodule, derivative works)
 ------------------------------------------------------------------------
 JavaANPR - Automatic Number Plate Recognition System for Java
 ------------------------------------------------------------------------
