@@ -69,6 +69,8 @@ package net.sf.javaanpr.configurator;
 
 import java.awt.Color;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -317,6 +319,19 @@ public class Configurator {
 	    
 	    if(f != null) {
 	    	return getClass().getResourceAsStream(corrected);
+	    }
+	    
+	    File file = new File(filename);
+	    if(file.exists()) {
+	    	FileInputStream fis = null;
+	    	
+	    	try {
+	    		fis = new FileInputStream(file);
+	    	} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} 
+	    	
+	    	return fis;
 	    }
 	    
 	    return null;
