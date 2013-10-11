@@ -445,6 +445,8 @@ public class Intelligence {
 
 				// SKEW-RELATED
 				Plate notNormalizedCopy = null;
+				
+				@SuppressWarnings("unused")
 				BufferedImage renderedHoughTransform = null;
 				HoughTransformation hough = null;
 				if (skewDetectionMode != 0) { // detekcia
@@ -523,6 +525,8 @@ public class Intelligence {
 				for (Char chr : chars) {
 					// heuristicka analyza jednotlivych pismen
 					boolean ok = true;
+					
+					@SuppressWarnings("unused")
 					String errorFlags = "";
 
 					// pri normalizovanom pisme musime uvazovat pomer
@@ -609,7 +613,6 @@ public class Intelligence {
 					if (ok == true) {
 						recognizedPlate.addChar(rc);
 					}
-					
 				} // end for each char
 
 				// nasledujuci riadok zabezpeci spracovanie dalsieho kandidata
@@ -619,6 +622,7 @@ public class Intelligence {
 						.getIntProperty("intelligence_minimumChars")) {
 					continue;
 				}
+				
 
 				lastProcessDuration = time.getTime();
 				String parsedOutput = Intelligence.parser.parse(
