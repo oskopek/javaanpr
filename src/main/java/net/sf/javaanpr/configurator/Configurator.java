@@ -86,7 +86,7 @@ public class Configurator {
 	private String fileName = new String("config.xml");
 	/* Configuration file's comment */
 	private String comment = new String(
-			"This si global configuration file for Automatic Number Plate Recognition System");
+			"This is the global configuration file for Automatic Number Plate Recognition System");
 
 	/* Primary property list containing values from configuration file */
 	private Properties list;
