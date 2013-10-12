@@ -25,6 +25,7 @@ import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -322,6 +323,12 @@ public class IntelligenceTest {
 		// return new String("not available yet ;-)");
 		System.out.println("null string");
 		return;
+	}
+	
+	@Test
+	public void testLastProccessDuration() {
+		Assume.assumeNotNull(lastProcessDuration);
+		System.out.println(lastProcessDuration);
 	}
 
 }

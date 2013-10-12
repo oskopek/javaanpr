@@ -65,7 +65,7 @@ for more info about JavaANPR.
 ------------------------------------------------------------------------
  */
 
-package net.sf.javaanpr;
+package net.sf.javaanpr.jar;
 
 //import com.sun.java.swing.plaf.windows.resources.windows;
 //import java.awt.Color;

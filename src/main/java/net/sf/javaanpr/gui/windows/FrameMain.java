@@ -78,11 +78,11 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
-import net.sf.javaanpr.Main;
 import net.sf.javaanpr.gui.tools.FileListModel;
 import net.sf.javaanpr.gui.tools.ImageFileFilter;
 import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.imageanalysis.Photo;
+import net.sf.javaanpr.jar.Main;
 
 
 public class FrameMain extends javax.swing.JFrame {

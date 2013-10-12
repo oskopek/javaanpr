@@ -141,6 +141,7 @@ public class KnnPatternClassificator extends CharacterRecognizer {
 		return recognized;
 	}
 
+	@SuppressWarnings("unused") //Maybe will be used eventually again
 	private float difference(Vector<Double> vectorA, Vector<Double> vectorB) {
 		float diff = 0;
 		for (int x = 0; x < vectorA.size(); x++) {

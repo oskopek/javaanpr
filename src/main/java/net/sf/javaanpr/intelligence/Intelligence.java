@@ -71,7 +71,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Vector;
 
-import net.sf.javaanpr.Main;
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.gui.TimeMeter;
 import net.sf.javaanpr.imageanalysis.Band;
@@ -80,6 +79,7 @@ import net.sf.javaanpr.imageanalysis.Char;
 import net.sf.javaanpr.imageanalysis.HoughTransformation;
 import net.sf.javaanpr.imageanalysis.Photo;
 import net.sf.javaanpr.imageanalysis.Plate;
+import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.CharacterRecognizer;
 import net.sf.javaanpr.recognizer.KnnPatternClassificator;
 import net.sf.javaanpr.recognizer.NeuralPatternClassificator;

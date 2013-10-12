@@ -77,14 +77,17 @@ import java.util.Vector;
 
 //import org.xml.sax.SAXException;
 
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 
 
-import net.sf.javaanpr.Main;
+
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
+
 
 //import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
