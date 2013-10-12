@@ -71,21 +71,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 
-
-
-
-
-//import org.xml.sax.SAXException;
-
-
-
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-
-
-
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.sf.javaanpr.configurator.Configurator;
@@ -175,11 +162,11 @@ public class Parser {
 	}
 
 	/**
-	 * Returns null if couldn't load file
+	 * 
 	 * @deprecated use {@link Parser#loadFromXml(InputStream)}
 	 * @param fileName
 	 * 
-	 * @return
+	 * @return null if couldn't load file
 	 * @throws IOException 
 	 * @throws SAXException 
 	 * @throws ParserConfigurationException 
@@ -189,6 +176,14 @@ public class Parser {
 		return loadFromXml(inStream);
 	}
 	
+	/**
+	 * 
+	 * @param inStream
+	 * @return {@link Vector} of loaded {@link PlateForm}s
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
 	public Vector<PlateForm> loadFromXml(InputStream inStream) throws ParserConfigurationException, SAXException, IOException {
         Vector<PlateForm> plateForms = new Vector<PlateForm>();
 
