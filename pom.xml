@@ -5,6 +5,24 @@
 	<artifactId>javaanpr</artifactId>
 	<version>1.2.0-SNAPSHOT</version>
 	<name>JavaANPR</name>
+	<packaging>jar</packaging>
+
+	<licenses>
+		<license>
+			<name>Educational Community License, Version 2.0</name>
+			<url>http://opensource.org/licenses/ECL-2.0</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/oskopek/javaanpr.git</url>
+		<connection>scm:git:https://github.com/oskopek/javaanpr.git</connection>
+		<developerConnection>scm:git:https://github.com/oskopek/javaanpr.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+	<url>https://www.ohloh.net/p/javaanpr</url>
+	<description>JavaANPR is an automatic number plate recognition software, which implements algorithmic and mathematical principles from field of artificial intelligence, machine vision and neural networks. It was created by Ondrej Martinsky in 2006 and 2007 as part of the research plan &quot;Security-oriented research in information technology, MSM 0021630528&quot; at Brno University of Technology.</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -72,9 +90,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.12</version>
-				<configuration>
-					<!-- <forkMode>always</forkMode> -->
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -90,15 +105,4 @@
 			<version>4.11</version>
 		</dependency>
 	</dependencies>
-	<scm>
-		<url>https://github.com/oskopek/javaanpr.git</url>
-		<connection>scm:git:https://github.com/oskopek/javaanpr.git</connection>
-		<developerConnection>scm:git:https://github.com/oskopek/javaanpr.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
-	<url>https://www.ohloh.net/p/javaanpr</url>
-	<description>
-JavaANPR is an automatic number plate recognition software, which implements algorithmic and mathematical principles from field of artificial intelligence, machine vision and neural networks.
-
-It was created by Ondrej Martinsky in 2006 and 2007 as part of the research plan &quot;Security-oriented research in information technology, MSM 0021630528&quot; at Brno University of Technology.</description>
 </project>
