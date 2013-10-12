@@ -439,6 +439,7 @@ public class Intelligence {
 		int skewDetectionMode = configurator
 				.getIntProperty("intelligence_skewdetection");
 
+		
 		for (Band b : carSnapshot.getBands()) { // doporucene 3
 			
 			for (Plate plate : b.getPlates()) {// doporucene 3

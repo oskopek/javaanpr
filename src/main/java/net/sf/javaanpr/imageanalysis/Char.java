@@ -401,9 +401,10 @@ public class Char extends Photo {
 		String s;
 		for(int i = 0; i < alphaString.length(); i++) {
 		    s = directory + File.separator + alphaString.charAt(i) + suffix + ".jpg";
-
+		    
 		    if(Configurator.getConfigurator().getResourceAsStream(s)!=null) {
 		    	filenames.add(s);
+		    	continue;
 		    }
 		}
 		
