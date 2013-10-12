@@ -131,8 +131,8 @@ public class FrameMain extends javax.swing.JFrame {
 						parentFrame.panelCar.getWidth(),
 						parentFrame.panelCar.getHeight());
 				parentFrame.panelCar.paint(parentFrame.panelCar.getGraphics());
-			} catch (IOException ex) {
-				ex.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}

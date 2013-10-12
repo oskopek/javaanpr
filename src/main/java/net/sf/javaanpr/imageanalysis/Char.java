@@ -124,6 +124,7 @@ public class Char extends Photo {
 	 * 
 	 * @param fileName
 	 * @throws IOException
+	 * @throws ImageReadException 
 	 */
 	public Char(String fileName) throws IOException {		
 		super(Configurator.getConfigurator().getResourceAsStream(fileName));
@@ -149,6 +150,7 @@ public class Char extends Photo {
 	 * 
 	 * @param is
 	 * @throws IOException
+	 * @throws ImageReadException 
 	 */
 	public Char(InputStream is) throws IOException {		
 		super(is);

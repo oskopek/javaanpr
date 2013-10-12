@@ -77,7 +77,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Vector;
 
-
 //import net.sf.javaanpr.gui.ReportGenerator;
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.imageanalysis.Char;
@@ -141,7 +140,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
 			try {
 				learnAlphabet(learnAlphabetPath);
 			} catch (IOException e) {
-				System.err.println("Failed to load alphabet.");
+				System.err.println("Failed to load alphabet: " + learnAlphabetPath);
 				e.printStackTrace();
 			}
 		} else {

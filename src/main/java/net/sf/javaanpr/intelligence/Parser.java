@@ -78,15 +78,21 @@ import java.util.Vector;
 //import org.xml.sax.SAXException;
 
 
+
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 
 
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
+
+
 
 
 //import javax.xml.parsers.ParserConfigurationException;
@@ -94,6 +100,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class Parser {
 	public class PlateForm {
@@ -153,8 +160,11 @@ public class Parser {
 
 	Vector<PlateForm> plateForms;
 
-	/** Creates a new instance of Parser */
-	public Parser() {
+	/** Creates a new instance of Parser 
+	 * @throws IOException 
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException */
+	public Parser() throws ParserConfigurationException, SAXException, IOException {
 		plateForms = new Vector<PlateForm>();
 		
 		String fileName = Configurator.getConfigurator()
@@ -166,62 +176,28 @@ public class Parser {
 
 	/**
 	 * Returns null if couldn't load file
-	 * 
+	 * @deprecated use {@link Parser#loadFromXml(InputStream)}
 	 * @param fileName
 	 * 
 	 * @return
+	 * @throws IOException 
+	 * @throws SAXException 
+	 * @throws ParserConfigurationException 
 	 */
-	public Vector<PlateForm> loadFromXml(String fileName) {
-		Vector<PlateForm> plateForms = new Vector<PlateForm>();
-
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		
-		Document doc = null;
-		try {
-			DocumentBuilder parser = factory.newDocumentBuilder();
-			doc = parser.parse(fileName);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		Node structureNode = doc.getDocumentElement();
-		NodeList structureNodeContent = structureNode.getChildNodes();
-		for (int i = 0; i < structureNodeContent.getLength(); i++) {
-			Node typeNode = structureNodeContent.item(i);
-			if (!typeNode.getNodeName().equals("type")) {
-				continue;
-			}
-			PlateForm form = new PlateForm(
-					((Element) typeNode).getAttribute("name"));
-			NodeList typeNodeContent = typeNode.getChildNodes();
-			for (int ii = 0; ii < typeNodeContent.getLength(); ii++) {
-				Node charNode = typeNodeContent.item(ii);
-				if (!charNode.getNodeName().equals("char")) {
-					continue;
-				}
-				String content = ((Element) charNode).getAttribute("content");
-
-				form.addPosition(form.new Position(content.toUpperCase()));
-			}
-			plateForms.add(form);
-		}
-		return plateForms;
+	public Vector<PlateForm> loadFromXml(String fileName) throws ParserConfigurationException, SAXException, IOException {
+		InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
+		return loadFromXml(inStream);
 	}
 	
-	public Vector<PlateForm> loadFromXml(InputStream inStream) {
+	public Vector<PlateForm> loadFromXml(InputStream inStream) throws ParserConfigurationException, SAXException, IOException {
         Vector<PlateForm> plateForms = new Vector<PlateForm>();
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         
         Document doc = null;
         
-        try {
         	DocumentBuilder parser = factory.newDocumentBuilder();
         	doc = parser.parse(inStream);
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }
 
         Node structureNode = doc.getDocumentElement();
         NodeList structureNodeContent = structureNode.getChildNodes();

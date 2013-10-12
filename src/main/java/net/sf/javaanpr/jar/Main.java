@@ -67,31 +67,8 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.jar;
 
-//import com.sun.java.swing.plaf.windows.resources.windows;
-//import java.awt.Color;
-//import java.awt.Font;
-//import java.awt.Graphics;
-//import java.awt.Graphics2D;
-//import java.awt.Rectangle;
-//import java.awt.image.BufferedImage;
 import java.io.File;
-//import java.io.FileNotFoundException;
 import java.io.IOException;
-
-//import javax.xml.parsers.ParserConfigurationException;
-//import javax.xml.transform.TransformerException;
-
-//import net.sf.javaanpr.imageanalysis.Band;
-//import net.sf.javaanpr.imageanalysis.Photo;
-//import net.sf.javaanpr.imageanalysis.PixelMap;
-//import net.sf.javaanpr.imageanalysis.Plate;
-//import java.util.*;
-//import net.sf.javaanpr.imageanalysis.Graph.ProbabilityDistributor;
-//import net.sf.javaanpr.neuralnetwork.NeuralNetwork;
-//import net.sf.javaanpr.recognizer.CharacterRecognizer;
-
-
-//import javax.swing.JFrame;
 import javax.swing.UIManager;
 
 import net.sf.javaanpr.configurator.Configurator;

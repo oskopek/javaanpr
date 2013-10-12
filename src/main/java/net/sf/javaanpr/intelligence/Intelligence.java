@@ -69,7 +69,12 @@ package net.sf.javaanpr.intelligence;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Vector;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.gui.TimeMeter;
@@ -92,7 +97,7 @@ public class Intelligence {
 	public static CharacterRecognizer chrRecog;
 	public static Parser parser;
 
-	public Intelligence() {
+	public Intelligence() throws ParserConfigurationException, SAXException, IOException {
 		
 		int classification_method = configurator
 				.getIntProperty("intelligence_classification_method");
