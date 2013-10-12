@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.javaanpr</groupId>
 	<artifactId>javaanpr</artifactId>
@@ -29,7 +28,7 @@
 		<tag>HEAD</tag>
 	</scm>
 	<url>https://www.ohloh.net/p/javaanpr</url>
-	<description>JavaANPR is an automatic number plate recognition software, which implements algorithmic and mathematical principles from field of artificial intelligence, machine vision and neural networks. It was created by Ondrej Martinsky in 2006 and 2007 as part of the research plan &quot;Security-oriented research in information technology, MSM 0021630528&quot; at Brno University of Technology.</description>
+	<description>JavaANPR is an automatic number plate recognition software, which implements algorithmic and mathematical principles from field of artificial intelligence, machine vision and neural networks. It was created by Ondrej Martinsky in 2006 and 2007 as part of the research plan "Security-oriented research in information technology, MSM 0021630528" at Brno University of Technology.</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
