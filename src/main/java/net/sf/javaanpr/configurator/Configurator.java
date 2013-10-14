@@ -79,275 +79,269 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
 public class Configurator {
-    
+
     private static Configurator configurator;
-    
-	/* Default name of configuration file */
-	private String fileName = "config.xml";
-	/* Configuration file's comment */
-	private String comment = "This is the global configuration file for Automatic Number Plate Recognition System";
 
-	/* Primary property list containing values from configuration file */
-	private Properties list;
+    /* Default name of configuration file */
+    private String fileName = "config.xml";
+    /* Configuration file's comment */
+    private String comment = "This is the global configuration file for Automatic Number Plate Recognition System";
 
-	public Configurator() throws IOException {
-		list = new Properties();
-		/* ***** BEGIN *** Definition of property defaults ******* */
+    /* Primary property list containing values from configuration file */
+    private Properties list;
 
-		// PHOTO
+    public Configurator() throws IOException {
+        this.list = new Properties();
+        /* ***** BEGIN *** Definition of property defaults ******* */
 
-		// adaptive thresholding radius (0 = no adaptive)
-		setIntProperty("photo_adaptivethresholdingradius", 7); // 7 is
-																// recommanded
+        // PHOTO
 
-		// BANDGRAPH - spracovanie horizontalnej projekcie detekovanej oblasti
-		// znacky
-		// na ose X sa detekuje peak, peakfoot, a nakoniec sa to nasobi p.d.m.c
-		// konstantou
-		setDoubleProperty("bandgraph_peakfootconstant", 0.55); // 0.75
-		setDoubleProperty("bandgraph_peakDiffMultiplicationConstant", 0.2);
+        // adaptive thresholding radius (0 = no adaptive)
+        this.setIntProperty("photo_adaptivethresholdingradius", 7); // 7 is
+        // recommanded
 
-		// CARSNAPSHOT
-		setIntProperty("carsnapshot_distributormargins", 25);
-		setIntProperty("carsnapshot_graphrankfilter", 9);
+        // BANDGRAPH - spracovanie horizontalnej projekcie detekovanej oblasti
+        // znacky
+        // na ose X sa detekuje peak, peakfoot, a nakoniec sa to nasobi p.d.m.c
+        // konstantou
+        this.setDoubleProperty("bandgraph_peakfootconstant", 0.55); // 0.75
+        this.setDoubleProperty("bandgraph_peakDiffMultiplicationConstant", 0.2);
 
-		// CARSNAPSHOTGRAPH
-		setDoubleProperty("carsnapshotgraph_peakfootconstant", 0.55); // 0.55
-		setDoubleProperty("carsnapshotgraph_peakDiffMultiplicationConstant",
-				0.1);
+        // CARSNAPSHOT
+        this.setIntProperty("carsnapshot_distributormargins", 25);
+        this.setIntProperty("carsnapshot_graphrankfilter", 9);
 
-		setIntProperty("intelligence_skewdetection", 0);
+        // CARSNAPSHOTGRAPH
+        this.setDoubleProperty("carsnapshotgraph_peakfootconstant", 0.55); // 0.55
+        this.setDoubleProperty("carsnapshotgraph_peakDiffMultiplicationConstant", 0.1);
 
-		// CHAR
-		// this.setDoubleProperty("char_contrastnormalizationconstant", 0.5);
-		// //1.0
-		setIntProperty("char_normalizeddimensions_x", 8); // 8
-		setIntProperty("char_normalizeddimensions_y", 13); // 13
-		setIntProperty("char_resizeMethod", 1); // 0=linear 1=average
-		setIntProperty("char_featuresExtractionMethod", 0); // 0=map,
-															// 1=edge
-		setStrProperty("char_neuralNetworkPath",
-				"/neuralnetworks/network_avgres_813_map.xml");
-		setStrProperty("char_learnAlphabetPath",
-				"/alphabets/alphabet_8x13");
-		setIntProperty("intelligence_classification_method", 0); // 0 =
-																	// pattern
-																	// match
-																	// ,1=nn
+        this.setIntProperty("intelligence_skewdetection", 0);
 
-		// PLATEGRAPH
-		setDoubleProperty("plategraph_peakfootconstant", 0.7); // urci
-																// sirku
-																// detekovanej
-																// medzery
-		setDoubleProperty("plategraph_rel_minpeaksize", 0.86); // 0.85 //
-																// mensie
-																// cislo
-																// seka
-																// znaky,
-																// vacsie
-																// zase
-																// nespravne
-																// zdruzuje
+        // CHAR
+        // this.setDoubleProperty("char_contrastnormalizationconstant", 0.5);
+        // //1.0
+        this.setIntProperty("char_normalizeddimensions_x", 8); // 8
+        this.setIntProperty("char_normalizeddimensions_y", 13); // 13
+        this.setIntProperty("char_resizeMethod", 1); // 0=linear 1=average
+        this.setIntProperty("char_featuresExtractionMethod", 0); // 0=map,
+        // 1=edge
+        this.setStrProperty("char_neuralNetworkPath", "/neuralnetworks/network_avgres_813_map.xml");
+        this.setStrProperty("char_learnAlphabetPath", "/alphabets/alphabet_8x13");
+        this.setIntProperty("intelligence_classification_method", 0); // 0 =
+                                                                      // pattern
+                                                                      // match
+                                                                      // ,1=nn
 
-		// PLATEGRAPHHORIZONTALGRAPH
-		setDoubleProperty("platehorizontalgraph_peakfootconstant", 0.05);
-		setIntProperty("platehorizontalgraph_detectionType", 1); // 1=edgedetection
-																	// 0=magnitudederivate
+        // PLATEGRAPH
+        this.setDoubleProperty("plategraph_peakfootconstant", 0.7); // urci
+        // sirku
+        // detekovanej
+        // medzery
+        this.setDoubleProperty("plategraph_rel_minpeaksize", 0.86); // 0.85 //
+        // mensie
+        // cislo
+        // seka
+        // znaky,
+        // vacsie
+        // zase
+        // nespravne
+        // zdruzuje
 
-		// PLATEVERICALGRAPH
-		setDoubleProperty("plateverticalgraph_peakfootconstant", 0.42);
+        // PLATEGRAPHHORIZONTALGRAPH
+        this.setDoubleProperty("platehorizontalgraph_peakfootconstant", 0.05);
+        this.setIntProperty("platehorizontalgraph_detectionType", 1); // 1=edgedetection
+                                                                      // 0=magnitudederivate
 
-		// INTELLIGENCE
-		setIntProperty("intelligence_numberOfBands", 3);
-		setIntProperty("intelligence_numberOfPlates", 3);
-		setIntProperty("intelligence_numberOfChars", 20);
+        // PLATEVERICALGRAPH
+        this.setDoubleProperty("plateverticalgraph_peakfootconstant", 0.42);
 
-		setIntProperty("intelligence_minimumChars", 5);
-		setIntProperty("intelligence_maximumChars", 15);
+        // INTELLIGENCE
+        this.setIntProperty("intelligence_numberOfBands", 3);
+        this.setIntProperty("intelligence_numberOfPlates", 3);
+        this.setIntProperty("intelligence_numberOfChars", 20);
 
-		// plate heuristics
-		setDoubleProperty("intelligence_maxCharWidthDispersion", 0.5); // in
-																		// plate
-		setDoubleProperty("intelligence_minPlateWidthHeightRatio", 0.5);
-		setDoubleProperty("intelligence_maxPlateWidthHeightRatio", 15.0);
+        this.setIntProperty("intelligence_minimumChars", 5);
+        this.setIntProperty("intelligence_maximumChars", 15);
 
-		// char heuristics
-		setDoubleProperty("intelligence_minCharWidthHeightRatio", 0.1);
-		setDoubleProperty("intelligence_maxCharWidthHeightRatio", 0.92);
-		setDoubleProperty("intelligence_maxBrightnessCostDispersion", 0.161);
-		setDoubleProperty("intelligence_maxContrastCostDispersion", 0.1);
-		setDoubleProperty("intelligence_maxHueCostDispersion", 0.145);
-		setDoubleProperty("intelligence_maxSaturationCostDispersion", 0.24); // 0.15
-		setDoubleProperty("intelligence_maxHeightCostDispersion", 0.2);
-		setDoubleProperty("intelligence_maxSimilarityCostDispersion", 100);
+        // plate heuristics
+        this.setDoubleProperty("intelligence_maxCharWidthDispersion", 0.5); // in
+        // plate
+        this.setDoubleProperty("intelligence_minPlateWidthHeightRatio", 0.5);
+        this.setDoubleProperty("intelligence_maxPlateWidthHeightRatio", 15.0);
 
-		// RECOGNITION
-		setIntProperty("intelligence_syntaxanalysis", 2);
-		setStrProperty("intelligence_syntaxDescriptionFile",
-				"/syntax/syntax.xml");
+        // char heuristics
+        this.setDoubleProperty("intelligence_minCharWidthHeightRatio", 0.1);
+        this.setDoubleProperty("intelligence_maxCharWidthHeightRatio", 0.92);
+        this.setDoubleProperty("intelligence_maxBrightnessCostDispersion", 0.161);
+        this.setDoubleProperty("intelligence_maxContrastCostDispersion", 0.1);
+        this.setDoubleProperty("intelligence_maxHueCostDispersion", 0.145);
+        this.setDoubleProperty("intelligence_maxSaturationCostDispersion", 0.24); // 0.15
+        this.setDoubleProperty("intelligence_maxHeightCostDispersion", 0.2);
+        this.setDoubleProperty("intelligence_maxSimilarityCostDispersion", 100);
 
-		// NEURAL NETWORK
-		// int maxK, double eps, double lambda, double micro
+        // RECOGNITION
+        this.setIntProperty("intelligence_syntaxanalysis", 2);
+        this.setStrProperty("intelligence_syntaxDescriptionFile", "/syntax/syntax.xml");
 
-		setIntProperty("neural_maxk", 8000); // maximum K - maximalny pocet
-												// iteracii
-		setDoubleProperty("neural_eps", 0.07); // epsilon - pozadovana
-												// presnost
-		setDoubleProperty("neural_lambda", 0.05); // lambda factor -
-													// rychlost ucenia,
-													// velkost gradientu
-		setDoubleProperty("neural_micro", 0.5); // micro - momentovy clen
-												// pre prekonavanie
-												// lokalnych extremov
-		// top(log(m recognized units)) = 6
-		setIntProperty("neural_topology", 20); // topologia strednej vrstvy
+        // NEURAL NETWORK
+        // int maxK, double eps, double lambda, double micro
 
-		/* ***** END ***** Definition of property defaults ******* */
+        this.setIntProperty("neural_maxk", 8000); // maximum K - maximalny pocet
+                                                  // iteracii
+        this.setDoubleProperty("neural_eps", 0.07); // epsilon - pozadovana
+        // presnost
+        this.setDoubleProperty("neural_lambda", 0.05); // lambda factor -
+                                                       // rychlost ucenia,
+                                                       // velkost gradientu
+        this.setDoubleProperty("neural_micro", 0.5); // micro - momentovy clen
+        // pre prekonavanie
+        // lokalnych extremov
+        // top(log(m recognized units)) = 6
+        this.setIntProperty("neural_topology", 20); // topologia strednej vrstvy
 
-		setStrProperty("help_file_help", "/help/help.html");
-		setStrProperty("help_file_about", "/help/about.html");
-		setStrProperty("reportgeneratorcss",
-				"/reportgenerator/style.css");
-		
-		InputStream is = getResourceAsStream(fileName);
-		
-		if(is!=null) {
-			loadConfiguration(is);
-			is.close();
-		}
-		
-		Configurator.configurator = this;
-	}
+        /* ***** END ***** Definition of property defaults ******* */
 
-	public Configurator(String path) throws IOException {
-		this();
+        this.setStrProperty("help_file_help", "/help/help.html");
+        this.setStrProperty("help_file_about", "/help/about.html");
+        this.setStrProperty("reportgeneratorcss", "/reportgenerator/style.css");
 
+        InputStream is = this.getResourceAsStream(this.fileName);
 
-	}
+        if (is != null) {
+            this.loadConfiguration(is);
+            is.close();
+        }
 
-	public void setConfigurationFileName(String name) {
-		fileName = name;
-	}
+        Configurator.configurator = this;
+    }
 
-	public String getConfigurationFileName() {
-		return fileName;
-	}
+    public Configurator(String path) throws IOException {
+        this();
 
-	public String getStrProperty(String name) {
-		return list.getProperty(name).toString();
-	}
+    }
 
-	public String getPathProperty(String name) {
-		return getStrProperty(name).replace('/', File.separatorChar);
+    public void setConfigurationFileName(String name) {
+        this.fileName = name;
+    }
 
-	}
+    public String getConfigurationFileName() {
+        return this.fileName;
+    }
 
-	public void setStrProperty(String name, String value) {
-		list.setProperty(name, value);
-	}
+    public String getStrProperty(String name) {
+        return this.list.getProperty(name).toString();
+    }
 
-	public int getIntProperty(String name) throws NumberFormatException {
-		return Integer.decode(list.getProperty(name));
-	}
+    public String getPathProperty(String name) {
+        return this.getStrProperty(name).replace('/', File.separatorChar);
 
-	public void setIntProperty(String name, int value) {
-		list.setProperty(name, String.valueOf(value));
-	}
+    }
 
-	public double getDoubleProperty(String name) throws NumberFormatException {
-		return Double.parseDouble(list.getProperty(name));
-	}
+    public void setStrProperty(String name, String value) {
+        this.list.setProperty(name, value);
+    }
 
-	public void setDoubleProperty(String name, double value) {
-		list.setProperty(name, String.valueOf(value));
-	}
+    public int getIntProperty(String name) throws NumberFormatException {
+        return Integer.decode(this.list.getProperty(name));
+    }
 
-	public Color getColorProperty(String name) {
-		return new Color(Integer.decode(list.getProperty(name)));
-	}
+    public void setIntProperty(String name, int value) {
+        this.list.setProperty(name, String.valueOf(value));
+    }
 
-	public void setColorProperty(String name, Color value) {
-		list.setProperty(name, String.valueOf(value.getRGB()));
-	}
+    public double getDoubleProperty(String name) throws NumberFormatException {
+        return Double.parseDouble(this.list.getProperty(name));
+    }
 
-	public void saveConfiguration() throws IOException {
-		saveConfiguration(fileName);
-	}
+    public void setDoubleProperty(String name, double value) {
+        this.list.setProperty(name, String.valueOf(value));
+    }
 
-	public void saveConfiguration(String arg_file) throws IOException {
-		FileOutputStream os = new FileOutputStream(arg_file);
-		list.storeToXML(os, comment);
-	}
+    public Color getColorProperty(String name) {
+        return new Color(Integer.decode(this.list.getProperty(name)));
+    }
 
-	public void loadConfiguration() throws InvalidPropertiesFormatException, IOException {
-		loadConfiguration(fileName);
-	}
+    public void setColorProperty(String name, Color value) {
+        this.list.setProperty(name, String.valueOf(value.getRGB()));
+    }
 
-	public void loadConfiguration(String arg_file) throws InvalidPropertiesFormatException, IOException {
-		InputStream is = getResourceAsStream(arg_file);
-        
-		loadConfiguration(is);
-	}
-	
-	public void loadConfiguration(InputStream arg_stream) throws InvalidPropertiesFormatException, IOException {
-	    if(arg_stream == null) {
-	    	list = null;
+    public void saveConfiguration() throws IOException {
+        this.saveConfiguration(this.fileName);
+    }
+
+    public void saveConfiguration(String arg_file) throws IOException {
+        FileOutputStream os = new FileOutputStream(arg_file);
+        this.list.storeToXML(os, this.comment);
+    }
+
+    public void loadConfiguration() throws InvalidPropertiesFormatException, IOException {
+        this.loadConfiguration(this.fileName);
+    }
+
+    public void loadConfiguration(String arg_file) throws InvalidPropertiesFormatException, IOException {
+        InputStream is = this.getResourceAsStream(arg_file);
+
+        this.loadConfiguration(is);
+    }
+
+    public void loadConfiguration(InputStream arg_stream) throws InvalidPropertiesFormatException, IOException {
+        if (arg_stream == null) {
+            this.list = null;
             return;
         }
-	    
-        list.loadFromXML(arg_stream);
-	}
-	
-	public InputStream getResourceAsStream(String filename) {
-	    String corrected = filename;
-	    
-	    URL f = getClass().getResource(corrected);
-	    if(f != null) {
-	        return getClass().getResourceAsStream(corrected);
-	    }
-	    
-	    if (filename.startsWith("/")) {
-	        corrected = filename.substring(1);
-	    } else if(filename.startsWith("./")) {
-	        corrected = filename.substring(2);
-	    } else {
-	        corrected = "/" + filename;
-	    }
-	    
-	    f = getClass().getResource(corrected);
-	    
-	    if(f != null) {
-	    	return getClass().getResourceAsStream(corrected);
-	    }
-	    
-	    File file = new File(filename);
-	    if(file.exists()) {
-	    	FileInputStream fis = null;
-	    	
-	    	try {
-	    		fis = new FileInputStream(file);
-	    	} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} 
-	    	
-	    	return fis;
-	    }
-	    
-	    return null;
-	}
-	
-	public static Configurator getConfigurator() {
-		if(configurator==null) {
-			try {
-				configurator = new Configurator();
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-		
-	    return configurator;
-	}
+
+        this.list.loadFromXML(arg_stream);
+    }
+
+    public InputStream getResourceAsStream(String filename) {
+        String corrected = filename;
+
+        URL f = this.getClass().getResource(corrected);
+        if (f != null) {
+            return this.getClass().getResourceAsStream(corrected);
+        }
+
+        if (filename.startsWith("/")) {
+            corrected = filename.substring(1);
+        } else if (filename.startsWith("./")) {
+            corrected = filename.substring(2);
+        } else {
+            corrected = "/" + filename;
+        }
+
+        f = this.getClass().getResource(corrected);
+
+        if (f != null) {
+            return this.getClass().getResourceAsStream(corrected);
+        }
+
+        File file = new File(filename);
+        if (file.exists()) {
+            FileInputStream fis = null;
+
+            try {
+                fis = new FileInputStream(file);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            return fis;
+        }
+
+        return null;
+    }
+
+    public static Configurator getConfigurator() {
+        if (configurator == null) {
+            try {
+                configurator = new Configurator();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        return configurator;
+    }
 
 }

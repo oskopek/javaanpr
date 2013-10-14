@@ -76,90 +76,85 @@ import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.imageanalysis.Char;
 
 public class KnnPatternClassificator extends CharacterRecognizer {
-	Vector<Vector<Double>> learnVectors;
+    Vector<Vector<Double>> learnVectors;
 
-	public KnnPatternClassificator() {		
-		String path = Configurator.getConfigurator()
-				.getPathProperty("char_learnAlphabetPath");
+    public KnnPatternClassificator() {
+        String path = Configurator.getConfigurator().getPathProperty("char_learnAlphabetPath");
 
-		// inicializacia vektora na pozadovanu velkost (nulovanie poloziek)
-		learnVectors = new Vector<Vector<Double>>(36);
-		
-		ArrayList<String> filenames = (ArrayList<String>) Char.getAlphabetList(path);
-		
-		for (String fileName : filenames) {
-			InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
-			
-			Char imgChar = null;
-			
-			try {
-				imgChar = new Char(is);
-				
-			} catch (IOException e) {
-				System.err.println("Failed to load Char: " + fileName);
-				e.printStackTrace();
-			}
-			imgChar.normalize();
-			// zapis na danu poziciu vo vektore
-			learnVectors.add(imgChar.extractFeatures());
-		}
+        // inicializacia vektora na pozadovanu velkost (nulovanie poloziek)
+        this.learnVectors = new Vector<Vector<Double>>(36);
 
-		// kontrola poloziek vektora
-		for (int i = 0; i < learnVectors.size(); i++) {
-			if (learnVectors.elementAt(i) == null) {
-				System.err.println("Warning : alphabet in " + path
-						+ " is not complete");
-			}
-		}
+        ArrayList<String> filenames = (ArrayList<String>) Char.getAlphabetList(path);
 
-	}
+        for (String fileName : filenames) {
+            InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
 
-	@Override
-	public RecognizedChar recognize(Char chr) {
-		Vector<Double> tested = chr.extractFeatures();
-		//int minx = 0;
-		//float minfx = Float.POSITIVE_INFINITY;
+            Char imgChar = null;
 
-		RecognizedChar recognized = new RecognizedChar();
+            try {
+                imgChar = new Char(is);
 
-		for (int x = 0; x < learnVectors.size(); x++) {
-			// pre lepsie fungovanie bol pouhy rozdiel vektorov nahradeny
-			// euklidovskou vzdialenostou
-			float fx = simplifiedEuclideanDistance(tested,
-					learnVectors.elementAt(x));
+            } catch (IOException e) {
+                System.err.println("Failed to load Char: " + fileName);
+                e.printStackTrace();
+            }
+            imgChar.normalize();
+            // zapis na danu poziciu vo vektore
+            this.learnVectors.add(imgChar.extractFeatures());
+        }
 
-			recognized.addPattern(recognized.new RecognizedPattern(alphabet[x],
-					fx));
+        // kontrola poloziek vektora
+        for (int i = 0; i < this.learnVectors.size(); i++) {
+            if (this.learnVectors.elementAt(i) == null) {
+                System.err.println("Warning : alphabet in " + path + " is not complete");
+            }
+        }
 
-			// if (fx < minfx) {
-			// minfx = fx;
-			// minx = x;
-			// }
-		}
-		// return new RecognizedChar(this.alphabet[minx], minfx);
-		recognized.sort(0);
-		return recognized;
-	}
+    }
 
-	@SuppressWarnings("unused") //Maybe will be used eventually again
-	private float difference(Vector<Double> vectorA, Vector<Double> vectorB) {
-		float diff = 0;
-		for (int x = 0; x < vectorA.size(); x++) {
-			diff += Math.abs(vectorA.elementAt(x) - vectorB.elementAt(x));
-		}
-		return diff;
-	}
+    @Override
+    public RecognizedChar recognize(Char chr) {
+        Vector<Double> tested = chr.extractFeatures();
+        //int minx = 0;
+        //float minfx = Float.POSITIVE_INFINITY;
 
-	private float simplifiedEuclideanDistance(Vector<Double> vectorA,
-			Vector<Double> vectorB) {
-		float diff = 0;
-		float partialDiff;
-		for (int x = 0; x < vectorA.size(); x++) {
-			partialDiff = (float) Math.abs(vectorA.elementAt(x)
-					- vectorB.elementAt(x));
-			diff += partialDiff * partialDiff;
-		}
-		return diff;
-	}
+        RecognizedChar recognized = new RecognizedChar();
+
+        for (int x = 0; x < this.learnVectors.size(); x++) {
+            // pre lepsie fungovanie bol pouhy rozdiel vektorov nahradeny
+            // euklidovskou vzdialenostou
+            float fx = this.simplifiedEuclideanDistance(tested, this.learnVectors.elementAt(x));
+
+            recognized.addPattern(recognized.new RecognizedPattern(alphabet[x], fx));
+
+            // if (fx < minfx) {
+            // minfx = fx;
+            // minx = x;
+            // }
+        }
+        // return new RecognizedChar(this.alphabet[minx], minfx);
+        recognized.sort(0);
+        return recognized;
+    }
+
+    @SuppressWarnings("unused")
+    //Maybe will be used eventually again
+    private float difference(Vector<Double> vectorA, Vector<Double> vectorB) {
+        float diff = 0;
+        for (int x = 0; x < vectorA.size(); x++) {
+            diff += Math.abs(vectorA.elementAt(x) - vectorB.elementAt(x));
+        }
+        return diff;
+    }
+
+    private float simplifiedEuclideanDistance(Vector<Double> vectorA, Vector<Double> vectorB) {
+        float diff = 0;
+        float partialDiff;
+        for (int x = 0; x < vectorA.size(); x++) {
+            partialDiff = (float) Math.abs(vectorA.elementAt(x) - vectorB.elementAt(x));
+            diff += partialDiff * partialDiff;
+        }
+        return diff;
+    }
 
 }

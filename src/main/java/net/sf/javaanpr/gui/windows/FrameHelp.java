@@ -74,95 +74,82 @@ import java.io.File;
 import net.sf.javaanpr.configurator.Configurator;
 
 public class FrameHelp extends javax.swing.JFrame {
-	static final long serialVersionUID = 0;
+    static final long serialVersionUID = 0;
 
-	public static int SHOW_HELP = 0;
-	public static int SHOW_ABOUT = 1;
-	public int mode;
+    public static int SHOW_HELP = 0;
+    public static int SHOW_ABOUT = 1;
+    public int mode;
 
-	/** Creates new form FrameHelp */
-	public FrameHelp(int mode) {
-		initComponents();
-		this.mode = mode;
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int width = getWidth();
-		int height = getHeight();
-		this.setLocation((screenSize.width - width) / 2,
-				(screenSize.height - height) / 2);
-		try {
-			if (mode == FrameHelp.SHOW_ABOUT) {
-				editorPane.setPage(new File(Configurator.getConfigurator() //TODO; fix this to actually load the file from jar
-						.getPathProperty("help_file_about")).toURI().toURL());
-			} else {
-				editorPane.setPage(new File(Configurator.getConfigurator()
-						.getPathProperty("help_file_help")).toURI().toURL());
-			}
-		} catch (Exception e) {
-			dispose();
-		}
-		setVisible(true);
-	}
+    /** Creates new form FrameHelp */
+    public FrameHelp(int mode) {
+        this.initComponents();
+        this.mode = mode;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = this.getWidth();
+        int height = this.getHeight();
+        this.setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
+        try {
+            if (mode == FrameHelp.SHOW_ABOUT) {
+                this.editorPane.setPage(new File(Configurator.getConfigurator() //TODO; fix this to actually load the file from jar
+                        .getPathProperty("help_file_about")).toURI().toURL());
+            } else {
+                this.editorPane.setPage(new File(Configurator.getConfigurator().getPathProperty("help_file_help"))
+                        .toURI().toURL());
+            }
+        } catch (Exception e) {
+            this.dispose();
+        }
+        this.setVisible(true);
+    }
 
-	// <editor-fold defaultstate="collapsed"
-	// desc=" Generated Code ">//GEN-BEGIN:initComponents
-	private void initComponents() {
-		jScrollPane1 = new javax.swing.JScrollPane();
-		editorPane = new javax.swing.JEditorPane();
-		helpWindowClose = new javax.swing.JButton();
+    // <editor-fold defaultstate="collapsed"
+    // desc=" Generated Code ">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        this.jScrollPane1 = new javax.swing.JScrollPane();
+        this.editorPane = new javax.swing.JEditorPane();
+        this.helpWindowClose = new javax.swing.JButton();
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setTitle("JavaANPR");
-		setResizable(false);
-		jScrollPane1.setViewportView(editorPane);
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        this.setTitle("JavaANPR");
+        this.setResizable(false);
+        this.jScrollPane1.setViewportView(this.editorPane);
 
-		helpWindowClose.setFont(new java.awt.Font("Arial", 0, 11));
-		helpWindowClose.setText("Close");
-		helpWindowClose.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				helpWindowCloseActionPerformed(evt);
-			}
-		});
+        this.helpWindowClose.setFont(new java.awt.Font("Arial", 0, 11));
+        this.helpWindowClose.setText("Close");
+        this.helpWindowClose.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FrameHelp.this.helpWindowCloseActionPerformed(evt);
+            }
+        });
 
-		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(
-				getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout
-				.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-				.add(layout
-						.createSequentialGroup()
-						.addContainerGap()
-						.add(layout
-								.createParallelGroup(
-										org.jdesktop.layout.GroupLayout.LEADING)
-								.add(org.jdesktop.layout.GroupLayout.TRAILING,
-										helpWindowClose)
-								.add(jScrollPane1,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										514, Short.MAX_VALUE))
-						.addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(
-				org.jdesktop.layout.GroupLayout.LEADING).add(
-				org.jdesktop.layout.GroupLayout.TRAILING,
-				layout.createSequentialGroup()
-						.addContainerGap()
-						.add(jScrollPane1,
-								org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-								461, Short.MAX_VALUE)
-						.addPreferredGap(
-								org.jdesktop.layout.LayoutStyle.RELATED)
-						.add(helpWindowClose).addContainerGap()));
-		pack();
-	}// </editor-fold>//GEN-END:initComponents
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this.getContentPane());
+        this.getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+                layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(layout
+                                .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(org.jdesktop.layout.GroupLayout.TRAILING, this.helpWindowClose)
+                                .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 514,
+                                        Short.MAX_VALUE)).addContainerGap()));
+        layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+                org.jdesktop.layout.GroupLayout.TRAILING,
+                layout.createSequentialGroup().addContainerGap()
+                        .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(this.helpWindowClose)
+                        .addContainerGap()));
+        this.pack();
+    }// </editor-fold>//GEN-END:initComponents
 
-	private void helpWindowCloseActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_helpWindowCloseActionPerformed
-		dispose();
-	}// GEN-LAST:event_helpWindowCloseActionPerformed
+    private void helpWindowCloseActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_helpWindowCloseActionPerformed
+        this.dispose();
+    }// GEN-LAST:event_helpWindowCloseActionPerformed
 
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JEditorPane editorPane;
-	private javax.swing.JButton helpWindowClose;
-	private javax.swing.JScrollPane jScrollPane1;
-	// End of variables declaration//GEN-END:variables
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JEditorPane editorPane;
+    private javax.swing.JButton helpWindowClose;
+    private javax.swing.JScrollPane jScrollPane1;
+    // End of variables declaration//GEN-END:variables
 
 }

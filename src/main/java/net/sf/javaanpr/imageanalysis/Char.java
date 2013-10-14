@@ -76,341 +76,323 @@ import java.util.List;
 //import java.awt.image.ConvolveOp;
 //import java.awt.image.Kernel;
 import java.util.Vector;
-
 //import org.omg.CORBA.TIMEOUT;
-
 import net.sf.javaanpr.configurator.Configurator;
+
 import net.sf.javaanpr.recognizer.CharacterRecognizer;
 
 public class Char extends Photo {
 
-	public boolean normalized = false;
-	public PositionInPlate positionInPlate = null;
+    public boolean normalized = false;
+    public PositionInPlate positionInPlate = null;
 
-	// private PixelMap pixelMap;
-	private PixelMap.Piece bestPiece = null;
+    // private PixelMap pixelMap;
+    private PixelMap.Piece bestPiece = null;
 
-	public int fullWidth, fullHeight, pieceWidth, pieceHeight;
+    public int fullWidth, fullHeight, pieceWidth, pieceHeight;
 
-	public float statisticAverageBrightness;
-	public float statisticMinimumBrightness;
-	public float statisticMaximumBrightness;
-	public float statisticContrast;
-	public float statisticAverageHue;
-	public float statisticAverageSaturation;
+    public float statisticAverageBrightness;
+    public float statisticMinimumBrightness;
+    public float statisticMaximumBrightness;
+    public float statisticContrast;
+    public float statisticAverageHue;
+    public float statisticAverageSaturation;
 
-	public BufferedImage thresholdedImage;
+    public BufferedImage thresholdedImage;
 
-	public Char(BufferedImage bi, BufferedImage thresholdedImage,
-			PositionInPlate positionInPlate) {
-		super(bi);
-		this.thresholdedImage = thresholdedImage;
-		this.positionInPlate = positionInPlate;
-		init();
-	}
+    public Char(BufferedImage bi, BufferedImage thresholdedImage, PositionInPlate positionInPlate) {
+        super(bi);
+        this.thresholdedImage = thresholdedImage;
+        this.positionInPlate = positionInPlate;
+        this.init();
+    }
 
-	public Char(BufferedImage bi) {
-		this(bi, bi, null);
-		init();
-	}
-	
-	/**
-	 * Nacita znak zo suboru a hned vykona aj thresholding
-	 * prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze znaky sa
-	 * vysekavaju
-	 * zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru
-	 * tomuto
-	 * principu nezodpoveda, cize spravime prahovanie zvlast
-	 * 
-	 * @param fileName
-	 * @throws IOException
-	 * @throws ImageReadException 
-	 */
-	public Char(String fileName) throws IOException {		
-		super(Configurator.getConfigurator().getResourceAsStream(fileName));
-		// this.thresholdedImage = this.image; povodny kod, zakomentovany dna
-		// 23.12.2006 2:33 AM
+    public Char(BufferedImage bi) {
+        this(bi, bi, null);
+        this.init();
+    }
 
-		// nasledovne 4 riadky pridane 23.12.2006 2:33 AM
-		BufferedImage origin = Photo.duplicateBufferedImage(image);
-		adaptiveThresholding(); // s ucinnostou nad this.image
-		thresholdedImage = image;
-		image = origin;
+    /**
+     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u
+     * znakov nerobi, pretoze znaky sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale
+     * nacitavanie zo suboru tomuto principu nezodpoveda, cize spravime prahovanie zvlast
+     * 
+     * @param fileName
+     * @throws IOException
+     * @throws ImageReadException
+     */
+    public Char(String fileName) throws IOException {
+        super(Configurator.getConfigurator().getResourceAsStream(fileName));
+        // this.thresholdedImage = this.image; povodny kod, zakomentovany dna
+        // 23.12.2006 2:33 AM
 
-		init();
-	}
+        // nasledovne 4 riadky pridane 23.12.2006 2:33 AM
+        BufferedImage origin = Photo.duplicateBufferedImage(this.image);
+        this.adaptiveThresholding(); // s ucinnostou nad this.image
+        this.thresholdedImage = this.image;
+        this.image = origin;
 
-	/**
-	 * Nacita znak zo suboru a hned vykona aj thresholding
-	 * prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze znaky sa
-	 * vysekavaju
-	 * zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru
-	 * tomuto
-	 * principu nezodpoveda, cize spravime prahovanie zvlast
-	 * 
-	 * @param is
-	 * @throws IOException
-	 * @throws ImageReadException 
-	 */
-	public Char(InputStream is) throws IOException {		
-		super(is);
-		// this.thresholdedImage = this.image; povodny kod, zakomentovany dna
-		// 23.12.2006 2:33 AM
+        this.init();
+    }
 
-		// nasledovne 4 riadky pridane 23.12.2006 2:33 AM
-		BufferedImage origin = Photo.duplicateBufferedImage(image);
-		adaptiveThresholding(); // s ucinnostou nad this.image
-		thresholdedImage = image;
-		image = origin;
+    /**
+     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u
+     * znakov nerobi, pretoze znaky sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale
+     * nacitavanie zo suboru tomuto principu nezodpoveda, cize spravime prahovanie zvlast
+     * 
+     * @param is
+     * @throws IOException
+     * @throws ImageReadException
+     */
+    public Char(InputStream is) throws IOException {
+        super(is);
+        // this.thresholdedImage = this.image; povodny kod, zakomentovany dna
+        // 23.12.2006 2:33 AM
 
-		init();
-	}
+        // nasledovne 4 riadky pridane 23.12.2006 2:33 AM
+        BufferedImage origin = Photo.duplicateBufferedImage(this.image);
+        this.adaptiveThresholding(); // s ucinnostou nad this.image
+        this.thresholdedImage = this.image;
+        this.image = origin;
 
-	@Override
-	public Char clone() {
-		return new Char(duplicateBufferedImage(image),
-				duplicateBufferedImage(thresholdedImage), positionInPlate);
-	}
+        this.init();
+    }
 
-	private void init() {
-		fullWidth = super.getWidth();
-		fullHeight = super.getHeight();
-	}
+    @Override
+    public Char clone() {
+        return new Char(duplicateBufferedImage(this.image), duplicateBufferedImage(this.thresholdedImage),
+                this.positionInPlate);
+    }
 
-	public void normalize() {
+    private void init() {
+        this.fullWidth = super.getWidth();
+        this.fullHeight = super.getHeight();
+    }
 
-		if (normalized) {
-			return;
-		}
+    public void normalize() {
 
-		BufferedImage colorImage = duplicateBufferedImage(getBi());
-		image = thresholdedImage;
+        if (this.normalized) {
+            return;
+        }
 
-		/*
-		 * NEBUDEME POUZIVAT // tu treba osetrit pripady, ked je prvy alebo
-		 * posledny riadok cely cierny (zmenime na biely) boolean flag = false;
-		 * for (int x=0; x<this.getWidth(); x++) if (this.getBrightness(x,0) >
-		 * 0.5f) flag = true; if (flag == false) for (int x=0;
-		 * x<this.getWidth(); x++) this.setBrightness(x,0,1.0f);
-		 */
-		PixelMap pixelMap = getPixelMap();
+        BufferedImage colorImage = duplicateBufferedImage(this.getBi());
+        this.image = this.thresholdedImage;
 
-		bestPiece = pixelMap.getBestPiece();
+        /*
+         * NEBUDEME POUZIVAT // tu treba osetrit pripady, ked je prvy alebo
+         * posledny riadok cely cierny (zmenime na biely) boolean flag = false;
+         * for (int x=0; x<this.getWidth(); x++) if (this.getBrightness(x,0) >
+         * 0.5f) flag = true; if (flag == false) for (int x=0;
+         * x<this.getWidth(); x++) this.setBrightness(x,0,1.0f);
+         */
+        PixelMap pixelMap = this.getPixelMap();
 
-		colorImage = getBestPieceInFullColor(colorImage, bestPiece);
+        this.bestPiece = pixelMap.getBestPiece();
 
-		// vypocet statistik
-		computeStatisticBrightness(colorImage);
-		computeStatisticContrast(colorImage);
-		computeStatisticHue(colorImage);
-		computeStatisticSaturation(colorImage);
+        colorImage = this.getBestPieceInFullColor(colorImage, this.bestPiece);
 
-		image = bestPiece.render();
+        // vypocet statistik
+        this.computeStatisticBrightness(colorImage);
+        this.computeStatisticContrast(colorImage);
+        this.computeStatisticHue(colorImage);
+        this.computeStatisticSaturation(colorImage);
 
-		if (image == null) {
-			image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
-		}
+        this.image = this.bestPiece.render();
 
-		pieceWidth = super.getWidth();
-		pieceHeight = super.getHeight();
+        if (this.image == null) {
+            this.image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+        }
 
-		normalizeResizeOnly();
-		normalized = true;
-	}
+        this.pieceWidth = super.getWidth();
+        this.pieceHeight = super.getHeight();
 
-	private BufferedImage getBestPieceInFullColor(BufferedImage bi,
-			PixelMap.Piece piece) {
-		if ((piece.width <= 0) || (piece.height <= 0)) {
-			return bi;
-		}
-		return bi.getSubimage(piece.mostLeftPoint, piece.mostTopPoint,
-				piece.width, piece.height);
-	}
+        this.normalizeResizeOnly();
+        this.normalized = true;
+    }
 
-	private void normalizeResizeOnly() { // vracia ten isty Char, nie novy
+    private BufferedImage getBestPieceInFullColor(BufferedImage bi, PixelMap.Piece piece) {
+        if ((piece.width <= 0) || (piece.height <= 0)) {
+            return bi;
+        }
+        return bi.getSubimage(piece.mostLeftPoint, piece.mostTopPoint, piece.width, piece.height);
+    }
 
-		int x = Configurator.getConfigurator()
-				.getIntProperty("char_normalizeddimensions_x");
-		int y = Configurator.getConfigurator()
-				.getIntProperty("char_normalizeddimensions_y");
-		if ((x == 0) || (y == 0)) {
-			return;// nebude resize
-			// this.linearResize(x,y);
-		}
+    private void normalizeResizeOnly() { // vracia ten isty Char, nie novy
 
-		if (Configurator.getConfigurator().getIntProperty("char_resizeMethod") == 0) {
-			linearResize(x, y); // radsej weighted average
-		} else {
-			averageResize(x, y);
-		}
+        int x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
+        int y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
+        if ((x == 0) || (y == 0)) {
+            return;// nebude resize
+            // this.linearResize(x,y);
+        }
 
-		normalizeBrightness(0.5f);
-	}
+        if (Configurator.getConfigurator().getIntProperty("char_resizeMethod") == 0) {
+            this.linearResize(x, y); // radsej weighted average
+        } else {
+            this.averageResize(x, y);
+        }
 
-	// /////////////////////////////////////////////////////
-	private void computeStatisticContrast(BufferedImage bi) {
-		float sum = 0;
-		int w = bi.getWidth();
-		int h = bi.getHeight();
-		for (int x = 0; x < w; x++) {
-			for (int y = 0; y < h; y++) {
-				sum += Math.abs(statisticAverageBrightness
-						- Photo.getBrightness(bi, x, y));
-			}
-		}
-		statisticContrast = sum / (w * h);
-	}
+        this.normalizeBrightness(0.5f);
+    }
 
-	private void computeStatisticBrightness(BufferedImage bi) {
-		float sum = 0;
-		float min = Float.POSITIVE_INFINITY;
-		float max = Float.NEGATIVE_INFINITY;
+    // /////////////////////////////////////////////////////
+    private void computeStatisticContrast(BufferedImage bi) {
+        float sum = 0;
+        int w = bi.getWidth();
+        int h = bi.getHeight();
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                sum += Math.abs(this.statisticAverageBrightness - Photo.getBrightness(bi, x, y));
+            }
+        }
+        this.statisticContrast = sum / (w * h);
+    }
 
-		int w = bi.getWidth();
-		int h = bi.getHeight();
-		for (int x = 0; x < w; x++) {
-			for (int y = 0; y < h; y++) {
-				float value = Photo.getBrightness(bi, x, y);
-				sum += value;
-				min = Math.min(min, value);
-				max = Math.max(max, value);
-			}
-		}
-		statisticAverageBrightness = sum / (w * h);
-		statisticMinimumBrightness = min;
-		statisticMaximumBrightness = max;
-	}
+    private void computeStatisticBrightness(BufferedImage bi) {
+        float sum = 0;
+        float min = Float.POSITIVE_INFINITY;
+        float max = Float.NEGATIVE_INFINITY;
 
-	private void computeStatisticHue(BufferedImage bi) {
-		float sum = 0;
-		int w = bi.getWidth();
-		int h = bi.getHeight();
-		for (int x = 0; x < w; x++) {
-			for (int y = 0; y < h; y++) {
-				sum += Photo.getHue(bi, x, y);
-			}
-		}
-		statisticAverageHue = sum / (w * h);
-	}
+        int w = bi.getWidth();
+        int h = bi.getHeight();
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                float value = Photo.getBrightness(bi, x, y);
+                sum += value;
+                min = Math.min(min, value);
+                max = Math.max(max, value);
+            }
+        }
+        this.statisticAverageBrightness = sum / (w * h);
+        this.statisticMinimumBrightness = min;
+        this.statisticMaximumBrightness = max;
+    }
 
-	private void computeStatisticSaturation(BufferedImage bi) {
-		float sum = 0;
-		int w = bi.getWidth();
-		int h = bi.getHeight();
-		for (int x = 0; x < w; x++) {
-			for (int y = 0; y < h; y++) {
-				sum += Photo.getSaturation(bi, x, y);
-			}
-		}
-		statisticAverageSaturation = sum / (w * h);
-	}
+    private void computeStatisticHue(BufferedImage bi) {
+        float sum = 0;
+        int w = bi.getWidth();
+        int h = bi.getHeight();
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                sum += Photo.getHue(bi, x, y);
+            }
+        }
+        this.statisticAverageHue = sum / (w * h);
+    }
 
-	public PixelMap getPixelMap() {
-		return new PixelMap(this);
-	}
+    private void computeStatisticSaturation(BufferedImage bi) {
+        float sum = 0;
+        int w = bi.getWidth();
+        int h = bi.getHeight();
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                sum += Photo.getSaturation(bi, x, y);
+            }
+        }
+        this.statisticAverageSaturation = sum / (w * h);
+    }
 
-	// //////
+    public PixelMap getPixelMap() {
+        return new PixelMap(this);
+    }
 
-	public Vector<Double> extractEdgeFeatures() {
-		int w = image.getWidth();
-		int h = image.getHeight();
-		double featureMatch;
+    // //////
 
-		float[][] array = bufferedImageToArrayWithBounds(image, w, h);
-		w += 2; // pridame okraje
-		h += 2;
+    public Vector<Double> extractEdgeFeatures() {
+        int w = this.image.getWidth();
+        int h = this.image.getHeight();
+        double featureMatch;
 
-		float[][] features = CharacterRecognizer.features;
-		// Vector<Double> output = new Vector<Double>(features.length*4);
-		double[] output = new double[features.length * 4];
+        float[][] array = this.bufferedImageToArrayWithBounds(this.image, w, h);
+        w += 2; // pridame okraje
+        h += 2;
 
-		for (int f = 0; f < features.length; f++) { // cez vsetky features
-			for (int my = 0; my < (h - 1); my++) {
-				for (int mx = 0; mx < (w - 1); mx++) { // dlazdice x 0,2,4,..8
-														// vcitane
-					featureMatch = 0;
-					featureMatch += Math.abs(array[mx][my] - features[f][0]);
-					featureMatch += Math
-							.abs(array[mx + 1][my] - features[f][1]);
-					featureMatch += Math
-							.abs(array[mx][my + 1] - features[f][2]);
-					featureMatch += Math.abs(array[mx + 1][my + 1]
-							- features[f][3]);
+        float[][] features = CharacterRecognizer.features;
+        // Vector<Double> output = new Vector<Double>(features.length*4);
+        double[] output = new double[features.length * 4];
 
-					int bias = 0;
-					if (mx >= (w / 2)) {
-						bias += features.length; // ak je v kvadrante napravo ,
-					}
-					// posunieme bias o jednu
-					// triedu
-					if (my >= (h / 2)) {
-						bias += features.length * 2; // ak je v dolnom
-					}
-					// kvadrante, posuvame
-					// bias o 2 triedy
-					output[bias + f] += featureMatch < 0.05 ? 1 : 0;
-				} // end my
-			} // end mx
-		} // end f
-		Vector<Double> outputVector = new Vector<Double>();
-		for (Double value : output) {
-			outputVector.add(value);
-		}
-		return outputVector;
-	}
+        for (int f = 0; f < features.length; f++) { // cez vsetky features
+            for (int my = 0; my < (h - 1); my++) {
+                for (int mx = 0; mx < (w - 1); mx++) { // dlazdice x 0,2,4,..8
+                                                       // vcitane
+                    featureMatch = 0;
+                    featureMatch += Math.abs(array[mx][my] - features[f][0]);
+                    featureMatch += Math.abs(array[mx + 1][my] - features[f][1]);
+                    featureMatch += Math.abs(array[mx][my + 1] - features[f][2]);
+                    featureMatch += Math.abs(array[mx + 1][my + 1] - features[f][3]);
 
-	public Vector<Double> extractMapFeatures() {
-		Vector<Double> vectorInput = new Vector<Double>();
-		for (int y = 0; y < getHeight(); y++) {
-			for (int x = 0; x < getWidth(); x++) {
-				vectorInput.add(new Double(this.getBrightness(x, y)));
-			}
-		}
-		return vectorInput;
-	}
+                    int bias = 0;
+                    if (mx >= (w / 2)) {
+                        bias += features.length; // ak je v kvadrante napravo ,
+                    }
+                    // posunieme bias o jednu
+                    // triedu
+                    if (my >= (h / 2)) {
+                        bias += features.length * 2; // ak je v dolnom
+                    }
+                    // kvadrante, posuvame
+                    // bias o 2 triedy
+                    output[bias + f] += featureMatch < 0.05 ? 1 : 0;
+                } // end my
+            } // end mx
+        } // end f
+        Vector<Double> outputVector = new Vector<Double>();
+        for (Double value : output) {
+            outputVector.add(value);
+        }
+        return outputVector;
+    }
 
-	public Vector<Double> extractFeatures() {
-		int featureExtractionMethod = Configurator.getConfigurator()
-				.getIntProperty("char_featuresExtractionMethod");
-		if (featureExtractionMethod == 0) {
-			return extractMapFeatures();
-		} else {
-			return extractEdgeFeatures();
-		}
-	}
-	
+    public Vector<Double> extractMapFeatures() {
+        Vector<Double> vectorInput = new Vector<Double>();
+        for (int y = 0; y < this.getHeight(); y++) {
+            for (int x = 0; x < this.getWidth(); x++) {
+                vectorInput.add(new Double(this.getBrightness(x, y)));
+            }
+        }
+        return vectorInput;
+    }
 
-	private static String getSuffix(String directoryName) {		
-		if(directoryName.endsWith("/")) {
-			directoryName = directoryName.substring(0, directoryName.length()-1); //cuts last char off
-		}
-		
-		String suffix =  directoryName.substring(directoryName.lastIndexOf('_'));
-		
-		return suffix;
-	}
-	
-	public static List<String> getAlphabetList(String directory) {
-		final String alphaString = "0123456789abcdefghijklmnopqrstuvwxyz";
-		final String suffix = getSuffix(directory);
-		
-		if(directory.endsWith("/")) {
-			directory = directory.substring(0, directory.length()-1);
-		}
-		
-		ArrayList<String> filenames = new ArrayList<>();
-		
-		String s;
-		for(int i = 0; i < alphaString.length(); i++) {
-		    s = directory + File.separator + alphaString.charAt(i) + suffix + ".jpg";
-		    
-		    if(Configurator.getConfigurator().getResourceAsStream(s)!=null) {
-		    	filenames.add(s);
-		    	continue;
-		    }
-		}
-		
-		return filenames;
-	} 
+    public Vector<Double> extractFeatures() {
+        int featureExtractionMethod = Configurator.getConfigurator().getIntProperty("char_featuresExtractionMethod");
+        if (featureExtractionMethod == 0) {
+            return this.extractMapFeatures();
+        } else {
+            return this.extractEdgeFeatures();
+        }
+    }
+
+    private static String getSuffix(String directoryName) {
+        if (directoryName.endsWith("/")) {
+            directoryName = directoryName.substring(0, directoryName.length() - 1); //cuts last char off
+        }
+
+        String suffix = directoryName.substring(directoryName.lastIndexOf('_'));
+
+        return suffix;
+    }
+
+    public static List<String> getAlphabetList(String directory) {
+        final String alphaString = "0123456789abcdefghijklmnopqrstuvwxyz";
+        final String suffix = getSuffix(directory);
+
+        if (directory.endsWith("/")) {
+            directory = directory.substring(0, directory.length() - 1);
+        }
+
+        ArrayList<String> filenames = new ArrayList<>();
+
+        String s;
+        for (int i = 0; i < alphaString.length(); i++) {
+            s = directory + File.separator + alphaString.charAt(i) + suffix + ".jpg";
+
+            if (Configurator.getConfigurator().getResourceAsStream(s) != null) {
+                filenames.add(s);
+                continue;
+            }
+        }
+
+        return filenames;
+    }
 
 }

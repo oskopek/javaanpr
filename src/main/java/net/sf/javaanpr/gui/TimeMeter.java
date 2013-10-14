@@ -70,13 +70,13 @@ package net.sf.javaanpr.gui;
 import java.util.Calendar;
 
 public class TimeMeter {
-	private long startTime;
+    private long startTime;
 
-	public TimeMeter() {
-		startTime = Calendar.getInstance().getTimeInMillis();
-	}
+    public TimeMeter() {
+        this.startTime = Calendar.getInstance().getTimeInMillis();
+    }
 
-	public long getTime() {
-		return Calendar.getInstance().getTimeInMillis() - startTime;
-	}
+    public long getTime() {
+        return Calendar.getInstance().getTimeInMillis() - this.startTime;
+    }
 }

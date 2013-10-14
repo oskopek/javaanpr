@@ -79,9 +79,6 @@ import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
 
-
-
-
 //import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -90,109 +87,114 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class Parser {
-	public class PlateForm {
-		public class Position {
-			public char[] allowedChars;
+    public class PlateForm {
+        public class Position {
+            public char[] allowedChars;
 
-			public Position(String data) {
-				allowedChars = data.toCharArray();
-			}
+            public Position(String data) {
+                this.allowedChars = data.toCharArray();
+            }
 
-			public boolean isAllowed(char chr) {
-				boolean ret = false;
-				for (int i = 0; i < allowedChars.length; i++) {
-					if (allowedChars[i] == chr) {
-						ret = true;
-					}
-				}
-				return ret;
-			}
-		}
+            public boolean isAllowed(char chr) {
+                boolean ret = false;
+                for (int i = 0; i < this.allowedChars.length; i++) {
+                    if (this.allowedChars[i] == chr) {
+                        ret = true;
+                    }
+                }
+                return ret;
+            }
+        }
 
-		Vector<Position> positions;
-		String name;
-		public boolean flagged = false;
+        Vector<Position> positions;
+        String name;
+        public boolean flagged = false;
 
-		public PlateForm(String name) {
-			this.name = name;
-			positions = new Vector<Position>();
-		}
+        public PlateForm(String name) {
+            this.name = name;
+            this.positions = new Vector<Position>();
+        }
 
-		public void addPosition(Position p) {
-			positions.add(p);
-		}
+        public void addPosition(Position p) {
+            this.positions.add(p);
+        }
 
-		public Position getPosition(int index) {
-			return positions.elementAt(index);
-		}
+        public Position getPosition(int index) {
+            return this.positions.elementAt(index);
+        }
 
-		public int length() {
-			return positions.size();
-		}
+        public int length() {
+            return this.positions.size();
+        }
 
-	}
+    }
 
-	public class FinalPlate {
-		public String plate;
-		public float requiredChanges = 0;
+    public class FinalPlate {
+        public String plate;
+        public float requiredChanges = 0;
 
-		FinalPlate() {
-			plate = new String();
-		}
+        FinalPlate() {
+            this.plate = new String();
+        }
 
-		public void addChar(char chr) {
-			plate = plate + chr;
-		}
-	}
+        public void addChar(char chr) {
+            this.plate = this.plate + chr;
+        }
+    }
 
-	Vector<PlateForm> plateForms;
+    Vector<PlateForm> plateForms;
 
-	/** Creates a new instance of Parser 
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException */
-	public Parser() throws ParserConfigurationException, SAXException, IOException {
-		plateForms = new Vector<PlateForm>();
-		
-		String fileName = Configurator.getConfigurator()
-                .getPathProperty("intelligence_syntaxDescriptionFile");
-		InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
-		
-		plateForms = loadFromXml(inStream);
-	}
+    /**
+     * Creates a new instance of Parser
+     * 
+     * @throws IOException
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     */
+    public Parser() throws ParserConfigurationException, SAXException, IOException {
+        this.plateForms = new Vector<PlateForm>();
 
-	/**
-	 * 
-	 * @deprecated use {@link Parser#loadFromXml(InputStream)}
-	 * @param fileName
-	 * 
-	 * @return null if couldn't load file
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws ParserConfigurationException 
-	 */
-	public Vector<PlateForm> loadFromXml(String fileName) throws ParserConfigurationException, SAXException, IOException {
-		InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
-		return loadFromXml(inStream);
-	}
-	
-	/**
-	 * 
-	 * @param inStream
-	 * @return {@link Vector} of loaded {@link PlateForm}s
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
-	 * @throws IOException
-	 */
-	public Vector<PlateForm> loadFromXml(InputStream inStream) throws ParserConfigurationException, SAXException, IOException {
+        String fileName = Configurator.getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
+        InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
+
+        this.plateForms = this.loadFromXml(inStream);
+    }
+
+    /**
+     * 
+     * @deprecated use {@link Parser#loadFromXml(InputStream)}
+     * @param fileName
+     * 
+     * @return null if couldn't load file
+     * @throws IOException
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     */
+    @Deprecated
+    public Vector<PlateForm> loadFromXml(String fileName) throws ParserConfigurationException, SAXException,
+            IOException {
+        InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
+        return this.loadFromXml(inStream);
+    }
+
+    /**
+     * 
+     * @param inStream
+     * @return {@link Vector} of loaded {@link PlateForm}s
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     */
+    public Vector<PlateForm> loadFromXml(InputStream inStream) throws ParserConfigurationException, SAXException,
+            IOException {
         Vector<PlateForm> plateForms = new Vector<PlateForm>();
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        
+
         Document doc = null;
-        
-        	DocumentBuilder parser = factory.newDocumentBuilder();
-        	doc = parser.parse(inStream);
+
+        DocumentBuilder parser = factory.newDocumentBuilder();
+        doc = parser.parse(inStream);
 
         Node structureNode = doc.getDocumentElement();
         NodeList structureNodeContent = structureNode.getChildNodes();
@@ -201,8 +203,7 @@ public class Parser {
             if (!typeNode.getNodeName().equals("type")) {
                 continue;
             }
-            PlateForm form = new PlateForm(
-                    ((Element) typeNode).getAttribute("name"));
+            PlateForm form = new PlateForm(((Element) typeNode).getAttribute("name"));
             NodeList typeNodeContent = typeNode.getChildNodes();
             for (int ii = 0; ii < typeNodeContent.getLength(); ii++) {
                 Node charNode = typeNodeContent.item(ii);
@@ -218,130 +219,125 @@ public class Parser {
         return plateForms;
     }
 
-	// //
-	public void unFlagAll() {
-		for (PlateForm form : plateForms) {
-			form.flagged = false;
-		}
-	}
+    // //
+    public void unFlagAll() {
+        for (PlateForm form : this.plateForms) {
+            form.flagged = false;
+        }
+    }
 
-	// pre danu dlzku znacky sa pokusi najst nejaky plateform o rovnakej dlzke
-	// v pripade ze nenajde ziadny, pripusti moznost ze je nejaky znak navyse
-	// a hlada plateform s mensim poctom pismen
-	public void flagEqualOrShorterLength(int length) {
-		boolean found = false;
-		for (int i = length; (i >= 1) && !found; i--) {
-			for (PlateForm form : plateForms) {
-				if (form.length() == i) {
-					form.flagged = true;
-					found = true;
-				}
-			}
-		}
-	}
+    // pre danu dlzku znacky sa pokusi najst nejaky plateform o rovnakej dlzke
+    // v pripade ze nenajde ziadny, pripusti moznost ze je nejaky znak navyse
+    // a hlada plateform s mensim poctom pismen
+    public void flagEqualOrShorterLength(int length) {
+        boolean found = false;
+        for (int i = length; (i >= 1) && !found; i--) {
+            for (PlateForm form : this.plateForms) {
+                if (form.length() == i) {
+                    form.flagged = true;
+                    found = true;
+                }
+            }
+        }
+    }
 
-	public void flagEqualLength(int length) {
-		for (PlateForm form : plateForms) {
-			if (form.length() == length) {
-				form.flagged = true;
-			}
-		}
-	}
+    public void flagEqualLength(int length) {
+        for (PlateForm form : this.plateForms) {
+            if (form.length() == length) {
+                form.flagged = true;
+            }
+        }
+    }
 
-	public void invertFlags() {
-		for (PlateForm form : plateForms) {
-			form.flagged = !form.flagged;
-		}
-	}
+    public void invertFlags() {
+        for (PlateForm form : this.plateForms) {
+            form.flagged = !form.flagged;
+        }
+    }
 
-	// syntax analysis mode : 0 (do not parse)
-	// : 1 (only equal length)
-	// : 2 (equal or shorter)
-	public String parse(RecognizedPlate recognizedPlate, int syntaxAnalysisMode)
-			throws IOException {
-		if (syntaxAnalysisMode == 0) {
-			Main.rg.insertText(" result : " + recognizedPlate.getString()
-					+ " --> <font size=15>" + recognizedPlate.getString()
-					+ "</font><hr><br>");
-			return recognizedPlate.getString();
-		}
+    // syntax analysis mode : 0 (do not parse)
+    // : 1 (only equal length)
+    // : 2 (equal or shorter)
+    public String parse(RecognizedPlate recognizedPlate, int syntaxAnalysisMode) throws IOException {
+        if (syntaxAnalysisMode == 0) {
+            Main.rg.insertText(" result : " + recognizedPlate.getString() + " --> <font size=15>"
+                    + recognizedPlate.getString() + "</font><hr><br>");
+            return recognizedPlate.getString();
+        }
 
-		int length = recognizedPlate.chars.size();
-		unFlagAll();
-		if (syntaxAnalysisMode == 1) {
-			flagEqualLength(length);
-		} else {
-			flagEqualOrShorterLength(length);
-		}
+        int length = recognizedPlate.chars.size();
+        this.unFlagAll();
+        if (syntaxAnalysisMode == 1) {
+            this.flagEqualLength(length);
+        } else {
+            this.flagEqualOrShorterLength(length);
+        }
 
-		Vector<FinalPlate> finalPlates = new Vector<FinalPlate>();
+        Vector<FinalPlate> finalPlates = new Vector<FinalPlate>();
 
-		for (PlateForm form : plateForms) {
-			if (!form.flagged) {
-				continue; // skip unflagged
-			}
-			for (int i = 0; i <= (length - form.length()); i++) { // posuvanie
-																	// formy po
-																	// znacke
-				// System.out.println("comparing "+recognizedPlate.getString()+" with form "+form.name+" and offset "+i
-				// );
-				FinalPlate finalPlate = new FinalPlate();
-				for (int ii = 0; ii < form.length(); ii++) { // prebehnut vsetky
-																// znaky formy
-					// form.getPosition(ii).allowedChars // zoznam povolenych
-					RecognizedChar rc = recognizedPlate.getChar(ii + i); // znak
-																			// na
-																			// znacke
+        for (PlateForm form : this.plateForms) {
+            if (!form.flagged) {
+                continue; // skip unflagged
+            }
+            for (int i = 0; i <= (length - form.length()); i++) { // posuvanie
+                                                                  // formy po
+                                                                  // znacke
+                // System.out.println("comparing "+recognizedPlate.getString()+" with form "+form.name+" and offset "+i
+                // );
+                FinalPlate finalPlate = new FinalPlate();
+                for (int ii = 0; ii < form.length(); ii++) { // prebehnut vsetky
+                                                             // znaky formy
+                    // form.getPosition(ii).allowedChars // zoznam povolenych
+                    RecognizedChar rc = recognizedPlate.getChar(ii + i); // znak
+                                                                         // na
+                                                                         // znacke
 
-					if (form.getPosition(ii).isAllowed(
-							rc.getPattern(0).getChar())) {
-						finalPlate.addChar(rc.getPattern(0).getChar());
-					} else { // treba vymenu
-						finalPlate.requiredChanges++; // +1 za pismeno
-						for (int x = 0; x < rc.getPatterns().size(); x++) {
-							if (form.getPosition(ii).isAllowed(
-									rc.getPattern(x).getChar())) {
-								RecognizedChar.RecognizedPattern rp = rc
-										.getPattern(x);
-								finalPlate.requiredChanges += (rp.getCost() / 100); // +x
-																					// za
-																					// jeho
-																					// cost
-								finalPlate.addChar(rp.getChar());
-								break;
-							}
-						}
-					}
-				}
-				// System.out.println("adding "+finalPlate.plate+" with required changes "+finalPlate.requiredChanges);
-				finalPlates.add(finalPlate);
-			}
-		}
-		//
+                    if (form.getPosition(ii).isAllowed(rc.getPattern(0).getChar())) {
+                        finalPlate.addChar(rc.getPattern(0).getChar());
+                    } else { // treba vymenu
+                        finalPlate.requiredChanges++; // +1 za pismeno
+                        for (int x = 0; x < rc.getPatterns().size(); x++) {
+                            if (form.getPosition(ii).isAllowed(rc.getPattern(x).getChar())) {
+                                RecognizedChar.RecognizedPattern rp = rc.getPattern(x);
+                                finalPlate.requiredChanges += (rp.getCost() / 100); // +x
+                                                                                    // za
+                                                                                    // jeho
+                                                                                    // cost
+                                finalPlate.addChar(rp.getChar());
+                                break;
+                            }
+                        }
+                    }
+                }
+                // System.out.println("adding "+finalPlate.plate+" with required changes "+finalPlate.requiredChanges);
+                finalPlates.add(finalPlate);
+            }
+        }
+        //
 
-		// tu este osetrit nespracovanie znacky v pripade ze nebola oznacena
-		// ziadna
-		if (finalPlates.size() == 0) {
-			return recognizedPlate.getString();
-		}
-		// else :
-		// najst tu s najmensim poctom vymen
-		float minimalChanges = Float.POSITIVE_INFINITY;
-		int minimalIndex = 0;
-		// System.out.println("---");
-		for (int i = 0; i < finalPlates.size(); i++) {
-			// System.out.println("::"+finalPlates.elementAt(i).plate+" "+finalPlates.elementAt(i).requiredChanges);
-			if (finalPlates.elementAt(i).requiredChanges <= minimalChanges) {
-				minimalChanges = finalPlates.elementAt(i).requiredChanges;
-				minimalIndex = i;
-			}
-		}
+        // tu este osetrit nespracovanie znacky v pripade ze nebola oznacena
+        // ziadna
+        if (finalPlates.size() == 0) {
+            return recognizedPlate.getString();
+        }
+        // else :
+        // najst tu s najmensim poctom vymen
+        float minimalChanges = Float.POSITIVE_INFINITY;
+        int minimalIndex = 0;
+        // System.out.println("---");
+        for (int i = 0; i < finalPlates.size(); i++) {
+            // System.out.println("::"+finalPlates.elementAt(i).plate+" "+finalPlates.elementAt(i).requiredChanges);
+            if (finalPlates.elementAt(i).requiredChanges <= minimalChanges) {
+                minimalChanges = finalPlates.elementAt(i).requiredChanges;
+                minimalIndex = i;
+            }
+        }
 
-		String toReturn = recognizedPlate.getString();
-		if (finalPlates.elementAt(minimalIndex).requiredChanges <= 2) {
-			toReturn = finalPlates.elementAt(minimalIndex).plate;
-		}
-		return toReturn;
-	}
+        String toReturn = recognizedPlate.getString();
+        if (finalPlates.elementAt(minimalIndex).requiredChanges <= 2) {
+            toReturn = finalPlates.elementAt(minimalIndex).plate;
+        }
+        return toReturn;
+    }
 
 }

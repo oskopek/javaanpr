@@ -76,521 +76,516 @@ import java.util.Stack;
 import java.util.Vector;
 
 public class PixelMap {
-	private class Point {
-		int x;
-		int y;
+    private class Point {
+        int x;
+        int y;
 
-		// boolean deleted;
-		Point(int x, int y) {
-			this.x = x;
-			this.y = y;
-			// this.deleted = false;
-		}
+        // boolean deleted;
+        Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+            // this.deleted = false;
+        }
 
-		boolean equals(Point p2) {
-			if ((p2.x == x) && (p2.y == y)) {
-				return true;
-			}
-			return false;
-		}
-		
-		/*
-		boolean equals(int x, int y) {
-			if ((x == this.x) && (y == this.y)) {
-				return true;
-			}
-			return false;
-		}
-		*/
+        boolean equals(Point p2) {
+            if ((p2.x == this.x) && (p2.y == this.y)) {
+                return true;
+            }
+            return false;
+        }
 
-		/*
-		public boolean value() {
-			return matrix[x][y];
-		}
-		*/
-	}
+        /*
+        boolean equals(int x, int y) {
+        	if ((x == this.x) && (y == this.y)) {
+        		return true;
+        	}
+        	return false;
+        }
+        */
 
-	private class PointSet extends Stack<Point> {
-		static final long serialVersionUID = 0;
+        /*
+        public boolean value() {
+        	return matrix[x][y];
+        }
+        */
+    }
 
-		public void removePoint(Point p) {
-			Point toRemove = null;
-			for (Point px : this) {
-				if (px.equals(p)) {
-					toRemove = px;
-				}
-			}
-			this.remove(toRemove);
-		}
+    private class PointSet extends Stack<Point> {
+        static final long serialVersionUID = 0;
 
-	}
+        public void removePoint(Point p) {
+            Point toRemove = null;
+            for (Point px : this) {
+                if (px.equals(p)) {
+                    toRemove = px;
+                }
+            }
+            this.remove(toRemove);
+        }
 
-	public class PieceSet extends Vector<Piece> {
-		static final long serialVersionUID = 0;
-	}
+    }
 
-	private Piece bestPiece = null;
+    public class PieceSet extends Vector<Piece> {
+        static final long serialVersionUID = 0;
+    }
 
-	public class Piece extends PointSet {
-		static final long serialVersionUID = 0;
-		public int mostLeftPoint;
-		public int mostRightPoint;
-		public int mostTopPoint;
-		public int mostBottomPoint;
-		public int width;
-		public int height;
-		public int centerX;
-		public int centerY;
-		public float magnitude;
-		public int numberOfBlackPoints;
-		public int numberOfAllPoints;
+    private Piece bestPiece = null;
 
-		public BufferedImage render() {
-			if (numberOfAllPoints == 0) {
-				return null;
-			}
-			BufferedImage image = new BufferedImage(width, height,
-					BufferedImage.TYPE_INT_RGB);
-			for (int x = mostLeftPoint; x <= mostRightPoint; x++) {
-				for (int y = mostTopPoint; y <= mostBottomPoint; y++) {
-					if (matrix[x][y]) {
-						image.setRGB(x - mostLeftPoint, y - mostTopPoint,
-								Color.BLACK.getRGB());
-					} else {
-						image.setRGB(x - mostLeftPoint, y - mostTopPoint,
-								Color.WHITE.getRGB());
-					}
-				}
-			}
-			return image;
-		}
+    public class Piece extends PointSet {
+        static final long serialVersionUID = 0;
+        public int mostLeftPoint;
+        public int mostRightPoint;
+        public int mostTopPoint;
+        public int mostBottomPoint;
+        public int width;
+        public int height;
+        public int centerX;
+        public int centerY;
+        public float magnitude;
+        public int numberOfBlackPoints;
+        public int numberOfAllPoints;
 
-		public void createStatistics() {
-			mostLeftPoint = mostLeftPoint();
-			mostRightPoint = mostRightPoint();
-			mostTopPoint = mostTopPoint();
-			mostBottomPoint = mostBottomPoint();
-			width = (mostRightPoint - mostLeftPoint) + 1;
-			height = (mostBottomPoint - mostTopPoint) + 1;
-			centerX = (mostLeftPoint + mostRightPoint) / 2;
-			centerY = (mostTopPoint + mostBottomPoint) / 2;
-			numberOfBlackPoints = numberOfBlackPoints();
-			numberOfAllPoints = numberOfAllPoints();
-			magnitude = magnitude();
-		}
+        public BufferedImage render() {
+            if (this.numberOfAllPoints == 0) {
+                return null;
+            }
+            BufferedImage image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
+            for (int x = this.mostLeftPoint; x <= this.mostRightPoint; x++) {
+                for (int y = this.mostTopPoint; y <= this.mostBottomPoint; y++) {
+                    if (PixelMap.this.matrix[x][y]) {
+                        image.setRGB(x - this.mostLeftPoint, y - this.mostTopPoint, Color.BLACK.getRGB());
+                    } else {
+                        image.setRGB(x - this.mostLeftPoint, y - this.mostTopPoint, Color.WHITE.getRGB());
+                    }
+                }
+            }
+            return image;
+        }
 
-		public int cost() { // vypocita ako velmi sa piece podoba pismenku
-			return numberOfAllPoints - numberOfBlackPoints();
-		}
+        public void createStatistics() {
+            this.mostLeftPoint = this.mostLeftPoint();
+            this.mostRightPoint = this.mostRightPoint();
+            this.mostTopPoint = this.mostTopPoint();
+            this.mostBottomPoint = this.mostBottomPoint();
+            this.width = (this.mostRightPoint - this.mostLeftPoint) + 1;
+            this.height = (this.mostBottomPoint - this.mostTopPoint) + 1;
+            this.centerX = (this.mostLeftPoint + this.mostRightPoint) / 2;
+            this.centerY = (this.mostTopPoint + this.mostBottomPoint) / 2;
+            this.numberOfBlackPoints = this.numberOfBlackPoints();
+            this.numberOfAllPoints = this.numberOfAllPoints();
+            this.magnitude = this.magnitude();
+        }
 
-		public void bleachPiece() {
-			for (Point p : this) {
-				matrix[p.x][p.y] = false;
-			}
-		}
+        public int cost() { // vypocita ako velmi sa piece podoba pismenku
+            return this.numberOfAllPoints - this.numberOfBlackPoints();
+        }
 
-		private float magnitude() {
-			return ((float) numberOfBlackPoints / numberOfAllPoints);
-		}
+        public void bleachPiece() {
+            for (Point p : this) {
+                PixelMap.this.matrix[p.x][p.y] = false;
+            }
+        }
 
-		private int numberOfBlackPoints() {
-			return size();
-		}
+        private float magnitude() {
+            return ((float) this.numberOfBlackPoints / this.numberOfAllPoints);
+        }
 
-		private int numberOfAllPoints() {
-			return width * height;
-		}
+        private int numberOfBlackPoints() {
+            return this.size();
+        }
 
-		private int mostLeftPoint() {
-			int position = Integer.MAX_VALUE;
-			for (Point p : this) {
-				position = Math.min(position, p.x);
-			}
-			return position;
-		}
+        private int numberOfAllPoints() {
+            return this.width * this.height;
+        }
 
-		private int mostRightPoint() {
-			int position = 0;
-			for (Point p : this) {
-				position = Math.max(position, p.x);
-			}
-			return position;
-		}
+        private int mostLeftPoint() {
+            int position = Integer.MAX_VALUE;
+            for (Point p : this) {
+                position = Math.min(position, p.x);
+            }
+            return position;
+        }
 
-		private int mostTopPoint() {
-			int position = Integer.MAX_VALUE;
-			for (Point p : this) {
-				position = Math.min(position, p.y);
-			}
-			return position;
-		}
+        private int mostRightPoint() {
+            int position = 0;
+            for (Point p : this) {
+                position = Math.max(position, p.x);
+            }
+            return position;
+        }
 
-		private int mostBottomPoint() {
-			int position = 0;
-			for (Point p : this) {
-				position = Math.max(position, p.y);
-			}
-			return position;
-		}
-	}
+        private int mostTopPoint() {
+            int position = Integer.MAX_VALUE;
+            for (Point p : this) {
+                position = Math.min(position, p.y);
+            }
+            return position;
+        }
 
-	// row column
-	boolean[][] matrix;
-	private int width;
-	private int height;
+        private int mostBottomPoint() {
+            int position = 0;
+            for (Point p : this) {
+                position = Math.max(position, p.y);
+            }
+            return position;
+        }
+    }
 
-	public PixelMap(Photo bi) {
-		matrixInit(bi);
-	}
+    // row column
+    boolean[][] matrix;
+    private int width;
+    private int height;
 
-	void matrixInit(Photo bi) {
-		width = bi.getWidth();
-		height = bi.getHeight();
+    public PixelMap(Photo bi) {
+        this.matrixInit(bi);
+    }
 
-		matrix = new boolean[width][height];
+    void matrixInit(Photo bi) {
+        this.width = bi.getWidth();
+        this.height = bi.getHeight();
 
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				matrix[x][y] = bi.getBrightness(x, y) < 0.5;
-			}
-		}
-	}
+        this.matrix = new boolean[this.width][this.height];
 
-	// renderuje celu maticu
-	public BufferedImage render() {
-		BufferedImage image = new BufferedImage(width, height,
-				BufferedImage.TYPE_INT_RGB);
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				if (matrix[x][y]) {
-					image.setRGB(x, y, Color.BLACK.getRGB());
-				} else {
-					image.setRGB(x, y, Color.WHITE.getRGB());
-				}
-			}
-		}
-		return image;
-	}
+        for (int x = 0; x < this.width; x++) {
+            for (int y = 0; y < this.height; y++) {
+                this.matrix[x][y] = bi.getBrightness(x, y) < 0.5;
+            }
+        }
+    }
 
-	public Piece getBestPiece() {
-		reduceOtherPieces();
-		if (bestPiece == null) {
-			return new Piece();
-		}
-		return bestPiece;
-	}
+    // renderuje celu maticu
+    public BufferedImage render() {
+        BufferedImage image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
+        for (int x = 0; x < this.width; x++) {
+            for (int y = 0; y < this.height; y++) {
+                if (this.matrix[x][y]) {
+                    image.setRGB(x, y, Color.BLACK.getRGB());
+                } else {
+                    image.setRGB(x, y, Color.WHITE.getRGB());
+                }
+            }
+        }
+        return image;
+    }
 
-	private boolean getPointValue(int x, int y) {
-		// body mimo su automaticky biele
-		if ((x < 0) || (y < 0) || (x >= width) || (y >= height)) {
-			return false;
-		}
-		return matrix[x][y];
-	}
+    public Piece getBestPiece() {
+        this.reduceOtherPieces();
+        if (this.bestPiece == null) {
+            return new Piece();
+        }
+        return this.bestPiece;
+    }
 
-	private boolean isBoundaryPoint(int x, int y) {
+    private boolean getPointValue(int x, int y) {
+        // body mimo su automaticky biele
+        if ((x < 0) || (y < 0) || (x >= this.width) || (y >= this.height)) {
+            return false;
+        }
+        return this.matrix[x][y];
+    }
 
-		if (!getPointValue(x, y)) {
-			return false; // ak je bod biely, return false
-		}
+    private boolean isBoundaryPoint(int x, int y) {
 
-		// konturovy bod ma aspon jeden bod v okoli biely
-		if (!getPointValue(x - 1, y - 1) || !getPointValue(x - 1, y + 1)
-				|| !getPointValue(x + 1, y - 1) || !getPointValue(x + 1, y + 1)
-				|| !getPointValue(x, y + 1) || !getPointValue(x, y - 1)
-				|| !getPointValue(x + 1, y) || !getPointValue(x - 1, y)) {
-			return true;
-		}
+        if (!this.getPointValue(x, y)) {
+            return false; // ak je bod biely, return false
+        }
 
-		return false;
-	}
+        // konturovy bod ma aspon jeden bod v okoli biely
+        if (!this.getPointValue(x - 1, y - 1) || !this.getPointValue(x - 1, y + 1) || !this.getPointValue(x + 1, y - 1)
+                || !this.getPointValue(x + 1, y + 1) || !this.getPointValue(x, y + 1) || !this.getPointValue(x, y - 1)
+                || !this.getPointValue(x + 1, y) || !this.getPointValue(x - 1, y)) {
+            return true;
+        }
 
-	private int n(int x, int y) { // pocet ciernych bodov v okoli
-		int n = 0;
-		if (getPointValue(x - 1, y - 1)) {
-			n++;
-		}
-		if (getPointValue(x - 1, y + 1)) {
-			n++;
-		}
-		if (getPointValue(x + 1, y - 1)) {
-			n++;
-		}
-		if (getPointValue(x + 1, y + 1)) {
-			n++;
-		}
-		if (getPointValue(x, y + 1)) {
-			n++;
-		}
-		if (getPointValue(x, y - 1)) {
-			n++;
-		}
-		if (getPointValue(x + 1, y)) {
-			n++;
-		}
-		if (getPointValue(x - 1, y)) {
-			n++;
-		}
-		return n;
-	}
+        return false;
+    }
 
-	// number of 0-1 transitions in ordered sequence 2,3,...,8,9,2
-	private int t(int x, int y) {
-		int n = 0; // number of 0-1 transitions
-		// proceeding tranisions 2-3, 3-4, 4-5, 5-6, 6-7, 7-8, 8-9, 9-2
-		for (int i = 2; i <= 8; i++) {
-			if (!p(i, x, y) && p(i + 1, x, y)) {
-				n++;
-			}
-		}
-		if (!p(9, x, y) && p(2, x, y)) {
-			n++;
-		}
-		return n;
-	}
+    private int n(int x, int y) { // pocet ciernych bodov v okoli
+        int n = 0;
+        if (this.getPointValue(x - 1, y - 1)) {
+            n++;
+        }
+        if (this.getPointValue(x - 1, y + 1)) {
+            n++;
+        }
+        if (this.getPointValue(x + 1, y - 1)) {
+            n++;
+        }
+        if (this.getPointValue(x + 1, y + 1)) {
+            n++;
+        }
+        if (this.getPointValue(x, y + 1)) {
+            n++;
+        }
+        if (this.getPointValue(x, y - 1)) {
+            n++;
+        }
+        if (this.getPointValue(x + 1, y)) {
+            n++;
+        }
+        if (this.getPointValue(x - 1, y)) {
+            n++;
+        }
+        return n;
+    }
 
-	/**
-	 * okolie bodu p1 p9 p2 p3 p8 p1 p4 p7 p6 p5
-	 */
-	private boolean p(int i, int x, int y) {
-		if (i == 1) {
-			return getPointValue(x, y);
-		}
-		if (i == 2) {
-			return getPointValue(x, y - 1);
-		}
-		if (i == 3) {
-			return getPointValue(x + 1, y - 1);
-		}
-		if (i == 4) {
-			return getPointValue(x + 1, y);
-		}
-		if (i == 5) {
-			return getPointValue(x + 1, y + 1);
-		}
-		if (i == 6) {
-			return getPointValue(x, y + 1);
-		}
-		if (i == 7) {
-			return getPointValue(x - 1, y + 1);
-		}
-		if (i == 8) {
-			return getPointValue(x - 1, y);
-		}
-		if (i == 9) {
-			return getPointValue(x - 1, y - 1);
-		}
-		return false;
-	}
+    // number of 0-1 transitions in ordered sequence 2,3,...,8,9,2
+    private int t(int x, int y) {
+        int n = 0; // number of 0-1 transitions
+        // proceeding tranisions 2-3, 3-4, 4-5, 5-6, 6-7, 7-8, 8-9, 9-2
+        for (int i = 2; i <= 8; i++) {
+            if (!this.p(i, x, y) && this.p(i + 1, x, y)) {
+                n++;
+            }
+        }
+        if (!this.p(9, x, y) && this.p(2, x, y)) {
+            n++;
+        }
+        return n;
+    }
 
-	private boolean step1passed(int x, int y) {
-		int n = n(x, y);
-		return (((2 <= n) && (n <= 6)) && (t(x, y) == 1)
-				&& (!p(2, x, y) || !p(4, x, y) || !p(6, x, y)) && (!p(4, x, y)
-				|| !p(6, x, y) || !p(8, x, y)));
-	}
+    /**
+     * okolie bodu p1 p9 p2 p3 p8 p1 p4 p7 p6 p5
+     */
+    private boolean p(int i, int x, int y) {
+        if (i == 1) {
+            return this.getPointValue(x, y);
+        }
+        if (i == 2) {
+            return this.getPointValue(x, y - 1);
+        }
+        if (i == 3) {
+            return this.getPointValue(x + 1, y - 1);
+        }
+        if (i == 4) {
+            return this.getPointValue(x + 1, y);
+        }
+        if (i == 5) {
+            return this.getPointValue(x + 1, y + 1);
+        }
+        if (i == 6) {
+            return this.getPointValue(x, y + 1);
+        }
+        if (i == 7) {
+            return this.getPointValue(x - 1, y + 1);
+        }
+        if (i == 8) {
+            return this.getPointValue(x - 1, y);
+        }
+        if (i == 9) {
+            return this.getPointValue(x - 1, y - 1);
+        }
+        return false;
+    }
 
-	private boolean step2passed(int x, int y) {
-		int n = n(x, y);
-		return (((2 <= n) && (n <= 6)) && (t(x, y) == 1)
-				&& (!p(2, x, y) || !p(4, x, y) || !p(8, x, y)) && (!p(2, x, y)
-				|| !p(6, x, y) || !p(8, x, y)));
-	}
+    private boolean step1passed(int x, int y) {
+        int n = this.n(x, y);
+        return (((2 <= n) && (n <= 6)) && (this.t(x, y) == 1)
+                && (!this.p(2, x, y) || !this.p(4, x, y) || !this.p(6, x, y)) && (!this.p(4, x, y) || !this.p(6, x, y) || !this
+                .p(8, x, y)));
+    }
 
-	private void findBoundaryPoints(PointSet set) {
-		if (!set.isEmpty()) {
-			set.clear();
-		}
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				if (isBoundaryPoint(x, y)) {
-					set.add(new Point(x, y));
-				}
-			}
-		}
-	}
+    private boolean step2passed(int x, int y) {
+        int n = this.n(x, y);
+        return (((2 <= n) && (n <= 6)) && (this.t(x, y) == 1)
+                && (!this.p(2, x, y) || !this.p(4, x, y) || !this.p(8, x, y)) && (!this.p(2, x, y) || !this.p(6, x, y) || !this
+                .p(8, x, y)));
+    }
 
-	public PixelMap skeletonize() { // vykona skeletonizaciu
-		// thinning procedure
-		PointSet flaggedPoints = new PointSet();
-		PointSet boundaryPoints = new PointSet();
-		boolean cont;
+    private void findBoundaryPoints(PointSet set) {
+        if (!set.isEmpty()) {
+            set.clear();
+        }
+        for (int x = 0; x < this.width; x++) {
+            for (int y = 0; y < this.height; y++) {
+                if (this.isBoundaryPoint(x, y)) {
+                    set.add(new Point(x, y));
+                }
+            }
+        }
+    }
 
-		do {
-			cont = false;
-			findBoundaryPoints(boundaryPoints);
-			// apply step 1 to flag boundary points for deletion
-			for (Point p : boundaryPoints) {
-				if (step1passed(p.x, p.y)) {
-					flaggedPoints.add(p);
-				}
-			}
-			// delete flagged points
-			if (!flaggedPoints.isEmpty()) {
-				cont = true;
-			}
-			for (Point p : flaggedPoints) {
-				matrix[p.x][p.y] = false;
-				boundaryPoints.remove(p);
-			}
-			flaggedPoints.clear();
-			// apply step 2 to flag remaining points
-			for (Point p : boundaryPoints) {
-				if (step2passed(p.x, p.y)) {
-					flaggedPoints.add(p);
-				}
-			}
-			// delete flagged points
-			if (!flaggedPoints.isEmpty()) {
-				cont = true;
-			}
-			for (Point p : flaggedPoints) {
-				matrix[p.x][p.y] = false;
-			}
-			boundaryPoints.clear();
-			flaggedPoints.clear();
-		} while (cont);
+    public PixelMap skeletonize() { // vykona skeletonizaciu
+        // thinning procedure
+        PointSet flaggedPoints = new PointSet();
+        PointSet boundaryPoints = new PointSet();
+        boolean cont;
 
-		return (this);
-	}
+        do {
+            cont = false;
+            this.findBoundaryPoints(boundaryPoints);
+            // apply step 1 to flag boundary points for deletion
+            for (Point p : boundaryPoints) {
+                if (this.step1passed(p.x, p.y)) {
+                    flaggedPoints.add(p);
+                }
+            }
+            // delete flagged points
+            if (!flaggedPoints.isEmpty()) {
+                cont = true;
+            }
+            for (Point p : flaggedPoints) {
+                this.matrix[p.x][p.y] = false;
+                boundaryPoints.remove(p);
+            }
+            flaggedPoints.clear();
+            // apply step 2 to flag remaining points
+            for (Point p : boundaryPoints) {
+                if (this.step2passed(p.x, p.y)) {
+                    flaggedPoints.add(p);
+                }
+            }
+            // delete flagged points
+            if (!flaggedPoints.isEmpty()) {
+                cont = true;
+            }
+            for (Point p : flaggedPoints) {
+                this.matrix[p.x][p.y] = false;
+            }
+            boundaryPoints.clear();
+            flaggedPoints.clear();
+        } while (cont);
 
-	// redukcia sumu /////////////////////////////
+        return (this);
+    }
 
-	public PixelMap reduceNoise() {
-		PointSet pointsToReduce = new PointSet();
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				if (n(x, y) < 4) {
-					pointsToReduce.add(new Point(x, y)); // doporucene 4
-				}
-			}
-		}
-		// zmazemee oznacene body
-		for (Point p : pointsToReduce) {
-			matrix[p.x][p.y] = false;
-		}
-		return (this);
-	}
+    // redukcia sumu /////////////////////////////
 
-	// reduce other pieces /////////////////////////////
+    public PixelMap reduceNoise() {
+        PointSet pointsToReduce = new PointSet();
+        for (int x = 0; x < this.width; x++) {
+            for (int y = 0; y < this.height; y++) {
+                if (this.n(x, y) < 4) {
+                    pointsToReduce.add(new Point(x, y)); // doporucene 4
+                }
+            }
+        }
+        // zmazemee oznacene body
+        for (Point p : pointsToReduce) {
+            this.matrix[p.x][p.y] = false;
+        }
+        return (this);
+    }
 
-	/*
-	private boolean isInPieces(PieceSet pieces, int x, int y) {
-		for (Piece piece : pieces) {
-			// pre vsetky kusky
-			for (Point point : piece) {
-				// pre vsetky body na kusku
-				if (point.equals(x, y)) {
-					return true;
-				}
-			}
-		}
+    // reduce other pieces /////////////////////////////
 
-		return false;
-	}
-	*/
+    /*
+    private boolean isInPieces(PieceSet pieces, int x, int y) {
+    	for (Piece piece : pieces) {
+    		// pre vsetky kusky
+    		for (Point point : piece) {
+    			// pre vsetky body na kusku
+    			if (point.equals(x, y)) {
+    				return true;
+    			}
+    		}
+    	}
 
-	private boolean seedShouldBeAdded(Piece piece, Point p) {
-		// ak sa nevymyka okrajom
-		if ((p.x < 0) || (p.y < 0) || (p.x >= width) || (p.y >= height)) {
-			return false;
-		}
-		// ak je cierny,
-		if (!matrix[p.x][p.y]) {
-			return false;
-		}
-		// ak este nie je sucastou ziadneho kuska
-		for (Point piecePoint : piece) {
-			if (piecePoint.equals(p)) {
-				return false;
-			}
-		}
-		return true;
-	}
+    	return false;
+    }
+    */
 
-	// vytvori novy piece, najde okolie (piece) napcha donho vsetky body a vrati
-	// vstupom je nejaka mnozina "ciernych" bodov, z ktorej algoritmus tie
-	// body vybera
-	private Piece createPiece(PointSet unsorted) {
+    private boolean seedShouldBeAdded(Piece piece, Point p) {
+        // ak sa nevymyka okrajom
+        if ((p.x < 0) || (p.y < 0) || (p.x >= this.width) || (p.y >= this.height)) {
+            return false;
+        }
+        // ak je cierny,
+        if (!this.matrix[p.x][p.y]) {
+            return false;
+        }
+        // ak este nie je sucastou ziadneho kuska
+        for (Point piecePoint : piece) {
+            if (piecePoint.equals(p)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-		Piece piece = new Piece();
+    // vytvori novy piece, najde okolie (piece) napcha donho vsetky body a vrati
+    // vstupom je nejaka mnozina "ciernych" bodov, z ktorej algoritmus tie
+    // body vybera
+    private Piece createPiece(PointSet unsorted) {
 
-		PointSet stack = new PointSet();
-		stack.push(unsorted.lastElement());
+        Piece piece = new Piece();
 
-		while (!stack.isEmpty()) {
-			Point p = stack.pop();
-			if (seedShouldBeAdded(piece, p)) {
-				piece.add(p);
-				unsorted.removePoint(p);
-				stack.push(new Point(p.x + 1, p.y));
-				stack.push(new Point(p.x - 1, p.y));
-				stack.push(new Point(p.x, p.y + 1));
-				stack.push(new Point(p.x, p.y - 1));
-			}
-		}
-		piece.createStatistics();
-		return piece;
-	}
+        PointSet stack = new PointSet();
+        stack.push(unsorted.lastElement());
 
-	public PieceSet findPieces() {
-		// boolean continueFlag;
-		PieceSet pieces = new PieceSet();
+        while (!stack.isEmpty()) {
+            Point p = stack.pop();
+            if (this.seedShouldBeAdded(piece, p)) {
+                piece.add(p);
+                unsorted.removePoint(p);
+                stack.push(new Point(p.x + 1, p.y));
+                stack.push(new Point(p.x - 1, p.y));
+                stack.push(new Point(p.x, p.y + 1));
+                stack.push(new Point(p.x, p.y - 1));
+            }
+        }
+        piece.createStatistics();
+        return piece;
+    }
 
-		// vsetky cierne body na kopu.
-		PointSet unsorted = new PointSet();
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				if (matrix[x][y]) {
-					unsorted.add(new Point(x, y));
-				}
-			}
-		}
+    public PieceSet findPieces() {
+        // boolean continueFlag;
+        PieceSet pieces = new PieceSet();
 
-		// pre kazdy cierny bod z kopy,
-		while (!unsorted.isEmpty()) {
-			// createPiece vytvori novy piece s tym ze vsetky pouzite body
-			// vyhodi von z kopy
+        // vsetky cierne body na kopu.
+        PointSet unsorted = new PointSet();
+        for (int x = 0; x < this.width; x++) {
+            for (int y = 0; y < this.height; y++) {
+                if (this.matrix[x][y]) {
+                    unsorted.add(new Point(x, y));
+                }
+            }
+        }
 
-			pieces.add(createPiece(unsorted));
-		}
-		/*
-		 * do { continueFlag = false; boolean loopBreak = false; for (int x = 0;
-		 * x<this.width; x++) { for (int y = 0; y<this.height; y++) { // for
-		 * each pixel // ak je pixel cierny, a nie je sucastou ziadneho kuska if
-		 * (this.matrix[x][y] && !isInPieces(pieces,x,y)) { continueFlag = true;
-		 * pieces.add(createPiece(x,y)); } }// for y } // for x } while
-		 * (continueFlag);
-		 */
-		return pieces;
-	}
+        // pre kazdy cierny bod z kopy,
+        while (!unsorted.isEmpty()) {
+            // createPiece vytvori novy piece s tym ze vsetky pouzite body
+            // vyhodi von z kopy
 
-	// redukuje ostatne pieces a vracia ten najlepsi
-	public PixelMap reduceOtherPieces() {
-		if (bestPiece != null) {
-			return this; // bestPiece uz je , netreba dalej nic
-		}
+            pieces.add(this.createPiece(unsorted));
+        }
+        /*
+         * do { continueFlag = false; boolean loopBreak = false; for (int x = 0;
+         * x<this.width; x++) { for (int y = 0; y<this.height; y++) { // for
+         * each pixel // ak je pixel cierny, a nie je sucastou ziadneho kuska if
+         * (this.matrix[x][y] && !isInPieces(pieces,x,y)) { continueFlag = true;
+         * pieces.add(createPiece(x,y)); } }// for y } // for x } while
+         * (continueFlag);
+         */
+        return pieces;
+    }
 
-		PieceSet pieces = findPieces();
-		int maxCost = 0;
-		int maxIndex = 0;
-		// najdeme najlepsi cost
-		for (int i = 0; i < pieces.size(); i++) {
-			if (pieces.elementAt(i).cost() > maxCost) {
-				maxCost = pieces.elementAt(i).cost();
-				maxIndex = i;
-			}
-		}
+    // redukuje ostatne pieces a vracia ten najlepsi
+    public PixelMap reduceOtherPieces() {
+        if (this.bestPiece != null) {
+            return this; // bestPiece uz je , netreba dalej nic
+        }
 
-		// a ostatne zmazeme
-		for (int i = 0; i < pieces.size(); i++) {
-			if (i != maxIndex) {
-				pieces.elementAt(i).bleachPiece();
-			}
-		}
-		if (pieces.size() != 0) {
-			bestPiece = pieces.elementAt(maxIndex);
-		}
-		return this;
-	}
+        PieceSet pieces = this.findPieces();
+        int maxCost = 0;
+        int maxIndex = 0;
+        // najdeme najlepsi cost
+        for (int i = 0; i < pieces.size(); i++) {
+            if (pieces.elementAt(i).cost() > maxCost) {
+                maxCost = pieces.elementAt(i).cost();
+                maxIndex = i;
+            }
+        }
+
+        // a ostatne zmazeme
+        for (int i = 0; i < pieces.size(); i++) {
+            if (i != maxIndex) {
+                pieces.elementAt(i).bleachPiece();
+            }
+        }
+        if (pieces.size() != 0) {
+            this.bestPiece = pieces.elementAt(maxIndex);
+        }
+        return this;
+    }
 }

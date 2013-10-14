@@ -78,98 +78,94 @@ import net.sf.javaanpr.configurator.Configurator;
 //import net.sf.javaanpr.configurator.Configurator;
 
 public class Band extends Photo {
-	static public Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(
-			0, 0, 25, 25);
-	static private int numberOfCandidates = Configurator.getConfigurator()
-			.getIntProperty("intelligence_numberOfPlates");
+    static public Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 25, 25);
+    static private int numberOfCandidates = Configurator.getConfigurator()
+            .getIntProperty("intelligence_numberOfPlates");
 
-	private BandGraph graphHandle = null;
+    private BandGraph graphHandle = null;
 
-	public Band(BufferedImage bi) {
-		super(bi);
-	}
+    public Band(BufferedImage bi) {
+        super(bi);
+    }
 
-	public BufferedImage renderGraph() {
-		computeGraph();
-		return graphHandle.renderHorizontally(getWidth(), 100);
-	}
+    public BufferedImage renderGraph() {
+        this.computeGraph();
+        return this.graphHandle.renderHorizontally(this.getWidth(), 100);
+    }
 
-	private Vector<Graph.Peak> computeGraph() {
-		if (graphHandle != null) {
-			return graphHandle.peaks; // graf uz bol vypocitany
-		}
-		BufferedImage imageCopy = Photo.duplicateBufferedImage(image);
-		fullEdgeDetector(imageCopy);
-		graphHandle = histogram(imageCopy);
-		graphHandle.rankFilter(image.getHeight());
-		graphHandle.applyProbabilityDistributor(Band.distributor);
-		graphHandle.findPeaks(Band.numberOfCandidates);
-		return graphHandle.peaks;
-	}
+    private Vector<Graph.Peak> computeGraph() {
+        if (this.graphHandle != null) {
+            return this.graphHandle.peaks; // graf uz bol vypocitany
+        }
+        BufferedImage imageCopy = Photo.duplicateBufferedImage(this.image);
+        this.fullEdgeDetector(imageCopy);
+        this.graphHandle = this.histogram(imageCopy);
+        this.graphHandle.rankFilter(this.image.getHeight());
+        this.graphHandle.applyProbabilityDistributor(Band.distributor);
+        this.graphHandle.findPeaks(Band.numberOfCandidates);
+        return this.graphHandle.peaks;
+    }
 
-	public Vector<Plate> getPlates() {
-		Vector<Plate> out = new Vector<Plate>();
+    public Vector<Plate> getPlates() {
+        Vector<Plate> out = new Vector<Plate>();
 
-		Vector<Graph.Peak> peaks = computeGraph();
+        Vector<Graph.Peak> peaks = this.computeGraph();
 
-		for (int i = 0; i < peaks.size(); i++) {
-			// vyseknut z povodneho! obrazka znacky, a ulozit do vektora. POZOR
-			// !!!!!! Vysekavame z povodneho, takze
-			// na suradnice vypocitane z imageCopy musime uplatnit inverznu
-			// transformaciu
-			Graph.Peak p = peaks.elementAt(i);
-			out.add(new Plate(image.getSubimage(p.getLeft(), 0, p.getDiff(),
-					image.getHeight())));
-		}
-		return out;
-	}
+        for (int i = 0; i < peaks.size(); i++) {
+            // vyseknut z povodneho! obrazka znacky, a ulozit do vektora. POZOR
+            // !!!!!! Vysekavame z povodneho, takze
+            // na suradnice vypocitane z imageCopy musime uplatnit inverznu
+            // transformaciu
+            Graph.Peak p = peaks.elementAt(i);
+            out.add(new Plate(this.image.getSubimage(p.getLeft(), 0, p.getDiff(), this.image.getHeight())));
+        }
+        return out;
+    }
 
-	// public void horizontalRankBi(BufferedImage image) {
-	// BufferedImage imageCopy = duplicateBi(image);
-	//
-	// float data[] = new float[image.getHeight()];
-	// for (int i=0; i<data.length; i++) data[i] = 1.0f/data.length;
-	//
-	// new ConvolveOp(new Kernel(data.length,1, data), ConvolveOp.EDGE_NO_OP,
-	// null).filter(imageCopy, image);
-	// }
+    // public void horizontalRankBi(BufferedImage image) {
+    // BufferedImage imageCopy = duplicateBi(image);
+    //
+    // float data[] = new float[image.getHeight()];
+    // for (int i=0; i<data.length; i++) data[i] = 1.0f/data.length;
+    //
+    // new ConvolveOp(new Kernel(data.length,1, data), ConvolveOp.EDGE_NO_OP,
+    // null).filter(imageCopy, image);
+    // }
 
-	public BandGraph histogram(BufferedImage bi) {
-		BandGraph graph = new BandGraph(this);
-		for (int x = 0; x < bi.getWidth(); x++) {
-			float counter = 0;
-			for (int y = 0; y < bi.getHeight(); y++) {
-				counter += Photo.getBrightness(bi, x, y);
-			}
-			graph.addPeak(counter);
-		}
-		return graph;
-	}
+    public BandGraph histogram(BufferedImage bi) {
+        BandGraph graph = new BandGraph(this);
+        for (int x = 0; x < bi.getWidth(); x++) {
+            float counter = 0;
+            for (int y = 0; y < bi.getHeight(); y++) {
+                counter += Photo.getBrightness(bi, x, y);
+            }
+            graph.addPeak(counter);
+        }
+        return graph;
+    }
 
-	public void fullEdgeDetector(BufferedImage source) {
-		float verticalMatrix[] = { -1, 0, 1, -2, 0, 2, -1, 0, 1, };
-		float horizontalMatrix[] = { -1, -2, -1, 0, 0, 0, 1, 2, 1 };
+    public void fullEdgeDetector(BufferedImage source) {
+        float verticalMatrix[] = { -1, 0, 1, -2, 0, 2, -1, 0, 1, };
+        float horizontalMatrix[] = { -1, -2, -1, 0, 0, 0, 1, 2, 1 };
 
-		BufferedImage i1 = Photo.createBlankBi(source);
-		BufferedImage i2 = Photo.createBlankBi(source);
+        BufferedImage i1 = Photo.createBlankBi(source);
+        BufferedImage i2 = Photo.createBlankBi(source);
 
-		new ConvolveOp(new Kernel(3, 3, verticalMatrix), ConvolveOp.EDGE_NO_OP,
-				null).filter(source, i1);
-		new ConvolveOp(new Kernel(3, 3, horizontalMatrix),
-				ConvolveOp.EDGE_NO_OP, null).filter(source, i2);
+        new ConvolveOp(new Kernel(3, 3, verticalMatrix), ConvolveOp.EDGE_NO_OP, null).filter(source, i1);
+        new ConvolveOp(new Kernel(3, 3, horizontalMatrix), ConvolveOp.EDGE_NO_OP, null).filter(source, i2);
 
-		int w = source.getWidth();
-		int h = source.getHeight();
+        int w = source.getWidth();
+        int h = source.getHeight();
 
-		for (int x = 0; x < w; x++) {
-			for (int y = 0; y < h; y++) {
-				float sum = 0.0f;
-				sum += Photo.getBrightness(i1, x, y);
-				sum += Photo.getBrightness(i2, x, y);
-				Photo.setBrightness(source, x, y, Math.min(1.0f, sum));
-			}
-		}
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                float sum = 0.0f;
+                sum += Photo.getBrightness(i1, x, y);
+                sum += Photo.getBrightness(i2, x, y);
+                Photo.setBrightness(source, x, y, Math.min(1.0f, sum));
+            }
+        }
 
-	}
+    }
 
 }

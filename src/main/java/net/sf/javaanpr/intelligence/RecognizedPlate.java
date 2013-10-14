@@ -72,27 +72,27 @@ import java.util.Vector;
 import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
 
 public class RecognizedPlate {
-	Vector<RecognizedChar> chars;
+    Vector<RecognizedChar> chars;
 
-	public RecognizedPlate() {
-		chars = new Vector<RecognizedChar>();
-	}
+    public RecognizedPlate() {
+        this.chars = new Vector<RecognizedChar>();
+    }
 
-	public void addChar(RecognizedChar chr) {
-		chars.add(chr);
-	}
+    public void addChar(RecognizedChar chr) {
+        this.chars.add(chr);
+    }
 
-	public RecognizedChar getChar(int i) {
-		return chars.elementAt(i);
-	}
+    public RecognizedChar getChar(int i) {
+        return this.chars.elementAt(i);
+    }
 
-	public String getString() {
-		String ret = new String("");
-		for (int i = 0; i < chars.size(); i++) {
+    public String getString() {
+        String ret = new String("");
+        for (int i = 0; i < this.chars.size(); i++) {
 
-			ret = ret + chars.elementAt(i).getPattern(0).getChar();
-		}
-		return ret;
-	}
+            ret = ret + this.chars.elementAt(i).getPattern(0).getChar();
+        }
+        return ret;
+    }
 
 }

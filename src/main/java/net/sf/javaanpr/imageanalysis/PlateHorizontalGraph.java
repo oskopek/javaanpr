@@ -74,67 +74,65 @@ import java.util.Vector;
 import net.sf.javaanpr.configurator.Configurator;
 
 public class PlateHorizontalGraph extends Graph {
-	/*private static double peakFootConstant = // 0.1; //CONSTANT
-	Intelligence.configurator
-			.getDoubleProperty("platehorizontalgraph_peakfootconstant");
-	*/
-	
-	private static int horizontalDetectionType = Configurator.getConfigurator()
-			.getIntProperty("platehorizontalgraph_detectionType");
-	
-	Plate handle;
+    /*private static double peakFootConstant = // 0.1; //CONSTANT
+    Intelligence.configurator
+    		.getDoubleProperty("platehorizontalgraph_peakfootconstant");
+    */
 
-	public PlateHorizontalGraph(Plate handle) {
-		this.handle = handle;
-	}
+    private static int horizontalDetectionType = Configurator.getConfigurator().getIntProperty(
+            "platehorizontalgraph_detectionType");
 
-	public float derivation(int index1, int index2) {
-		return yValues.elementAt(index1) - yValues.elementAt(index2);
-	}
+    Plate handle;
 
-	public Vector<Peak> findPeak(int count) {
-		if (PlateHorizontalGraph.horizontalDetectionType == 1) {
-			return findPeak_edgedetection(count);
-		}
-		return findPeak_derivate(count);
-	}
+    public PlateHorizontalGraph(Plate handle) {
+        this.handle = handle;
+    }
 
-	public Vector<Peak> findPeak_derivate(int count) { // RIESENIE DERIVACIOU
-		int a, b;
-		float maxVal = this.getMaxValue();
+    public float derivation(int index1, int index2) {
+        return this.yValues.elementAt(index1) - this.yValues.elementAt(index2);
+    }
 
-		for (a = 2; (-derivation(a, a + 4) < (maxVal * 0.2))
-				&& (a < (yValues.size() - 2 - 2 - 4)); a++) {
-			;
-		}
-		for (b = yValues.size() - 1 - 2; (derivation(b - 4, b) < (maxVal * 0.2))
-				&& (b > (a + 2)); b--) {
-			;
-		}
+    public Vector<Peak> findPeak(int count) {
+        if (PlateHorizontalGraph.horizontalDetectionType == 1) {
+            return this.findPeak_edgedetection(count);
+        }
+        return this.findPeak_derivate(count);
+    }
 
-		Vector<Peak> outPeaks = new Vector<Peak>();
+    public Vector<Peak> findPeak_derivate(int count) { // RIESENIE DERIVACIOU
+        int a, b;
+        float maxVal = this.getMaxValue();
 
-		outPeaks.add(new Peak(a, b));
-		super.peaks = outPeaks;
-		return outPeaks;
-	}
+        for (a = 2; (-this.derivation(a, a + 4) < (maxVal * 0.2)) && (a < (this.yValues.size() - 2 - 2 - 4)); a++) {
+            ;
+        }
+        for (b = this.yValues.size() - 1 - 2; (this.derivation(b - 4, b) < (maxVal * 0.2)) && (b > (a + 2)); b--) {
+            ;
+        }
 
-	public Vector<Peak> findPeak_edgedetection(int count) {
-		float average = this.getAverageValue();
-		int a, b;
-		for (a = 0; yValues.elementAt(a) < average; a++) {
-			;
-		}
-		for (b = yValues.size() - 1; yValues.elementAt(b) < average; b--) {
-			;
-		}
+        Vector<Peak> outPeaks = new Vector<Peak>();
 
-		Vector<Peak> outPeaks = new Vector<Peak>();
-		a = Math.max(a - 5, 0);
-		b = Math.min(b + 5, yValues.size());
+        outPeaks.add(new Peak(a, b));
+        super.peaks = outPeaks;
+        return outPeaks;
+    }
 
-		outPeaks.add(new Peak(a, b));
-		super.peaks = outPeaks;
-		return outPeaks;
-	}
+    public Vector<Peak> findPeak_edgedetection(int count) {
+        float average = this.getAverageValue();
+        int a, b;
+        for (a = 0; this.yValues.elementAt(a) < average; a++) {
+            ;
+        }
+        for (b = this.yValues.size() - 1; this.yValues.elementAt(b) < average; b--) {
+            ;
+        }
+
+        Vector<Peak> outPeaks = new Vector<Peak>();
+        a = Math.max(a - 5, 0);
+        b = Math.min(b + 5, this.yValues.size());
+
+        outPeaks.add(new Peak(a, b));
+        super.peaks = outPeaks;
+        return outPeaks;
+    }
 }

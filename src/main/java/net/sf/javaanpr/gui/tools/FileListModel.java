@@ -73,50 +73,50 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
 public class FileListModel implements ListModel<Object> {
-	public class FileListModelEntry {
-		public String fileName;
-		public String fullPath;
-		public String recognizedPlate;
+    public class FileListModelEntry {
+        public String fileName;
+        public String fullPath;
+        public String recognizedPlate;
 
-		public FileListModelEntry(String fileName, String fullPath) {
-			this.fileName = fileName;
-			this.fullPath = fullPath;
-			recognizedPlate = "?";
-		}
+        public FileListModelEntry(String fileName, String fullPath) {
+            this.fileName = fileName;
+            this.fullPath = fullPath;
+            this.recognizedPlate = "?";
+        }
 
-		@Override
-		public String toString() {
-			return fileName;
-		}
-	}
+        @Override
+        public String toString() {
+            return this.fileName;
+        }
+    }
 
-	public Vector<FileListModelEntry> fileList;
+    public Vector<FileListModelEntry> fileList;
 
-	/** Creates a new instance of FileListModel */
-	public FileListModel() {
-		fileList = new Vector<FileListModelEntry>();
-	}
+    /** Creates a new instance of FileListModel */
+    public FileListModel() {
+        this.fileList = new Vector<FileListModelEntry>();
+    }
 
-	public void addFileListModelEntry(String fileName, String fullPath) {
-		fileList.add(new FileListModelEntry(fileName, fullPath));
-	}
+    public void addFileListModelEntry(String fileName, String fullPath) {
+        this.fileList.add(new FileListModelEntry(fileName, fullPath));
+    }
 
-	@Override
-	public int getSize() {
-		return fileList.size();
-	}
+    @Override
+    public int getSize() {
+        return this.fileList.size();
+    }
 
-	@Override
-	public Object getElementAt(int index) {
-		return fileList.elementAt(index);
-	}
+    @Override
+    public Object getElementAt(int index) {
+        return this.fileList.elementAt(index);
+    }
 
-	@Override
-	public void addListDataListener(ListDataListener l) {
-	}
+    @Override
+    public void addListDataListener(ListDataListener l) {
+    }
 
-	@Override
-	public void removeListDataListener(ListDataListener l) {
-	}
+    @Override
+    public void removeListDataListener(ListDataListener l) {
+    }
 
 }

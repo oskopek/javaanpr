@@ -79,151 +79,146 @@ import net.sf.javaanpr.imageanalysis.Char;
 
 public abstract class CharacterRecognizer {
 
-	// rozpoznavane pismena :
-	// 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
-	// 28 29 30 31 32 33 34 35
-	// 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
-	public static char[] alphabet = { '0', '1', '2', '3', '4', '5', '6', '7',
-			'8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-			'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-			'Y', 'Z' };
+    // rozpoznavane pismena :
+    // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
+    // 28 29 30 31 32 33 34 35
+    // 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+    public static char[] alphabet = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+            'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
-	public static float[][] features = { { 0, 1, 0, 1 }, // 0
-			{ 1, 0, 1, 0 }, // 1
-			{ 0, 0, 1, 1 }, // 2
-			{ 1, 1, 0, 0 }, // 3
-			{ 0, 0, 0, 1 }, // 4
-			{ 1, 0, 0, 0 }, // 5
-			{ 1, 1, 1, 0 }, // 6
-			{ 0, 1, 1, 1 }, // 7
-			{ 0, 0, 1, 0 }, // 8
-			{ 0, 1, 0, 0 }, // 9
-			{ 1, 0, 1, 1 }, // 10
-			{ 1, 1, 0, 1 } // 11
-	};
+    public static float[][] features = { { 0, 1, 0, 1 }, // 0
+            { 1, 0, 1, 0 }, // 1
+            { 0, 0, 1, 1 }, // 2
+            { 1, 1, 0, 0 }, // 3
+            { 0, 0, 0, 1 }, // 4
+            { 1, 0, 0, 0 }, // 5
+            { 1, 1, 1, 0 }, // 6
+            { 0, 1, 1, 1 }, // 7
+            { 0, 0, 1, 0 }, // 8
+            { 0, 1, 0, 0 }, // 9
+            { 1, 0, 1, 1 }, // 10
+            { 1, 1, 0, 1 } // 11
+    };
 
-	public class RecognizedChar {
-		public class RecognizedPattern {
-			private char chr;
-			private float cost;
+    public class RecognizedChar {
+        public class RecognizedPattern {
+            private char chr;
+            private float cost;
 
-			RecognizedPattern(char chr, float value) {
-				this.chr = chr;
-				cost = value;
-			}
+            RecognizedPattern(char chr, float value) {
+                this.chr = chr;
+                this.cost = value;
+            }
 
-			public char getChar() {
-				return chr;
-			}
+            public char getChar() {
+                return this.chr;
+            }
 
-			public float getCost() {
-				return cost;
-			}
-		}
+            public float getCost() {
+                return this.cost;
+            }
+        }
 
-		public class PatternComparer implements Comparator<Object> {
-			int direction;
+        public class PatternComparer implements Comparator<Object> {
+            int direction;
 
-			public PatternComparer(int direction) {
-				this.direction = direction;
-			}
+            public PatternComparer(int direction) {
+                this.direction = direction;
+            }
 
-			@Override
-			public int compare(Object o1, Object o2) {
-				float cost1 = ((RecognizedPattern) o1).getCost();
-				float cost2 = ((RecognizedPattern) o2).getCost();
+            @Override
+            public int compare(Object o1, Object o2) {
+                float cost1 = ((RecognizedPattern) o1).getCost();
+                float cost2 = ((RecognizedPattern) o2).getCost();
 
-				int ret = 0;
+                int ret = 0;
 
-				if (cost1 < cost2) {
-					ret = -1;
-				}
-				if (cost1 > cost2) {
-					ret = 1;
-				}
-				if (direction == 1) {
-					ret *= -1;
-				}
-				return ret;
-			}
-		}
+                if (cost1 < cost2) {
+                    ret = -1;
+                }
+                if (cost1 > cost2) {
+                    ret = 1;
+                }
+                if (this.direction == 1) {
+                    ret *= -1;
+                }
+                return ret;
+            }
+        }
 
-		private Vector<RecognizedPattern> patterns;
-		private boolean isSorted;
+        private Vector<RecognizedPattern> patterns;
+        private boolean isSorted;
 
-		RecognizedChar() {
-			patterns = new Vector<RecognizedPattern>();
-			isSorted = false;
-		}
+        RecognizedChar() {
+            this.patterns = new Vector<RecognizedPattern>();
+            this.isSorted = false;
+        }
 
-		public void addPattern(RecognizedPattern pattern) {
-			patterns.add(pattern);
-		}
+        public void addPattern(RecognizedPattern pattern) {
+            this.patterns.add(pattern);
+        }
 
-		public boolean isSorted() {
-			return isSorted;
-		}
+        public boolean isSorted() {
+            return this.isSorted;
+        }
 
-		public void sort(int direction) {
-			if (isSorted) {
-				return;
-			}
-			isSorted = true;
-			Collections.sort(patterns, new PatternComparer(direction));
-		}
+        public void sort(int direction) {
+            if (this.isSorted) {
+                return;
+            }
+            this.isSorted = true;
+            Collections.sort(this.patterns, new PatternComparer(direction));
+        }
 
-		public Vector<RecognizedPattern> getPatterns() {
-			if (isSorted) {
-				return patterns;
-			}
-			return null; // if not sorted
-		}
+        public Vector<RecognizedPattern> getPatterns() {
+            if (this.isSorted) {
+                return this.patterns;
+            }
+            return null; // if not sorted
+        }
 
-		public RecognizedPattern getPattern(int i) {
-			if (isSorted) {
-				return patterns.elementAt(i);
-			}
-			return null;
-		}
+        public RecognizedPattern getPattern(int i) {
+            if (this.isSorted) {
+                return this.patterns.elementAt(i);
+            }
+            return null;
+        }
 
-		public BufferedImage render() {
-			int width = 500;
-			int height = 200;
-			BufferedImage histogram = new BufferedImage(width + 20,
-					height + 20, BufferedImage.TYPE_INT_RGB);
-			Graphics2D graphic = histogram.createGraphics();
+        public BufferedImage render() {
+            int width = 500;
+            int height = 200;
+            BufferedImage histogram = new BufferedImage(width + 20, height + 20, BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphic = histogram.createGraphics();
 
-			graphic.setColor(Color.LIGHT_GRAY);
-			Rectangle backRect = new Rectangle(0, 0, width + 20, height + 20);
-			graphic.fill(backRect);
-			graphic.draw(backRect);
+            graphic.setColor(Color.LIGHT_GRAY);
+            Rectangle backRect = new Rectangle(0, 0, width + 20, height + 20);
+            graphic.fill(backRect);
+            graphic.draw(backRect);
 
-			graphic.setColor(Color.BLACK);
+            graphic.setColor(Color.BLACK);
 
-			int colWidth = width / patterns.size();
-			int left, top;
+            int colWidth = width / this.patterns.size();
+            int left, top;
 
-			for (int ay = 0; ay <= 100; ay += 10) {
-				int y = 15 + (int) (((100 - ay) / 100.0f) * (height - 20));
-				graphic.drawString(new Integer(ay).toString(), 3, y + 11);
-				graphic.drawLine(25, y + 5, 35, y + 5);
-			}
-			graphic.drawLine(35, 19, 35, height);
+            for (int ay = 0; ay <= 100; ay += 10) {
+                int y = 15 + (int) (((100 - ay) / 100.0f) * (height - 20));
+                graphic.drawString(new Integer(ay).toString(), 3, y + 11);
+                graphic.drawLine(25, y + 5, 35, y + 5);
+            }
+            graphic.drawLine(35, 19, 35, height);
 
-			graphic.setColor(Color.BLUE);
+            graphic.setColor(Color.BLUE);
 
-			for (int i = 0; i < patterns.size(); i++) {
-				left = (i * colWidth) + 42;
-				top = height
-						- (int) (patterns.elementAt(i).cost * (height - 20));
+            for (int i = 0; i < this.patterns.size(); i++) {
+                left = (i * colWidth) + 42;
+                top = height - (int) (this.patterns.elementAt(i).cost * (height - 20));
 
-				graphic.drawRect(left, top, colWidth - 2, height - top);
-				graphic.drawString(patterns.elementAt(i).chr + " ", left + 2,
-						top - 8);
-			}
-			return histogram;
-		}
-	}
+                graphic.drawRect(left, top, colWidth - 2, height - top);
+                graphic.drawString(this.patterns.elementAt(i).chr + " ", left + 2, top - 8);
+            }
+            return histogram;
+        }
+    }
 
-	public abstract RecognizedChar recognize(Char chr);
+    public abstract RecognizedChar recognize(Char chr);
 }

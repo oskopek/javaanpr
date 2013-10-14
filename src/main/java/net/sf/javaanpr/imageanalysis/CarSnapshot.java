@@ -77,104 +77,100 @@ import java.util.Vector;
 import net.sf.javaanpr.configurator.Configurator;
 
 public class CarSnapshot extends Photo {
-	private static int distributor_margins = Configurator.getConfigurator()
-			.getIntProperty("carsnapshot_distributormargins");
-	// private static int carsnapshot_projectionresize_x =
-	// Main.configurator.getIntProperty("carsnapshot_projectionresize_x");
-	// private static int carsnapshot_projectionresize_y =
-	// Main.configurator.getIntProperty("carsnapshot_projectionresize_y");
-	private static int carsnapshot_graphrankfilter = Configurator.getConfigurator()
-			.getIntProperty("carsnapshot_graphrankfilter");
+    private static int distributor_margins = Configurator.getConfigurator().getIntProperty(
+            "carsnapshot_distributormargins");
+    // private static int carsnapshot_projectionresize_x =
+    // Main.configurator.getIntProperty("carsnapshot_projectionresize_x");
+    // private static int carsnapshot_projectionresize_y =
+    // Main.configurator.getIntProperty("carsnapshot_projectionresize_y");
+    private static int carsnapshot_graphrankfilter = Configurator.getConfigurator().getIntProperty(
+            "carsnapshot_graphrankfilter");
 
-	static private int numberOfCandidates = Configurator.getConfigurator()
-			.getIntProperty("intelligence_numberOfBands");
-	private CarSnapshotGraph graphHandle = null;
+    static private int numberOfCandidates = Configurator.getConfigurator().getIntProperty("intelligence_numberOfBands");
+    private CarSnapshotGraph graphHandle = null;
 
-	public static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(
-			0, 0, CarSnapshot.distributor_margins,
-			CarSnapshot.distributor_margins);
-	
-	public CarSnapshot(String filename) throws IOException {
-		super(Configurator.getConfigurator().getResourceAsStream(filename));
-		
-	}
+    public static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0,
+            CarSnapshot.distributor_margins, CarSnapshot.distributor_margins);
 
-	public CarSnapshot(BufferedImage bi) {
-		super(bi);
-	}
-	
-	public CarSnapshot(InputStream is) throws IOException {
-	    super(is);
-	}
+    public CarSnapshot(String filename) throws IOException {
+        super(Configurator.getConfigurator().getResourceAsStream(filename));
 
-	public BufferedImage renderGraph() {
-		computeGraph();
-		return graphHandle.renderVertically(100, getHeight());
-	}
+    }
 
-	private Vector<Graph.Peak> computeGraph() {
-		if (graphHandle != null) {
-			return graphHandle.peaks; // graf uz bol vypocitany
-		}
+    public CarSnapshot(BufferedImage bi) {
+        super(bi);
+    }
 
-		BufferedImage imageCopy = duplicateBufferedImage(image);
-		verticalEdgeBi(imageCopy);
-		Photo.thresholding(imageCopy); // strasne moc zere
+    public CarSnapshot(InputStream is) throws IOException {
+        super(is);
+    }
 
-		graphHandle = histogram(imageCopy);
-		graphHandle.rankFilter(CarSnapshot.carsnapshot_graphrankfilter);
-		graphHandle.applyProbabilityDistributor(CarSnapshot.distributor);
+    public BufferedImage renderGraph() {
+        this.computeGraph();
+        return this.graphHandle.renderVertically(100, this.getHeight());
+    }
 
-		graphHandle.findPeaks(CarSnapshot.numberOfCandidates); // sort by height
-		return graphHandle.peaks;
-	}
+    private Vector<Graph.Peak> computeGraph() {
+        if (this.graphHandle != null) {
+            return this.graphHandle.peaks; // graf uz bol vypocitany
+        }
 
-	public Vector<Band> getBands() {
-		Vector<Band> out = new Vector<Band>();
+        BufferedImage imageCopy = duplicateBufferedImage(this.image);
+        this.verticalEdgeBi(imageCopy);
+        Photo.thresholding(imageCopy); // strasne moc zere
 
-		Vector<Graph.Peak> peaks = computeGraph();
+        this.graphHandle = this.histogram(imageCopy);
+        this.graphHandle.rankFilter(CarSnapshot.carsnapshot_graphrankfilter);
+        this.graphHandle.applyProbabilityDistributor(CarSnapshot.distributor);
 
-		for (int i = 0; i < peaks.size(); i++) {
-			// vyseknut z povodneho! obrazka znacky, a ulozit do vektora. POZOR
-			// !!!!!! Vysekavame z povodneho, takze
-			// na suradnice vypocitane z imageCopy musime uplatnit inverznu
-			// transformaciu
-			Graph.Peak p = peaks.elementAt(i);
-			out.add(new Band(image.getSubimage(0, (p.getLeft()),
-					image.getWidth(), (p.getDiff()))));
-		}
-		return out;
+        this.graphHandle.findPeaks(CarSnapshot.numberOfCandidates); // sort by height
+        return this.graphHandle.peaks;
+    }
 
-	}
+    public Vector<Band> getBands() {
+        Vector<Band> out = new Vector<Band>();
 
-	public void verticalEdgeBi(BufferedImage image) {
-		BufferedImage imageCopy = Photo.duplicateBufferedImage(image);
+        Vector<Graph.Peak> peaks = this.computeGraph();
 
-		float data[] = { -1, 0, 1, -1, 0, 1, -1, 0, 1, -1, 0, 1 };
+        for (int i = 0; i < peaks.size(); i++) {
+            // vyseknut z povodneho! obrazka znacky, a ulozit do vektora. POZOR
+            // !!!!!! Vysekavame z povodneho, takze
+            // na suradnice vypocitane z imageCopy musime uplatnit inverznu
+            // transformaciu
+            Graph.Peak p = peaks.elementAt(i);
+            out.add(new Band(this.image.getSubimage(0, (p.getLeft()), this.image.getWidth(), (p.getDiff()))));
+        }
+        return out;
 
-		new ConvolveOp(new Kernel(3, 4, data), ConvolveOp.EDGE_NO_OP, null)
-				.filter(imageCopy, image);
-	}
+    }
 
-	// public void verticalRankBi(BufferedImage image) {
-	// BufferedImage imageCopy = duplicateBi(image);
-	//
-	// float data[] = new float[9];
-	// for (int i=0; i<data.length; i++) data[i] = 1.0f/data.length;
-	//
-	// new ConvolveOp(new Kernel(1,data.length, data), ConvolveOp.EDGE_NO_OP,
-	// null).filter(imageCopy, image);
-	// }
+    public void verticalEdgeBi(BufferedImage image) {
+        BufferedImage imageCopy = Photo.duplicateBufferedImage(image);
 
-	public CarSnapshotGraph histogram(BufferedImage bi) {
-		CarSnapshotGraph graph = new CarSnapshotGraph(this);
-		for (int y = 0; y < bi.getHeight(); y++) {
-			float counter = 0;
-			for (int x = 0; x < bi.getWidth(); x++) {
-				counter += Photo.getBrightness(bi, x, y);
-			}
-			graph.addPeak(counter);
-		}
-		return graph;
-	}
+        float data[] = { -1, 0, 1, -1, 0, 1, -1, 0, 1, -1, 0, 1 };
+
+        new ConvolveOp(new Kernel(3, 4, data), ConvolveOp.EDGE_NO_OP, null).filter(imageCopy, image);
+    }
+
+    // public void verticalRankBi(BufferedImage image) {
+    // BufferedImage imageCopy = duplicateBi(image);
+    //
+    // float data[] = new float[9];
+    // for (int i=0; i<data.length; i++) data[i] = 1.0f/data.length;
+    //
+    // new ConvolveOp(new Kernel(1,data.length, data), ConvolveOp.EDGE_NO_OP,
+    // null).filter(imageCopy, image);
+    // }
+
+    public CarSnapshotGraph histogram(BufferedImage bi) {
+        CarSnapshotGraph graph = new CarSnapshotGraph(this);
+        for (int y = 0; y < bi.getHeight(); y++) {
+            float counter = 0;
+            for (int x = 0; x < bi.getWidth(); x++) {
+                counter += Photo.getBrightness(bi, x, y);
+            }
+            graph.addPeak(counter);
+        }
+        return graph;
+    }
 }

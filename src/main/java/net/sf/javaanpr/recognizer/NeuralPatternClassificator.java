@@ -90,140 +90,129 @@ import net.sf.javaanpr.neuralnetwork.NeuralNetwork;
 
 public class NeuralPatternClassificator extends CharacterRecognizer {
 
-	private static int normalize_x = Configurator.getConfigurator()
-			.getIntProperty("char_normalizeddimensions_x");
-	private static int normalize_y = Configurator.getConfigurator()
-			.getIntProperty("char_normalizeddimensions_y");
+    private static int normalize_x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
+    private static int normalize_y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
 
-	// rozmer vstupneho pismena po transformacii : 10 x 16 = 160 neuronov
+    // rozmer vstupneho pismena po transformacii : 10 x 16 = 160 neuronov
 
-	public NeuralNetwork network;
+    public NeuralNetwork network;
 
-	// do not learn netwotk, but load if from file (default)
-	public NeuralPatternClassificator() {
-		this(false);
-	}
+    // do not learn netwotk, but load if from file (default)
+    public NeuralPatternClassificator() {
+        this(false);
+    }
 
-	public NeuralPatternClassificator(boolean learn) {
-		Configurator configurator = Configurator.getConfigurator();
-		
-		// zakomentovane dna 2.1.2007
-		// this.normalize_x =
-		// configurator.getIntProperty("char_normalizeddimensions_x");
-		// this.normalize_y =
-		// configurator.getIntProperty("char_normalizeddimensions_y");
+    public NeuralPatternClassificator(boolean learn) {
+        Configurator configurator = Configurator.getConfigurator();
 
-		Vector<Integer> dimensions = new Vector<Integer>();
+        // zakomentovane dna 2.1.2007
+        // this.normalize_x =
+        // configurator.getIntProperty("char_normalizeddimensions_x");
+        // this.normalize_y =
+        // configurator.getIntProperty("char_normalizeddimensions_y");
 
-		// determine size of input layer according to chosen feature extraction
-		// method.
-		int inputLayerSize;
-		if (configurator
-				.getIntProperty("char_featuresExtractionMethod") == 0) {
-			inputLayerSize = NeuralPatternClassificator.normalize_x
-					* NeuralPatternClassificator.normalize_y;
-		} else {
-			inputLayerSize = CharacterRecognizer.features.length * 4;
-		}
+        Vector<Integer> dimensions = new Vector<Integer>();
 
-		// construct new neural network with specified dimensions.
-		dimensions.add(inputLayerSize);
-		dimensions.add(configurator
-				.getIntProperty("neural_topology"));
-		dimensions.add(CharacterRecognizer.alphabet.length);
-		network = new NeuralNetwork(dimensions);
+        // determine size of input layer according to chosen feature extraction
+        // method.
+        int inputLayerSize;
+        if (configurator.getIntProperty("char_featuresExtractionMethod") == 0) {
+            inputLayerSize = NeuralPatternClassificator.normalize_x * NeuralPatternClassificator.normalize_y;
+        } else {
+            inputLayerSize = CharacterRecognizer.features.length * 4;
+        }
 
-		if (learn) {
-			// learn network
-			String learnAlphabetPath = configurator
-					.getStrProperty("char_learnAlphabetPath");
-			try {
-				learnAlphabet(learnAlphabetPath);
-			} catch (IOException e) {
-				System.err.println("Failed to load alphabet: " + learnAlphabetPath);
-				e.printStackTrace();
-			}
-		} else {
-			// or load network from xml
-			String neuralNetPath = configurator
-					.getPathProperty("char_neuralNetworkPath");
-			
-			InputStream is = configurator.getResourceAsStream(neuralNetPath);
-			
-			network = new NeuralNetwork(is);
-		}
-	}
+        // construct new neural network with specified dimensions.
+        dimensions.add(inputLayerSize);
+        dimensions.add(configurator.getIntProperty("neural_topology"));
+        dimensions.add(CharacterRecognizer.alphabet.length);
+        this.network = new NeuralNetwork(dimensions);
 
-	// IMAGE -> CHAR
-	@Override
-	public RecognizedChar recognize(Char imgChar) { // rozpozna UZ normalizovany
-													// char
-		imgChar.normalize();
-		Vector<Double> output = network.test(imgChar.extractFeatures());
-		//double max = 0.0;
-		//int indexMax = 0;
+        if (learn) {
+            // learn network
+            String learnAlphabetPath = configurator.getStrProperty("char_learnAlphabetPath");
+            try {
+                this.learnAlphabet(learnAlphabetPath);
+            } catch (IOException e) {
+                System.err.println("Failed to load alphabet: " + learnAlphabetPath);
+                e.printStackTrace();
+            }
+        } else {
+            // or load network from xml
+            String neuralNetPath = configurator.getPathProperty("char_neuralNetworkPath");
 
-		RecognizedChar recognized = new RecognizedChar();
+            InputStream is = configurator.getResourceAsStream(neuralNetPath);
 
-		for (int i = 0; i < output.size(); i++) {
-			recognized.addPattern(recognized.new RecognizedPattern(alphabet[i],
-					output.elementAt(i).floatValue()));
-		}
-		recognized.render();
-		recognized.sort(1);
-		return recognized;
-	}
+            this.network = new NeuralNetwork(is);
+        }
+    }
 
-	// public Vector<Double> imageToVector(Char imgChar) {
-	// Vector<Double> vectorInput = new Vector<Double>();
-	// for (int x = 0; x<imgChar.getWidth(); x++)
-	// for (int y = 0; y<imgChar.getHeight(); y++)
-	// vectorInput.add(new Double(imgChar.getBrightness(x,y)));
-	// return vectorInput;
-	// }
-	public NeuralNetwork.SetOfIOPairs.IOPair createNewPair(char chr,
-			Char imgChar) { // uz normalizonvany
-		Vector<Double> vectorInput = imgChar.extractFeatures();
+    // IMAGE -> CHAR
+    @Override
+    public RecognizedChar recognize(Char imgChar) { // rozpozna UZ normalizovany
+                                                    // char
+        imgChar.normalize();
+        Vector<Double> output = this.network.test(imgChar.extractFeatures());
+        //double max = 0.0;
+        //int indexMax = 0;
 
-		Vector<Double> vectorOutput = new Vector<Double>();
-		for (int i = 0; i < alphabet.length; i++) {
-			if (chr == alphabet[i]) {
-				vectorOutput.add(1.0);
-			} else {
-				vectorOutput.add(0.0);
-			}
-		}
+        RecognizedChar recognized = new RecognizedChar();
 
-		/*
-		 * System.out.println(); for (Double d : vectorInput)
-		 * System.out.print(d+" "); System.out.println(); for (Double d :
-		 * vectorOutput) System.out.print(d+" "); System.out.println();
-		 */
+        for (int i = 0; i < output.size(); i++) {
+            recognized.addPattern(recognized.new RecognizedPattern(alphabet[i], output.elementAt(i).floatValue()));
+        }
+        recognized.render();
+        recognized.sort(1);
+        return recognized;
+    }
 
-		return (new NeuralNetwork.SetOfIOPairs.IOPair(vectorInput, vectorOutput));
-	}
+    // public Vector<Double> imageToVector(Char imgChar) {
+    // Vector<Double> vectorInput = new Vector<Double>();
+    // for (int x = 0; x<imgChar.getWidth(); x++)
+    // for (int y = 0; y<imgChar.getHeight(); y++)
+    // vectorInput.add(new Double(imgChar.getBrightness(x,y)));
+    // return vectorInput;
+    // }
+    public NeuralNetwork.SetOfIOPairs.IOPair createNewPair(char chr, Char imgChar) { // uz normalizonvany
+        Vector<Double> vectorInput = imgChar.extractFeatures();
 
-	// NAUCI NEURONOVU SIET ABECEDE, KTORU NAJDE V ADRESARI PATH
-	public void learnAlphabet(String folder) throws IOException {		
-		NeuralNetwork.SetOfIOPairs train = new NeuralNetwork.SetOfIOPairs();
+        Vector<Double> vectorOutput = new Vector<Double>();
+        for (int i = 0; i < alphabet.length; i++) {
+            if (chr == alphabet[i]) {
+                vectorOutput.add(1.0);
+            } else {
+                vectorOutput.add(0.0);
+            }
+        }
 
-		ArrayList<String> fileList = (ArrayList<String>) Char.getAlphabetList(folder);
-		
-		for (String fileName : fileList) {			
-			InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
+        /*
+         * System.out.println(); for (Double d : vectorInput)
+         * System.out.print(d+" "); System.out.println(); for (Double d :
+         * vectorOutput) System.out.print(d+" "); System.out.println();
+         */
 
-			Char imgChar = new Char(is);
-			imgChar.normalize();
-			train.addIOPair(createNewPair(fileName.toUpperCase().charAt(0),
-					imgChar));
-			
-			is.close();
-		}
+        return (new NeuralNetwork.SetOfIOPairs.IOPair(vectorInput, vectorOutput));
+    }
 
-		network.learn(train,
-				Configurator.getConfigurator().getIntProperty("neural_maxk"),
-				Configurator.getConfigurator().getDoubleProperty("neural_eps"),
-				Configurator.getConfigurator().getDoubleProperty("neural_lambda"),
-				Configurator.getConfigurator().getDoubleProperty("neural_micro"));
-	}
+    // NAUCI NEURONOVU SIET ABECEDE, KTORU NAJDE V ADRESARI PATH
+    public void learnAlphabet(String folder) throws IOException {
+        NeuralNetwork.SetOfIOPairs train = new NeuralNetwork.SetOfIOPairs();
+
+        ArrayList<String> fileList = (ArrayList<String>) Char.getAlphabetList(folder);
+
+        for (String fileName : fileList) {
+            InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
+
+            Char imgChar = new Char(is);
+            imgChar.normalize();
+            train.addIOPair(this.createNewPair(fileName.toUpperCase().charAt(0), imgChar));
+
+            is.close();
+        }
+
+        this.network.learn(train, Configurator.getConfigurator().getIntProperty("neural_maxk"), Configurator
+                .getConfigurator().getDoubleProperty("neural_eps"),
+                Configurator.getConfigurator().getDoubleProperty("neural_lambda"), Configurator.getConfigurator()
+                        .getDoubleProperty("neural_micro"));
+    }
 }
