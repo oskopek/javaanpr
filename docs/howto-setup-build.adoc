@@ -1,0 +1,11 @@
+== How-to setup your build environment for JavaANPR
+
+. *Install Java7*
+
+. *Install Maven* - (preferably the latest version you can).
+Usually, your distribution's package management repository has it:
+** Fedora: `yum install mvn`
+
+. *Run the build*
+** Recomennded: `mvn clean install -DskipTests`
+** Run unit tests: `mvn clean install`

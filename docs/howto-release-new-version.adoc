@@ -1,0 +1,11 @@
+= Releasing a new version of JavaANPR
+
+. Make sure the code/resources is the version you want to release
+. Go to the root directory of the project
+. Run: `./docs/releasing/release.sh` and follow the steps there
+
+== Guidelines on versioning in JavaANPR
+
+== General coding guidelines
+
+== Licence compliment
