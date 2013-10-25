@@ -1,6 +1,0 @@
-#!/bin/bash
-mvn clean -Prelease
-mvn release:clean -Prelease
-mvn release:prepare -Prelease
-mvn release:perform -Prelease
-git push
