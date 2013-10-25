@@ -388,7 +388,7 @@ public class Intelligence {
         return null;
     }
 
-    public String recognize(CarSnapshot carSnapshot) throws Exception { //TODO; remove throws, should be static?
+    public String recognize(CarSnapshot carSnapshot) throws Exception { //TODO 2 Remove <code>throws</code>, should be static?
         TimeMeter time = new TimeMeter();
         int syntaxAnalysisMode = configurator.getIntProperty("intelligence_syntaxanalysis");
         int skewDetectionMode = configurator.getIntProperty("intelligence_skewdetection");

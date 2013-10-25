@@ -65,7 +65,7 @@
 
 	<!-- NEURAL NETWORK LEARNING PARAMETERS -->
 
-	<entry key="char_neuralNetworkPath">/neuralnetworks/network_avgres_813_map.xml</entry> <!-- neural network topology file (caution : dimensions must match with selected 
+	<entry key="char_neuralNetworkPath">neuralnetworks/network_avgres_813_map.xml</entry> <!-- neural network topology file (caution : dimensions must match with selected 
 		extraction method) -->
 	<entry key="neural_maxk">8000</entry> <!-- maximum number of iterations during learning process -->
 	<entry key="neural_eps">0.07</entry> <!-- expected error ratio -->
@@ -79,7 +79,7 @@
 		if character count matchs 2 - correct characters anyway (eliminate redundant 
 		characters) -->
 	<entry key="intelligence_syntaxanalysis">2</entry> <!-- syntax analysis mode -->
-	<entry key="intelligence_syntaxDescriptionFile">/syntax/syntax.xml</entry>
+	<entry key="intelligence_syntaxDescriptionFile">syntax/syntax.xml</entry>
 
 	<!-- CAR SNAPSHOT, BAND, PLATE GRAPH ANALYSIS -->
 

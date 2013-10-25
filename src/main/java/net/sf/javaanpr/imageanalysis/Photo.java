@@ -267,8 +267,8 @@ public class Photo implements AutoCloseable {
         this.image = this.averageResizeBi(this.image, width, height);
     }
 
-    // TODO : nefunguje dobre pre znaky podobnej velkosti ako cielvoa velkost
-    public BufferedImage averageResizeBi(BufferedImage origin, int width, int height) {
+    
+    public BufferedImage averageResizeBi(BufferedImage origin, int width, int height) { // TODO 2 Nefunguje dobre pre znaky podobnej velkosti ako cielova velkost
 
         if ((origin.getWidth() < width) || (origin.getHeight() < height)) {
             return Photo.linearResizeBi(origin, width, height); // average
@@ -326,7 +326,7 @@ public class Photo implements AutoCloseable {
         return imageCopy;
     }
 
-    static void thresholding(BufferedImage bi) { // TODO: optimalizovat
+    static void thresholding(BufferedImage bi) { // TODO 3 Optimalizovat
         short[] threshold = new short[256];
         for (short i = 0; i < 36; i++) {
             threshold[i] = 0;

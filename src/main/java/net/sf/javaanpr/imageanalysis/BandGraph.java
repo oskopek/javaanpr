@@ -73,7 +73,7 @@ import java.util.Vector;
 
 import net.sf.javaanpr.configurator.Configurator;
 
-public class BandGraph extends Graph {/* TODO - BEGIN */
+public class BandGraph extends Graph {
     Band handle;
 
     private static double peakFootConstant = Configurator.getConfigurator().getDoubleProperty(
@@ -183,5 +183,4 @@ public class BandGraph extends Graph {/* TODO - BEGIN */
         }
         return Math.min(this.yValues.size(), index);
     }
-    /* TODO - END */
 }

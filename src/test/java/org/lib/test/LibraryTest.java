@@ -28,7 +28,7 @@ import org.junit.Test;
 public class LibraryTest {
 
     /*
-     * TODO: Fix for some strange encodings of jpeg images - they don't always load correctly
+     * TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly
      * See: http://stackoverflow.com/questions/2408613/problem-reading-jpeg-image-using-imageio-readfile-file
      * B/W images load without a problem: for now - using snapshots/test_041.jpg
      */

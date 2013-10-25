@@ -334,7 +334,6 @@ public class FrameMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void helpMenuActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_helpMenuActionPerformed
-        // TODO add your handling code here:
     }// GEN-LAST:event_helpMenuActionPerformed
 
     private void helpItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_helpItemActionPerformed
