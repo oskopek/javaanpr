@@ -7,5 +7,5 @@ Usually, your distribution's package management repository has it:
 ** Fedora: `yum install mvn`
 
 . *Run the build*
-** Recomennded: `mvn clean install -DskipTests`
-** Run unit tests: `mvn clean install`
+** Recomended: `mvn clean install -DskipTests`
+** To run unit tests: `mvn clean install`

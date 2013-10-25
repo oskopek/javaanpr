@@ -362,10 +362,10 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 </head>
 <body class="article">
 <div id="header">
-<h1>Releasing a new version of JavaANPR</h1>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="_releasing_a_new_version_of_javaanpr">Releasing a new version of JavaANPR</h2>
 <div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
@@ -378,32 +378,35 @@ span.icon > [class^="icon-"], span.icon > [class*=" icon-"] { cursor: default; }
 <li>
 <p>Run: <code>./docs/releasing/release.sh</code> and follow the steps there</p>
 </li>
+<li>
+<p>Go to <a href="https://oss.sonatype.org/">Sonatype OSS Nexus</a> and login&#8201;&#8212;&#8201;only an account authorized for JavaANPR!</p>
+</li>
+<li>
+<p>Refresh <em>Staging repositories</em></p>
+</li>
+<li>
+<p>Find the javaanpr entry, select it and <em>Close</em>&#8201;&#8212;&#8201;add a meaningful message</p>
+</li>
+<li>
+<p>Wait until the check completes, refresh, and <em>Release</em>&#8201;&#8212;&#8201;add a meaningful message</p>
+</li>
+<li>
+<p>In about two hours the new version should appear in <a href="http://search.maven.org/#search|ga|1|javaanpr">Maven Central</a>!</p>
+</li>
 </ol>
 </div>
+<div class="sect2">
+<h3 id="_guidelines_on_versioning_in_javaanpr">Guidelines on versioning in JavaANPR</h3>
+<div class="paragraph">
+<p>See: <a href="http://semver.org/">Semantic Versioning</a></p>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_guidelines_on_versioning_in_javaanpr">Guidelines on versioning in JavaANPR</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_general_coding_guidelines">General coding guidelines</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_licence_compliment">Licence compliment</h2>
-<div class="sectionbody">
-
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2013-10-25 14:37:57 CEST
+Last updated 2013-10-25 22:12:53 CEST
 </div>
 </div>
 </body>
