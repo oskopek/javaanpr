@@ -69,9 +69,7 @@ package net.sf.javaanpr.gui.windows;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URL;
 
 import net.sf.javaanpr.configurator.Configurator;
 
@@ -91,14 +89,14 @@ public class FrameHelp extends javax.swing.JFrame {
         int height = this.getHeight();
         this.setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
         try {
-            if (mode == FrameHelp.SHOW_ABOUT) { //TODO 1 Fix to actually load the html file
-                Path p = Paths.get(Configurator.getConfigurator().getPathProperty("help_file_about"));
-                File aboutFile = p.toFile();               
-                this.editorPane.setPage(aboutFile.toURI().toURL());
+            if (mode == FrameHelp.SHOW_ABOUT) {
+                URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_about"));
+                System.out.println(url);
+                this.editorPane.setPage(url);
             } else {
-                Path p = Paths.get(Configurator.getConfigurator().getPathProperty("help_file_help"));
-                File helpFile = p.toFile();               
-                this.editorPane.setPage(helpFile.toURI().toURL());
+                URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_help"));
+                System.out.println(url);
+                this.editorPane.setPage(url);
             }
         } catch (Exception e) {
             this.dispose();

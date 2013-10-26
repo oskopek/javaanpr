@@ -315,6 +315,11 @@ public class Configurator {
             return this.getClass().getResourceAsStream(corrected);
         }
 
+        /*
+         * Should actually load filename.
+         * It is here for the GUI.
+         * Loading images exactly from specified filesystem path
+         */
         File file = new File(filename);
         if (file.exists()) {
             FileInputStream fis = null;
