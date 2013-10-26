@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.lib.test;
 
 import static org.junit.Assert.assertEquals;
@@ -22,7 +19,6 @@ import net.sf.javaanpr.intelligence.Intelligence;
 import org.junit.Test;
 
 /**
- * @author oskopek
  * 
  */
 public class LibraryTest {

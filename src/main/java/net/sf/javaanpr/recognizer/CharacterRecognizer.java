@@ -56,12 +56,12 @@ exactly by the following label :
 
 ---- label begin ----
 This work is a derivate of the JavaANPR. JavaANPR is a intellectual 
-property of Ondrej Martinsky. Please visit http://net.sf.javaanpr.sourceforge.net 
+property of Ondrej Martinsky. Please visit http://javaanpr.sourceforge.net 
 for more informations about JavaANPR. 
 ----  label end  ----
 
 ------------------------------------------------------------------------
-                                         http://net.sf.javaanpr.sourceforge.net
+                                         http://javaanpr.sourceforge.net
 ------------------------------------------------------------------------
  */
 
