@@ -47,17 +47,17 @@ The name and trademarks of copyright holder(s) may NOT be used in
 advertising or publicity pertaining to the Original or Derivative Works
 without specific, written prior permission. Title to copyright in the
 Original Work and any associated documentation will at all times remain
-with the copyright holders. 
+with the copyright holders.
 
-If you want to alter upon this work, you MUST attribute it in 
+If you want to alter upon this work, you MUST attribute it in
 a) all source files
 b) on every place, where is the copyright of derivated work
 exactly by the following label :
 
 ---- label begin ----
-This work is a derivate of the JavaANPR. JavaANPR is a intellectual 
-property of Ondrej Martinsky. Please visit http://javaanpr.sourceforge.net 
-for more info about JavaANPR. 
+This work is a derivate of the JavaANPR. JavaANPR is a intellectual
+property of Ondrej Martinsky. Please visit http://javaanpr.sourceforge.net
+for more info about JavaANPR.
 ----  label end  ----
 
 ------------------------------------------------------------------------

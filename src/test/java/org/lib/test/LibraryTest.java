@@ -19,7 +19,7 @@ import net.sf.javaanpr.intelligence.Intelligence;
 import org.junit.Test;
 
 /**
- * 
+ *
  */
 public class LibraryTest {
 
