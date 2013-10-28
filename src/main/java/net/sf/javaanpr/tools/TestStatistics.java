@@ -77,11 +77,11 @@ import java.util.Vector;
 public class TestStatistics {
 
     public static String helpText = "" + "-----------------------------------------------------------\n"
-            + "ANPR Statistics Generator\n" + "Copyright (c) Ondrej Martinsky, 2006-2007\n" + "\n"
-            + "Licensed under the Educational Community License,\n" + "\n" + "Command line arguments\n" + "\n"
-            + "    -help         Displays this help\n" + "    -i <file>     Create statistics for test file\n" + "\n"
-            + "Test file must be have a CSV format\n" + "Each row must contain name of analysed snapshot,\n"
-            + "real plate and recognized plate string\n" + "Example : \n" + "001.jpg, 1B01234, 1B012??";
+        + "ANPR Statistics Generator\n" + "Copyright (c) Ondrej Martinsky, 2006-2007\n" + "\n"
+        + "Licensed under the Educational Community License,\n" + "\n" + "Command line arguments\n" + "\n"
+        + "    -help         Displays this help\n" + "    -i <file>     Create statistics for test file\n" + "\n"
+        + "Test file must be have a CSV format\n" + "Each row must contain name of analysed snapshot,\n"
+        + "real plate and recognized plate string\n" + "Example : \n" + "001.jpg, 1B01234, 1B012??";
 
     public TestStatistics() {
     }
@@ -144,7 +144,7 @@ class TestReport {
             for (int i = 0; i < this.length; i++) { // POROVNAVAT ODZADU (napr.
                 // BA123AB vs. XBA123AB)
                 if (this.getChar(this.plate, this.length - i - 1) == this.getChar(this.recognizedPlate, this.length - i
-                        - 1)) {
+                    - 1)) {
                     g2++;
                 }
             }
@@ -201,7 +201,7 @@ class TestReport {
             binaryScoreCount += (record.isOk() ? 1 : 0);
             if (!record.isOk()) {
                 System.out.println(record.plate + " ~ " + record.recognizedPlate + " ("
-                        + (((float) record.getGoodCount() / record.getLength()) * 100) + "% ok)");
+                    + (((float) record.getGoodCount() / record.getLength()) * 100) + "% ok)");
             }
         }
         System.out.println("\n----------------------------------------------");

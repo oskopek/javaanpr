@@ -78,9 +78,9 @@ public class PlateGraph extends Graph {
     Plate handle;
 
     private static double plategraph_rel_minpeaksize = Configurator.getConfigurator().getDoubleProperty(
-            "plategraph_rel_minpeaksize");
+        "plategraph_rel_minpeaksize");
     private static double peakFootConstant = Configurator.getConfigurator().getDoubleProperty(
-            "plategraph_peakfootconstant");
+        "plategraph_peakfootconstant");
 
     public PlateGraph(Plate handle) {
         this.handle = handle; // nesie odkaz na obrazok (Plate), ku ktoremu sa
@@ -182,15 +182,14 @@ public class PlateGraph extends Graph {
         Vector<Peak> chars = new Vector<Peak>();
 
         /*
-         * + + +++ +++ + + +++ + + + + + + + + + + + ++ + + + ++ +++ +++ | | 1 |
-         * 2 .... | +--> 1. local minimum
+         * + + +++ +++ + + +++ + + + + + + + + + + + ++ + + + ++ +++ +++ | | 1 | 2 .... | +--> 1. local minimum
          */
 
         // zapocitame aj znak od medzery na lavo :
         if (spaces.size() != 0) {
             // detekujeme 1. lokalne minimum na grafe
             // 3 = leftmargin
-            //int minIndex = getMinValueIndex(0, spaces.elementAt(0).getCenter());
+            // int minIndex = getMinValueIndex(0, spaces.elementAt(0).getCenter());
             // System.out.println("minindex found at " + minIndex +
             // " in interval 0 - " + outPeaksFiltered.elementAt(0).getCenter());
             // hladame index do lava od minindex

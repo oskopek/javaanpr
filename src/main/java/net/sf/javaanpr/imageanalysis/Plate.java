@@ -80,7 +80,7 @@ public class Plate extends Photo {
     static public Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 0, 0);
     static private int numberOfCandidates = Configurator.getConfigurator().getIntProperty("intelligence_numberOfChars");
     private static int horizontalDetectionType = Configurator.getConfigurator().getIntProperty(
-            "platehorizontalgraph_detectionType");
+        "platehorizontalgraph_detectionType");
 
     private PlateGraph graphHandle = null;
     public Plate plateCopy;
@@ -128,8 +128,8 @@ public class Plate extends Photo {
                 continue;
             }
             out.add(new Char(this.image.getSubimage(p.getLeft(), 0, p.getDiff(), this.image.getHeight()),
-                    this.plateCopy.image.getSubimage(p.getLeft(), 0, p.getDiff(), this.image.getHeight()),
-                    new PositionInPlate(p.getLeft(), p.getRight())));
+                this.plateCopy.image.getSubimage(p.getLeft(), 0, p.getDiff(), this.image.getHeight()),
+                new PositionInPlate(p.getLeft(), p.getRight())));
         }
 
         return out;

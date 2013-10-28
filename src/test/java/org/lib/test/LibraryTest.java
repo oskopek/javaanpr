@@ -24,38 +24,32 @@ import org.junit.Test;
 public class LibraryTest {
 
     /*
-     * TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly
-     * See: http://stackoverflow.com/questions/2408613/problem-reading-jpeg-image-using-imageio-readfile-file
-     * B/W images load without a problem: for now - using snapshots/test_041.jpg
+     * TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly See:
+     * http://stackoverflow.com/questions/2408613/problem-reading-jpeg-image-using-imageio-readfile-file B/W images load without
+     * a problem: for now - using snapshots/test_041.jpg
      */
     @Test
     public void intelligenceTest() throws Exception {
         final String image = "snapshots/test_041.jpg";
 
-        /* Show raw loaded image for 5s
-        InputStream is = Configurator.getConfigurator().getResourceAsStream(image);        
-        BufferedImage bi = ImageIO.read(is);
-        TestImageDraw t = new TestImageDraw(bi);
-        Thread.sleep(5000);
-        is = Configurator.getConfigurator().getResourceAsStream(image);
-        */
+        /*
+         * Show raw loaded image for 5s InputStream is = Configurator.getConfigurator().getResourceAsStream(image);
+         * BufferedImage bi = ImageIO.read(is); TestImageDraw t = new TestImageDraw(bi); Thread.sleep(5000); is =
+         * Configurator.getConfigurator().getResourceAsStream(image);
+         */
 
-        /* Show Photo loaded image for 5s
-        Photo p = new Photo(is);
-        t = new TestImageDraw(p.image);
-        Thread.sleep(5000);
-        p.close();
-        */
+        /*
+         * Show Photo loaded image for 5s Photo p = new Photo(is); t = new TestImageDraw(p.image); Thread.sleep(5000);
+         * p.close();
+         */
 
         CarSnapshot carSnap = new CarSnapshot(image);
         assertNotNull("carSnap is null", carSnap);
         assertNotNull("carSnap.image is null", carSnap.image);
 
-        /* Show CarSnapshot loaded image for 5s
-        t = new TestImageDraw(carSnap.image);
-        Thread.sleep(5000);
-        t.frame.dispose();
-        */
+        /*
+         * Show CarSnapshot loaded image for 5s t = new TestImageDraw(carSnap.image); Thread.sleep(5000); t.frame.dispose();
+         */
 
         Intelligence intel = new Intelligence();
         assertNotNull(intel);
@@ -63,11 +57,11 @@ public class LibraryTest {
         String spz = intel.recognize(carSnap);
         assertNotNull("The licence plate is null - are you sure the image has the correct color space?", spz);
 
-        //System.out.println(spz);
+        // System.out.println(spz);
 
         assertEquals("LM025BD", spz);
 
-        //System.out.println(intel.lastProcessDuration());
+        // System.out.println(intel.lastProcessDuration());
 
     }
 
@@ -87,7 +81,7 @@ public class LibraryTest {
             this.frame.add(new JLabel(new ImageIcon(this.getImage())));
 
             this.frame.pack();
-            //          frame.setSize(WIDTH, HEIGHT);
+            // frame.setSize(WIDTH, HEIGHT);
             // Better to DISPOSE than EXIT
             this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         }

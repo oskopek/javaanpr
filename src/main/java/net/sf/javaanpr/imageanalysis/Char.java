@@ -113,9 +113,9 @@ public class Char extends Photo {
     }
 
     /**
-     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u
-     * znakov nerobi, pretoze znaky sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale
-     * nacitavanie zo suboru tomuto principu nezodpoveda, cize spravime prahovanie zvlast
+     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze znaky
+     * sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu nezodpoveda, cize
+     * spravime prahovanie zvlast
      * 
      * @param fileName
      * @throws IOException
@@ -136,9 +136,9 @@ public class Char extends Photo {
     }
 
     /**
-     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u
-     * znakov nerobi, pretoze znaky sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale
-     * nacitavanie zo suboru tomuto principu nezodpoveda, cize spravime prahovanie zvlast
+     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze znaky
+     * sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu nezodpoveda, cize
+     * spravime prahovanie zvlast
      * 
      * @param is
      * @throws IOException
@@ -161,7 +161,7 @@ public class Char extends Photo {
     @Override
     public Char clone() {
         return new Char(duplicateBufferedImage(this.image), duplicateBufferedImage(this.thresholdedImage),
-                this.positionInPlate);
+            this.positionInPlate);
     }
 
     private void init() {
@@ -179,11 +179,9 @@ public class Char extends Photo {
         this.image = this.thresholdedImage;
 
         /*
-         * NEBUDEME POUZIVAT // tu treba osetrit pripady, ked je prvy alebo
-         * posledny riadok cely cierny (zmenime na biely) boolean flag = false;
-         * for (int x=0; x<this.getWidth(); x++) if (this.getBrightness(x,0) >
-         * 0.5f) flag = true; if (flag == false) for (int x=0;
-         * x<this.getWidth(); x++) this.setBrightness(x,0,1.0f);
+         * NEBUDEME POUZIVAT // tu treba osetrit pripady, ked je prvy alebo posledny riadok cely cierny (zmenime na biely)
+         * boolean flag = false; for (int x=0; x<this.getWidth(); x++) if (this.getBrightness(x,0) > 0.5f) flag = true; if (flag
+         * == false) for (int x=0; x<this.getWidth(); x++) this.setBrightness(x,0,1.0f);
          */
         PixelMap pixelMap = this.getPixelMap();
 
@@ -364,7 +362,7 @@ public class Char extends Photo {
 
     private static String getSuffix(String directoryName) {
         if (directoryName.endsWith("/")) {
-            directoryName = directoryName.substring(0, directoryName.length() - 1); //cuts last char off
+            directoryName = directoryName.substring(0, directoryName.length() - 1); // cuts last char off
         }
 
         String suffix = directoryName.substring(directoryName.lastIndexOf('_'));

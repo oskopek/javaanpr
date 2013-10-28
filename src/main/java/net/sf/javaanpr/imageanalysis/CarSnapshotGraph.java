@@ -76,9 +76,9 @@ import net.sf.javaanpr.configurator.Configurator;
 public class CarSnapshotGraph extends Graph {
     // configuration for searching bands in image !
     private static double peakFootConstant = Configurator.getConfigurator().getDoubleProperty(
-            "carsnapshotgraph_peakfootconstant"); // 0.55
+        "carsnapshotgraph_peakfootconstant"); // 0.55
     private static double peakDiffMultiplicationConstant = Configurator.getConfigurator().getDoubleProperty(
-            "carsnapshotgraph_peakDiffMultiplicationConstant");// 0.1
+        "carsnapshotgraph_peakDiffMultiplicationConstant");// 0.1
 
     CarSnapshot handle;
 

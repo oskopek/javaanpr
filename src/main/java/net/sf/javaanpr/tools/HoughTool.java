@@ -82,7 +82,7 @@ public class HoughTool {
         Photo p = new Photo(fis);
         HoughTransformation hough = p.getHoughTransformation();
         Photo transformed = new Photo(hough.render(HoughTransformation.RENDER_TRANSFORMONLY,
-                HoughTransformation.COLOR_HUE));
+            HoughTransformation.COLOR_HUE));
 
         transformed.saveImage(args[1]);
 

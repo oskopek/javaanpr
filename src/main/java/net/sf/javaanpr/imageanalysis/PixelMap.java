@@ -95,19 +95,12 @@ public class PixelMap {
         }
 
         /*
-        boolean equals(int x, int y) {
-        	if ((x == this.x) && (y == this.y)) {
-        		return true;
-        	}
-        	return false;
-        }
-        */
+         * boolean equals(int x, int y) { if ((x == this.x) && (y == this.y)) { return true; } return false; }
+         */
 
         /*
-        public boolean value() {
-        	return matrix[x][y];
-        }
-        */
+         * public boolean value() { return matrix[x][y]; }
+         */
     }
 
     private class PointSet extends Stack<Point> {
@@ -292,8 +285,8 @@ public class PixelMap {
 
         // konturovy bod ma aspon jeden bod v okoli biely
         if (!this.getPointValue(x - 1, y - 1) || !this.getPointValue(x - 1, y + 1) || !this.getPointValue(x + 1, y - 1)
-                || !this.getPointValue(x + 1, y + 1) || !this.getPointValue(x, y + 1) || !this.getPointValue(x, y - 1)
-                || !this.getPointValue(x + 1, y) || !this.getPointValue(x - 1, y)) {
+            || !this.getPointValue(x + 1, y + 1) || !this.getPointValue(x, y + 1) || !this.getPointValue(x, y - 1)
+            || !this.getPointValue(x + 1, y) || !this.getPointValue(x - 1, y)) {
             return true;
         }
 
@@ -381,15 +374,15 @@ public class PixelMap {
     private boolean step1passed(int x, int y) {
         int n = this.n(x, y);
         return (((2 <= n) && (n <= 6)) && (this.t(x, y) == 1)
-                && (!this.p(2, x, y) || !this.p(4, x, y) || !this.p(6, x, y)) && (!this.p(4, x, y) || !this.p(6, x, y) || !this
-                .p(8, x, y)));
+            && (!this.p(2, x, y) || !this.p(4, x, y) || !this.p(6, x, y)) && (!this.p(4, x, y) || !this.p(6, x, y) || !this
+            .p(8, x, y)));
     }
 
     private boolean step2passed(int x, int y) {
         int n = this.n(x, y);
         return (((2 <= n) && (n <= 6)) && (this.t(x, y) == 1)
-                && (!this.p(2, x, y) || !this.p(4, x, y) || !this.p(8, x, y)) && (!this.p(2, x, y) || !this.p(6, x, y) || !this
-                .p(8, x, y)));
+            && (!this.p(2, x, y) || !this.p(4, x, y) || !this.p(8, x, y)) && (!this.p(2, x, y) || !this.p(6, x, y) || !this
+            .p(8, x, y)));
     }
 
     private void findBoundaryPoints(PointSet set) {
@@ -470,20 +463,11 @@ public class PixelMap {
     // reduce other pieces /////////////////////////////
 
     /*
-    private boolean isInPieces(PieceSet pieces, int x, int y) {
-    	for (Piece piece : pieces) {
-    		// pre vsetky kusky
-    		for (Point point : piece) {
-    			// pre vsetky body na kusku
-    			if (point.equals(x, y)) {
-    				return true;
-    			}
-    		}
-    	}
-
-    	return false;
-    }
-    */
+     * private boolean isInPieces(PieceSet pieces, int x, int y) { for (Piece piece : pieces) { // pre vsetky kusky for (Point
+     * point : piece) { // pre vsetky body na kusku if (point.equals(x, y)) { return true; } } }
+     * 
+     * return false; }
+     */
 
     private boolean seedShouldBeAdded(Piece piece, Point p) {
         // ak sa nevymyka okrajom
@@ -550,11 +534,9 @@ public class PixelMap {
             pieces.add(this.createPiece(unsorted));
         }
         /*
-         * do { continueFlag = false; boolean loopBreak = false; for (int x = 0;
-         * x<this.width; x++) { for (int y = 0; y<this.height; y++) { // for
-         * each pixel // ak je pixel cierny, a nie je sucastou ziadneho kuska if
-         * (this.matrix[x][y] && !isInPieces(pieces,x,y)) { continueFlag = true;
-         * pieces.add(createPiece(x,y)); } }// for y } // for x } while
+         * do { continueFlag = false; boolean loopBreak = false; for (int x = 0; x<this.width; x++) { for (int y = 0;
+         * y<this.height; y++) { // for each pixel // ak je pixel cierny, a nie je sucastou ziadneho kuska if (this.matrix[x][y]
+         * && !isInPieces(pieces,x,y)) { continueFlag = true; pieces.add(createPiece(x,y)); } }// for y } // for x } while
          * (continueFlag);
          */
         return pieces;

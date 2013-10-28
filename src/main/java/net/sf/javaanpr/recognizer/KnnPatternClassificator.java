@@ -115,8 +115,8 @@ public class KnnPatternClassificator extends CharacterRecognizer {
     @Override
     public RecognizedChar recognize(Char chr) {
         Vector<Double> tested = chr.extractFeatures();
-        //int minx = 0;
-        //float minfx = Float.POSITIVE_INFINITY;
+        // int minx = 0;
+        // float minfx = Float.POSITIVE_INFINITY;
 
         RecognizedChar recognized = new RecognizedChar();
 
@@ -138,7 +138,7 @@ public class KnnPatternClassificator extends CharacterRecognizer {
     }
 
     @SuppressWarnings("unused")
-    //Maybe will be used eventually again
+    // Maybe will be used eventually again
     private float difference(Vector<Double> vectorA, Vector<Double> vectorB) {
         float diff = 0;
         for (int x = 0; x < vectorA.size(); x++) {

@@ -82,7 +82,7 @@ import net.sf.javaanpr.configurator.Configurator;
 public class ReportGenerator {
     private String directory;
     private String output;
-    //private BufferedWriter out;
+    // private BufferedWriter out;
     private boolean enabled;
 
     public ReportGenerator(String directory) throws IOException {
@@ -95,8 +95,8 @@ public class ReportGenerator {
         }
 
         this.output = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" + "<html>"
-                + "<head><title>ANPR report</title>" + "</head>" + "<style type=\"text/css\">"
-                + "@import \"style.css\";" + "</style>";
+            + "<head><title>ANPR report</title>" + "</head>" + "<style type=\"text/css\">"
+            + "@import \"style.css\";" + "</style>";
 
     }
 
@@ -122,7 +122,7 @@ public class ReportGenerator {
 
         if ((w != 0) && (h != 0)) {
             this.output += "<img src='" + imageName + "' alt='' width='" + w + "' height='" + h + "' class='" + cls
-                    + "'>\n";
+                + "'>\n";
         } else {
             this.output += "<img src='" + imageName + "' alt='' class='" + cls + "'>\n";
         }

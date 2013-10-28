@@ -172,7 +172,7 @@ public class Parser {
      */
     @Deprecated
     public Vector<PlateForm> loadFromXml(String fileName) throws ParserConfigurationException, SAXException,
-            IOException {
+        IOException {
         InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
         return this.loadFromXml(inStream);
     }
@@ -186,7 +186,7 @@ public class Parser {
      * @throws IOException
      */
     public Vector<PlateForm> loadFromXml(InputStream inStream) throws ParserConfigurationException, SAXException,
-            IOException {
+        IOException {
         Vector<PlateForm> plateForms = new Vector<PlateForm>();
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -261,7 +261,7 @@ public class Parser {
     public String parse(RecognizedPlate recognizedPlate, int syntaxAnalysisMode) throws IOException {
         if (syntaxAnalysisMode == 0) {
             Main.rg.insertText(" result : " + recognizedPlate.getString() + " --> <font size=15>"
-                    + recognizedPlate.getString() + "</font><hr><br>");
+                + recognizedPlate.getString() + "</font><hr><br>");
             return recognizedPlate.getString();
         }
 

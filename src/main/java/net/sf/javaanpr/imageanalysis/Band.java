@@ -80,7 +80,7 @@ import net.sf.javaanpr.configurator.Configurator;
 public class Band extends Photo {
     static public Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 25, 25);
     static private int numberOfCandidates = Configurator.getConfigurator()
-            .getIntProperty("intelligence_numberOfPlates");
+        .getIntProperty("intelligence_numberOfPlates");
 
     private BandGraph graphHandle = null;
 

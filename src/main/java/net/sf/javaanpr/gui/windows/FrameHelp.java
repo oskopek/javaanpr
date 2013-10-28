@@ -128,19 +128,19 @@ public class FrameHelp extends javax.swing.JFrame {
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this.getContentPane());
         this.getContentPane().setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-                layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(layout
-                                .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                .add(org.jdesktop.layout.GroupLayout.TRAILING, this.helpWindowClose)
-                                .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 514,
-                                        Short.MAX_VALUE)).addContainerGap()));
+            layout.createSequentialGroup()
+                .addContainerGap()
+                .add(layout
+                    .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, this.helpWindowClose)
+                    .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 514,
+                        Short.MAX_VALUE)).addContainerGap()));
         layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-                org.jdesktop.layout.GroupLayout.TRAILING,
-                layout.createSequentialGroup().addContainerGap()
-                        .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(this.helpWindowClose)
-                        .addContainerGap()));
+            org.jdesktop.layout.GroupLayout.TRAILING,
+            layout.createSequentialGroup().addContainerGap()
+                .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(this.helpWindowClose)
+                .addContainerGap()));
         this.pack();
     }// </editor-fold>//GEN-END:initComponents
 

@@ -153,8 +153,8 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
                                                     // char
         imgChar.normalize();
         Vector<Double> output = this.network.test(imgChar.extractFeatures());
-        //double max = 0.0;
-        //int indexMax = 0;
+        // double max = 0.0;
+        // int indexMax = 0;
 
         RecognizedChar recognized = new RecognizedChar();
 
@@ -186,8 +186,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
         }
 
         /*
-         * System.out.println(); for (Double d : vectorInput)
-         * System.out.print(d+" "); System.out.println(); for (Double d :
+         * System.out.println(); for (Double d : vectorInput) System.out.print(d+" "); System.out.println(); for (Double d :
          * vectorOutput) System.out.print(d+" "); System.out.println();
          */
 
@@ -211,8 +210,8 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
         }
 
         this.network.learn(train, Configurator.getConfigurator().getIntProperty("neural_maxk"), Configurator
-                .getConfigurator().getDoubleProperty("neural_eps"),
-                Configurator.getConfigurator().getDoubleProperty("neural_lambda"), Configurator.getConfigurator()
-                        .getDoubleProperty("neural_micro"));
+            .getConfigurator().getDoubleProperty("neural_eps"),
+            Configurator.getConfigurator().getDoubleProperty("neural_lambda"), Configurator.getConfigurator()
+                .getDoubleProperty("neural_micro"));
     }
 }

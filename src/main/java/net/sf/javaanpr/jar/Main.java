@@ -85,19 +85,19 @@ public class Main {
     public static ReportGenerator rg = new ReportGenerator();
     public static Intelligence systemLogic;
     public static String helpText = "" + "-----------------------------------------------------------\n"
-            + "Automatic number plate recognition system\n" + "Copyright (c) Ondrej Martinsky, 2006-2007\n" + "\n"
-            + "Licensed under the Educational Community License,\n" + "\n" + "Usage : java -jar anpr.jar [-options]\n"
-            + "\n" + "Where options include:\n" + "\n" + "    -help         Displays this help\n"
-            + "    -gui          Run GUI viewer (default choice)\n" + "    -recognize -i <snapshot>\n"
-            + "                  Recognize single snapshot\n" + "    -recognize -i <snapshot> -o <dstdir>\n"
-            + "                  Recognize single snapshot and\n"
-            + "                  save report html into specified\n" + "                  directory\n"
-            + "    -newconfig -o <file>\n" + "                  Generate default configuration file\n"
-            + "    -newnetwork -o <file>\n" + "                  Train neural network according to\n"
-            + "                  specified feature extraction method and\n"
-            + "                  learning parameters (in config. file)\n"
-            + "                  and saves it into output file\n" + "    -newalphabet -i <srcdir> -o <dstdir>\n"
-            + "                  Normalize all images in <srcdir> and save\n" + "                  it to <dstdir>.";
+        + "Automatic number plate recognition system\n" + "Copyright (c) Ondrej Martinsky, 2006-2007\n" + "\n"
+        + "Licensed under the Educational Community License,\n" + "\n" + "Usage : java -jar anpr.jar [-options]\n"
+        + "\n" + "Where options include:\n" + "\n" + "    -help         Displays this help\n"
+        + "    -gui          Run GUI viewer (default choice)\n" + "    -recognize -i <snapshot>\n"
+        + "                  Recognize single snapshot\n" + "    -recognize -i <snapshot> -o <dstdir>\n"
+        + "                  Recognize single snapshot and\n"
+        + "                  save report html into specified\n" + "                  directory\n"
+        + "    -newconfig -o <file>\n" + "                  Generate default configuration file\n"
+        + "    -newnetwork -o <file>\n" + "                  Train neural network according to\n"
+        + "                  specified feature extraction method and\n"
+        + "                  learning parameters (in config. file)\n"
+        + "                  and saves it into output file\n" + "    -newalphabet -i <srcdir> -o <dstdir>\n"
+        + "                  Normalize all images in <srcdir> and save\n" + "                  it to <dstdir>.";
 
     // normalizuje abecedu v zdrojovom adresari a vysledok ulozi do cieloveho
     // adresara

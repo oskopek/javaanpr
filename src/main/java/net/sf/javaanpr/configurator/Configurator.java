@@ -316,9 +316,7 @@ public class Configurator {
         }
 
         /*
-         * Should actually load filename.
-         * It is here for the GUI.
-         * Loading images exactly from specified filesystem path
+         * Should actually load filename. It is here for the GUI. Loading images exactly from specified filesystem path
          */
         File file = new File(filename);
         if (file.exists()) {

@@ -120,7 +120,7 @@ public class Photo implements AutoCloseable {
 
     public BufferedImage getBiWithAxes() {
         BufferedImage axis = new BufferedImage(this.image.getWidth() + 40, this.image.getHeight() + 40,
-                BufferedImage.TYPE_INT_RGB);
+            BufferedImage.TYPE_INT_RGB);
         Graphics2D graphicAxis = axis.createGraphics();
 
         graphicAxis.setColor(Color.LIGHT_GRAY);
@@ -194,8 +194,7 @@ public class Photo implements AutoCloseable {
     /**
      * Converts a given Image into a BufferedImage
      * 
-     * @param img
-     *            The Image to be converted
+     * @param img The Image to be converted
      * @return The converted BufferedImage
      */
     public static BufferedImage toBufferedImage(Image img) {
@@ -242,7 +241,7 @@ public class Photo implements AutoCloseable {
         for (int x = 0; x < this.getWidth(); x++) {
             for (int y = 0; y < this.getHeight(); y++) {
                 Photo.setBrightness(this.image, x, y,
-                        stats.thresholdBrightness(Photo.getBrightness(this.image, x, y), coef));
+                    stats.thresholdBrightness(Photo.getBrightness(this.image, x, y), coef));
             }
         }
     }
@@ -267,8 +266,8 @@ public class Photo implements AutoCloseable {
         this.image = this.averageResizeBi(this.image, width, height);
     }
 
-    
-    public BufferedImage averageResizeBi(BufferedImage origin, int width, int height) { // TODO 2 Nefunguje dobre pre znaky podobnej velkosti ako cielova velkost
+    public BufferedImage averageResizeBi(BufferedImage origin, int width, int height) { // TODO 2 Nefunguje dobre pre znaky
+                                                                                        // podobnej velkosti ako cielova velkost
 
         if ((origin.getWidth() < width) || (origin.getHeight() < height)) {
             return Photo.linearResizeBi(origin, width, height); // average
@@ -279,11 +278,9 @@ public class Photo implements AutoCloseable {
         }
 
         /*
-         * java api standardne zmensuje obrazky bilinearnou metodou, resp.
-         * linear mapping. co so sebou prinasa dost velku stratu informacie.
-         * Idealna by bola fourierova transformacia, ale ta neprichadza do uvahy
-         * z dovodu velkej cesovej narocnosti preto sa ako optimalna javi metoda
-         * WEIGHTED AVERAGE
+         * java api standardne zmensuje obrazky bilinearnou metodou, resp. linear mapping. co so sebou prinasa dost velku stratu
+         * informacie. Idealna by bola fourierova transformacia, ale ta neprichadza do uvahy z dovodu velkej cesovej narocnosti
+         * preto sa ako optimalna javi metoda WEIGHTED AVERAGE
          */
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -402,12 +399,12 @@ public class Photo implements AutoCloseable {
                                                                        // by
                                                                        // edgeDetectors
         BufferedImage out = new BufferedImage(Math.min(bi1.getWidth(), bi2.getWidth()), Math.min(bi1.getHeight(),
-                bi2.getHeight()), BufferedImage.TYPE_INT_RGB);
+            bi2.getHeight()), BufferedImage.TYPE_INT_RGB);
 
         for (int x = 0; x < out.getWidth(); x++) {
             for (int y = 0; y < out.getHeight(); y++) {
                 Photo.setBrightness(out, x, y,
-                        (float) Math.min(1.0, Photo.getBrightness(bi1, x, y) + Photo.getBrightness(bi2, x, y)));
+                    (float) Math.min(1.0, Photo.getBrightness(bi1, x, y) + Photo.getBrightness(bi2, x, y)));
             }
         }
         return out;

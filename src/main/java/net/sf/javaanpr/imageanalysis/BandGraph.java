@@ -77,9 +77,9 @@ public class BandGraph extends Graph {
     Band handle;
 
     private static double peakFootConstant = Configurator.getConfigurator().getDoubleProperty(
-            "bandgraph_peakfootconstant"); // 0.75
+        "bandgraph_peakfootconstant"); // 0.75
     private static double peakDiffMultiplicationConstant = Configurator.getConfigurator().getDoubleProperty(
-            "bandgraph_peakDiffMultiplicationConstant"); // 0.2
+        "bandgraph_peakDiffMultiplicationConstant"); // 0.2
 
     public BandGraph(Band handle) {
         this.handle = handle; // nesie odkaz na obrazok (band), ku ktoremu sa
@@ -145,10 +145,10 @@ public class BandGraph extends Graph {
         Vector<Peak> outPeaksFiltered = new Vector<Peak>();
         for (Peak p : outPeaks) {
             if ((p.getDiff() > (2 * this.handle.getHeight())) && // ak nieje znacka
-                    (// prilis uzka
-                    p.getDiff() < (15 * this.handle.getHeight() // alebo nie je
-                    // prilis siroka
-                    ))) {
+                (// prilis uzka
+                p.getDiff() < (15 * this.handle.getHeight() // alebo nie je
+                // prilis siroka
+                ))) {
                 outPeaksFiltered.add(p);// znacka ok, bereme ju
                 // else outPeaksFiltered.add(p);// znacka ok, bereme ju
             }
@@ -162,7 +162,7 @@ public class BandGraph extends Graph {
 
     public int indexOfLeftPeakAbs(int peak, double peakFootConstantAbs) {
         int index = peak;
-        //int counter = 0;
+        // int counter = 0;
         for (int i = peak; i >= 0; i--) {
             index = i;
             if (this.yValues.elementAt(index) < peakFootConstantAbs) {
@@ -174,7 +174,7 @@ public class BandGraph extends Graph {
 
     public int indexOfRightPeakAbs(int peak, double peakFootConstantAbs) {
         int index = peak;
-        //int counter = 0;
+        // int counter = 0;
         for (int i = peak; i < this.yValues.size(); i++) {
             index = i;
             if (this.yValues.elementAt(index) < peakFootConstantAbs) {

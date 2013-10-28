@@ -159,10 +159,7 @@ public class Intelligence {
                 HoughTransformation hough = null;
 
                 /*
-                 *  detekcia sa robi bud:
-                 *  1. kvoli report generatoru
-                 *  2. kvoli korekcii
-                 *  
+                 * detekcia sa robi bud: 1. kvoli report generatoru 2. kvoli korekcii
                  */
                 if (enableReportGeneration) {// || (skewDetectionMode != 0)) {
                     notNormalizedCopy = plate.clone();
@@ -182,7 +179,7 @@ public class Intelligence {
 
                 float plateWHratio = (float) plate.getWidth() / (float) plate.getHeight();
                 if ((plateWHratio < configurator.getDoubleProperty("intelligence_minPlateWidthHeightRatio"))
-                        || (plateWHratio > configurator.getDoubleProperty("intelligence_maxPlateWidthHeightRatio"))) {
+                    || (plateWHratio > configurator.getDoubleProperty("intelligence_maxPlateWidthHeightRatio"))) {
                     continue;
                 }
 
@@ -192,12 +189,12 @@ public class Intelligence {
                 // pismen :
                 // Recognizer.configurator.getIntProperty("intelligence_minimumChars")
                 if ((chars.size() < configurator.getIntProperty("intelligence_minimumChars"))
-                        || (chars.size() > configurator.getIntProperty("intelligence_maximumChars"))) {
+                    || (chars.size() > configurator.getIntProperty("intelligence_maximumChars"))) {
                     continue;
                 }
 
                 if (plate.getCharsWidthDispersion(chars) > configurator
-                        .getDoubleProperty("intelligence_maxCharWidthDispersion")) {
+                    .getDoubleProperty("intelligence_maxCharWidthDispersion")) {
                     continue;
                 }
 
@@ -254,8 +251,8 @@ public class Intelligence {
                     widthHeightRatio /= (chr.pieceHeight);
 
                     if ((widthHeightRatio < configurator.getDoubleProperty("intelligence_minCharWidthHeightRatio"))
-                            || (widthHeightRatio > configurator
-                                    .getDoubleProperty("intelligence_maxCharWidthHeightRatio"))) {
+                        || (widthHeightRatio > configurator
+                            .getDoubleProperty("intelligence_maxCharWidthHeightRatio"))) {
                         errorFlags += "WHR ";
                         ok = false;
                         if (!enableReportGeneration) {
@@ -264,7 +261,7 @@ public class Intelligence {
                     }
 
                     if (((chr.positionInPlate.x1 < 2) || (chr.positionInPlate.x2 > (plate.getWidth() - 1)))
-                            && (widthHeightRatio < 0.12)) {
+                        && (widthHeightRatio < 0.12)) {
                         errorFlags += "POS ";
                         ok = false;
                         if (!enableReportGeneration) {
@@ -340,19 +337,19 @@ public class Intelligence {
                     if (enableReportGeneration) {
                         Main.rg.insertText("<div class='heuristictable'>");
                         Main.rg.insertImage(Photo.linearResizeBi(chr.getBi(), chr.getWidth() * 2, chr.getHeight() * 2),
-                                "skeleton", 0, 0);
+                            "skeleton", 0, 0);
                         Main.rg.insertText("<span class='name'>WHR</span><span class='value'>" + widthHeightRatio
-                                + "</span>");
+                            + "</span>");
                         Main.rg.insertText("<span class='name'>HEI</span><span class='value'>" + heightCost + "</span>");
                         Main.rg.insertText("<span class='name'>NEU</span><span class='value'>" + similarityCost
-                                + "</span>");
+                            + "</span>");
                         Main.rg.insertText("<span class='name'>CON</span><span class='value'>" + contrastCost
-                                + "</span>");
+                            + "</span>");
                         Main.rg.insertText("<span class='name'>BRI</span><span class='value'>" + brightnessCost
-                                + "</span>");
+                            + "</span>");
                         Main.rg.insertText("<span class='name'>HUE</span><span class='value'>" + hueCost + "</span>");
                         Main.rg.insertText("<span class='name'>SAT</span><span class='value'>" + saturationCost
-                                + "</span>");
+                            + "</span>");
                         Main.rg.insertText("</table>");
                         if (errorFlags.length() != 0) {
                             Main.rg.insertText("<span class='errflags'>" + errorFlags + "</span>");
@@ -388,7 +385,7 @@ public class Intelligence {
         return null;
     }
 
-    public String recognize(CarSnapshot carSnapshot) throws Exception { //TODO 2 Remove <code>throws</code>, should be static?
+    public String recognize(CarSnapshot carSnapshot) throws Exception { // TODO 2 Remove <code>throws</code>, should be static?
         TimeMeter time = new TimeMeter();
         int syntaxAnalysisMode = configurator.getIntProperty("intelligence_syntaxanalysis");
         int skewDetectionMode = configurator.getIntProperty("intelligence_skewdetection");
@@ -431,7 +428,7 @@ public class Intelligence {
 
                 float plateWHratio = (float) plate.getWidth() / (float) plate.getHeight();
                 if ((plateWHratio < configurator.getDoubleProperty("intelligence_minPlateWidthHeightRatio"))
-                        || (plateWHratio > configurator.getDoubleProperty("intelligence_maxPlateWidthHeightRatio"))) {
+                    || (plateWHratio > configurator.getDoubleProperty("intelligence_maxPlateWidthHeightRatio"))) {
                     continue;
                 }
 
@@ -441,12 +438,12 @@ public class Intelligence {
                 // pismen :
                 // Recognizer.configurator.getIntProperty("intelligence_minimumChars")
                 if ((chars.size() < configurator.getIntProperty("intelligence_minimumChars"))
-                        || (chars.size() > configurator.getIntProperty("intelligence_maximumChars"))) {
+                    || (chars.size() > configurator.getIntProperty("intelligence_maximumChars"))) {
                     continue;
                 }
 
                 if (plate.getCharsWidthDispersion(chars) > configurator
-                        .getDoubleProperty("intelligence_maxCharWidthDispersion")) {
+                    .getDoubleProperty("intelligence_maxCharWidthDispersion")) {
                     continue;
                 }
 
@@ -476,15 +473,15 @@ public class Intelligence {
                     widthHeightRatio /= (chr.pieceHeight);
 
                     if ((widthHeightRatio < configurator.getDoubleProperty("intelligence_minCharWidthHeightRatio"))
-                            || (widthHeightRatio > configurator
-                                    .getDoubleProperty("intelligence_maxCharWidthHeightRatio"))) {
+                        || (widthHeightRatio > configurator
+                            .getDoubleProperty("intelligence_maxCharWidthHeightRatio"))) {
                         errorFlags += "WHR ";
                         ok = false;
                         continue;
                     }
 
                     if (((chr.positionInPlate.x1 < 2) || (chr.positionInPlate.x2 > (plate.getWidth() - 1)))
-                            && (widthHeightRatio < 0.12)) {
+                        && (widthHeightRatio < 0.12)) {
                         errorFlags += "POS ";
                         ok = false;
                         continue;

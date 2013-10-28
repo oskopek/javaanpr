@@ -399,8 +399,8 @@ public class Graph {
 
         for (int ay = 0; ay < content.getHeight(); ay += 20) {
             graphicAxis.drawString(
-                    new Integer(new Float((1 - ((float) ay / content.getHeight())) * 100).intValue()).toString() + "%",
-                    1, ay + 15);
+                new Integer(new Float((1 - ((float) ay / content.getHeight())) * 100).intValue()).toString() + "%",
+                1, ay + 15);
             graphicAxis.drawLine(25, ay + 5, 35, ay + 5);
         }
         graphicContent.dispose();

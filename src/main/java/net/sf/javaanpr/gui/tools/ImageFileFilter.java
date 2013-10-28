@@ -77,7 +77,7 @@ public class ImageFileFilter extends FileFilter {
         String name = f.getName();
         String type = new String(name.substring(name.lastIndexOf('.') + 1, name.length()).toLowerCase());
         if (!type.equals("bmp") && !type.equals("jpg") && !type.equals("jpeg") && !type.equals("png")
-                && !type.equals("gif") && !f.isDirectory()) {
+            && !type.equals("gif") && !f.isDirectory()) {
             return false;
         }
         return true;
@@ -86,7 +86,7 @@ public class ImageFileFilter extends FileFilter {
     public static boolean accept(String name) {
         String type = new String(name.substring(name.lastIndexOf('.') + 1, name.length()).toLowerCase());
         if (!type.equals("bmp") && !type.equals("jpg") && !type.equals("jpeg") && !type.equals("png")
-                && !type.equals("gif")) {
+            && !type.equals("gif")) {
             return false;
         }
         return true;

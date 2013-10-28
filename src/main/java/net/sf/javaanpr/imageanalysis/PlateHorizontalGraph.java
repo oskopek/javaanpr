@@ -74,13 +74,13 @@ import java.util.Vector;
 import net.sf.javaanpr.configurator.Configurator;
 
 public class PlateHorizontalGraph extends Graph {
-    /*private static double peakFootConstant = // 0.1; //CONSTANT
-    Intelligence.configurator
-    		.getDoubleProperty("platehorizontalgraph_peakfootconstant");
-    */
+    /*
+     * private static double peakFootConstant = // 0.1; //CONSTANT Intelligence.configurator
+     * .getDoubleProperty("platehorizontalgraph_peakfootconstant");
+     */
 
     private static int horizontalDetectionType = Configurator.getConfigurator().getIntProperty(
-            "platehorizontalgraph_detectionType");
+        "platehorizontalgraph_detectionType");
 
     Plate handle;
 
