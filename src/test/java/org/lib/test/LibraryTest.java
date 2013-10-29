@@ -7,16 +7,19 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
+import javax.xml.parsers.ParserConfigurationException;
 
 import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.intelligence.Intelligence;
 
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -29,7 +32,7 @@ public class LibraryTest {
      * a problem: for now - using snapshots/test_041.jpg
      */
     @Test
-    public void intelligenceTest() throws Exception {
+    public void intelligenceTest() throws IOException, ParserConfigurationException, SAXException {
         final String image = "snapshots/test_041.jpg";
 
         /*

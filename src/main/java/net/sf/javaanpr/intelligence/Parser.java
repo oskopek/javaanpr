@@ -258,7 +258,7 @@ public class Parser {
     // syntax analysis mode : 0 (do not parse)
     // : 1 (only equal length)
     // : 2 (equal or shorter)
-    public String parse(RecognizedPlate recognizedPlate, int syntaxAnalysisMode) throws IOException {
+    public String parse(RecognizedPlate recognizedPlate, int syntaxAnalysisMode) {
         if (syntaxAnalysisMode == 0) {
             Main.rg.insertText(" result : " + recognizedPlate.getString() + " --> <font size=15>"
                 + recognizedPlate.getString() + "</font><hr><br>");

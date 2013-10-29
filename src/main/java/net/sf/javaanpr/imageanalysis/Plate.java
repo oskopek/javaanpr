@@ -289,7 +289,7 @@ public class Plate extends Photo {
         return averageWidth;
     }
 
-    public float getAveragePieceHue(Vector<Char> chars) throws Exception {
+    public float getAveragePieceHue(Vector<Char> chars) {
         float averageHue = 0;
         for (Char chr : chars) {
             averageHue += chr.statisticAverageHue;
@@ -298,7 +298,7 @@ public class Plate extends Photo {
         return averageHue;
     }
 
-    public float getAveragePieceContrast(Vector<Char> chars) throws Exception {
+    public float getAveragePieceContrast(Vector<Char> chars) {
         float averageContrast = 0;
         for (Char chr : chars) {
             averageContrast += chr.statisticContrast;
@@ -307,7 +307,7 @@ public class Plate extends Photo {
         return averageContrast;
     }
 
-    public float getAveragePieceBrightness(Vector<Char> chars) throws Exception {
+    public float getAveragePieceBrightness(Vector<Char> chars) {
         float averageBrightness = 0;
         for (Char chr : chars) {
             averageBrightness += chr.statisticAverageBrightness;
@@ -316,7 +316,7 @@ public class Plate extends Photo {
         return averageBrightness;
     }
 
-    public float getAveragePieceMinBrightness(Vector<Char> chars) throws Exception {
+    public float getAveragePieceMinBrightness(Vector<Char> chars) {
         float averageMinBrightness = 0;
         for (Char chr : chars) {
             averageMinBrightness += chr.statisticMinimumBrightness;
@@ -325,7 +325,7 @@ public class Plate extends Photo {
         return averageMinBrightness;
     }
 
-    public float getAveragePieceMaxBrightness(Vector<Char> chars) throws Exception {
+    public float getAveragePieceMaxBrightness(Vector<Char> chars) {
         float averageMaxBrightness = 0;
         for (Char chr : chars) {
             averageMaxBrightness += chr.statisticMaximumBrightness;
@@ -334,7 +334,7 @@ public class Plate extends Photo {
         return averageMaxBrightness;
     }
 
-    public float getAveragePieceSaturation(Vector<Char> chars) throws Exception {
+    public float getAveragePieceSaturation(Vector<Char> chars) {
         float averageSaturation = 0;
         for (Char chr : chars) {
             averageSaturation += chr.statisticAverageSaturation;

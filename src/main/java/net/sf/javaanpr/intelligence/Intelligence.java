@@ -115,7 +115,7 @@ public class Intelligence {
         return lastProcessDuration;
     }
 
-    public String recognizeWithReport(CarSnapshot carSnapshot) throws Exception {
+    public String recognizeWithReport(CarSnapshot carSnapshot) throws IllegalArgumentException, IOException {
         final boolean enableReportGeneration = true;
 
         TimeMeter time = new TimeMeter();
@@ -385,7 +385,7 @@ public class Intelligence {
         return null;
     }
 
-    public String recognize(CarSnapshot carSnapshot) throws Exception { // TODO 2 Remove <code>throws</code>, should be static?
+    public String recognize(CarSnapshot carSnapshot) {
         TimeMeter time = new TimeMeter();
         int syntaxAnalysisMode = configurator.getIntProperty("intelligence_syntaxanalysis");
         int skewDetectionMode = configurator.getIntProperty("intelligence_skewdetection");
