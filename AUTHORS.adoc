@@ -1,0 +1,20 @@
+== Authors and Contributors of JavaANPR
+
+[cols="4*", options="header"]
+|===
+|Name
+|Nickname
+|Email address
+|Contribution
+
+|Ondrej Martinsky
+|
+|
+|Original author
+
+|Ondrej Skopek
+|oskopek
+|skopekondrej@gmail.com
+|Maintainer
+
+|===

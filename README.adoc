@@ -1,11 +1,11 @@
 == JavaANPR
 
-Original author: Copyright (C) 2006-2007 Ondrej Martinsky. All rights reserved.
+*Original author*: Copyright (C) 2006-2007 Ondrej Martinsky. All rights reserved.
 
-Current details of licensing for JavaANPR are in the file LICENCE.
+Licensing details for JavaANPR are in the file LICENCE.
 
 *This work is a derivative of JavaANPR created by Ondrej Martinsky, for his original work visit: http://javaanpr.sourceforge.net/*
 
 === Example GUI
 
-To run the example gui, simply type `mvn exec:java` in the root directory of the project.
+To run the example GUI, simply type `mvn exec:java` in the root directory of the project.
