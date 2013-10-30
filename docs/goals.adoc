@@ -4,5 +4,5 @@ If you want to help with any of them, just contact me -- Ondrej Skopek -- at mai
 
 * [ ] Document functionality
 * [ ] Add all needed JavaDoc
-* [ ] Fix links in AsciiDoctor docs
+* [x] Fix links in AsciiDoctor docs
 * [x] Move from BitBucket to GitHub
