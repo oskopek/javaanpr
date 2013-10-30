@@ -104,13 +104,13 @@ public class PlateHorizontalGraph extends Graph {
         float maxVal = this.getMaxValue();
 
         for (a = 2; (-this.derivation(a, a + 4) < (maxVal * 0.2)) && (a < (this.yValues.size() - 2 - 2 - 4)); a++) {
-            ;
+
         }
         for (b = this.yValues.size() - 1 - 2; (this.derivation(b - 4, b) < (maxVal * 0.2)) && (b > (a + 2)); b--) {
-            ;
+
         }
 
-        Vector<Peak> outPeaks = new Vector<Peak>();
+        Vector<Peak> outPeaks = new Vector<>();
 
         outPeaks.add(new Peak(a, b));
         super.peaks = outPeaks;
@@ -121,13 +121,13 @@ public class PlateHorizontalGraph extends Graph {
         float average = this.getAverageValue();
         int a, b;
         for (a = 0; this.yValues.elementAt(a) < average; a++) {
-            ;
+
         }
         for (b = this.yValues.size() - 1; this.yValues.elementAt(b) < average; b--) {
-            ;
+
         }
 
-        Vector<Peak> outPeaks = new Vector<Peak>();
+        Vector<Peak> outPeaks = new Vector<>();
         a = Math.max(a - 5, 0);
         b = Math.min(b + 5, this.yValues.size());
 

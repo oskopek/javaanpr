@@ -86,9 +86,6 @@ public class Char extends Photo {
     public boolean normalized = false;
     public PositionInPlate positionInPlate = null;
 
-    // private PixelMap pixelMap;
-    private PixelMap.Piece bestPiece = null;
-
     public int fullWidth, fullHeight, pieceWidth, pieceHeight;
 
     public float statisticAverageBrightness;
@@ -117,9 +114,8 @@ public class Char extends Photo {
      * sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu nezodpoveda, cize
      * spravime prahovanie zvlast
      *
-     * @param fileName
-     * @throws IOException
-     * @throws ImageReadException
+     * @param fileName name of character file
+     * @throws IOException if the fileName couldn't be loaded
      */
     public Char(String fileName) throws IOException {
         super(Configurator.getConfigurator().getResourceAsStream(fileName));
@@ -140,9 +136,8 @@ public class Char extends Photo {
      * sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu nezodpoveda, cize
      * spravime prahovanie zvlast
      *
-     * @param is
+     * @param is loads Char from this InputStream
      * @throws IOException
-     * @throws ImageReadException
      */
     public Char(InputStream is) throws IOException {
         super(is);
@@ -160,6 +155,7 @@ public class Char extends Photo {
 
     @Override
     public Char clone() {
+        super.clone();
         return new Char(duplicateBufferedImage(this.image), duplicateBufferedImage(this.thresholdedImage),
             this.positionInPlate);
     }
@@ -185,9 +181,9 @@ public class Char extends Photo {
          */
         PixelMap pixelMap = this.getPixelMap();
 
-        this.bestPiece = pixelMap.getBestPiece();
+        PixelMap.Piece bestPiece = pixelMap.getBestPiece();
 
-        colorImage = this.getBestPieceInFullColor(colorImage, this.bestPiece);
+        colorImage = this.getBestPieceInFullColor(colorImage, bestPiece);
 
         // vypocet statistik
         this.computeStatisticBrightness(colorImage);
@@ -195,7 +191,7 @@ public class Char extends Photo {
         this.computeStatisticHue(colorImage);
         this.computeStatisticSaturation(colorImage);
 
-        this.image = this.bestPiece.render();
+        this.image = bestPiece.render();
 
         if (this.image == null) {
             this.image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
@@ -334,7 +330,7 @@ public class Char extends Photo {
                 } // end my
             } // end mx
         } // end f
-        Vector<Double> outputVector = new Vector<Double>();
+        Vector<Double> outputVector = new Vector<>();
         for (Double value : output) {
             outputVector.add(value);
         }
@@ -342,10 +338,10 @@ public class Char extends Photo {
     }
 
     public Vector<Double> extractMapFeatures() {
-        Vector<Double> vectorInput = new Vector<Double>();
+        Vector<Double> vectorInput = new Vector<>();
         for (int y = 0; y < this.getHeight(); y++) {
             for (int x = 0; x < this.getWidth(); x++) {
-                vectorInput.add(new Double(this.getBrightness(x, y)));
+                vectorInput.add((double) this.getBrightness(x, y));
             }
         }
         return vectorInput;
@@ -365,9 +361,7 @@ public class Char extends Photo {
             directoryName = directoryName.substring(0, directoryName.length() - 1); // cuts last char off
         }
 
-        String suffix = directoryName.substring(directoryName.lastIndexOf('_'));
-
-        return suffix;
+        return directoryName.substring(directoryName.lastIndexOf('_'));
     }
 
     public static List<String> getAlphabetList(String directory) {
@@ -386,7 +380,6 @@ public class Char extends Photo {
 
             if (Configurator.getConfigurator().getResourceAsStream(s) != null) {
                 filenames.add(s);
-                continue;
             }
         }
 

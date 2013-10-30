@@ -114,7 +114,7 @@ public class Plate extends Photo {
     }
 
     public Vector<Char> getChars() {
-        Vector<Char> out = new Vector<Char>();
+        Vector<Char> out = new Vector<>();
 
         Vector<Graph.Peak> peaks = this.computeGraph();
 
@@ -137,6 +137,7 @@ public class Plate extends Photo {
 
     @Override
     public Plate clone() {
+        super.clone();
         return new Plate(duplicateBufferedImage(this.image));
     }
 

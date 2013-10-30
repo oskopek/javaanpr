@@ -110,7 +110,10 @@ public class Intelligence {
         parser = new Parser();
     }
 
-    // vrati ako dlho v ms trvalo posledne rozpoznaavnie
+    /**
+     * Vrati ako dlho v ms trvalo posledne rozpoznaavnie
+     * @return last process duration in milliseconds
+     */
     public long lastProcessDuration() {
         return lastProcessDuration;
     }
@@ -154,8 +157,8 @@ public class Intelligence {
                 }
 
                 // SKEW-RELATED
-                Plate notNormalizedCopy = null;
-                BufferedImage renderedHoughTransform = null;
+                Plate notNormalizedCopy;
+                BufferedImage renderedHoughTransform;
                 HoughTransformation hough = null;
 
                 /*
@@ -315,7 +318,7 @@ public class Intelligence {
 
                     float similarityCost = 0;
                     RecognizedChar rc = null;
-                    if (ok == true) {
+                    if (ok) {
                         rc = chrRecog.recognize(chr);
                         similarityCost = rc.getPatterns().elementAt(0).getCost();
 
@@ -329,7 +332,7 @@ public class Intelligence {
 
                     }
 
-                    if (ok == true) {
+                    if (ok) {
                         recognizedPlate.addChar(rc);
                     } else {
                     }
@@ -395,7 +398,7 @@ public class Intelligence {
             for (Plate plate : b.getPlates()) {// doporucene 3
 
                 // SKEW-RELATED
-                Plate notNormalizedCopy = null;
+                Plate notNormalizedCopy;
 
                 @SuppressWarnings("unused")
                 BufferedImage renderedHoughTransform = null;
@@ -521,9 +524,9 @@ public class Intelligence {
                         continue;
                     }
 
-                    float similarityCost = 0;
+                    float similarityCost;
                     RecognizedChar rc = null;
-                    if (ok == true) {
+                    if (ok) {
                         rc = chrRecog.recognize(chr);
                         similarityCost = rc.getPatterns().elementAt(0).getCost();
 
@@ -535,7 +538,7 @@ public class Intelligence {
 
                     }
 
-                    if (ok == true) {
+                    if (ok) {
                         recognizedPlate.addChar(rc);
                     }
                 } // end for each char
@@ -548,9 +551,7 @@ public class Intelligence {
                 }
 
                 lastProcessDuration = time.getTime();
-                String parsedOutput = Intelligence.parser.parse(recognizedPlate, syntaxAnalysisMode);
-
-                return parsedOutput;
+                return Intelligence.parser.parse(recognizedPlate, syntaxAnalysisMode);
 
             } // end for each plate
 
