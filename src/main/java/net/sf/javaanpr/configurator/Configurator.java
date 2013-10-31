@@ -215,11 +215,6 @@ public class Configurator {
         Configurator.configurator = this;
     }
 
-    public Configurator(String path) throws IOException {
-        this();
-
-    }
-
     public void setConfigurationFileName(String name) {
         this.fileName = name;
     }
