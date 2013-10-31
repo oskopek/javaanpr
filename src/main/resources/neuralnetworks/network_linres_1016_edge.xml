@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-2"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<?xml version="1.0" encoding="iso-8859-2"?> <!-- TODO 2 Add DTD -->
 <neuralNetwork dateOfExport="Sun Dec 31 00:59:13 CET 2006">
     <structure numberOfLayers="3">
         <layer index="0" numberOfNeurons="48">

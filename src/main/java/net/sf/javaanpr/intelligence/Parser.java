@@ -155,9 +155,23 @@ public class Parser {
         this.plateForms = new Vector<PlateForm>();
 
         String fileName = Configurator.getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
+        
+        if(fileName == null || fileName.isEmpty()) {
+            throw new IOException("Failed to get syntax description file from Configurator");
+        }
+        
         InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
+        
+        if(inStream == null) {
+            throw new IOException("Couldn't find parser syntax description file");
+        }
 
-        this.plateForms = this.loadFromXml(inStream);
+        try {
+            this.plateForms = this.loadFromXml(inStream);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            System.err.println("Failed to load from parser syntax description file");
+            throw e;
+        }
     }
 
     /**

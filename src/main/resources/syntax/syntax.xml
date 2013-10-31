@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-2"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<?xml version="1.0" encoding="iso-8859-2"?> <!-- TODO 2 Add DTD -->
 <structure>
 
     <type name="germany">
