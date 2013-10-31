@@ -465,7 +465,7 @@ public class PixelMap {
     /*
      * private boolean isInPieces(PieceSet pieces, int x, int y) { for (Piece piece : pieces) { // pre vsetky kusky for (Point
      * point : piece) { // pre vsetky body na kusku if (point.equals(x, y)) { return true; } } }
-     *
+     * 
      * return false; }
      */
 
