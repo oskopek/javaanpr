@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.sf.javaanpr</groupId>
     <artifactId>javaanpr</artifactId>
-    <version>1.2.6</version>
+    <version>1.2.7-SNAPSHOT</version>
     <name>JavaANPR</name>
     <packaging>jar</packaging>
 
