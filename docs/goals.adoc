@@ -1,6 +1,6 @@
 == Goals for JavaANPR
 
-If you want to help with any of them, just contact me -- Ondrej Skopek -- at mailto:skopekondrej@gmail.com[skopekondrej@gmail.com]!
+If you want to help with any of them, just contact me -- Ondrej Skopek -- at mailto:skopekondrej@gmail.com[skopekondrej@gmail.com!]
 
 * [ ] Document functionality
 * [ ] Add all needed JavaDoc
