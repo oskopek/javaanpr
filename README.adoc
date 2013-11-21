@@ -6,7 +6,9 @@ Licensing details for JavaANPR are in the file LICENCE.
 
 *This work is a derivative of JavaANPR created by Ondrej Martinsky, for his original work visit: http://javaanpr.sourceforge.net/*
 
-image:https://travis-ci.org/oskopek/javaanpr.png?branch=master["Build Status", link="https://travis-ci.org/oskopek/javaanpr"]
+Build status: image:https://travis-ci.org/oskopek/javaanpr.png?branch=master["Build Status", link="https://travis-ci.org/oskopek/javaanpr"]
+
+Ohloh: image:https://www.ohloh.net/p/javaanpr/widgets/project_thin_badge.gif["Ohloh widget", link="https://www.ohloh.net/p/javaanpr"]
 
 === Example GUI
 
