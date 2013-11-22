@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!ELEMENT char EMPTY >
+<!ATTLIST char content NMTOKEN #REQUIRED >
+
+<!ELEMENT structure ( type+ ) >
+
+<!ELEMENT type ( char+ ) >
+<!ATTLIST type name NMTOKEN #REQUIRED >

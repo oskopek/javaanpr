@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="iso-8859-2"?> <!-- TODO 2 Add DTD -->
-<structure>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE structure SYSTEM "../dtd/syntax.dtd">
 
+<structure>
     <type name="germany">
         <char content="abcdefghijklmno0pqrstuvwxyz" />
         <char content="abcdefghijklmno0pqrstuvwxyz" />
@@ -48,5 +49,4 @@
         <char content="o0123456789" />
         <char content="o0123456789" />
     </type>
-
 </structure>

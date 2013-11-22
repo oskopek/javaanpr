@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!ELEMENT input EMPTY >
+<!ATTLIST input index NMTOKEN #REQUIRED >
+<!ATTLIST input weight NMTOKEN #REQUIRED >
+
+<!ELEMENT layer ( neuron+ ) >
+<!ATTLIST layer index NMTOKEN #REQUIRED >
+<!ATTLIST layer numberOfNeurons NMTOKEN #REQUIRED >
+
+<!ELEMENT neuralNetwork ( structure ) >
+<!ATTLIST neuralNetwork dateOfExport CDATA #REQUIRED >
+
+<!ELEMENT neuron ( input+ ) >
+<!ATTLIST neuron NumberOfInputs NMTOKEN #REQUIRED >
+<!ATTLIST neuron index NMTOKEN #REQUIRED >
+<!ATTLIST neuron threshold NMTOKEN #REQUIRED >
+
+<!ELEMENT structure ( layer+ ) >
+<!ATTLIST structure numberOfLayers NMTOKEN #REQUIRED >

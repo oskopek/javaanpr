@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="iso-8859-2"?> <!-- TODO 2 Add DTD -->
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE neural SYSTEM "../dtd/neuralNetwork.dtd" >
+
 <neuralNetwork dateOfExport="Sun Dec 31 00:26:16 CET 2006">
     <structure numberOfLayers="3">
         <layer index="0" numberOfNeurons="104">
