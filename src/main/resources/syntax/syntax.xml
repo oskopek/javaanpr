@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE structure SYSTEM "../dtd/syntax.dtd">
+<!DOCTYPE structure SYSTEM "https://raw.github.com/oskopek/javaanpr/master/src/main/resources/dtd/syntax.dtd">
 
 <structure>
     <type name="germany">
