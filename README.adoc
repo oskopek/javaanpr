@@ -10,6 +10,8 @@ Build status: image:https://travis-ci.org/oskopek/javaanpr.png?branch=master["Bu
 
 Ohloh: image:https://www.ohloh.net/p/javaanpr/widgets/project_thin_badge.gif["Ohloh widget", link="https://www.ohloh.net/p/javaanpr"]
 
+image:https://badge.waffle.io/oskopek/javaanpr.png?label=ready["Stories in Ready", link="http://waffle.io/oskopek/javaanpr"]
+
 === Info
 
 JavaANPR uses http://semver.org/[semantic versioning] and branching model similar to http://nvie.com/posts/a-successful-git-branching-model/[this].
