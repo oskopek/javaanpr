@@ -1,16 +1,16 @@
 == JavaANPR
 
+image:https://travis-ci.org/oskopek/javaanpr.png?branch=master["Build Status", link="https://travis-ci.org/oskopek/javaanpr"] image:https://coveralls.io/repos/oskopek/javaanpr/badge.png?branch=develop["Coverage Status", link="https://coveralls.io/r/oskopek/javaanpr?branch=develop"] image:https://badge.waffle.io/oskopek/javaanpr.png?label=ready["Stories in Ready", link="http://waffle.io/oskopek/javaanpr"] image:https://www.ohloh.net/p/javaanpr/widgets/project_thin_badge.gif["Ohloh widget", link="https://www.ohloh.net/p/javaanpr"]
+
 *Original author*: Copyright (C) 2006-2007 Ondrej Martinsky. All rights reserved.
 
 Licensing details for JavaANPR are in the file LICENCE.
 
 *This work is a derivative of JavaANPR created by Ondrej Martinsky, for his original work visit: http://javaanpr.sourceforge.net/*
 
-Build status: image:https://travis-ci.org/oskopek/javaanpr.png?branch=master["Build Status", link="https://travis-ci.org/oskopek/javaanpr"]
+=== Info
 
-Ohloh: image:https://www.ohloh.net/p/javaanpr/widgets/project_thin_badge.gif["Ohloh widget", link="https://www.ohloh.net/p/javaanpr"]
-
-image:https://badge.waffle.io/oskopek/javaanpr.png?label=ready["Stories in Ready", link="http://waffle.io/oskopek/javaanpr"]
+JavaANPR uses http://semver.org/[semantic versioning] and branching model similar to http://nvie.com/posts/a-successful-git-branching-model/[this].
 
 === Example GUI
 
