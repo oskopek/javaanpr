@@ -147,7 +147,9 @@ public class FrameMain extends javax.swing.JFrame {
         // init : file chooser
         this.fileChooser = new JFileChooser();
         this.fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        this.fileChooser.setFileFilter(new ImageFileFilter());
+        this.fileChooser.setMultiSelectionEnabled(true);
+        this.fileChooser.setDialogTitle("Load snapshots");
+        // this.fileChooser.setFileFilter(new ImageFileFilter());
 
         // init : window dimensions and visibility
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -180,7 +182,7 @@ public class FrameMain extends javax.swing.JFrame {
         this.bottomLine = new javax.swing.JLabel();
         this.menuBar = new javax.swing.JMenuBar();
         this.imageMenu = new javax.swing.JMenu();
-        this.openDirectoryItem = new javax.swing.JMenuItem();
+        this.openItem = new javax.swing.JMenuItem();
         this.exitItem = new javax.swing.JMenuItem();
         this.helpMenu = new javax.swing.JMenu();
         this.aboutItem = new javax.swing.JMenuItem();
@@ -233,16 +235,16 @@ public class FrameMain extends javax.swing.JFrame {
         this.menuBar.setFont(new java.awt.Font("Arial", 0, 11));
         this.imageMenu.setText("Image");
         this.imageMenu.setFont(new java.awt.Font("Arial", 0, 11));
-        this.openDirectoryItem.setFont(new java.awt.Font("Arial", 0, 11));
-        this.openDirectoryItem.setText("Load snapshots from directory");
-        this.openDirectoryItem.addActionListener(new java.awt.event.ActionListener() {
+        this.openItem.setFont(new java.awt.Font("Arial", 0, 11));
+        this.openItem.setText("Load snapshots");
+        this.openItem.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FrameMain.this.openDirectoryItemActionPerformed(evt);
+                FrameMain.this.openItemActionPerformed(evt);
             }
         });
 
-        this.imageMenu.add(this.openDirectoryItem);
+        this.imageMenu.add(this.openItem);
 
         this.exitItem.setFont(new java.awt.Font("Arial", 0, 11));
         this.exitItem.setText("Exit");
@@ -362,7 +364,7 @@ public class FrameMain extends javax.swing.JFrame {
     private void fileListValueChanged(javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_fileListValueChanged
         int selectedNow = this.fileList.getSelectedIndex();
 
-        if ((selectedNow != -1) && (this.selectedIndex != selectedNow)) {
+        if ((selectedNow != -1)) {
             this.recognitionLabel.setText(this.fileListModel.fileList.elementAt(selectedNow).recognizedPlate);
             this.selectedIndex = selectedNow;
             // proceed selectedNow
@@ -376,28 +378,35 @@ public class FrameMain extends javax.swing.JFrame {
         System.exit(0);
     }// GEN-LAST:event_exitItemActionPerformed
 
-    private void openDirectoryItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_openDirectoryItemActionPerformed
+    private void openItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_openDirectoryItemActionPerformed
         int returnValue;
-        String fileURL;
 
-        this.fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        this.fileChooser.setDialogTitle("Load snapshots from directory");
+        // this.fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        // this.fileChooser.setDialogTitle("Load snapshots");
         returnValue = this.fileChooser.showOpenDialog((Component) evt.getSource());
 
         if (returnValue != JFileChooser.APPROVE_OPTION) {
             return;
         }
 
-        fileURL = this.fileChooser.getSelectedFile().getAbsolutePath();
-        File selectedFile = new File(fileURL);
-
+        File[] selectedFiles = this.fileChooser.getSelectedFiles();
         this.fileListModel = new FileListModel();
-        for (String fileName : selectedFile.list()) {
-            if (!ImageFileFilter.accept(fileName)) {
-                continue; // not a image
+
+        for (File selectedFile : selectedFiles) {
+
+            if (selectedFile.isFile()) {
+                this.fileListModel.addFileListModelEntry(selectedFile.getName(), selectedFile.getAbsolutePath());
             }
-            this.fileListModel.addFileListModelEntry(fileName, selectedFile + File.separator + fileName);
+
+            else if (selectedFile.isDirectory()) {
+                for (String fileName : selectedFile.list()) {
+                    if (ImageFileFilter.accept(fileName)) {
+                        this.fileListModel.addFileListModelEntry(fileName, selectedFile + File.separator + fileName);
+                    }
+                }
+            }
         }
+
         this.fileList.setModel(this.fileListModel);
 
     }// GEN-LAST:event_openDirectoryItemActionPerformed
@@ -412,7 +421,7 @@ public class FrameMain extends javax.swing.JFrame {
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenu imageMenu;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem openDirectoryItem;
+    private javax.swing.JMenuItem openItem;
     private javax.swing.JPanel panelCar;
     private javax.swing.JLabel recognitionLabel;
     private javax.swing.JButton recognizeButton;
