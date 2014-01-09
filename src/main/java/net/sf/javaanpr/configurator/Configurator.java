@@ -267,6 +267,7 @@ public class Configurator {
     public void saveConfiguration(String arg_file) throws IOException {
         FileOutputStream os = new FileOutputStream(arg_file);
         this.list.storeToXML(os, this.comment);
+        os.close();
     }
 
     public void loadConfiguration() throws InvalidPropertiesFormatException, IOException {
@@ -277,6 +278,7 @@ public class Configurator {
         InputStream is = this.getResourceAsStream(arg_file);
 
         this.loadConfiguration(is);
+        is.close();
     }
 
     public void loadConfiguration(InputStream arg_stream) throws InvalidPropertiesFormatException, IOException {
