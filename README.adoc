@@ -10,6 +10,10 @@ Licensing details for JavaANPR are in the file LICENCE.
 
 *This work is a derivative of JavaANPR created by Ondrej Martinsky, for his original work visit: http://javaanpr.sourceforge.net/*
 
+== Screenshot
+
+image:http://cdn.imghack.se/images/74b82e230235c05ee141fd437b6ee174.png["JavaANPR GUI", scaledwidth="25%"]
+
 == Building
 
 * *Recomennded*: `mvn clean install -DskipTests`
