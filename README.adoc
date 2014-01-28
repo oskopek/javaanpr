@@ -59,3 +59,8 @@ the bug, including your Java version and operating system.
 5. If applicable, add tests for your feature or bug fix.
 6. Add, commit, and push your changes.
 7. http://help.github.com/send-pull-requests/[Submit a pull request.]
+
+== Documentation
+The state of documentation of JavaANPR is unsatisfactory.
+The bachelor thesis of the original author can serve very well for current needs:
+http://javaanpr.sourceforge.net/anpr.pdf[Algorithmic and Mathematical Principles of Automatic Number Plate Recognition Systems]
