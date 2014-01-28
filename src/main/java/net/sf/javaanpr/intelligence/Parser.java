@@ -146,7 +146,7 @@ public class Parser {
 
     /**
      * Creates a new instance of Parser
-     * 
+     *
      * @throws IOException
      * @throws SAXException
      * @throws ParserConfigurationException
@@ -175,10 +175,10 @@ public class Parser {
     }
 
     /**
-     * 
+     *
      * @deprecated use {@link Parser#loadFromXml(InputStream)}
      * @param fileName
-     * 
+     *
      * @return null if couldn't load file
      * @throws IOException
      * @throws SAXException
@@ -192,7 +192,7 @@ public class Parser {
     }
 
     /**
-     * 
+     *
      * @param inStream
      * @return {@link Vector} of loaded {@link PlateForm}s
      * @throws ParserConfigurationException

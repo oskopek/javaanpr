@@ -74,22 +74,24 @@ import javax.swing.filechooser.FileFilter;
 public class ImageFileFilter extends FileFilter {
     @Override
     public boolean accept(File f) {
-        String name = f.getName();
-        String type = new String(name.substring(name.lastIndexOf('.') + 1, name.length()).toLowerCase());
-        if (!type.equals("bmp") && !type.equals("jpg") && !type.equals("jpeg") && !type.equals("png")
-            && !type.equals("gif") && !f.isDirectory()) {
-            return false;
+        if (f.isDirectory()) {
+            return true;
         }
-        return true;
+        String name = f.getName();
+        return accept(name);
     }
 
     public static boolean accept(String name) {
-        String type = new String(name.substring(name.lastIndexOf('.') + 1, name.length()).toLowerCase());
-        if (!type.equals("bmp") && !type.equals("jpg") && !type.equals("jpeg") && !type.equals("png")
-            && !type.equals("gif")) {
+        int lastIndex = name.lastIndexOf('.');
+        if (lastIndex < 0) {
             return false;
         }
-        return true;
+        String type = new String(name.substring(lastIndex + 1, name.length()).toLowerCase());
+        if (type.equals("bmp") || type.equals("jpg") || type.equals("jpeg") || type.equals("png")
+            || type.equals("gif")) {
+            return true;
+        }
+        return false;
     }
 
     @Override

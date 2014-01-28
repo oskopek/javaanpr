@@ -193,7 +193,7 @@ public class Photo implements AutoCloseable {
 
     /**
      * Converts a given Image into a BufferedImage
-     * 
+     *
      * @param img The Image to be converted
      * @return The converted BufferedImage
      */

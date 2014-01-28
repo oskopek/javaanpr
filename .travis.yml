@@ -1,4 +1,28 @@
 language: java
+
 jdk:
-    - openjdk7
-    - oraclejdk7
+  - openjdk7
+  - oraclejdk7
+  - oraclejdk8
+
+cache:
+  directories:
+    - $HOME/.m2
+
+env:
+  global:
+    secure: rhh7uuw1PD6C4dItKlT/59UPwAjy2Fa3ZPPv4gpM2tuiVKv6HZI8gMY72KHIBo8o44LScmxKzv1tr2N6DGG+9xWJrRR9l5QpAPzVKEQcDOxH/1+kfzATuVhCuoJDwRBHjE3csMlHw+WsQXaEmKF7bP6WQ1gq5Kd/RLD9a1Ytn5M=
+
+install: /bin/true
+
+after_success:
+  - mvn clean cobertura:cobertura coveralls:cobertura
+
+notifications:
+  irc:
+    channels:
+      - irc.freenode.org#carcv
+    on_success: change
+    on_failure: always
+    template:
+      - '%{repository} (%{branch}:%{commit} by %{author}): %{message} (%{build_url})'

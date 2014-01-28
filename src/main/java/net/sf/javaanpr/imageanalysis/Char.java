@@ -113,7 +113,7 @@ public class Char extends Photo {
      * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze znaky
      * sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu nezodpoveda, cize
      * spravime prahovanie zvlast
-     * 
+     *
      * @param fileName name of character file
      * @throws IOException if the fileName couldn't be loaded
      */
@@ -135,7 +135,7 @@ public class Char extends Photo {
      * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze znaky
      * sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu nezodpoveda, cize
      * spravime prahovanie zvlast
-     * 
+     *
      * @param is loads Char from this InputStream
      * @throws IOException
      */

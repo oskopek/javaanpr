@@ -112,7 +112,7 @@ public class Intelligence {
 
     /**
      * Vrati ako dlho v ms trvalo posledne rozpoznaavnie
-     * 
+     *
      * @return last process duration in milliseconds
      */
     public long lastProcessDuration() {
