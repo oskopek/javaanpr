@@ -10,23 +10,25 @@ Licensing details for JavaANPR are in the file LICENCE.
 
 *This work is a derivative of JavaANPR created by Ondrej Martinsky, for his original work visit: http://javaanpr.sourceforge.net/*
 
-== Screenshot
+=== Screenshot
 
 image:http://cdn.imghack.se/images/74b82e230235c05ee141fd437b6ee174.png["JavaANPR GUI", scaledwidth="25%"]
 
-== Building
+=== Building
 
 * *Recomennded*: `mvn clean install -DskipTests`
 * To run *unit tests*: `mvn clean install`
 * To *clean*, run: `mvn clean`
+* To run the *example GUI*:  `mvn exec:java`
 
 === Info
 
 JavaANPR uses http://semver.org/[semantic versioning] and a branching model similar to http://nvie.com/posts/a-successful-git-branching-model/[this].
 
-=== Example GUI
-
-To run the example GUI, simply type `mvn exec:java` in the root directory of the project.
+== Documentation
+The state of documentation of JavaANPR is unsatisfactory.
+The bachelor thesis of the original author can serve very well for current needs:
+http://javaanpr.sourceforge.net/anpr.pdf[Algorithmic and Mathematical Principles of Automatic Number Plate Recognition Systems]
 
 === Contributing
 *Everyone* is encouraged to help improve this project.
@@ -59,8 +61,3 @@ the bug, including your Java version and operating system.
 5. If applicable, add tests for your feature or bug fix.
 6. Add, commit, and push your changes.
 7. http://help.github.com/send-pull-requests/[Submit a pull request.]
-
-== Documentation
-The state of documentation of JavaANPR is unsatisfactory.
-The bachelor thesis of the original author can serve very well for current needs:
-http://javaanpr.sourceforge.net/anpr.pdf[Algorithmic and Mathematical Principles of Automatic Number Plate Recognition Systems]
