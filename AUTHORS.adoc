@@ -17,4 +17,9 @@
 |skopekondrej@gmail.com
 |Maintainer
 
+|Sudhir Mohanraj
+|sudhirmohanraj
+|sudhirmohan87@gmail.com
+|Contributor
+
 |===
