@@ -1,13 +1,14 @@
 package org.lib.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -21,6 +22,8 @@ import net.sf.javaanpr.intelligence.Intelligence;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import static org.junit.Assert.*;
+
 /**
  *
  */
@@ -32,7 +35,7 @@ public class LibraryTest {
      * a problem: for now - using snapshots/test_041.jpg
      */
     @Test
-    public void intelligenceTest() throws IOException, ParserConfigurationException, SAXException {
+    public void intelligenceSingleTest() throws IOException, ParserConfigurationException, SAXException {
         final String image = "snapshots/test_041.jpg";
 
         /*
@@ -65,7 +68,57 @@ public class LibraryTest {
         assertEquals("LM025BD", spz);
 
         // System.out.println(intel.lastProcessDuration());
+        carSnap.close();
+    }
 
+    @Test
+    public void testAllSnapshots() throws Exception {
+        String snapshotDirPath = "src/test/resources/snapshots";
+        String resultsPath = "src/test/resources/results.properties";
+        InputStream resultsStream = new FileInputStream(new File(resultsPath));
+
+        Properties properties = new Properties();
+        properties.load(resultsStream);
+        resultsStream.close();
+        assertTrue(properties.size() > 0);
+
+        File snapshotDir = new File(snapshotDirPath);
+        File[] snapshots = snapshotDir.listFiles();
+        assertTrue(snapshots.length > 0);
+
+        Intelligence intel = new Intelligence();
+        assertNotNull(intel);
+
+        //TODO not working images
+        String[] ignores = {"test_048.jpg", "test_025.jpg", "test_075.jpg"};
+
+        for(File snap : snapshots) {
+            CarSnapshot carSnap = new CarSnapshot(new FileInputStream(snap));
+            assertNotNull("carSnap is null", carSnap);
+            assertNotNull("carSnap.image is null", carSnap.image);
+
+            String numberPlate = intel.recognize(carSnap);
+            assertNotNull("The licence plate is null - are you sure the image has the correct color space?", numberPlate);
+
+            String snapName = snap.getName();
+            String plateCorrect = properties.getProperty(snapName);
+            assertNotNull(plateCorrect);
+
+            boolean ignoreFlag = false;
+            System.out.println(snapName);
+            for(String ignore : ignores) {
+                if (ignore.equals(snapName)) {
+                    ignoreFlag = true;
+                    break;
+                }
+            }
+            if(ignoreFlag) {
+                continue;
+            }
+
+            assertEquals("The file \"" + snapName + "\" was incorrectly recognized.", plateCorrect, numberPlate);
+            carSnap.close();
+        }
     }
 
     public class TestImageDraw {
