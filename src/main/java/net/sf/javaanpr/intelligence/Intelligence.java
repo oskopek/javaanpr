@@ -158,7 +158,7 @@ public class Intelligence {
                 }
 
                 // SKEW-RELATED
-                Plate notNormalizedCopy;
+                Plate notNormalizedCopy = null;
                 BufferedImage renderedHoughTransform;
                 HoughTransformation hough = null;
 
@@ -166,7 +166,11 @@ public class Intelligence {
                  * detekcia sa robi bud: 1. kvoli report generatoru 2. kvoli korekcii
                  */
                 if (enableReportGeneration) {// || (skewDetectionMode != 0)) {
-                    notNormalizedCopy = plate.clone();
+                    try {
+                        notNormalizedCopy = plate.clone();
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
                     notNormalizedCopy.horizontalEdgeDetector(notNormalizedCopy.getBi());
                     hough = notNormalizedCopy.getHoughTransformation();
                     renderedHoughTransform = hough.render(HoughTransformation.RENDER_ALL, HoughTransformation.COLOR_BW);
@@ -209,7 +213,12 @@ public class Intelligence {
                     Main.rg.insertImage(b.getBiWithAxes(), "band", 0, 0);
                     Main.rg.insertImage(b.renderGraph(), "bandgraph", 0, 0);
                     Main.rg.insertText("<h2>Detected plate</h2>");
-                    Plate plateCopy = plate.clone();
+                    Plate plateCopy = null;
+                    try {
+                        plateCopy = plate.clone();
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
                     plateCopy.linearResize(450, 90);
                     Main.rg.insertImage(plateCopy.getBiWithAxes(), "plate", 0, 0);
                     Main.rg.insertImage(plateCopy.renderGraph(), "plategraph", 0, 0);
@@ -399,7 +408,7 @@ public class Intelligence {
             for (Plate plate : b.getPlates()) {// doporucene 3
 
                 // SKEW-RELATED
-                Plate notNormalizedCopy;
+                Plate notNormalizedCopy = null;
 
                 @SuppressWarnings("unused")
                 BufferedImage renderedHoughTransform = null;
@@ -415,7 +424,11 @@ public class Intelligence {
                                               // 2)
                                               // koli
                                               // korekcii
-                    notNormalizedCopy = plate.clone();
+                    try {
+                        notNormalizedCopy = plate.clone();
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
                     notNormalizedCopy.horizontalEdgeDetector(notNormalizedCopy.getBi());
                     hough = notNormalizedCopy.getHoughTransformation();
                     renderedHoughTransform = hough.render(HoughTransformation.RENDER_ALL, HoughTransformation.COLOR_BW);

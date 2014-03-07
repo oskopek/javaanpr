@@ -154,7 +154,7 @@ public class Char extends Photo {
     }
 
     @Override
-    public Char clone() {
+    public Char clone() throws CloneNotSupportedException {
         super.clone();
         return new Char(duplicateBufferedImage(this.image), duplicateBufferedImage(this.thresholdedImage),
             this.positionInPlate);

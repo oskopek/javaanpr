@@ -136,7 +136,7 @@ public class Plate extends Photo {
     }
 
     @Override
-    public Plate clone() {
+    public Plate clone() throws CloneNotSupportedException {
         super.clone();
         return new Plate(duplicateBufferedImage(this.image));
     }
@@ -156,13 +156,23 @@ public class Plate extends Photo {
         // naklonovaneho
         // obrazka, ktory je prahovany
 
-        Plate clone1 = this.clone();
+        Plate clone1 = null;
+        try {
+            clone1 = this.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
         clone1.verticalEdgeDetector(clone1.getBi());
         PlateVerticalGraph vertical = clone1.histogramYaxis(clone1.getBi());
         this.image = this.cutTopBottom(this.image, vertical);
         this.plateCopy.image = this.cutTopBottom(this.plateCopy.image, vertical);
 
-        Plate clone2 = this.clone();
+        Plate clone2 = null;
+        try {
+            clone2 = this.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
         if (Plate.horizontalDetectionType == 1) {
             clone2.horizontalEdgeDetector(clone2.getBi());
         }
