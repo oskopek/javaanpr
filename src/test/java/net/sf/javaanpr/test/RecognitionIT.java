@@ -65,7 +65,7 @@ for more info about JavaANPR.
 ------------------------------------------------------------------------
  */
 
-package org.lib.test;
+package net.sf.javaanpr.test;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -86,16 +86,21 @@ import javax.xml.parsers.ParserConfigurationException;
 import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.intelligence.Intelligence;
 
-import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 import org.xml.sax.SAXException;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 /**
  *
  */
-public class LibraryTest {
+public class RecognitionIT {
+
+    @Rule
+    public ErrorCollector recognitionErrors = new ErrorCollector();
 
     /*
      * TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly See:
@@ -140,7 +145,6 @@ public class LibraryTest {
     }
 
     @Test
-    @Ignore
     public void testAllSnapshots() throws Exception {
         String snapshotDirPath = "src/test/resources/snapshots";
         String resultsPath = "src/test/resources/results.properties";
@@ -169,9 +173,11 @@ public class LibraryTest {
             assertNotNull(plateCorrect);
 
             String numberPlate = intel.recognize(carSnap);
-            assertNotNull("The licence plate is null - are you sure the image has the correct color space?", numberPlate);
 
-            assertEquals("The file \"" + snapName + "\" was incorrectly recognized.", plateCorrect, numberPlate);
+            // Are you sure the image has the correct color space?
+            recognitionErrors.checkThat("The licence plate is null", numberPlate, is(notNullValue()));
+
+            recognitionErrors.checkThat("The file \"" + snapName + "\" was incorrectly recognized.", numberPlate, is(plateCorrect));
             carSnap.close();
         }
     }

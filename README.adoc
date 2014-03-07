@@ -16,10 +16,11 @@ image:http://cdn.imghack.se/images/74b82e230235c05ee141fd437b6ee174.png["JavaANP
 
 === Building
 
-* *Recomennded*: `mvn clean install -DskipTests`
-* To run *unit tests*: `mvn clean install`
+* *Recommended*: `mvn clean install -DskipTests`
+* To run *unit tests*: `mvn clean test`
+* To run *functional tests* too: `mvn clean verify -Pit`
 * To *clean*, run: `mvn clean`
-* To run the *example GUI*:  `mvn exec:java`
+* To run the *example GUI*: `mvn exec:java`
 
 === Info
 
@@ -35,7 +36,7 @@ http://javaanpr.sourceforge.net/anpr.pdf[Algorithmic and Mathematical Principles
 
 Here are some ways *you* can contribute:
 
-* by using alpha, beta, and prerelease versions
+* by using alpha, beta, and pre-release versions
 * by reporting bugs
 * by suggesting new features
 * by translating to a new language
