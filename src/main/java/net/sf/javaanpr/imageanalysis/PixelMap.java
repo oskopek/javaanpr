@@ -88,10 +88,7 @@ public class PixelMap {
         }
 
         boolean equals(Point p2) {
-            if ((p2.x == this.x) && (p2.y == this.y)) {
-                return true;
-            }
-            return false;
+            return (p2.x == this.x) && (p2.y == this.y);
         }
 
         /*
@@ -284,13 +281,10 @@ public class PixelMap {
         }
 
         // konturovy bod ma aspon jeden bod v okoli biely
-        if (!this.getPointValue(x - 1, y - 1) || !this.getPointValue(x - 1, y + 1) || !this.getPointValue(x + 1, y - 1)
-            || !this.getPointValue(x + 1, y + 1) || !this.getPointValue(x, y + 1) || !this.getPointValue(x, y - 1)
-            || !this.getPointValue(x + 1, y) || !this.getPointValue(x - 1, y)) {
-            return true;
-        }
+        return !this.getPointValue(x - 1, y - 1) || !this.getPointValue(x - 1, y + 1) || !this.getPointValue(x + 1, y - 1)
+                || !this.getPointValue(x + 1, y + 1) || !this.getPointValue(x, y + 1) || !this.getPointValue(x, y - 1)
+                || !this.getPointValue(x + 1, y) || !this.getPointValue(x - 1, y);
 
-        return false;
     }
 
     private int n(int x, int y) { // pocet ciernych bodov v okoli

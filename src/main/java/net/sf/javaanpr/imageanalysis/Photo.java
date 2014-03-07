@@ -98,7 +98,8 @@ public class Photo implements AutoCloseable {
     }
 
     @Override
-    public Photo clone() {
+    public Photo clone() throws CloneNotSupportedException {
+        super.clone();
         return new Photo(duplicateBufferedImage(this.image));
     }
 
@@ -108,10 +109,6 @@ public class Photo implements AutoCloseable {
 
     public int getHeight() {
         return this.image.getHeight();
-    }
-
-    public int getSquare() {
-        return this.getWidth() * this.getHeight();
     }
 
     public BufferedImage getBi() {
@@ -134,11 +131,11 @@ public class Photo implements AutoCloseable {
         graphicAxis.drawRect(35, 5, this.image.getWidth(), this.image.getHeight());
 
         for (int ax = 0; ax < this.image.getWidth(); ax += 50) {
-            graphicAxis.drawString(new Integer(ax).toString(), ax + 35, axis.getHeight() - 10);
+            graphicAxis.drawString(Integer.toString(ax), ax + 35, axis.getHeight() - 10);
             graphicAxis.drawLine(ax + 35, this.image.getHeight() + 5, ax + 35, this.image.getHeight() + 15);
         }
         for (int ay = 0; ay < this.image.getHeight(); ay += 50) {
-            graphicAxis.drawString(new Integer(ay).toString(), 3, ay + 15);
+            graphicAxis.drawString(Integer.toString(ay), 3, ay + 15);
             graphicAxis.drawLine(25, ay + 5, 35, ay + 5);
         }
         graphicAxis.dispose();
@@ -228,7 +225,7 @@ public class Photo implements AutoCloseable {
     }
 
     public void saveImage(String filepath) throws IOException {
-        String type = new String(filepath.substring(filepath.lastIndexOf('.') + 1, filepath.length()).toUpperCase());
+        String type = filepath.substring(filepath.lastIndexOf('.') + 1, filepath.length()).toUpperCase();
         if (!type.equals("BMP") && !type.equals("JPG") && !type.equals("JPEG") && !type.equals("PNG")) {
             throw new IOException("Unsupported file format");
         }
@@ -386,13 +383,11 @@ public class Photo implements AutoCloseable {
     }
 
     static public BufferedImage createBlankBi(BufferedImage image) {
-        BufferedImage imageCopy = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-        return imageCopy;
+        return new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
     }
 
     public BufferedImage createBlankBi(int width, int height) {
-        BufferedImage imageCopy = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        return imageCopy;
+        return new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     }
 
     public BufferedImage sumBi(BufferedImage bi1, BufferedImage bi2) { // used

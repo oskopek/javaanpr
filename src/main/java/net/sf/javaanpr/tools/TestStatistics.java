@@ -170,18 +170,14 @@ class TestReport {
         }
 
         public boolean isOk() {
-            if (this.length != this.good) {
-                return false;
-            } else {
-                return true;
-            }
+            return this.length == this.good;
         }
     }
 
     Vector<TestRecord> records;
 
     TestReport() {
-        this.records = new Vector<TestRecord>();
+        this.records = new Vector<>();
     }
 
     void addRecord(TestRecord testRecord) {

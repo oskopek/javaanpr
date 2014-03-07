@@ -112,7 +112,7 @@ public class Parser {
 
         public PlateForm(String name) {
             this.name = name;
-            this.positions = new Vector<Position>();
+            this.positions = new Vector<>();
         }
 
         public void addPosition(Position p) {
@@ -134,7 +134,7 @@ public class Parser {
         public float requiredChanges = 0;
 
         FinalPlate() {
-            this.plate = new String();
+            this.plate = "";
         }
 
         public void addChar(char chr) {
@@ -152,7 +152,7 @@ public class Parser {
      * @throws ParserConfigurationException
      */
     public Parser() throws ParserConfigurationException, SAXException, IOException {
-        this.plateForms = new Vector<PlateForm>();
+        this.plateForms = new Vector<>();
 
         String fileName = Configurator.getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
 
@@ -177,7 +177,7 @@ public class Parser {
     /**
      *
      * @deprecated use {@link Parser#loadFromXml(InputStream)}
-     * @param fileName
+     * @param fileName the path to the xml file
      *
      * @return null if couldn't load file
      * @throws IOException
@@ -193,7 +193,7 @@ public class Parser {
 
     /**
      *
-     * @param inStream
+     * @param inStream input stream from the xml file
      * @return {@link Vector} of loaded {@link PlateForm}s
      * @throws ParserConfigurationException
      * @throws SAXException
@@ -201,14 +201,12 @@ public class Parser {
      */
     public Vector<PlateForm> loadFromXml(InputStream inStream) throws ParserConfigurationException, SAXException,
         IOException {
-        Vector<PlateForm> plateForms = new Vector<PlateForm>();
+        Vector<PlateForm> plateForms = new Vector<>();
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-        Document doc = null;
-
         DocumentBuilder parser = factory.newDocumentBuilder();
-        doc = parser.parse(inStream);
+        Document doc = parser.parse(inStream);
 
         Node structureNode = doc.getDocumentElement();
         NodeList structureNodeContent = structureNode.getChildNodes();
@@ -287,7 +285,7 @@ public class Parser {
             this.flagEqualOrShorterLength(length);
         }
 
-        Vector<FinalPlate> finalPlates = new Vector<FinalPlate>();
+        Vector<FinalPlate> finalPlates = new Vector<>();
 
         for (PlateForm form : this.plateForms) {
             if (!form.flagged) {

@@ -74,7 +74,7 @@ import java.util.Vector;
 import net.sf.javaanpr.configurator.Configurator;
 
 public class BandGraph extends Graph {
-    Band handle;
+    private Band handle;
 
     private static double peakFootConstant = Configurator.getConfigurator().getDoubleProperty(
         "bandgraph_peakfootconstant"); // 0.75
@@ -114,7 +114,7 @@ public class BandGraph extends Graph {
     }
 
     public Vector<Peak> findPeaks(int count) {
-        Vector<Graph.Peak> outPeaks = new Vector<Peak>();
+        Vector<Graph.Peak> outPeaks = new Vector<>();
 
         for (int c = 0; c < count; c++) { // for count
             float maxValue = 0.0f;
@@ -142,7 +142,7 @@ public class BandGraph extends Graph {
         } // end for count
 
         // treba filtrovat kandidatov, ktory nezodpovedaju proporciam znacky
-        Vector<Peak> outPeaksFiltered = new Vector<Peak>();
+        Vector<Peak> outPeaksFiltered = new Vector<>();
         for (Peak p : outPeaks) {
             if ((p.getDiff() > (2 * this.handle.getHeight())) && // ak nieje znacka
                 (// prilis uzka

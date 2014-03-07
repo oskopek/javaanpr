@@ -86,12 +86,9 @@ public class ImageFileFilter extends FileFilter {
         if (lastIndex < 0) {
             return false;
         }
-        String type = new String(name.substring(lastIndex + 1, name.length()).toLowerCase());
-        if (type.equals("bmp") || type.equals("jpg") || type.equals("jpeg") || type.equals("png")
-            || type.equals("gif")) {
-            return true;
-        }
-        return false;
+        String type = name.substring(lastIndex + 1, name.length()).toLowerCase();
+        return type.equals("bmp") || type.equals("jpg") || type.equals("jpeg") || type.equals("png")
+                || type.equals("gif");
     }
 
     @Override
