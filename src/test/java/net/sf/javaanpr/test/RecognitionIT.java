@@ -67,20 +67,12 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.test;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.WindowConstants;
 import javax.xml.parsers.ParserConfigurationException;
 
 import net.sf.javaanpr.imageanalysis.CarSnapshot;
@@ -157,6 +149,7 @@ public class RecognitionIT {
 
         File snapshotDir = new File(snapshotDirPath);
         File[] snapshots = snapshotDir.listFiles();
+        assertNotNull(snapshots);
         assertTrue(snapshots.length > 0);
 
         Intelligence intel = new Intelligence();
@@ -179,50 +172,6 @@ public class RecognitionIT {
 
             recognitionErrors.checkThat("The file \"" + snapName + "\" was incorrectly recognized.", numberPlate, is(plateCorrect));
             carSnap.close();
-        }
-    }
-
-    public class TestImageDraw {
-
-        public JFrame frame;
-        BufferedImage img;
-        public int WIDTH = 800;
-        public int HEIGHT = 600;
-
-        public TestImageDraw(BufferedImage img) {
-            this.img = img;
-            this.frame = new JFrame("WINDOW");
-            this.frame.setVisible(true);
-
-            this.start();
-            this.frame.add(new JLabel(new ImageIcon(this.getImage())));
-
-            this.frame.pack();
-            // frame.setSize(WIDTH, HEIGHT);
-            // Better to DISPOSE than EXIT
-            this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        }
-
-        public Image getImage() {
-            return this.img;
-        }
-
-        public void start() {
-
-            boolean running = true;
-            while (running) {
-                BufferStrategy bs = this.frame.getBufferStrategy();
-                if (bs == null) {
-                    this.frame.createBufferStrategy(4);
-                    return;
-                }
-
-                Graphics g = bs.getDrawGraphics();
-                g.drawImage(this.img, 0, 0, this.WIDTH, this.HEIGHT, null);
-                g.dispose();
-                bs.show();
-
-            }
         }
     }
 }
