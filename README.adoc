@@ -1,6 +1,6 @@
 == JavaANPR
 
-image:https://travis-ci.org/oskopek/javaanpr.png?branch=master["Build Status", link="https://travis-ci.org/oskopek/javaanpr"]
+image:https://travis-ci.org/oskopek/javaanpr.svg?branch=develop["Build Status", link="https://travis-ci.org/oskopek/javaanpr"]
 image:https://coveralls.io/repos/oskopek/javaanpr/badge.png?branch=develop["Coverage Status", link="https://coveralls.io/r/oskopek/javaanpr?branch=develop"]
 image:https://www.ohloh.net/p/javaanpr/widgets/project_thin_badge.gif["Ohloh widget", link="https://www.ohloh.net/p/javaanpr"]
 
