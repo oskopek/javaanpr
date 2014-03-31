@@ -78,6 +78,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.intelligence.Intelligence;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
@@ -137,6 +138,7 @@ public class RecognitionIT {
     }
 
     @Test
+    @Ignore
     public void testAllSnapshots() throws Exception {
         String snapshotDirPath = "src/test/resources/snapshots";
         String resultsPath = "src/test/resources/results.properties";
