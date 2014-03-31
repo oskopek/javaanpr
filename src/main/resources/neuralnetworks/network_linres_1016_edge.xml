@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE neuralNetwork SYSTEM "https://raw.github.com/oskopek/javaanpr/master/src/main/resources/dtd/neuralNetwork.dtd">
+<!DOCTYPE neuralNetwork SYSTEM "src/main/resources/dtd/neuralNetwork.dtd">
 
 <neuralNetwork dateOfExport="Sun Dec 31 00:59:13 CET 2006">
     <structure numberOfLayers="3">
