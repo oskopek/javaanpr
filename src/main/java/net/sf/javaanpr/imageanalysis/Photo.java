@@ -81,12 +81,13 @@ import java.awt.image.ShortLookupTable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 
 import javax.imageio.ImageIO;
 
 import net.sf.javaanpr.configurator.Configurator;
 
-public class Photo implements AutoCloseable {
+public class Photo implements AutoCloseable, Cloneable {
     public BufferedImage image;
 
     public Photo(BufferedImage bi) {
@@ -109,6 +110,10 @@ public class Photo implements AutoCloseable {
 
     public int getHeight() {
         return this.image.getHeight();
+    }
+
+    public int getRGB(int x, int y) {
+        return this.image.getRGB(x, y);
     }
 
     public BufferedImage getBi() {
@@ -481,4 +486,39 @@ public class Photo implements AutoCloseable {
         this.image.flush();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Photo photo = (Photo) o;
+        if (this.getWidth() != photo.getWidth() || this.getHeight() != photo.getHeight()) {
+            return false;
+        }
+
+        for (int i = 0; i < getWidth(); i++) {
+            for (int j = 0; j < getHeight(); j++) {
+                if (this.getRGB(i, j) != this.getRGB(i, j)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        BigInteger rgbSum = BigInteger.ZERO;
+        for (int i = 0; i < getWidth(); i++) {
+            for (int j = 0; j < getHeight(); j++) {
+                rgbSum = rgbSum.add(BigInteger.valueOf(getRGB(i, j)));
+            }
+        }
+        return rgbSum.hashCode();
+    }
 }
