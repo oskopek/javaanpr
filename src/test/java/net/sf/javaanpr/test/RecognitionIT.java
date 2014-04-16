@@ -78,13 +78,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.intelligence.Intelligence;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 /**
@@ -94,6 +94,8 @@ public class RecognitionIT {
 
     @Rule
     public ErrorCollector recognitionErrors = new ErrorCollector();
+
+    final private static Logger LOGGER = LoggerFactory.getLogger(RecognitionIT.class);
 
     /*
      * TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly See:
@@ -137,8 +139,13 @@ public class RecognitionIT {
         carSnap.close();
     }
 
+    /**
+     * Goes through all the test images and checks if they are correctly recognized.
+     *
+     * This is only an information test right now, doesn't fail.
+     * @throws Exception
+     */
     @Test
-    @Ignore
     public void testAllSnapshots() throws Exception {
         String snapshotDirPath = "src/test/resources/snapshots";
         String resultsPath = "src/test/resources/results.properties";
@@ -157,7 +164,9 @@ public class RecognitionIT {
         Intelligence intel = new Intelligence();
         assertNotNull(intel);
 
-
+        int correctCount = 0;
+        int counter = 0;
+        boolean correct = false;
         for(File snap : snapshots) {
             CarSnapshot carSnap = new CarSnapshot(new FileInputStream(snap));
             assertNotNull("carSnap is null", carSnap);
@@ -169,11 +178,24 @@ public class RecognitionIT {
 
             String numberPlate = intel.recognize(carSnap);
 
+            //TODO enable these checks once the test passes
             // Are you sure the image has the correct color space?
-            recognitionErrors.checkThat("The licence plate is null", numberPlate, is(notNullValue()));
+            //recognitionErrors.checkThat("The licence plate is null", numberPlate, is(notNullValue()));
+            //recognitionErrors.checkThat("The file \"" + snapName + "\" was incorrectly recognized.", numberPlate, is(plateCorrect));
 
-            recognitionErrors.checkThat("The file \"" + snapName + "\" was incorrectly recognized.", numberPlate, is(plateCorrect));
+            if (numberPlate != null && numberPlate.equals(plateCorrect)) {
+                correctCount++;
+                correct = true;
+            }
+
             carSnap.close();
+
+            counter++;
+            LOGGER.debug("Finished recognizing {} ({} of {})\t{}", snapName, counter, snapshots.length, correct ? "correct" : "incorrect");
+            correct = false;
         }
+
+        LOGGER.info("Correct images: {}, total images: {}, accuracy: {}%", correctCount, snapshots.length, (float) correctCount / (float) snapshots.length * 100f);
+
     }
 }
