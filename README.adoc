@@ -1,7 +1,7 @@
 == JavaANPR
 
-image:https://travis-ci.org/oskopek/javaanpr.svg?branch=develop["Build Status", link="https://travis-ci.org/oskopek/javaanpr"]
-image:https://coveralls.io/repos/oskopek/javaanpr/badge.png?branch=develop["Coverage Status", link="https://coveralls.io/r/oskopek/javaanpr?branch=develop"]
+image:https://travis-ci.org/oskopek/javaanpr.svg?branch=master["Build Status", link="https://travis-ci.org/oskopek/javaanpr"]
+image:https://coveralls.io/repos/oskopek/javaanpr/badge.png?branch=master["Coverage Status", link="https://coveralls.io/r/oskopek/javaanpr?branch=master"]
 image:https://www.ohloh.net/p/javaanpr/widgets/project_thin_badge.gif["Ohloh widget", link="https://www.ohloh.net/p/javaanpr"]
 
 *Original author*: Copyright (C) 2006-2007 Ondrej Martinsky. All rights reserved.
@@ -29,7 +29,7 @@ image:http://cdn.imghack.se/images/74b82e230235c05ee141fd437b6ee174.png["JavaANP
 
 === Info
 
-JavaANPR uses http://semver.org/[semantic versioning] and a branching model similar to http://nvie.com/posts/a-successful-git-branching-model/[this].
+JavaANPR uses http://semver.org/[semantic versioning].
 
 == Documentation
 The state of documentation of JavaANPR is unsatisfactory.
