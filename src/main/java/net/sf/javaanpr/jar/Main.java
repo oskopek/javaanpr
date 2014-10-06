@@ -105,7 +105,7 @@ public class Main {
     /**
      * The report generator.
      */
-	public static ReportGenerator rg = new ReportGenerator();
+    public static ReportGenerator rg = new ReportGenerator();
     /**
      * The intelligence.
      */
