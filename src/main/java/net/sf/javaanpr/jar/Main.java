@@ -84,21 +84,20 @@ import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
 /**
  * <p>Main class which initializes the project, taking input parameters from command line and then running the project
  * accordingly.</p>
- *
+ * <p/>
  * Allowed parameters are:
  * <ul>
- *  <li>-help   Displays the help messsage.
- *  <li>-gui   Run GUI viewer (default choice).
- *  <li>-recognize -i "snapshot"   Recognize single snapshot.
- *  <li>-recognize -i "snapshot" -o "dstdir"   Recognize single snapshot and save report html into specified directory.
- *  <li>-newconfig -o "file"   Generate default configuration file.
- *  <li>-newnetwork -o "file"   Train neural network according to specified feature extraction method and learning
- *  parameters (in config. file) and saves it into output file.
- *  <li>-newalphabet -i "srcdir" -o "dstdir"   Normalize all images in "srcdir" and save it to "dstdir".
+ * <li>-help   Displays the help messsage.
+ * <li>-gui   Run GUI viewer (default choice).
+ * <li>-recognize -i "snapshot"   Recognize single snapshot.
+ * <li>-recognize -i "snapshot" -o "dstdir"   Recognize single snapshot and save report html into specified directory.
+ * <li>-newconfig -o "file"   Generate default configuration file.
+ * <li>-newnetwork -o "file"   Train neural network according to specified feature extraction method and learning
+ * parameters (in config. file) and saves it into output file.
+ * <li>-newalphabet -i "srcdir" -o "dstdir"   Normalize all images in "srcdir" and save it to "dstdir".
  * </ul>
  *
  * @author Ondrej Martinsky.
- *
  */
 public class Main {
 
@@ -106,27 +105,42 @@ public class Main {
      * The report generator.
      */
     public static ReportGenerator rg = new ReportGenerator();
+
     /**
      * The intelligence.
      */
     public static Intelligence systemLogic;
+
     /**
      * The help message.
      */
-    public static String helpText = "" + "-----------------------------------------------------------\n"
-        + "Automatic number plate recognition system\n" + "Copyright (c) Ondrej Martinsky, 2006-2007\n" + "\n"
-        + "Licensed under the Educational Community License,\n" + "\n" + "Usage : java -jar anpr.jar [-options]\n"
-        + "\n" + "Where options include:\n" + "\n" + "    -help         Displays this help\n"
-        + "    -gui          Run GUI viewer (default choice)\n" + "    -recognize -i <snapshot>\n"
-        + "                  Recognize single snapshot\n" + "    -recognize -i <snapshot> -o <dstdir>\n"
-        + "                  Recognize single snapshot and\n"
-        + "                  save report html into specified\n" + "                  directory\n"
-        + "    -newconfig -o <file>\n" + "                  Generate default configuration file\n"
-        + "    -newnetwork -o <file>\n" + "                  Train neural network according to\n"
-        + "                  specified feature extraction method and\n"
-        + "                  learning parameters (in config. file)\n"
-        + "                  and saves it into output file\n" + "    -newalphabet -i <srcdir> -o <dstdir>\n"
-        + "                  Normalize all images in <srcdir> and save\n" + "                  it to <dstdir>.";
+    public static String helpText = ""
+            + "-----------------------------------------------------------\n"
+            + "Automatic number plate recognition system\n"
+            + "Copyright (c) Ondrej Martinsky, 2006-2007\n"
+            + "\n"
+            + "Licensed under the Educational Community License,\n"
+            + "\n" + "Usage : java -jar anpr.jar [-options]\n"
+            + "\n" + "Where options include:\n"
+            + "\n"
+            + "    -help         Displays this help\n"
+            + "    -gui          Run GUI viewer (default choice)\n"
+            + "    -recognize -i <snapshot>\n"
+            + "                  Recognize single snapshot\n"
+            + "    -recognize -i <snapshot> -o <dstdir>\n"
+            + "                  Recognize single snapshot and\n"
+            + "                  save report html into specified\n"
+            + "                  directory\n"
+            + "    -newconfig -o <file>\n"
+            + "                  Generate default configuration file\n"
+            + "    -newnetwork -o <file>\n"
+            + "                  Train neural network according to\n"
+            + "                  specified feature extraction method and\n"
+            + "                  learning parameters (in config. file)\n"
+            + "                  and saves it into output file\n"
+            + "    -newalphabet -i <srcdir> -o <dstdir>\n"
+            + "                  Normalize all images in <srcdir> and save\n"
+            + "                  it to <dstdir>.";
 
     /**
      * Normalizes the alphabet in the source directory and writes the result to the target directory.
@@ -151,9 +165,9 @@ public class Main {
     }
 
     /**
-     * Train neural network according to specified feature extraction method and learning parameters (in config. file)
+     * Train neural network according to specified feature extraction method and learning parameters (in config file)
      * and saves it into output file.
-     * 
+     *
      * @param destinationFile the destination file.
      * @throws Exception
      */
@@ -180,8 +194,7 @@ public class Main {
         if ((args.length == 0) || ((args.length == 1) && args[0].equals("-gui"))) {
             // DONE run gui
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            FrameComponentInit frameComponentInit = new FrameComponentInit(); // show
-                                                                              // wait
+            FrameComponentInit frameComponentInit = new FrameComponentInit(); // show wait
             Main.systemLogic = new Intelligence();
             frameComponentInit.dispose(); // hide wait
             new FrameMain();
@@ -196,10 +209,8 @@ public class Main {
         } else if ((args.length == 5) && args[0].equals("-recognize") && args[1].equals("-i") && args[3].equals("-o")) {
             // load snapshot arg[2] and generate report into arg[4]
             try {
-                Main.rg = new ReportGenerator(args[4]); // prepare report
-                                                        // generator
-                Main.systemLogic = new Intelligence(); // prepare
-                                                       // intelligence
+                Main.rg = new ReportGenerator(args[4]); // prepare report generator
+                Main.systemLogic = new Intelligence(); // prepare intelligence
                 Main.systemLogic.recognizeWithReport(new CarSnapshot(args[2]));
                 Main.rg.finish();
             } catch (IOException e) {
