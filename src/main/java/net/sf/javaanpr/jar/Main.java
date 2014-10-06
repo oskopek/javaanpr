@@ -81,9 +81,38 @@ import net.sf.javaanpr.imageanalysis.Char;
 import net.sf.javaanpr.intelligence.Intelligence;
 import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
 
+/**
+ * <p>Main class which initializes the project, taking input parameters from command line and then running the project 
+ * accordingly.</p>
+ * 
+ * Allowed parameters are:
+ * <ul>
+ *  <li>-help   Displays the help messsage.
+ * 	<li>-gui   Run GUI viewer (default choice).
+ * 	<li>-recognize -i "snapshot"   Recognize single snapshot.
+ * 	<li>-recognize -i "snapshot" -o "dstdir"   Recognize single snapshot and save report html into specified directory.
+ * 	<li>-newconfig -o "file"   Generate default configuration file.
+ * 	<li>-newnetwork -o "file"   Train neural network according to specified feature extraction method and learning
+ *  parameters (in config. file) and saves it into output file.
+ * 	<li>-newalphabet -i "srcdir" -o "dstdir"   Normalize all images in "srcdir" and save it to "dstdir".
+ * </ul>
+ * 
+ * @author Ondrej Martinsky.
+ *
+ */
 public class Main {
+	
+    /**
+     * The report generator.
+     */
     public static ReportGenerator rg = new ReportGenerator();
+    /**
+     * The intelligence.
+     */
     public static Intelligence systemLogic;
+    /**
+     * The help message.
+     */
     public static String helpText = "" + "-----------------------------------------------------------\n"
         + "Automatic number plate recognition system\n" + "Copyright (c) Ondrej Martinsky, 2006-2007\n" + "\n"
         + "Licensed under the Educational Community License,\n" + "\n" + "Usage : java -jar anpr.jar [-options]\n"
@@ -99,8 +128,13 @@ public class Main {
         + "                  and saves it into output file\n" + "    -newalphabet -i <srcdir> -o <dstdir>\n"
         + "                  Normalize all images in <srcdir> and save\n" + "                  it to <dstdir>.";
 
-    // normalizuje abecedu v zdrojovom adresari a vysledok ulozi do cieloveho
-    // adresara
+    /**
+     * Normalizes the alphabet in the source directory and writes the result to the target directory.
+     * 
+     * @param srcdir the source directory.
+     * @param dstdir the destination directory.
+     * @throws IOException
+     */
     public static void newAlphabet(String srcdir, String dstdir) throws IOException { // NOT USED
 
         int x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
@@ -116,8 +150,13 @@ public class Main {
         }
     }
 
-    // DONE z danej abecedy precita deskriptory, tie sa nauci, a ulozi neuronovu
-    // siet
+    /**
+     * Train neural network according to specified feature extraction method and learning parameters (in config. file)
+     * and saves it into output file.
+     * 
+     * @param destinationFile the destination file.
+     * @throws Exception
+     */
     public static void learnAlphabet(String destinationFile) throws Exception {
         try {
             File f = new File(destinationFile);
@@ -130,6 +169,12 @@ public class Main {
         npc.network.saveToXml(destinationFile);
     }
 
+    /**
+     * Main method which parses the input parameters and then runs the project accordingly.
+     * 
+     * @param args the input parameters.
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
 
         if ((args.length == 0) || ((args.length == 1) && args[0].equals("-gui"))) {
@@ -187,6 +232,5 @@ public class Main {
             // DONE display help
             System.out.println(Main.helpText);
         }
-
     }
 }
