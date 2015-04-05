@@ -219,9 +219,8 @@ public class Main {
 
         } else if ((args.length == 3) && args[0].equals("-newconfig") && args[1].equals("-o")) {
             // DONE save default config into args[2]
-            Configurator configurator = new Configurator();
             try {
-                configurator.saveConfiguration(args[2]);
+                Configurator.getConfigurator().saveConfiguration(args[2]);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
