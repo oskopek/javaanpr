@@ -90,7 +90,7 @@ public class Configurator {
     /* Primary property list containing values from configuration file */
     private Properties list;
 
-    public Configurator() throws IOException {
+    private Configurator() throws IOException {
         this.list = new Properties();
         /* ***** BEGIN *** Definition of property defaults ******* */
 
@@ -331,7 +331,7 @@ public class Configurator {
         return null;
     }
 
-    public static Configurator getConfigurator() {
+    public static synchronized Configurator getConfigurator() {
         if (configurator == null) {
             try {
                 configurator = new Configurator();
