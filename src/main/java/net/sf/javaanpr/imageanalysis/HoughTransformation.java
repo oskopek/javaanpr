@@ -120,7 +120,8 @@ public class HoughTransformation {
     }
 
     /*
-     * private float getMaxValue() { float maxValue = 0; for (int x = 0; x < width; x++) { for (int y = 0; y < height; y++) {
+     * private float getMaxValue() { float maxValue = 0; for (int x = 0; x < width; x++) { for (int y = 0; y <
+     * height; y++) {
      * maxValue = Math.max(maxValue, bitmap[x][y]); } } return maxValue; }
      */
 

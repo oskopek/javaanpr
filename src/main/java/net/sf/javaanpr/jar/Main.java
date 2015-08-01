@@ -85,21 +85,16 @@ import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
  * <p>Main class which initializes the project, taking input parameters from command line and then running the project
  * accordingly.</p>
  * <p/>
- * Allowed parameters are:
- * <ul>
- * <li>-help   Displays the help messsage.
- * <li>-gui   Run GUI viewer (default choice).
- * <li>-recognize -i "snapshot"   Recognize single snapshot.
- * <li>-recognize -i "snapshot" -o "dstdir"   Recognize single snapshot and save report html into specified directory.
- * <li>-newconfig -o "file"   Generate default configuration file.
- * <li>-newnetwork -o "file"   Train neural network according to specified feature extraction method and learning
- * parameters (in config. file) and saves it into output file.
- * <li>-newalphabet -i "srcdir" -o "dstdir"   Normalize all images in "srcdir" and save it to "dstdir".
- * </ul>
+ * Allowed parameters are: <ul> <li>-help   Displays the help messsage. <li>-gui   Run GUI viewer (default choice).
+ * <li>-recognize -i "snapshot"   Recognize single snapshot. <li>-recognize -i "snapshot" -o "dstdir"   Recognize single
+ * snapshot and save report html into specified directory. <li>-newconfig -o "file"   Generate default configuration
+ * file. <li>-newnetwork -o "file"   Train neural network according to specified feature extraction method and learning
+ * parameters (in config. file) and saves it into output file. <li>-newalphabet -i "srcdir" -o "dstdir"   Normalize all
+ * images in "srcdir" and save it to "dstdir". </ul>
  *
  * @author Ondrej Martinsky.
  */
-public class Main {
+public final class Main {
 
     /**
      * The report generator.
@@ -142,12 +137,16 @@ public class Main {
             + "                  Normalize all images in <srcdir> and save\n"
             + "                  it to <dstdir>.";
 
+    private Main() {
+        // intentionally empty
+    }
+
     /**
      * Normalizes the alphabet in the source directory and writes the result to the target directory.
      *
-     * @param srcdir the source directory.
-     * @param dstdir the destination directory.
-     * @throws IOException
+     * @param srcdir the source directory
+     * @param dstdir the destination directory
+     * @throws IOException an IOException
      */
     public static void newAlphabet(String srcdir, String dstdir) throws IOException { // NOT USED
 
@@ -168,8 +167,8 @@ public class Main {
      * Train neural network according to specified feature extraction method and learning parameters (in config file)
      * and saves it into output file.
      *
-     * @param destinationFile the destination file.
-     * @throws Exception
+     * @param destinationFile the destination file
+     * @throws Exception an Exception
      */
     public static void learnAlphabet(String destinationFile) throws Exception {
         try {
@@ -186,8 +185,8 @@ public class Main {
     /**
      * Main method which parses the input parameters and then runs the project accordingly.
      *
-     * @param args the input parameters.
-     * @throws Exception
+     * @param args the input parameters
+     * @throws Exception an Exception
      */
     public static void main(String[] args) throws Exception {
 
@@ -231,7 +230,8 @@ public class Main {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-        } else if ((args.length == 5) && args[0].equals("-newalphabet") && args[1].equals("-i") && args[3].equals("-o")) {
+        } else if ((args.length == 5) && args[0].equals("-newalphabet") && args[1].equals("-i")
+                && args[3].equals("-o")) {
             // DONE transform alphabets from args[2] -> args[4]
             try {
                 Main.newAlphabet(args[2], args[4]);

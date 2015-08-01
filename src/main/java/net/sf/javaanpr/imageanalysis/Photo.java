@@ -122,7 +122,7 @@ public class Photo implements AutoCloseable, Cloneable {
 
     public BufferedImage getBiWithAxes() {
         BufferedImage axis = new BufferedImage(this.image.getWidth() + 40, this.image.getHeight() + 40,
-            BufferedImage.TYPE_INT_RGB);
+                BufferedImage.TYPE_INT_RGB);
         Graphics2D graphicAxis = axis.createGraphics();
 
         graphicAxis.setColor(Color.LIGHT_GRAY);
@@ -151,11 +151,11 @@ public class Photo implements AutoCloseable, Cloneable {
         this.image.setRGB(x, y, new Color(value, value, value).getRGB());
     }
 
-    static public void setBrightness(BufferedImage image, int x, int y, float value) {
+    public static void setBrightness(BufferedImage image, int x, int y, float value) {
         image.setRGB(x, y, new Color(value, value, value).getRGB());
     }
 
-    static public float getBrightness(BufferedImage image, int x, int y) {
+    public static float getBrightness(BufferedImage image, int x, int y) {
         int r = image.getRaster().getSample(x, y, 0);
         int g = image.getRaster().getSample(x, y, 1);
         int b = image.getRaster().getSample(x, y, 2);
@@ -163,7 +163,7 @@ public class Photo implements AutoCloseable, Cloneable {
         return hsb[2];
     }
 
-    static public float getSaturation(BufferedImage image, int x, int y) {
+    public static float getSaturation(BufferedImage image, int x, int y) {
         int r = image.getRaster().getSample(x, y, 0);
         int g = image.getRaster().getSample(x, y, 1);
         int b = image.getRaster().getSample(x, y, 2);
@@ -172,7 +172,7 @@ public class Photo implements AutoCloseable, Cloneable {
         return hsb[1];
     }
 
-    static public float getHue(BufferedImage image, int x, int y) {
+    public static float getHue(BufferedImage image, int x, int y) {
         int r = image.getRaster().getSample(x, y, 0);
         int g = image.getRaster().getSample(x, y, 1);
         int b = image.getRaster().getSample(x, y, 2);
@@ -194,7 +194,7 @@ public class Photo implements AutoCloseable, Cloneable {
     }
 
     /**
-     * Converts a given Image into a BufferedImage
+     * Converts a given Image into a BufferedImage.
      *
      * @param img The Image to be converted
      * @return The converted BufferedImage
@@ -243,7 +243,7 @@ public class Photo implements AutoCloseable, Cloneable {
         for (int x = 0; x < this.getWidth(); x++) {
             for (int y = 0; y < this.getHeight(); y++) {
                 Photo.setBrightness(this.image, x, y,
-                    stats.thresholdBrightness(Photo.getBrightness(this.image, x, y), coef));
+                        stats.thresholdBrightness(Photo.getBrightness(this.image, x, y), coef));
             }
         }
     }
@@ -253,7 +253,7 @@ public class Photo implements AutoCloseable, Cloneable {
         this.image = Photo.linearResizeBi(this.image, width, height);
     }
 
-    static public BufferedImage linearResizeBi(BufferedImage origin, int width, int height) {
+    public static BufferedImage linearResizeBi(BufferedImage origin, int width, int height) {
         BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = resizedImage.createGraphics();
         float xScale = (float) width / origin.getWidth();
@@ -268,20 +268,22 @@ public class Photo implements AutoCloseable, Cloneable {
         this.image = this.averageResizeBi(this.image, width, height);
     }
 
-    public BufferedImage averageResizeBi(BufferedImage origin, int width, int height) { // TODO 2 Nefunguje dobre pre znaky
-                                                                                        // podobnej velkosti ako cielova velkost
-
+    public BufferedImage averageResizeBi(BufferedImage origin, int width, int height) {
+        // TODO 2 Nefunguje dobre pre znaky
+        // podobnej velkosti ako cielova velkost
         if ((origin.getWidth() < width) || (origin.getHeight() < height)) {
             return Photo.linearResizeBi(origin, width, height); // average
-                                                                // height sa
+            // height sa
             // nehodi
             // na zvacsovanie, preto ak zvacsujeme v smere x alebo y, pouzijeme
             // radsej linearnu transformaciu
         }
 
         /*
-         * java api standardne zmensuje obrazky bilinearnou metodou, resp. linear mapping. co so sebou prinasa dost velku stratu
-         * informacie. Idealna by bola fourierova transformacia, ale ta neprichadza do uvahy z dovodu velkej cesovej narocnosti
+         * java api standardne zmensuje obrazky bilinearnou metodou, resp. linear mapping. co so sebou prinasa dost
+         * velku stratu
+         * informacie. Idealna by bola fourierova transformacia, ale ta neprichadza do uvahy z dovodu velkej cesovej
+         * narocnosti
          * preto sa ako optimalna javi metoda WEIGHTED AVERAGE
          */
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -319,7 +321,7 @@ public class Photo implements AutoCloseable, Cloneable {
         return new Photo(Photo.duplicateBufferedImage(this.image));
     }
 
-    static public BufferedImage duplicateBufferedImage(BufferedImage image) {
+    public static BufferedImage duplicateBufferedImage(BufferedImage image) {
         BufferedImage imageCopy = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
         imageCopy.setData(image.getData());
         return imageCopy;
@@ -339,11 +341,8 @@ public class Photo implements AutoCloseable, Cloneable {
 
     public void verticalEdgeDetector(BufferedImage source) {
         BufferedImage destination = Photo.duplicateBufferedImage(source);
-
-        float data1[] = { -1, 0, 1, -2, 0, 2, -1, 0, 1, };
-
-        // float data2[] = { 1, 0, -1, 2, 0, -2, 1, 0, -1, };
-
+        float[] data1 = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
+        // float[] data2 = {1, 0, -1, 2, 0, -2, 1, 0, -1};
         new ConvolveOp(new Kernel(3, 3, data1), ConvolveOp.EDGE_NO_OP, null).filter(destination, source);
     }
 
@@ -377,7 +376,7 @@ public class Photo implements AutoCloseable, Cloneable {
         return array;
     }
 
-    static public BufferedImage arrayToBufferedImage(float[][] array, int w, int h) {
+    public static BufferedImage arrayToBufferedImage(float[][] array, int w, int h) {
         BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
@@ -387,7 +386,7 @@ public class Photo implements AutoCloseable, Cloneable {
         return bi;
     }
 
-    static public BufferedImage createBlankBi(BufferedImage image) {
+    public static BufferedImage createBlankBi(BufferedImage image) {
         return new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
     }
 
@@ -396,15 +395,15 @@ public class Photo implements AutoCloseable, Cloneable {
     }
 
     public BufferedImage sumBi(BufferedImage bi1, BufferedImage bi2) { // used
-                                                                       // by
-                                                                       // edgeDetectors
+        // by
+        // edgeDetectors
         BufferedImage out = new BufferedImage(Math.min(bi1.getWidth(), bi2.getWidth()), Math.min(bi1.getHeight(),
-            bi2.getHeight()), BufferedImage.TYPE_INT_RGB);
+                bi2.getHeight()), BufferedImage.TYPE_INT_RGB);
 
         for (int x = 0; x < out.getWidth(); x++) {
             for (int y = 0; y < out.getHeight(); y++) {
                 Photo.setBrightness(out, x, y,
-                    (float) Math.min(1.0, Photo.getBrightness(bi1, x, y) + Photo.getBrightness(bi2, x, y)));
+                        (float) Math.min(1.0, Photo.getBrightness(bi1, x, y) + Photo.getBrightness(bi2, x, y)));
             }
         }
         return out;
@@ -420,9 +419,12 @@ public class Photo implements AutoCloseable, Cloneable {
         }
     }
 
-    /** ADAPTIVE THRESHOLDING CEZ GETNEIGHBORHOOD - deprecated */
-    public void adaptiveThresholding() { // jedine pouzitie tejto funkcie by
-                                         // malo byt v konstruktore znacky
+    /**
+     * ADAPTIVE THRESHOLDING CEZ GETNEIGHBORHOOD.
+     *
+     * @deprecated jedine pouzitie tejto funkcie by malo byt v konstruktore znacky
+     */
+    public void adaptiveThresholding() {
         Statistics stat = new Statistics(this);
         int radius = Configurator.getConfigurator().getIntProperty("photo_adaptivethresholdingradius");
         if (radius == 0) {

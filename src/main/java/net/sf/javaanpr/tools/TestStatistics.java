@@ -74,16 +74,17 @@ import java.io.FileReader;
 //import java.io.IOException;
 import java.util.Vector;
 
-public class TestStatistics {
+public final class TestStatistics {
 
     public static String helpText = "" + "-----------------------------------------------------------\n"
-        + "ANPR Statistics Generator\n" + "Copyright (c) Ondrej Martinsky, 2006-2007\n" + "\n"
-        + "Licensed under the Educational Community License,\n" + "\n" + "Command line arguments\n" + "\n"
-        + "    -help         Displays this help\n" + "    -i <file>     Create statistics for test file\n" + "\n"
-        + "Test file must be have a CSV format\n" + "Each row must contain name of analysed snapshot,\n"
-        + "real plate and recognized plate string\n" + "Example : \n" + "001.jpg, 1B01234, 1B012??";
+            + "ANPR Statistics Generator\n" + "Copyright (c) Ondrej Martinsky, 2006-2007\n" + "\n"
+            + "Licensed under the Educational Community License,\n" + "\n" + "Command line arguments\n" + "\n"
+            + "    -help         Displays this help\n" + "    -i <file>     Create statistics for test file\n" + "\n"
+            + "Test file must be have a CSV format\n" + "Each row must contain name of analysed snapshot,\n"
+            + "real plate and recognized plate string\n" + "Example : \n" + "001.jpg, 1B01234, 1B012??";
 
-    public TestStatistics() {
+    private TestStatistics() {
+        // intentionally empty
     }
 
     public static void main(String[] args) {
@@ -116,95 +117,95 @@ public class TestStatistics {
         }
 
     }
-}
 
-class TestReport {
-    class TestRecord {
-        String name, plate, recognizedPlate;
-        int good;
-        int length;
 
-        TestRecord(String name, String plate, String recognizedPlate) {
-            this.name = name.trim();
-            this.plate = plate.trim();
-            this.recognizedPlate = recognizedPlate.trim();
-            this.compute();
+    private static class TestReport {
+        class TestRecord {
+            String name, plate, recognizedPlate;
+            int good;
+            int length;
+
+            TestRecord(String name, String plate, String recognizedPlate) {
+                this.name = name.trim();
+                this.plate = plate.trim();
+                this.recognizedPlate = recognizedPlate.trim();
+                this.compute();
+            }
+
+            private void compute() {
+                this.length = Math.max(this.plate.length(), this.recognizedPlate.length());
+                int g1 = 0;
+                int g2 = 0;
+                for (int i = 0; i < this.length; i++) { // POROVNAVAT ODPREDU (napr. BA123AB vs. BA123ABX)
+                    if (this.getChar(this.plate, i) == this.getChar(this.recognizedPlate, i)) {
+                        g1++;
+                    }
+                }
+                for (int i = 0; i < this.length; i++) { // POROVNAVAT ODZADU (napr. BA123AB vs. XBA123AB)
+                    if (this.getChar(this.plate, this.length - i - 1)
+                            == this.getChar(this.recognizedPlate, this.length - i - 1)) {
+                        g2++;
+                    }
+                }
+                this.good = Math.max(g1, g2);
+            }
+
+            private char getChar(String string, int position) {
+                if (position >= string.length()) {
+                    return ' ';
+                }
+                if (position < 0) {
+                    return ' ';
+                }
+                return string.charAt(position);
+            }
+
+            public int getGoodCount() {
+                return this.good;
+            }
+
+            public int getLength() {
+                return this.length;
+            }
+
+            public boolean isOk() {
+                return this.length == this.good;
+            }
         }
 
-        private void compute() {
-            this.length = Math.max(this.plate.length(), this.recognizedPlate.length());
-            int g1 = 0;
-            int g2 = 0;
-            for (int i = 0; i < this.length; i++) { // POROVNAVAT ODPREDU (napr.
-                // BA123AB vs. BA123ABX)
-                if (this.getChar(this.plate, i) == this.getChar(this.recognizedPlate, i)) {
-                    g1++;
+        Vector<TestRecord> records;
+
+        TestReport() {
+            this.records = new Vector<>();
+        }
+
+        void addRecord(TestRecord testRecord) {
+            this.records.add(testRecord);
+        }
+
+        void printStatistics() {
+            int weightedScoreCount = 0;
+            int binaryScoreCount = 0;
+            int characterCount = 0;
+            System.out.println("----------------------------------------------");
+            System.out.println("Defective plates\n");
+
+            for (TestRecord record : this.records) {
+                characterCount += record.getLength();
+                weightedScoreCount += record.getGoodCount();
+                binaryScoreCount += (record.isOk() ? 1 : 0);
+                if (!record.isOk()) {
+                    System.out.println(record.plate + " ~ " + record.recognizedPlate + " ("
+                            + (((float) record.getGoodCount() / record.getLength()) * 100) + "% ok)");
                 }
             }
-            for (int i = 0; i < this.length; i++) { // POROVNAVAT ODZADU (napr.
-                // BA123AB vs. XBA123AB)
-                if (this.getChar(this.plate, this.length - i - 1) == this.getChar(this.recognizedPlate, this.length - i
-                    - 1)) {
-                    g2++;
-                }
-            }
-            this.good = Math.max(g1, g2);
+            System.out.println("\n----------------------------------------------");
+            System.out.println("Test report statistics\n");
+            System.out.println("Total number of plates     : " + this.records.size());
+            System.out.println("Total number of characters : " + characterCount);
+            System.out.println(
+                    "Binary score               : " + (((float) binaryScoreCount / this.records.size()) * 100));
+            System.out.println("Weighted score             : " + (((float) weightedScoreCount / characterCount) * 100));
         }
-
-        private char getChar(String string, int position) {
-            if (position >= string.length()) {
-                return ' ';
-            }
-            if (position < 0) {
-                return ' ';
-            }
-            return string.charAt(position);
-        }
-
-        public int getGoodCount() {
-            return this.good;
-        }
-
-        public int getLength() {
-            return this.length;
-        }
-
-        public boolean isOk() {
-            return this.length == this.good;
-        }
-    }
-
-    Vector<TestRecord> records;
-
-    TestReport() {
-        this.records = new Vector<>();
-    }
-
-    void addRecord(TestRecord testRecord) {
-        this.records.add(testRecord);
-    }
-
-    void printStatistics() {
-        int weightedScoreCount = 0;
-        int binaryScoreCount = 0;
-        int characterCount = 0;
-        System.out.println("----------------------------------------------");
-        System.out.println("Defective plates\n");
-
-        for (TestRecord record : this.records) {
-            characterCount += record.getLength();
-            weightedScoreCount += record.getGoodCount();
-            binaryScoreCount += (record.isOk() ? 1 : 0);
-            if (!record.isOk()) {
-                System.out.println(record.plate + " ~ " + record.recognizedPlate + " ("
-                    + (((float) record.getGoodCount() / record.getLength()) * 100) + "% ok)");
-            }
-        }
-        System.out.println("\n----------------------------------------------");
-        System.out.println("Test report statistics\n");
-        System.out.println("Total number of plates     : " + this.records.size());
-        System.out.println("Total number of characters : " + characterCount);
-        System.out.println("Binary score               : " + (((float) binaryScoreCount / this.records.size()) * 100));
-        System.out.println("Weighted score             : " + (((float) weightedScoreCount / characterCount) * 100));
     }
 }

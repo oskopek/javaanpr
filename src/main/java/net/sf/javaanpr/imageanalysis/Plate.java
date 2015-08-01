@@ -74,13 +74,11 @@ import java.util.Vector;
 
 import net.sf.javaanpr.configurator.Configurator;
 
-//import net.sf.javaanpr.imageanalysis.PositionInPlate;
-
 public class Plate extends Photo {
-    static public Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 0, 0);
-    static private int numberOfCandidates = Configurator.getConfigurator().getIntProperty("intelligence_numberOfChars");
+    public static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 0, 0);
+    private static int numberOfCandidates = Configurator.getConfigurator().getIntProperty("intelligence_numberOfChars");
     private static int horizontalDetectionType = Configurator.getConfigurator().getIntProperty(
-        "platehorizontalgraph_detectionType");
+            "platehorizontalgraph_detectionType");
 
     private PlateGraph graphHandle = null;
     public Plate plateCopy;
@@ -128,8 +126,8 @@ public class Plate extends Photo {
                 continue;
             }
             out.add(new Char(this.image.getSubimage(p.getLeft(), 0, p.getDiff(), this.image.getHeight()),
-                this.plateCopy.image.getSubimage(p.getLeft(), 0, p.getDiff(), this.image.getHeight()),
-                new PositionInPlate(p.getLeft(), p.getRight())));
+                    this.plateCopy.image.getSubimage(p.getLeft(), 0, p.getDiff(), this.image.getHeight()),
+                    new PositionInPlate(p.getLeft(), p.getRight())));
         }
 
         return out;
@@ -143,7 +141,7 @@ public class Plate extends Photo {
 
     public void horizontalEdgeBi(BufferedImage image) {
         BufferedImage imageCopy = Photo.duplicateBufferedImage(image);
-        float data[] = { -1, 0, 1 };
+        float[] data = {-1, 0, 1};
         new ConvolveOp(new Kernel(1, 3, data), ConvolveOp.EDGE_NO_OP, null).filter(imageCopy, image);
     }
 
@@ -242,7 +240,7 @@ public class Plate extends Photo {
     @Override
     public void verticalEdgeDetector(BufferedImage source) {
 
-        float matrix[] = { -1, 0, 1 };
+        float[] matrix = {-1, 0, 1};
 
         BufferedImage destination = Photo.duplicateBufferedImage(source);
 
@@ -253,7 +251,7 @@ public class Plate extends Photo {
     public void horizontalEdgeDetector(BufferedImage source) {
         BufferedImage destination = Photo.duplicateBufferedImage(source);
 
-        float matrix[] = { -1, -2, -1, 0, 0, 0, 1, 2, 1 };
+        float[] matrix = {-1, -2, -1, 0, 0, 0, 1, 2, 1};
 
         new ConvolveOp(new Kernel(3, 3, matrix), ConvolveOp.EDGE_NO_OP, null).filter(destination, source);
     }

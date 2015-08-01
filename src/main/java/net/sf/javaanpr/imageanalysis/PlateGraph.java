@@ -78,13 +78,13 @@ public class PlateGraph extends Graph {
     Plate handle;
 
     private static double plategraph_rel_minpeaksize = Configurator.getConfigurator().getDoubleProperty(
-        "plategraph_rel_minpeaksize");
+            "plategraph_rel_minpeaksize");
     private static double peakFootConstant = Configurator.getConfigurator().getDoubleProperty(
-        "plategraph_peakfootconstant");
+            "plategraph_peakfootconstant");
 
     public PlateGraph(Plate handle) {
         this.handle = handle; // nesie odkaz na obrazok (Plate), ku ktoremu sa
-                              // graf vztahuje
+        // graf vztahuje
     }
 
     public class SpaceComparer implements Comparator<Object> {
@@ -137,19 +137,19 @@ public class PlateGraph extends Graph {
             int maxIndex = 0;
             for (int i = 0; i < this.yValues.size(); i++) { // zlava doprava
                 if (this.allowedInterval(spacesTemp, i)) { // ak potencialny vrchol
-                                                           // sa nachadza vo
-                                                           // "volnom" intervale,
-                                                           // ktory nespada pod ine
-                                                           // vrcholy
+                    // sa nachadza vo
+                    // "volnom" intervale,
+                    // ktory nespada pod ine
+                    // vrcholy
                     if (this.yValues.elementAt(i) >= maxValue) {
                         maxValue = this.yValues.elementAt(i);
                         maxIndex = i;
                     }
                 }
             } // end for int 0->max
-              // nasli sme najvacsi peak
-              // 0.75 mensie cislo znamena tendenciu znaky sekat, vacsie cislo
-              // zase tendenciu nespravne zdruzovat
+            // nasli sme najvacsi peak
+            // 0.75 mensie cislo znamena tendenciu znaky sekat, vacsie cislo
+            // zase tendenciu nespravne zdruzovat
             if (this.yValues.elementAt(maxIndex) < (PlateGraph.plategraph_rel_minpeaksize * this.getMaxValue())) {
                 break;
             }
@@ -167,9 +167,9 @@ public class PlateGraph extends Graph {
         Vector<Peak> spaces = new Vector<Peak>();
         for (Peak p : spacesTemp) {
             if (p.getDiff() < (1 * this.handle.getHeight() // medzera nesmie byt
-                                                           // siroka
+                    // siroka
             )) {
-                spaces.add(p);// znacka ok, bereme ju
+                spaces.add(p); // znacka ok, bereme ju
                 // else outPeaksFiltered.add(p);// znacka ok, bereme ju
             }
         }

@@ -95,8 +95,8 @@ public class ReportGenerator {
         }
 
         this.output = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" + "<html>"
-            + "<head><title>ANPR report</title>" + "</head>" + "<style type=\"text/css\">"
-            + "@import \"style.css\";" + "</style>";
+                + "<head><title>ANPR report</title>" + "</head>" + "<style type=\"text/css\">"
+                + "@import \"style.css\";" + "</style>";
 
     }
 
@@ -112,7 +112,8 @@ public class ReportGenerator {
         this.output += "\n";
     }
 
-    public void insertImage(BufferedImage image, String cls, int w, int h) throws IllegalArgumentException, IOException {
+    public void insertImage(BufferedImage image, String cls, int w, int h)
+            throws IllegalArgumentException, IOException {
         if (!this.enabled) {
             return;
         }
@@ -122,7 +123,7 @@ public class ReportGenerator {
 
         if ((w != 0) && (h != 0)) {
             this.output += "<img src='" + imageName + "' alt='' width='" + w + "' height='" + h + "' class='" + cls
-                + "'>\n";
+                    + "'>\n";
         } else {
             this.output += "<img src='" + imageName + "' alt='' class='" + cls + "'>\n";
         }

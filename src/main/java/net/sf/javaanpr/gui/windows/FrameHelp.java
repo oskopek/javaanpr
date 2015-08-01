@@ -80,8 +80,12 @@ public class FrameHelp extends javax.swing.JFrame {
     public static int SHOW_ABOUT = 1;
     public int mode;
 
-    /** Creates new form FrameHelp */
-    public FrameHelp(int mode) {
+    /**
+     * Creates new form FrameHelp.
+     *
+     * @param mode the mode
+     */
+    public FrameHelp(int mode) { // TODO javadoc
         this.initComponents();
         this.mode = mode;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -128,30 +132,32 @@ public class FrameHelp extends javax.swing.JFrame {
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this.getContentPane());
         this.getContentPane().setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-            layout.createSequentialGroup()
-                .addContainerGap()
-                .add(layout
-                    .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, this.helpWindowClose)
-                    .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 514,
-                        Short.MAX_VALUE)).addContainerGap()));
+                layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(layout
+                                .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(org.jdesktop.layout.GroupLayout.TRAILING, this.helpWindowClose)
+                                .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 514,
+                                        Short.MAX_VALUE)).addContainerGap()));
         layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-            org.jdesktop.layout.GroupLayout.TRAILING,
-            layout.createSequentialGroup().addContainerGap()
-                .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(this.helpWindowClose)
-                .addContainerGap()));
+                org.jdesktop.layout.GroupLayout.TRAILING,
+                layout.createSequentialGroup().addContainerGap()
+                        .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(this.helpWindowClose)
+                        .addContainerGap()));
         this.pack();
-    }// </editor-fold>//GEN-END:initComponents
+    } // </editor-fold> //GEN-END:initComponents
 
-    private void helpWindowCloseActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_helpWindowCloseActionPerformed
+    private void helpWindowCloseActionPerformed(
+            java.awt.event.ActionEvent evt) { // GEN-FIRST:event_helpWindowCloseActionPerformed
         this.dispose();
-    }// GEN-LAST:event_helpWindowCloseActionPerformed
+    } // GEN-LAST:event_helpWindowCloseActionPerformed
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify
+    // GEN-BEGIN:variables
     private javax.swing.JEditorPane editorPane;
     private javax.swing.JButton helpWindowClose;
     private javax.swing.JScrollPane jScrollPane1;
-    // End of variables declaration//GEN-END:variables
+    // End of variables declaration //GEN-END:variables
 
 }

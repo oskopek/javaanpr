@@ -69,8 +69,6 @@ package net.sf.javaanpr.imageanalysis;
 
 import java.awt.image.BufferedImage;
 
-//import net.sf.javaanpr.imageanalysis.Photo;
-
 public class Statistics {
     public float maximum;
     public float minimum;

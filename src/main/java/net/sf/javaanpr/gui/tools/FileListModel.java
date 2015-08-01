@@ -92,7 +92,9 @@ public class FileListModel implements ListModel<Object> {
 
     public Vector<FileListModelEntry> fileList;
 
-    /** Creates a new instance of FileListModel */
+    /**
+     * Creates a new instance of FileListModel.
+     */
     public FileListModel() {
         this.fileList = new Vector<FileListModelEntry>();
     }

@@ -69,6 +69,7 @@ package net.sf.javaanpr.imageanalysis;
 
 //import java.util.Collections;
 //import java.util.Comparator;
+
 import java.util.Vector;
 
 import net.sf.javaanpr.configurator.Configurator;
@@ -80,7 +81,7 @@ public class PlateHorizontalGraph extends Graph {
      */
 
     private static int horizontalDetectionType = Configurator.getConfigurator().getIntProperty(
-        "platehorizontalgraph_detectionType");
+            "platehorizontalgraph_detectionType");
 
     Plate handle;
 
@@ -102,16 +103,13 @@ public class PlateHorizontalGraph extends Graph {
     public Vector<Peak> findPeak_derivate(int count) { // RIESENIE DERIVACIOU
         int a, b;
         float maxVal = this.getMaxValue();
-
         for (a = 2; (-this.derivation(a, a + 4) < (maxVal * 0.2)) && (a < (this.yValues.size() - 2 - 2 - 4)); a++) {
-
+            // intentionally empty
         }
         for (b = this.yValues.size() - 1 - 2; (this.derivation(b - 4, b) < (maxVal * 0.2)) && (b > (a + 2)); b--) {
-
+            // intentionally empty
         }
-
         Vector<Peak> outPeaks = new Vector<>();
-
         outPeaks.add(new Peak(a, b));
         super.peaks = outPeaks;
         return outPeaks;
@@ -121,16 +119,14 @@ public class PlateHorizontalGraph extends Graph {
         float average = this.getAverageValue();
         int a, b;
         for (a = 0; this.yValues.elementAt(a) < average; a++) {
-
+            // intentionally empty
         }
         for (b = this.yValues.size() - 1; this.yValues.elementAt(b) < average; b--) {
-
+            // intentionally empty
         }
-
         Vector<Peak> outPeaks = new Vector<>();
         a = Math.max(a - 5, 0);
         b = Math.min(b + 5, this.yValues.size());
-
         outPeaks.add(new Peak(a, b));
         super.peaks = outPeaks;
         return outPeaks;

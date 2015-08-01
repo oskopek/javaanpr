@@ -74,7 +74,7 @@ import java.io.IOException;
 import net.sf.javaanpr.imageanalysis.HoughTransformation;
 import net.sf.javaanpr.imageanalysis.Photo;
 
-public class HoughTool {
+public final class HoughTool {
 
     public static void main(String[] args) throws IOException {
         File file = new File(args[0]);
@@ -82,7 +82,7 @@ public class HoughTool {
         Photo p = new Photo(fis);
         HoughTransformation hough = p.getHoughTransformation();
         Photo transformed = new Photo(hough.render(HoughTransformation.RENDER_TRANSFORMONLY,
-            HoughTransformation.COLOR_HUE));
+                HoughTransformation.COLOR_HUE));
 
         transformed.saveImage(args[1]);
 
@@ -90,7 +90,8 @@ public class HoughTool {
         transformed.close();
     }
 
-    public HoughTool() {
+    private HoughTool() {
+        // intentionally empty
     }
 
 }

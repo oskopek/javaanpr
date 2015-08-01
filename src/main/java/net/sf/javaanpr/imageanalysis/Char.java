@@ -110,9 +110,9 @@ public class Char extends Photo {
     }
 
     /**
-     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze znaky
-     * sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu nezodpoveda, cize
-     * spravime prahovanie zvlast
+     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze
+     * znaky sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu
+     * nezodpoveda, cize spravime prahovanie zvlast.
      *
      * @param fileName name of character file
      * @throws IOException if the fileName couldn't be loaded
@@ -124,7 +124,7 @@ public class Char extends Photo {
 
         // nasledovne 4 riadky pridane 23.12.2006 2:33 AM
         BufferedImage origin = Photo.duplicateBufferedImage(this.image);
-        this.adaptiveThresholding(); // s ucinnostou nad this.image
+        this.adaptiveThresholding(); // s ucinnostou nad this.image // TODO deprecated
         this.thresholdedImage = this.image;
         this.image = origin;
 
@@ -132,14 +132,14 @@ public class Char extends Photo {
     }
 
     /**
-     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze znaky
-     * sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu nezodpoveda, cize
-     * spravime prahovanie zvlast
+     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze
+     * znaky sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu
+     * nezodpoveda, cize spravime prahovanie zvlast.
      *
      * @param is loads Char from this InputStream
-     * @throws IOException
+     * @throws IOException an IOException
      */
-    public Char(InputStream is) throws IOException {
+    public Char(InputStream is) throws IOException { // TODO javadoc
         super(is);
         // this.thresholdedImage = this.image; povodny kod, zakomentovany dna
         // 23.12.2006 2:33 AM
@@ -157,7 +157,7 @@ public class Char extends Photo {
     public Char clone() throws CloneNotSupportedException {
         super.clone();
         return new Char(duplicateBufferedImage(this.image), duplicateBufferedImage(this.thresholdedImage),
-            this.positionInPlate);
+                this.positionInPlate);
     }
 
     private void init() {
@@ -175,8 +175,10 @@ public class Char extends Photo {
         this.image = this.thresholdedImage;
 
         /*
-         * NEBUDEME POUZIVAT // tu treba osetrit pripady, ked je prvy alebo posledny riadok cely cierny (zmenime na biely)
-         * boolean flag = false; for (int x=0; x<this.getWidth(); x++) if (this.getBrightness(x,0) > 0.5f) flag = true; if (flag
+         * NEBUDEME POUZIVAT // tu treba osetrit pripady, ked je prvy alebo posledny riadok cely cierny (zmenime na
+         * biely)
+         * boolean flag = false; for (int x=0; x<this.getWidth(); x++) if (this.getBrightness(x,0) > 0.5f) flag =
+         * true; if (flag
          * == false) for (int x=0; x<this.getWidth(); x++) this.setBrightness(x,0,1.0f);
          */
         PixelMap pixelMap = this.getPixelMap();
@@ -216,7 +218,7 @@ public class Char extends Photo {
         int x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
         int y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
         if ((x == 0) || (y == 0)) {
-            return;// nebude resize
+            return; // nebude resize
             // this.linearResize(x,y);
         }
 
@@ -308,7 +310,7 @@ public class Char extends Photo {
         for (int f = 0; f < features.length; f++) { // cez vsetky features
             for (int my = 0; my < (h - 1); my++) {
                 for (int mx = 0; mx < (w - 1); mx++) { // dlazdice x 0,2,4,..8
-                                                       // vcitane
+                    // vcitane
                     featureMatch = 0;
                     featureMatch += Math.abs(array[mx][my] - features[f][0]);
                     featureMatch += Math.abs(array[mx + 1][my] - features[f][1]);

@@ -7,9 +7,9 @@
         </layout>
     </appender>
 
-    <logger name="net.sf.javaanpr" level="TRACE" />
+    <logger name="net.sf.javaanpr" level="TRACE"/>
 
     <root level="debug">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

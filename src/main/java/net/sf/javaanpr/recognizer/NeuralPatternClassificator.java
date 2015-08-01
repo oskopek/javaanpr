@@ -67,26 +67,14 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.recognizer;
 
-//import java.awt.Color;
-//import java.awt.Graphics2D;
-//import java.awt.Rectangle;
-//import java.awt.image.BufferedImage;
-//import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Vector;
 
-//import net.sf.javaanpr.gui.ReportGenerator;
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.imageanalysis.Char;
 import net.sf.javaanpr.neuralnetwork.NeuralNetwork;
-//import javax.xml.parsers.ParserConfigurationException;
-//import javax.xml.transform.TransformerException;
-//import org.xml.sax.SAXException;
-//import net.sf.javaanpr.configurator.Configurator;
-
-//import net.sf.javaanpr.neuralnetwork.NeuralNetwork.SetOfIOPairs;
 
 public class NeuralPatternClassificator extends CharacterRecognizer {
 
@@ -150,7 +138,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
     // IMAGE -> CHAR
     @Override
     public RecognizedChar recognize(Char imgChar) { // rozpozna UZ normalizovany
-                                                    // char
+        // char
         imgChar.normalize();
         Vector<Double> output = this.network.test(imgChar.extractFeatures());
         // double max = 0.0;
@@ -185,10 +173,17 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
             }
         }
 
-        /*
-         * System.out.println(); for (Double d : vectorInput) System.out.print(d+" "); System.out.println(); for (Double d :
-         * vectorOutput) System.out.print(d+" "); System.out.println();
-         */
+
+        System.out.println();
+        for (Double d : vectorInput) {
+            System.out.print(d + " ");
+        }
+        System.out.println();
+        for (Double d : vectorOutput) {
+            System.out.print(d + " ");
+        }
+        System.out.println();
+
 
         return (new NeuralNetwork.SetOfIOPairs.IOPair(vectorInput, vectorOutput));
     }
@@ -209,9 +204,9 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
             is.close();
         }
 
-        this.network.learn(train, Configurator.getConfigurator().getIntProperty("neural_maxk"), Configurator
-            .getConfigurator().getDoubleProperty("neural_eps"),
-            Configurator.getConfigurator().getDoubleProperty("neural_lambda"), Configurator.getConfigurator()
-                .getDoubleProperty("neural_micro"));
+        this.network.learn(train, Configurator.getConfigurator().getIntProperty("neural_maxk"),
+                Configurator.getConfigurator().getDoubleProperty("neural_eps"),
+                Configurator.getConfigurator().getDoubleProperty("neural_lambda"),
+                Configurator.getConfigurator().getDoubleProperty("neural_micro"));
     }
 }

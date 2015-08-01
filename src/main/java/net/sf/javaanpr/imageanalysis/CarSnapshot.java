@@ -78,19 +78,19 @@ import net.sf.javaanpr.configurator.Configurator;
 
 public class CarSnapshot extends Photo {
     private static int distributor_margins = Configurator.getConfigurator().getIntProperty(
-        "carsnapshot_distributormargins");
+            "carsnapshot_distributormargins");
     // private static int carsnapshot_projectionresize_x =
     // Main.configurator.getIntProperty("carsnapshot_projectionresize_x");
     // private static int carsnapshot_projectionresize_y =
     // Main.configurator.getIntProperty("carsnapshot_projectionresize_y");
     private static int carsnapshot_graphrankfilter = Configurator.getConfigurator().getIntProperty(
-        "carsnapshot_graphrankfilter");
+            "carsnapshot_graphrankfilter");
 
-    static private int numberOfCandidates = Configurator.getConfigurator().getIntProperty("intelligence_numberOfBands");
+    private static int numberOfCandidates = Configurator.getConfigurator().getIntProperty("intelligence_numberOfBands");
     private CarSnapshotGraph graphHandle = null;
 
     public static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0,
-        CarSnapshot.distributor_margins, CarSnapshot.distributor_margins);
+            CarSnapshot.distributor_margins, CarSnapshot.distributor_margins);
 
     public CarSnapshot(String filename) throws IOException {
         super(Configurator.getConfigurator().getResourceAsStream(filename));
@@ -146,9 +146,7 @@ public class CarSnapshot extends Photo {
 
     public void verticalEdgeBi(BufferedImage image) {
         BufferedImage imageCopy = Photo.duplicateBufferedImage(image);
-
-        float data[] = { -1, 0, 1, -1, 0, 1, -1, 0, 1, -1, 0, 1 };
-
+        float[] data = {-1, 0, 1, -1, 0, 1, -1, 0, 1, -1, 0, 1};
         new ConvolveOp(new Kernel(3, 4, data), ConvolveOp.EDGE_NO_OP, null).filter(imageCopy, image);
     }
 

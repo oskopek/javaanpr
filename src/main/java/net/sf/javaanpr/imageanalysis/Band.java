@@ -70,17 +70,14 @@ package net.sf.javaanpr.imageanalysis;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
-//import java.io.IOException;
 import java.util.Vector;
 
 import net.sf.javaanpr.configurator.Configurator;
 
-//import net.sf.javaanpr.configurator.Configurator;
-
 public class Band extends Photo {
-    static public Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 25, 25);
-    static private int numberOfCandidates = Configurator.getConfigurator()
-        .getIntProperty("intelligence_numberOfPlates");
+    public static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 25, 25);
+    private static int numberOfCandidates = Configurator.getConfigurator()
+            .getIntProperty("intelligence_numberOfPlates");
 
     private BandGraph graphHandle = null;
 
@@ -145,8 +142,8 @@ public class Band extends Photo {
     }
 
     public void fullEdgeDetector(BufferedImage source) {
-        float verticalMatrix[] = { -1, 0, 1, -2, 0, 2, -1, 0, 1, };
-        float horizontalMatrix[] = { -1, -2, -1, 0, 0, 0, 1, 2, 1 };
+        float[] verticalMatrix = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
+        float[] horizontalMatrix = {-1, -2, -1, 0, 0, 0, 1, 2, 1};
 
         BufferedImage i1 = Photo.createBlankBi(source);
         BufferedImage i2 = Photo.createBlankBi(source);

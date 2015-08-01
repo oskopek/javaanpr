@@ -145,13 +145,13 @@ public class Parser {
     Vector<PlateForm> plateForms;
 
     /**
-     * Creates a new instance of Parser
+     * Creates a new instance of Parser.
      *
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParserConfigurationException
+     * @throws ParserConfigurationException a ParserConfigurationException
+     * @throws SAXException a SAXException
+     * @throws IOException an IOException
      */
-    public Parser() throws ParserConfigurationException, SAXException, IOException {
+    public Parser() throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
         this.plateForms = new Vector<>();
 
         String fileName = Configurator.getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
@@ -175,32 +175,29 @@ public class Parser {
     }
 
     /**
-     *
-     * @deprecated use {@link Parser#loadFromXml(InputStream)}
      * @param fileName the path to the xml file
-     *
      * @return null if couldn't load file
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParserConfigurationException
+     * @throws ParserConfigurationException a ParserConfigurationException
+     * @throws SAXException a SAXException
+     * @throws IOException an IOException
+     * @deprecated use {@link Parser#loadFromXml(InputStream)}
      */
     @Deprecated
     public Vector<PlateForm> loadFromXml(String fileName) throws ParserConfigurationException, SAXException,
-        IOException {
+            IOException { // TODO javadoc
         InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
         return this.loadFromXml(inStream);
     }
 
     /**
-     *
      * @param inStream input stream from the xml file
      * @return {@link Vector} of loaded {@link PlateForm}s
-     * @throws ParserConfigurationException
-     * @throws SAXException
-     * @throws IOException
+     * @throws ParserConfigurationException a ParserConfigurationException
+     * @throws SAXException a SAXException
+     * @throws IOException an IOException
      */
     public Vector<PlateForm> loadFromXml(InputStream inStream) throws ParserConfigurationException, SAXException,
-        IOException {
+            IOException {  // TODO javadoc
         Vector<PlateForm> plateForms = new Vector<>();
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -273,7 +270,7 @@ public class Parser {
     public String parse(RecognizedPlate recognizedPlate, int syntaxAnalysisMode) {
         if (syntaxAnalysisMode == 0) {
             Main.rg.insertText(" result : " + recognizedPlate.getString() + " --> <font size=15>"
-                + recognizedPlate.getString() + "</font><hr><br>");
+                    + recognizedPlate.getString() + "</font><hr><br>");
             return recognizedPlate.getString();
         }
 
@@ -292,17 +289,17 @@ public class Parser {
                 continue; // skip unflagged
             }
             for (int i = 0; i <= (length - form.length()); i++) { // posuvanie
-                                                                  // formy po
-                                                                  // znacke
+                // formy po
+                // znacke
                 // System.out.println("comparing "+recognizedPlate.getString()+" with form "+form.name+" and offset "+i
                 // );
                 FinalPlate finalPlate = new FinalPlate();
                 for (int ii = 0; ii < form.length(); ii++) { // prebehnut vsetky
-                                                             // znaky formy
+                    // znaky formy
                     // form.getPosition(ii).allowedChars // zoznam povolenych
                     RecognizedChar rc = recognizedPlate.getChar(ii + i); // znak
-                                                                         // na
-                                                                         // znacke
+                    // na
+                    // znacke
 
                     if (form.getPosition(ii).isAllowed(rc.getPattern(0).getChar())) {
                         finalPlate.addChar(rc.getPattern(0).getChar());
@@ -312,9 +309,9 @@ public class Parser {
                             if (form.getPosition(ii).isAllowed(rc.getPattern(x).getChar())) {
                                 RecognizedChar.RecognizedPattern rp = rc.getPattern(x);
                                 finalPlate.requiredChanges += (rp.getCost() / 100); // +x
-                                                                                    // za
-                                                                                    // jeho
-                                                                                    // cost
+                                // za
+                                // jeho
+                                // cost
                                 finalPlate.addChar(rp.getChar());
                                 break;
                             }

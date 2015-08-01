@@ -120,7 +120,7 @@ public class Graph {
         }
     }
 
-    static public class ProbabilityDistributor {
+    public static class ProbabilityDistributor {
         float center;
         float power;
         int leftMargin;
@@ -376,7 +376,7 @@ public class Graph {
         }
 
         if (this.peaks != null) { // uz boli vyhladane aj peaky, renderujeme aj
-                                  // tie
+            // tie
             graphicContent.setColor(Color.RED);
             int i = 0;
             double multConst = (double) width / this.yValues.size();
@@ -399,8 +399,8 @@ public class Graph {
 
         for (int ay = 0; ay < content.getHeight(); ay += 20) {
             graphicAxis.drawString(
-                new Integer(new Float((1 - ((float) ay / content.getHeight())) * 100).intValue()).toString() + "%",
-                1, ay + 15);
+                    new Integer(new Float((1 - ((float) ay / content.getHeight())) * 100).intValue()).toString() + "%",
+                    1, ay + 15);
             graphicAxis.drawLine(25, ay + 5, 35, ay + 5);
         }
         graphicContent.dispose();
@@ -439,7 +439,7 @@ public class Graph {
         }
 
         if (this.peaks != null) { // uz boli vyhladane aj peaky, renderujeme aj
-                                  // tie
+            // tie
             graphicContent.setColor(Color.RED);
             int i = 0;
             double multConst = (double) height / this.yValues.size();

@@ -68,7 +68,7 @@ for more info about JavaANPR.
 package net.sf.javaanpr.imageanalysis;
 
 public class PositionInPlate { // objekt nesie suradnice znaku v ZNACKE (left X,
-                               // right X)
+    // right X)
     public int x1;
     public int x2;
 

@@ -78,7 +78,7 @@ import java.net.URL;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
-public class Configurator {
+public final class Configurator {
 
     private static Configurator configurator;
 
@@ -128,9 +128,9 @@ public class Configurator {
         this.setStrProperty("char_neuralNetworkPath", "/neuralnetworks/network_avgres_813_map.xml");
         this.setStrProperty("char_learnAlphabetPath", "/alphabets/alphabet_8x13");
         this.setIntProperty("intelligence_classification_method", 0); // 0 =
-                                                                      // pattern
-                                                                      // match
-                                                                      // ,1=nn
+        // pattern
+        // match
+        // ,1=nn
 
         // PLATEGRAPH
         this.setDoubleProperty("plategraph_peakfootconstant", 0.7); // urci
@@ -150,7 +150,7 @@ public class Configurator {
         // PLATEGRAPHHORIZONTALGRAPH
         this.setDoubleProperty("platehorizontalgraph_peakfootconstant", 0.05);
         this.setIntProperty("platehorizontalgraph_detectionType", 1); // 1=edgedetection
-                                                                      // 0=magnitudederivate
+        // 0=magnitudederivate
 
         // PLATEVERICALGRAPH
         this.setDoubleProperty("plateverticalgraph_peakfootconstant", 0.42);
@@ -187,12 +187,12 @@ public class Configurator {
         // int maxK, double eps, double lambda, double micro
 
         this.setIntProperty("neural_maxk", 8000); // maximum K - maximalny pocet
-                                                  // iteracii
+        // iteracii
         this.setDoubleProperty("neural_eps", 0.07); // epsilon - pozadovana
         // presnost
         this.setDoubleProperty("neural_lambda", 0.05); // lambda factor -
-                                                       // rychlost ucenia,
-                                                       // velkost gradientu
+        // rychlost ucenia,
+        // velkost gradientu
         this.setDoubleProperty("neural_micro", 0.5); // micro - momentovy clen
         // pre prekonavanie
         // lokalnych extremov

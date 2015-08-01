@@ -75,7 +75,7 @@ import net.sf.javaanpr.configurator.Configurator;
 
 public class PlateVerticalGraph extends Graph {
     private static double peakFootConstant = // 0.42; /* CONSTANT*/
-    Configurator.getConfigurator().getDoubleProperty("plateverticalgraph_peakfootconstant");
+            Configurator.getConfigurator().getDoubleProperty("plateverticalgraph_peakfootconstant");
 
     Plate handle;
 
@@ -141,10 +141,10 @@ public class PlateVerticalGraph extends Graph {
                     }
                 }
             } // end for int 0->max
-              // nasli sme najvacsi peak
+            // nasli sme najvacsi peak
 
             if (this.yValues.elementAt(maxIndex) < (0.05 * super.getMaxValue())) {
-                break;// 0.4
+                break; // 0.4
             }
 
             int leftIndex = this.indexOfLeftPeakRel(maxIndex, PlateVerticalGraph.peakFootConstant);

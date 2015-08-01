@@ -10,7 +10,7 @@ img {
     border-color: #000000;
 }
 
-img.platesmall,img.bandsmall {
+img.platesmall, img.bandsmall {
     display: block;
 }
 
@@ -31,7 +31,7 @@ h2:first-letter {
     font-size: 25px;
 }
 
-div.platetxt span,div.bandtxt span {
+div.platetxt span, div.bandtxt span {
     display: block;
     margin-bottom: 5px;
 }
@@ -59,7 +59,7 @@ div.bandtxt {
     float: left;
 }
 
-img.band,img.bandgraph,img.plate,img.plategraph {
+img.band, img.bandgraph, img.plate, img.plategraph {
     margin-top: 1px;
     display: block;
 }

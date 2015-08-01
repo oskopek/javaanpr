@@ -99,7 +99,8 @@ public class RecognitionIT {
 
     /*
      * TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly See:
-     * http://stackoverflow.com/questions/2408613/problem-reading-jpeg-image-using-imageio-readfile-file B/W images load without
+     * http://stackoverflow.com/questions/2408613/problem-reading-jpeg-image-using-imageio-readfile-file B/W images
+     * load without
      * a problem: for now - using snapshots/test_041.jpg
      */
     @Test
@@ -122,7 +123,8 @@ public class RecognitionIT {
         assertNotNull("carSnap.image is null", carSnap.image);
 
         /*
-         * Show CarSnapshot loaded image for 5s t = new TestImageDraw(carSnap.image); Thread.sleep(5000); t.frame.dispose();
+         * Show CarSnapshot loaded image for 5s t = new TestImageDraw(carSnap.image); Thread.sleep(5000); t.frame
+         * .dispose();
          */
 
         Intelligence intel = new Intelligence();
@@ -141,8 +143,9 @@ public class RecognitionIT {
 
     /**
      * Goes through all the test images and checks if they are correctly recognized.
-     *
+     * <p/>
      * This is only an information test right now, doesn't fail.
+     *
      * @throws Exception
      */
     @Test
@@ -167,7 +170,7 @@ public class RecognitionIT {
         int correctCount = 0;
         int counter = 0;
         boolean correct = false;
-        for(File snap : snapshots) {
+        for (File snap : snapshots) {
             CarSnapshot carSnap = new CarSnapshot(new FileInputStream(snap));
             assertNotNull("carSnap is null", carSnap);
             assertNotNull("carSnap.image is null", carSnap.image);
@@ -181,7 +184,8 @@ public class RecognitionIT {
             //TODO enable these checks once the test passes
             // Are you sure the image has the correct color space?
             //recognitionErrors.checkThat("The licence plate is null", numberPlate, is(notNullValue()));
-            //recognitionErrors.checkThat("The file \"" + snapName + "\" was incorrectly recognized.", numberPlate, is(plateCorrect));
+            //recognitionErrors.checkThat("The file \"" + snapName + "\" was incorrectly recognized.", numberPlate,
+            // is(plateCorrect));
 
             if (numberPlate != null && numberPlate.equals(plateCorrect)) {
                 correctCount++;
@@ -191,11 +195,13 @@ public class RecognitionIT {
             carSnap.close();
 
             counter++;
-            LOGGER.debug("Finished recognizing {} ({} of {})\t{}", snapName, counter, snapshots.length, correct ? "correct" : "incorrect");
+            LOGGER.debug("Finished recognizing {} ({} of {})\t{}", snapName, counter, snapshots.length,
+                    correct ? "correct" : "incorrect");
             correct = false;
         }
 
-        LOGGER.info("Correct images: {}, total images: {}, accuracy: {}%", correctCount, snapshots.length, (float) correctCount / (float) snapshots.length * 100f);
+        LOGGER.info("Correct images: {}, total images: {}, accuracy: {}%", correctCount, snapshots.length,
+                (float) correctCount / (float) snapshots.length * 100f);
 
     }
 }

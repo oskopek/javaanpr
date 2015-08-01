@@ -77,13 +77,13 @@ public class BandGraph extends Graph {
     private Band handle;
 
     private static double peakFootConstant = Configurator.getConfigurator().getDoubleProperty(
-        "bandgraph_peakfootconstant"); // 0.75
+            "bandgraph_peakfootconstant"); // 0.75
     private static double peakDiffMultiplicationConstant = Configurator.getConfigurator().getDoubleProperty(
-        "bandgraph_peakDiffMultiplicationConstant"); // 0.2
+            "bandgraph_peakDiffMultiplicationConstant"); // 0.2
 
     public BandGraph(Band handle) {
         this.handle = handle; // nesie odkaz na obrazok (band), ku ktoremu sa
-                              // graf vztahuje
+        // graf vztahuje
     }
 
     public class PeakComparer implements Comparator<Object> {
@@ -97,7 +97,7 @@ public class BandGraph extends Graph {
             // return ((Peak)peak).center(); // left > right
 
             return this.yValues.elementAt(((Peak) peak).getCenter()); // velkost
-                                                                      // peaku
+            // peaku
         }
 
         @Override
@@ -145,11 +145,11 @@ public class BandGraph extends Graph {
         Vector<Peak> outPeaksFiltered = new Vector<>();
         for (Peak p : outPeaks) {
             if ((p.getDiff() > (2 * this.handle.getHeight())) && // ak nieje znacka
-                (// prilis uzka
-                p.getDiff() < (15 * this.handle.getHeight() // alebo nie je
-                // prilis siroka
-                ))) {
-                outPeaksFiltered.add(p);// znacka ok, bereme ju
+                    (// prilis uzka
+                            p.getDiff() < (15 * this.handle.getHeight() // alebo nie je
+                                    // prilis siroka
+                            ))) {
+                outPeaksFiltered.add(p); // znacka ok, bereme ju
                 // else outPeaksFiltered.add(p);// znacka ok, bereme ju
             }
         }
