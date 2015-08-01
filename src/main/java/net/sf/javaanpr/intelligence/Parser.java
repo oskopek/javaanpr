@@ -67,24 +67,21 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.intelligence;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Vector;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
-
-//import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Vector;
 
 public class Parser {
     public class PlateForm {

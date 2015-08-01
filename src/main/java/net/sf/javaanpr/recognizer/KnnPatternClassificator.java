@@ -67,13 +67,13 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.recognizer;
 
+import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.imageanalysis.Char;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Vector;
-
-import net.sf.javaanpr.configurator.Configurator;
-import net.sf.javaanpr.imageanalysis.Char;
 
 public class KnnPatternClassificator extends CharacterRecognizer {
     Vector<Vector<Double>> learnVectors;

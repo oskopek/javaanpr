@@ -67,15 +67,13 @@ for more informations about JavaANPR.
 
 package net.sf.javaanpr.recognizer;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import net.sf.javaanpr.imageanalysis.Char;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
-
-import net.sf.javaanpr.imageanalysis.Char;
 
 public abstract class CharacterRecognizer {
 

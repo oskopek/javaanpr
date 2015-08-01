@@ -67,9 +67,8 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.gui.tools;
 
-import java.io.File;
-
 import javax.swing.filechooser.FileFilter;
+import java.io.File;
 
 public class ImageFileFilter extends FileFilter {
     @Override

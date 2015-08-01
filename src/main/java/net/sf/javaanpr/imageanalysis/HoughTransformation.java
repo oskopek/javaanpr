@@ -66,9 +66,7 @@ for more info about JavaANPR.
  */
 package net.sf.javaanpr.imageanalysis;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class HoughTransformation {

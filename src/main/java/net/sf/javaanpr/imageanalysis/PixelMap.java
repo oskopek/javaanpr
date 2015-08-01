@@ -67,11 +67,8 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.imageanalysis;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-//import java.util.Collection;
-//import java.util.Iterator;
-//import java.util.Set;
 import java.util.Stack;
 import java.util.Vector;
 

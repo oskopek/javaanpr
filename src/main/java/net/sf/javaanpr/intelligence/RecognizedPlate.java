@@ -67,9 +67,9 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.intelligence;
 
-import java.util.Vector;
-
 import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
+
+import java.util.Vector;
 
 public class RecognizedPlate {
     Vector<RecognizedChar> chars;

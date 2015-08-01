@@ -67,8 +67,9 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.gui;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import net.sf.javaanpr.imageanalysis.CarSnapshot;
+import net.sf.javaanpr.test.util.TestUtility;
+import org.junit.Test;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -76,10 +77,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.sf.javaanpr.imageanalysis.CarSnapshot;
-import net.sf.javaanpr.test.util.TestUtility;
-
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * Tests the class {@link ReportGenerator}.

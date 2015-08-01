@@ -67,11 +67,11 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.imageanalysis;
 
+import net.sf.javaanpr.configurator.Configurator;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
-
-import net.sf.javaanpr.configurator.Configurator;
 
 public class PlateGraph extends Graph {
 

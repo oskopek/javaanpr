@@ -67,10 +67,10 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.imageanalysis;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
+import net.sf.javaanpr.configurator.Configurator;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
@@ -82,10 +82,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
-
-import javax.imageio.ImageIO;
-
-import net.sf.javaanpr.configurator.Configurator;
 
 public class Photo implements AutoCloseable, Cloneable {
     public BufferedImage image;

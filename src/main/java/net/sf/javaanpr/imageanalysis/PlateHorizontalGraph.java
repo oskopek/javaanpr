@@ -67,12 +67,9 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.imageanalysis;
 
-//import java.util.Collections;
-//import java.util.Comparator;
+import net.sf.javaanpr.configurator.Configurator;
 
 import java.util.Vector;
-
-import net.sf.javaanpr.configurator.Configurator;
 
 public class PlateHorizontalGraph extends Graph {
     /*

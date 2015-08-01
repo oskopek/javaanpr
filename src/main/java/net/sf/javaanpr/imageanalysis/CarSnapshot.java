@@ -67,14 +67,14 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.imageanalysis;
 
+import net.sf.javaanpr.configurator.Configurator;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
-
-import net.sf.javaanpr.configurator.Configurator;
 
 public class CarSnapshot extends Photo {
     private static int distributor_margins = Configurator.getConfigurator().getIntProperty(

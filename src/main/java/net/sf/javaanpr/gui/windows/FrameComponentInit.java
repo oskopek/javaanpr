@@ -67,8 +67,7 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.gui.windows;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.*;
 
 public class FrameComponentInit extends javax.swing.JFrame {
     static final long serialVersionUID = 0;

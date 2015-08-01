@@ -67,11 +67,6 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.jar;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.UIManager;
-
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.gui.ReportGenerator;
 import net.sf.javaanpr.gui.windows.FrameComponentInit;
@@ -80,6 +75,10 @@ import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.imageanalysis.Char;
 import net.sf.javaanpr.intelligence.Intelligence;
 import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * <p>Main class which initializes the project, taking input parameters from command line and then running the project

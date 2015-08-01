@@ -67,22 +67,17 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.gui.windows;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-
 import net.sf.javaanpr.gui.tools.FileListModel;
 import net.sf.javaanpr.gui.tools.ImageFileFilter;
 import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.imageanalysis.Photo;
 import net.sf.javaanpr.jar.Main;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class FrameMain extends javax.swing.JFrame {
     static final long serialVersionUID = 0;

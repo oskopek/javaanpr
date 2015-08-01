@@ -67,13 +67,6 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.intelligence;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Vector;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.gui.TimeMeter;
 import net.sf.javaanpr.imageanalysis.Band;
@@ -87,8 +80,13 @@ import net.sf.javaanpr.recognizer.CharacterRecognizer;
 import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
 import net.sf.javaanpr.recognizer.KnnPatternClassificator;
 import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
-
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Vector;
 
 public class Intelligence {
     private static long lastProcessDuration = 0; // trvanie posledneho procesu v ms

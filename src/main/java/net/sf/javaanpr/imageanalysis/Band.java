@@ -67,12 +67,12 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.imageanalysis;
 
+import net.sf.javaanpr.configurator.Configurator;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.util.Vector;
-
-import net.sf.javaanpr.configurator.Configurator;
 
 public class Band extends Photo {
     public static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 25, 25);

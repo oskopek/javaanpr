@@ -67,19 +67,16 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.imageanalysis;
 
+import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.recognizer.CharacterRecognizer;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-//import java.awt.image.ConvolveOp;
-//import java.awt.image.Kernel;
 import java.util.Vector;
-//import org.omg.CORBA.TIMEOUT;
-import net.sf.javaanpr.configurator.Configurator;
-
-import net.sf.javaanpr.recognizer.CharacterRecognizer;
 
 public class Char extends Photo {
 

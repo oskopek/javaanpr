@@ -68,12 +68,11 @@ for more info about JavaANPR.
 package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
-
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 import java.io.InputStream;
+
+import static org.junit.Assert.*;
 
 public class PhotoTest {
 

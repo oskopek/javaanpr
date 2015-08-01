@@ -67,11 +67,10 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.gui.windows;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.net.URL;
-
 import net.sf.javaanpr.configurator.Configurator;
+
+import java.awt.*;
+import java.net.URL;
 
 public class FrameHelp extends javax.swing.JFrame {
     static final long serialVersionUID = 0;

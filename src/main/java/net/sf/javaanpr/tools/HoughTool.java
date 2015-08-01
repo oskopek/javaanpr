@@ -67,12 +67,12 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.tools;
 
+import net.sf.javaanpr.imageanalysis.HoughTransformation;
+import net.sf.javaanpr.imageanalysis.Photo;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
-import net.sf.javaanpr.imageanalysis.HoughTransformation;
-import net.sf.javaanpr.imageanalysis.Photo;
 
 public final class HoughTool {
 

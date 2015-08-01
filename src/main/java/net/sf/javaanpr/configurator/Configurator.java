@@ -67,7 +67,7 @@ for more info about JavaANPR.
 
 package net.sf.javaanpr.configurator;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
