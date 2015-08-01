@@ -34,9 +34,6 @@ import java.util.Properties;
 
 import static org.junit.Assert.*;
 
-/**
- *
- */
 public class RecognitionIT {
 
     @Rule
@@ -44,47 +41,20 @@ public class RecognitionIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RecognitionIT.class);
 
-    /*
-     * TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly See:
-     * http://stackoverflow.com/questions/2408613/problem-reading-jpeg-image-using-imageio-readfile-file B/W images
-     * load without
-     * a problem: for now - using snapshots/test_041.jpg
-     */
+//    TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly
+//    See: http://stackoverflow.com/questions/2408613/problem-reading-jpeg-image-using-imageio-readfile-file
+//    B/W images load without a problem: for now - using snapshots/test_041.jpg
     @Test
     public void intelligenceSingleTest() throws IOException, ParserConfigurationException, SAXException {
         final String image = "snapshots/test_041.jpg";
-
-        /*
-         * Show raw loaded image for 5s InputStream is = Configurator.getConfigurator().getResourceAsStream(image);
-         * BufferedImage bi = ImageIO.read(is); TestImageDraw t = new TestImageDraw(bi); Thread.sleep(5000); is =
-         * Configurator.getConfigurator().getResourceAsStream(image);
-         */
-
-        /*
-         * Show Photo loaded image for 5s Photo p = new Photo(is); t = new TestImageDraw(p.image); Thread.sleep(5000);
-         * p.close();
-         */
-
         CarSnapshot carSnap = new CarSnapshot(image);
         assertNotNull("carSnap is null", carSnap);
         assertNotNull("carSnap.image is null", carSnap.image);
-
-        /*
-         * Show CarSnapshot loaded image for 5s t = new TestImageDraw(carSnap.image); Thread.sleep(5000); t.frame
-         * .dispose();
-         */
-
         Intelligence intel = new Intelligence();
         assertNotNull(intel);
-
         String spz = intel.recognize(carSnap);
         assertNotNull("The licence plate is null - are you sure the image has the correct color space?", spz);
-
-        // System.out.println(spz);
-
         assertEquals("LM025BD", spz);
-
-        // System.out.println(intel.lastProcessDuration());
         carSnap.close();
     }
 
@@ -128,10 +98,10 @@ public class RecognitionIT {
 
             String numberPlate = intel.recognize(carSnap);
 
-            //TODO enable these checks once the test passes
+            // TODO enable these checks once the test passes
             // Are you sure the image has the correct color space?
-            //recognitionErrors.checkThat("The licence plate is null", numberPlate, is(notNullValue()));
-            //recognitionErrors.checkThat("The file \"" + snapName + "\" was incorrectly recognized.", numberPlate,
+            // recognitionErrors.checkThat("The licence plate is null", numberPlate, is(notNullValue()));
+            // recognitionErrors.checkThat("The file \"" + snapName + "\" was incorrectly recognized.", numberPlate,
             // is(plateCorrect));
 
             if (numberPlate != null && numberPlate.equals(plateCorrect)) {

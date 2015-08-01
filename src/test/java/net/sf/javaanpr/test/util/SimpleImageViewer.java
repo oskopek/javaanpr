@@ -24,39 +24,34 @@ import java.awt.image.BufferedImage;
 /**
  * A simple utility class to view an image - opens a GUI window (JFrame).
  */
-public class SimpleImageViewer {
+class SimpleImageViewer {
 
-    public JFrame frame;
-    BufferedImage img;
-    public int WIDTH = 800;
-    public int HEIGHT = 600;
+    private final JFrame frame;
+    private final BufferedImage img;
+    private final int WIDTH = 800;
+    private final int HEIGHT = 600;
 
     public SimpleImageViewer(BufferedImage img) {
         this.img = img;
         this.frame = new JFrame("WINDOW");
         this.frame.setVisible(true);
-
         this.start();
         this.frame.add(new JLabel(new ImageIcon(this.getImage())));
-
         this.frame.pack();
-        // frame.setSize(WIDTH, HEIGHT);
-        // Better to DISPOSE than EXIT
         this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
-    public Image getImage() {
+    private Image getImage() {
         return this.img;
     }
 
-    public void start() {
+    private void start() {
         while (true) {
             BufferStrategy bs = this.frame.getBufferStrategy();
             if (bs == null) {
                 this.frame.createBufferStrategy(4);
                 return;
             }
-
             Graphics g = bs.getDrawGraphics();
             g.drawImage(this.img, 0, 0, this.WIDTH, this.HEIGHT, null);
             g.dispose();
