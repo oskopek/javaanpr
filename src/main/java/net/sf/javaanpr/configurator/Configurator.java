@@ -24,7 +24,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
 public final class Configurator {
@@ -219,18 +218,18 @@ public final class Configurator {
         os.close();
     }
 
-    public void loadConfiguration() throws InvalidPropertiesFormatException, IOException {
+    public void loadConfiguration() throws IOException {
         this.loadConfiguration(this.fileName);
     }
 
-    public void loadConfiguration(String arg_file) throws InvalidPropertiesFormatException, IOException {
+    public void loadConfiguration(String arg_file) throws IOException {
         InputStream is = this.getResourceAsStream(arg_file);
 
         this.loadConfiguration(is);
         is.close();
     }
 
-    public void loadConfiguration(InputStream arg_stream) throws InvalidPropertiesFormatException, IOException {
+    public void loadConfiguration(InputStream arg_stream) throws IOException {
         if (arg_stream == null) {
             this.list = null;
             return;
