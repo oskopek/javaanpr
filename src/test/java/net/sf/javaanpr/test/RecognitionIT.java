@@ -95,7 +95,7 @@ public class RecognitionIT {
     @Rule
     public ErrorCollector recognitionErrors = new ErrorCollector();
 
-    final private static Logger LOGGER = LoggerFactory.getLogger(RecognitionIT.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecognitionIT.class);
 
     /*
      * TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly See:
@@ -146,7 +146,7 @@ public class RecognitionIT {
      * <p/>
      * This is only an information test right now, doesn't fail.
      *
-     * @throws Exception
+     * @throws Exception an Exception
      */
     @Test
     public void testAllSnapshots() throws Exception {

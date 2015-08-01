@@ -82,7 +82,7 @@ import net.sf.javaanpr.test.util.TestUtility;
 import org.junit.Test;
 
 /**
- * Tests the class {@link ReportGenerator}
+ * Tests the class {@link ReportGenerator}.
  */
 public class ReportGeneratorTest {
     TestUtility testUtility = new TestUtility();
@@ -238,7 +238,7 @@ public class ReportGeneratorTest {
     }
 
     /**
-     * Tests {@link ReportGenerator#saveImage(BufferedImage, String)} with invalid string input and a valid image input
+     * Tests {@link ReportGenerator#saveImage(BufferedImage, String)} with invalid string input and a valid image input.
      *
      * @throws IllegalArgumentException the illegal argument exception
      * @throws IOException Signals that an I/O exception has occurred.

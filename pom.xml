@@ -260,6 +260,9 @@
                             <logViolationsToConsole>true</logViolationsToConsole>
                             <failOnViolation>true</failOnViolation>
                             <failsOnError>true</failsOnError>
+                            <includeResources>true</includeResources>
+                            <includeTestResources>true</includeTestResources>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
                         </configuration>
                     </execution>
                 </executions>

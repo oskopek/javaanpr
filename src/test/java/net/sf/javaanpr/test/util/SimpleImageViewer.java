@@ -73,7 +73,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 /**
- * A simple utility class to view an image - opens a GUI window (JFrame)
+ * A simple utility class to view an image - opens a GUI window (JFrame).
  */
 public class SimpleImageViewer {
 
