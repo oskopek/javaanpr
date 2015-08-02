@@ -36,23 +36,23 @@ import static org.junit.Assert.*;
 
 public class RecognitionIT {
 
+    private static final int currentlyCorrectSnapshots = 53;
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecognitionIT.class);
     @Rule
     public ErrorCollector recognitionErrors = new ErrorCollector();
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RecognitionIT.class);
-
-//    TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly
-//    See: http://stackoverflow.com/questions/2408613/problem-reading-jpeg-image-using-imageio-readfile-file
-//    B/W images load without a problem: for now - using snapshots/test_041.jpg
+    //    TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly
+    //    See: http://stackoverflow.com/questions/2408613/problem-reading-jpeg-image-using-imageio-readfile-file
+    //    B/W images load without a problem: for now - using snapshots/test_041.jpg
     @Test
     public void intelligenceSingleTest() throws IOException, ParserConfigurationException, SAXException {
         final String image = "snapshots/test_041.jpg";
         CarSnapshot carSnap = new CarSnapshot(image);
         assertNotNull("carSnap is null", carSnap);
-        assertNotNull("carSnap.image is null", carSnap.image);
+        assertNotNull("carSnap.image is null", carSnap.getImage());
         Intelligence intel = new Intelligence();
         assertNotNull(intel);
-        String spz = intel.recognize(carSnap);
+        String spz = intel.recognize(carSnap, false);
         assertNotNull("The licence plate is null - are you sure the image has the correct color space?", spz);
         assertEquals("LM025BD", spz);
         carSnap.close();
@@ -60,7 +60,7 @@ public class RecognitionIT {
 
     /**
      * Goes through all the test images and checks if they are correctly recognized.
-     * <p/>
+     * <p>
      * This is only an information test right now, doesn't fail.
      *
      * @throws Exception an Exception
@@ -86,17 +86,18 @@ public class RecognitionIT {
 
         int correctCount = 0;
         int counter = 0;
-        boolean correct = false;
+        boolean correct;
         for (File snap : snapshots) {
+            correct = false;
             CarSnapshot carSnap = new CarSnapshot(new FileInputStream(snap));
             assertNotNull("carSnap is null", carSnap);
-            assertNotNull("carSnap.image is null", carSnap.image);
+            assertNotNull("carSnap.image is null", carSnap.getImage());
 
             String snapName = snap.getName();
             String plateCorrect = properties.getProperty(snapName);
             assertNotNull(plateCorrect);
 
-            String numberPlate = intel.recognize(carSnap);
+            String numberPlate = intel.recognize(carSnap, false);
 
             // TODO enable these checks once the test passes
             // Are you sure the image has the correct color space?
@@ -108,17 +109,13 @@ public class RecognitionIT {
                 correctCount++;
                 correct = true;
             }
-
             carSnap.close();
-
             counter++;
             LOGGER.debug("Finished recognizing {} ({} of {})\t{}", snapName, counter, snapshots.length,
                     correct ? "correct" : "incorrect");
-            correct = false;
         }
-
         LOGGER.info("Correct images: {}, total images: {}, accuracy: {}%", correctCount, snapshots.length,
                 (float) correctCount / (float) snapshots.length * 100f);
-
+        assertEquals(currentlyCorrectSnapshots, correctCount);
     }
 }

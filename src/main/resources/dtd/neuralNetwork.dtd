@@ -15,7 +15,7 @@
   ~ permissions and limitations under the License.
   -->
 
-<!ELEMENT input EMPTY >
+        <!ELEMENT input EMPTY >
         <!ATTLIST input index NMTOKEN #REQUIRED >
         <!ATTLIST input weight NMTOKEN #REQUIRED >
 

@@ -17,54 +17,59 @@
 package net.sf.javaanpr.gui.windows;
 
 import net.sf.javaanpr.configurator.Configurator;
+import org.jdesktop.layout.GroupLayout;
+import org.jdesktop.layout.LayoutStyle;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.net.URL;
 
-public class FrameHelp extends javax.swing.JFrame {
-    static final long serialVersionUID = 0;
+public class FrameHelp extends JFrame {
 
-    public static int SHOW_HELP = 0;
-    public static int SHOW_ABOUT = 1;
-    public int mode;
+    public enum MODE {
+        SHOW_HELP,
+        SHOW_ABOUT
+    }
+
+    private static final long serialVersionUID = 0L;
+    public MODE mode;
+
+    private JEditorPane editorPane;
+    private JButton helpWindowClose;
+    private JScrollPane jScrollPane1;
 
     /**
      * Creates new form FrameHelp.
      *
      * @param mode the mode
+     * @throws IOException in case the file to show in given mode failed to load
      */
-    public FrameHelp(int mode) { // TODO javadoc
+    public FrameHelp(MODE mode) throws IOException { // TODO javadoc
         this.initComponents();
         this.mode = mode;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = this.getWidth();
         int height = this.getHeight();
         this.setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
-        try {
-            if (mode == FrameHelp.SHOW_ABOUT) {
-                URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_about"));
-                System.out.println(url);
-                this.editorPane.setPage(url);
-            } else {
-                URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_help"));
-                System.out.println(url);
-                this.editorPane.setPage(url);
-            }
-        } catch (Exception e) {
-            this.dispose();
+        if (mode == MODE.SHOW_ABOUT) {
+            URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_about"));
+            this.editorPane.setPage(url);
+        } else if (mode == MODE.SHOW_HELP) {
+            URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_help"));
+            this.editorPane.setPage(url);
         }
         this.setVisible(true);
     }
 
-    // <editor-fold defaultstate="collapsed"
-    // desc=" Generated Code ">//GEN-BEGIN:initComponents
     private void initComponents() {
-        this.jScrollPane1 = new javax.swing.JScrollPane();
-        this.editorPane = new javax.swing.JEditorPane();
-        this.helpWindowClose = new javax.swing.JButton();
+        this.jScrollPane1 = new JScrollPane();
+        this.editorPane = new JEditorPane();
+        this.helpWindowClose = new JButton();
 
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        this.setTitle("JavaANPR");
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setTitle("JavaANPR - Help");
         this.setResizable(false);
         this.jScrollPane1.setViewportView(this.editorPane);
 
@@ -77,35 +82,22 @@ public class FrameHelp extends javax.swing.JFrame {
             }
         });
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this.getContentPane());
+        GroupLayout layout = new GroupLayout(this.getContentPane());
         this.getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-                layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(layout
-                                .createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                .add(org.jdesktop.layout.GroupLayout.TRAILING, this.helpWindowClose)
-                                .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 514,
-                                        Short.MAX_VALUE)).addContainerGap()));
-        layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-                org.jdesktop.layout.GroupLayout.TRAILING,
-                layout.createSequentialGroup().addContainerGap()
-                        .add(this.jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(this.helpWindowClose)
+        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.LEADING)
+                .add(layout.createSequentialGroup().addContainerGap()
+                        .add(layout.createParallelGroup(GroupLayout.LEADING)
+                                .add(GroupLayout.TRAILING, this.helpWindowClose)
+                                .add(this.jScrollPane1, GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE))
                         .addContainerGap()));
+        layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.LEADING).add(GroupLayout.TRAILING,
+                layout.createSequentialGroup().addContainerGap()
+                        .add(this.jScrollPane1, GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+                        .addPreferredGap(LayoutStyle.RELATED).add(this.helpWindowClose).addContainerGap()));
         this.pack();
-    } // </editor-fold> //GEN-END:initComponents
+    }
 
-    private void helpWindowCloseActionPerformed(
-            java.awt.event.ActionEvent evt) { // GEN-FIRST:event_helpWindowCloseActionPerformed
+    private void helpWindowCloseActionPerformed(ActionEvent evt) {
         this.dispose();
-    } // GEN-LAST:event_helpWindowCloseActionPerformed
-
-    // Variables declaration - do not modify
-    // GEN-BEGIN:variables
-    private javax.swing.JEditorPane editorPane;
-    private javax.swing.JButton helpWindowClose;
-    private javax.swing.JScrollPane jScrollPane1;
-    // End of variables declaration //GEN-END:variables
-
+    }
 }

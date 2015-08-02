@@ -37,22 +37,29 @@ import java.util.Date;
 import java.util.Random;
 import java.util.Vector;
 
-@SuppressWarnings("unused")
-// have a lot of them and need those variables
+/**
+ * Have a lot of them and need those variables.
+ */
 public class NeuralNetwork {
-    // holds list of layers
+
+    /**
+     * Holds a list of layers.
+     */
     private Vector<NeuralLayer> listLayers = new Vector<NeuralLayer>();
+
     private Random randomGenerator;
 
-    // rozmery su v poradi od najspodnejsej (input) po najvrchnejsiu (output)
-    // vrstvu
+    /**
+     * Dimensions are in order from the lowest (input) to highest (output) layer.
+     *
+     * @param dimensions number of neurons in each layer
+     */
     public NeuralNetwork(Vector<Integer> dimensions) {
-        // initialization of layers
         for (int i = 0; i < dimensions.size(); i++) {
             this.listLayers.add(new NeuralLayer(dimensions.elementAt(i), this));
         }
         this.randomGenerator = new Random();
-        // System.out.println("Created neural network with "+dimensions.size()+" layers");
+        // TODO logger System.out.println("Created neural network with "+dimensions.size()+" layers");
     }
 
     public NeuralNetwork(InputStream inStream) {
@@ -62,9 +69,10 @@ public class NeuralNetwork {
 
     public Vector<Double> test(Vector<Double> inputs) {
         if (inputs.size() != this.getLayer(0).numberOfNeurons()) {
-            throw new ArrayIndexOutOfBoundsException("[Error] NN-Test: You are trying to pass vector with "
-                    + inputs.size() + " values into neural layer with " + this.getLayer(0).numberOfNeurons()
-                    + " neurons. Consider using another network, or another descriptors.");
+            throw new ArrayIndexOutOfBoundsException(
+                    "[Error] NN-Test: You are trying to pass vector with " + inputs.size()
+                            + " values into neural layer with " + this.getLayer(0).numberOfNeurons() + " neurons. "
+                            + "Consider using another network, or another descriptors.");
         } else {
             return this.activities(inputs);
         }
@@ -75,16 +83,16 @@ public class NeuralNetwork {
             throw new NullPointerException(
                     "[Error] NN-Learn: You are using an empty training set, neural network couldn't be trained.");
         } else if (trainingSet.pairs.elementAt(0).inputs.size() != this.getLayer(0).numberOfNeurons()) {
-            throw new ArrayIndexOutOfBoundsException("[Error] NN-Test: You are trying to pass vector with "
-                    + trainingSet.pairs.elementAt(0).inputs.size() + " values into neural layer with "
-                    + this.getLayer(0).numberOfNeurons()
-                    + " neurons. Consider using another network, or another descriptors.");
+            throw new ArrayIndexOutOfBoundsException(
+                    "[Error] NN-Test: You are trying to pass vector with " + trainingSet.pairs.elementAt(0).inputs
+                            .size() + " values into neural layer with " + this.getLayer(0).numberOfNeurons()
+                            + " neurons. Consider using another network, or another " + "descriptors.");
         } else if (trainingSet.pairs.elementAt(0).outputs.size() != this.getLayer(this.numberOfLayers() - 1)
                 .numberOfNeurons()) {
-            throw new ArrayIndexOutOfBoundsException("[Error] NN-Test:  You are trying to pass vector with "
-                    + trainingSet.pairs.elementAt(0).inputs.size() + " values into neural layer with "
-                    + this.getLayer(0).numberOfNeurons()
-                    + " neurons. Consider using another network, or another descriptors.");
+            throw new ArrayIndexOutOfBoundsException(
+                    "[Error] NN-Test:  You are trying to pass vector with " + trainingSet.pairs.elementAt(0).inputs
+                            .size() + " values into neural layer with " + this.getLayer(0).numberOfNeurons()
+                            + " neurons. Consider using another network, or another " + "descriptors.");
         } else {
             this.adaptation(trainingSet, maxK, eps, lambda, micro);
         }
@@ -95,7 +103,7 @@ public class NeuralNetwork {
     }
 
     private void loadFromXml(InputStream inStream) {
-        System.out.println("NeuralNetwork : loading network topology from InputStream");
+        System.out.println("NeuralNetwork : loading network topology from InputStream"); // TODO logger
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         Document doc = null;
         try {
@@ -109,7 +117,7 @@ public class NeuralNetwork {
         }
 
         Node nodeNeuralNetwork = doc.getDocumentElement();
-        if (!nodeNeuralNetwork.getNodeName().equals("neuralNetwork")) {
+        if (!nodeNeuralNetwork.getNodeName().equals("neuralNetwork")) { // TODO logger
             System.err.println("[Error] NN-Load: Parse error in XML file, neural network couldn't be loaded.");
         }
         // nodeNeuralNetwork ok
@@ -118,32 +126,30 @@ public class NeuralNetwork {
         NodeList nodeNeuralNetworkContent = nodeNeuralNetwork.getChildNodes();
         for (int innc = 0; innc < nodeNeuralNetworkContent.getLength(); innc++) {
             Node nodeStructure = nodeNeuralNetworkContent.item(innc);
-            if (nodeStructure.getNodeName().equals("structure")) { // for
-                // structure
-                // element
+            if (nodeStructure.getNodeName().equals("structure")) { // for structure element
                 NodeList nodeStructureContent = nodeStructure.getChildNodes();
                 for (int isc = 0; isc < nodeStructureContent.getLength(); isc++) {
                     Node nodeLayer = nodeStructureContent.item(isc);
-                    if (nodeLayer.getNodeName().equals("layer")) { // for layer
-                        // element
+                    if (nodeLayer.getNodeName().equals("layer")) { // for layer element
                         NeuralLayer neuralLayer = new NeuralLayer(this);
                         this.listLayers.add(neuralLayer);
                         NodeList nodeLayerContent = nodeLayer.getChildNodes();
                         for (int ilc = 0; ilc < nodeLayerContent.getLength(); ilc++) {
                             Node nodeNeuron = nodeLayerContent.item(ilc);
                             if (nodeNeuron.getNodeName().equals("neuron")) { // for neuron in layer
-                                Neuron neuron = new Neuron(Double.parseDouble(((Element) nodeNeuron)
-                                        .getAttribute("threshold")), neuralLayer);
+                                Neuron neuron =
+                                        new Neuron(Double.parseDouble(((Element) nodeNeuron).getAttribute("threshold")),
+                                                neuralLayer);
                                 neuralLayer.listNeurons.add(neuron);
                                 NodeList nodeNeuronContent = nodeNeuron.getChildNodes();
                                 for (int inc = 0; inc < nodeNeuronContent.getLength(); inc++) {
                                     Node nodeNeuralInput = nodeNeuronContent.item(inc);
-                                    // if (nodeNeuralInput==null)
+                                    // if (nodeNeuralInput==null)  // TODO logger
                                     // System.out.print("-"); else
                                     // System.out.print("*");
 
                                     if (nodeNeuralInput.getNodeName().equals("input")) {
-//                                        System.out.println("neuron at STR:"+innc+" LAY:"+isc+" NEU:"+ilc+" INP:"+inc);
+                                        //System.out.println("neuron at STR:"+innc+" LAY:"+isc+" NEU:"+ilc+" INP:"+inc);
                                         NeuralInput neuralInput = new NeuralInput(
                                                 Double.parseDouble(((Element) nodeNeuralInput).getAttribute("weight")),
                                                 neuron);
@@ -159,9 +165,9 @@ public class NeuralNetwork {
 
     }
 
-    public void saveToXml(String fileName) throws ParserConfigurationException, FileNotFoundException,
-            TransformerException {
-        System.out.println("Saving network topology to file " + fileName);
+    public void saveToXml(String fileName)
+            throws ParserConfigurationException, FileNotFoundException, TransformerException {
+        System.out.println("Saving network topology to file " + fileName); // TODO logger
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder parser = factory.newDocumentBuilder();
         Document doc = parser.newDocument();
@@ -170,45 +176,33 @@ public class NeuralNetwork {
         root.setAttribute("dateOfExport", new Date().toString());
         Element layers = doc.createElement("structure");
         layers.setAttribute("numberOfLayers", Integer.toString(this.numberOfLayers()));
-
         for (int il = 0; il < this.numberOfLayers(); il++) {
             Element layer = doc.createElement("layer");
             layer.setAttribute("index", Integer.toString(il));
             layer.setAttribute("numberOfNeurons", Integer.toString(this.getLayer(il).numberOfNeurons()));
-
             for (int in = 0; in < this.getLayer(il).numberOfNeurons(); in++) {
                 Element neuron = doc.createElement("neuron");
                 neuron.setAttribute("index", Integer.toString(in));
                 neuron.setAttribute("NumberOfInputs",
                         Integer.toString(this.getLayer(il).getNeuron(in).numberOfInputs()));
                 neuron.setAttribute("threshold", Double.toString(this.getLayer(il).getNeuron(in).threshold));
-
                 for (int ii = 0; ii < this.getLayer(il).getNeuron(in).numberOfInputs(); ii++) {
                     Element input = doc.createElement("input");
                     input.setAttribute("index", Integer.toString(ii));
                     input.setAttribute("weight", Double.toString(this.getLayer(il).getNeuron(in).getInput(ii).weight));
-
                     neuron.appendChild(input);
                 }
-
                 layer.appendChild(neuron);
             }
-
             layers.appendChild(layer);
         }
-
         root.appendChild(layers);
         doc.appendChild(root);
 
-        // save
         File xmlOutputFile = new File(fileName);
-        FileOutputStream fos;
-        Transformer transformer;
-
-        fos = new FileOutputStream(xmlOutputFile);
-        // Use a Transformer for output
+        FileOutputStream fos = new FileOutputStream(xmlOutputFile);
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        transformer = transformerFactory.newTransformer();
+        Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(fos);
         // transform source into result will do save
@@ -217,22 +211,198 @@ public class NeuralNetwork {
         transformer.transform(source, result);
     }
 
-    public static class SetOfIOPairs {
-        Vector<IOPair> pairs;
+    private double random() {
+        return this.randomGenerator.nextDouble();
+    }
 
-        public static class IOPair { // TU SOM PRIDAL STATIC, posovdne do tam
-            // nebolo
-            Vector<Double> inputs;
-            Vector<Double> outputs;
-
-            public IOPair(Vector<Double> inputs, Vector<Double> outputs) {
-                // corrected warning
-                // this.inputs = (Vector<Double>)inputs.clone();
-                // this.outputs = (Vector<Double>)outputs.clone();
-                this.inputs = new Vector<Double>(inputs);
-                this.outputs = new Vector<Double>(outputs);
+    private void computeGradient(Gradients gradients, Vector<Double> inputs, Vector<Double> requiredOutputs) {
+        this.activities(inputs);
+        for (int layerIndex = this.numberOfLayers() - 1; layerIndex >= 1;
+                layerIndex--) { // backpropagation cez vsetky vrstvy okrem poslednej
+            NeuralLayer currentLayer = this.getLayer(layerIndex);
+            if (currentLayer.isLayerTop()) {
+                // ak sa jedna o najvyssiu vrstvu
+                // pridame gradient prahov pre danu vrstvu do odpovedajuceho
+                // vektora a tento gradient pocitame cez neurony:
+                // gradients.thresholds.add(layerIndex, new Vector<Double>());
+                for (int neuronIndex = 0; neuronIndex < currentLayer.numberOfNeurons(); neuronIndex++) {
+                    Neuron currentNeuron = currentLayer.getNeuron(neuronIndex);
+                    gradients.setThreshold(layerIndex, neuronIndex,
+                            currentNeuron.output * (1 - currentNeuron.output) * (currentNeuron.output - requiredOutputs
+                                    .elementAt(neuronIndex)));
+                }
+                for (int neuronIndex = 0; neuronIndex < currentLayer.numberOfNeurons(); neuronIndex++) {
+                    Neuron currentNeuron = currentLayer.getNeuron(neuronIndex);
+                    for (int inputIndex = 0; inputIndex < currentNeuron.numberOfInputs(); inputIndex++) {
+                        NeuralInput currentInput = currentNeuron.getInput(inputIndex);
+                        gradients.setWeight(layerIndex, neuronIndex, inputIndex,
+                                gradients.getThreshold(layerIndex, neuronIndex) * currentLayer.lowerLayer()
+                                        .getNeuron(inputIndex).output);
+                    }
+                }
+            } else {
+                // ak sa jedna o spodnejsie vrstvy (najnizsiu vrstvu
+                // nepocitame, ideme len po 1.)
+                // pocitame gradient prahov :
+                // gradients.thresholds.add(layerIndex, new Vector<Double>());
+                for (int neuronIndex = 0; neuronIndex < currentLayer.numberOfNeurons(); neuronIndex++) {
+                    double aux = 0;
+                    // iterujeme cez vsetky axony neuronu (resp. synapsie neuronov na vyssej vrstve)
+                    for (int axonIndex = 0; axonIndex < currentLayer.upperLayer().numberOfNeurons(); axonIndex++) {
+                        aux += gradients.getThreshold(layerIndex + 1, axonIndex) * currentLayer.upperLayer()
+                                .getNeuron(axonIndex).getInput(neuronIndex).weight;
+                    }
+                    gradients.setThreshold(layerIndex, neuronIndex,
+                            currentLayer.getNeuron(neuronIndex).output * (1 - currentLayer
+                                    .getNeuron(neuronIndex).output) * aux);
+                }
+                // pocitame gradienty vah :
+                for (int neuronIndex = 0; neuronIndex < currentLayer.numberOfNeurons(); neuronIndex++) {
+                    Neuron currentNeuron = currentLayer.getNeuron(neuronIndex);
+                    for (int inputIndex = 0; inputIndex < currentNeuron.numberOfInputs(); inputIndex++) {
+                        NeuralInput currentInput = currentNeuron.getInput(inputIndex);
+                        gradients.setWeight(layerIndex, neuronIndex, inputIndex,
+                                gradients.getThreshold(layerIndex, neuronIndex) * currentLayer.lowerLayer()
+                                        .getNeuron(inputIndex).output);
+                    }
+                }
             }
         }
+    }
+
+    private void computeTotalGradient(Gradients totalGradients, Gradients partialGradients, SetOfIOPairs trainingSet) {
+        totalGradients.resetGradients();
+        for (SetOfIOPairs.IOPair pair : trainingSet.pairs) {
+            this.computeGradient(partialGradients, pair.inputs, pair.outputs);
+            for (int layerIndex = this.numberOfLayers() - 1; layerIndex >= 1;
+                    layerIndex--) { // all layers except last one
+                NeuralLayer currentLayer = this.getLayer(layerIndex);
+                for (int neuronIndex = 0; neuronIndex < currentLayer.numberOfNeurons(); neuronIndex++) {
+                    // upravime gradient prahov :
+                    totalGradients.incrementThreshold(layerIndex, neuronIndex,
+                            partialGradients.getThreshold(layerIndex, neuronIndex));
+                    for (int inputIndex = 0; inputIndex < currentLayer.lowerLayer().numberOfNeurons(); inputIndex++) {
+                        totalGradients.incrementWeight(layerIndex, neuronIndex, inputIndex,
+                                partialGradients.getWeight(layerIndex, neuronIndex, inputIndex));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param trainingSet training set
+     * @param maxK maximum number of iterations
+     * @param eps epsilon, required accuracy of normal gradient length
+     * @param lambda speed of learning (0.1)
+     * @param micro moment factor
+     */
+    private void adaptation(SetOfIOPairs trainingSet, int maxK, double eps, double lambda, double micro) {
+        double delta;
+        Gradients deltaGradients = new Gradients(this);
+        Gradients totalGradients = new Gradients(this);
+        Gradients partialGradients = new Gradients(this);
+        System.out.println("setting up random weights and thresholds ..."); // TODO logger
+        // prahy a vahy neuronovej siete nastavime na nahodne hodnoty,
+        // delta-gradienty vynulujeme (oni sa nuluju uz pri init)
+        for (int layerIndex = this.numberOfLayers() - 1; layerIndex >= 1;
+                layerIndex--) { // top down all layers except last one
+            NeuralLayer currentLayer = this.getLayer(layerIndex);
+            for (int neuronIndex = 0; neuronIndex < currentLayer.numberOfNeurons(); neuronIndex++) {
+                Neuron currentNeuron = currentLayer.getNeuron(neuronIndex);
+                currentNeuron.threshold = (2 * this.random()) - 1;
+                for (int inputIndex = 0; inputIndex < currentNeuron.numberOfInputs(); inputIndex++) {
+                    currentNeuron.getInput(inputIndex).weight = (2 * this.random()) - 1;
+                }
+            }
+        }
+
+        int curK = 0;
+        double curE = Double.POSITIVE_INFINITY; // pociatocna aktualna presnost bude nekonecna (tendencia znizovania)
+        System.out.println("entering adaptation loop ... (maxK = " + maxK + ")"); // TODO logger
+        while ((curK < maxK) && (curE > eps)) {
+            this.computeTotalGradient(totalGradients, partialGradients, trainingSet);
+            for (int layerIndex = this.numberOfLayers() - 1; layerIndex >= 1;
+                    layerIndex--) { // top down all layers except last one
+                NeuralLayer currentLayer = this.getLayer(layerIndex);
+                for (int neuronIndex = 0; neuronIndex < currentLayer.numberOfNeurons(); neuronIndex++) {
+                    Neuron currentNeuron = currentLayer.getNeuron(neuronIndex);
+                    delta = (-lambda * totalGradients.getThreshold(layerIndex, neuronIndex)) + (micro * deltaGradients
+                            .getThreshold(layerIndex, neuronIndex));
+                    currentNeuron.threshold += delta;
+                    deltaGradients.setThreshold(layerIndex, neuronIndex, delta);
+                }
+
+                for (int neuronIndex = 0; neuronIndex < currentLayer.numberOfNeurons(); neuronIndex++) {
+                    Neuron currentNeuron = currentLayer.getNeuron(neuronIndex);
+                    for (int inputIndex = 0; inputIndex < currentNeuron.numberOfInputs(); inputIndex++) {
+                        delta = (-lambda * totalGradients.getWeight(layerIndex, neuronIndex, inputIndex)) + (micro
+                                * deltaGradients.getWeight(layerIndex, neuronIndex, inputIndex));
+                        currentNeuron.getInput(inputIndex).weight += delta;
+                        deltaGradients.setWeight(layerIndex, neuronIndex, inputIndex, delta);
+                    }
+                }
+            }
+            curE = totalGradients.getGradientAbs();
+            curK++;
+            if ((curK % 25) == 0) {
+                System.out.println("curK=" + curK + "   curE=" + curE); // TODO logger
+            }
+        }
+    }
+
+    private Vector<Double> activities(Vector<Double> inputs) {
+        for (int layerIndex = 0; layerIndex < this.numberOfLayers(); layerIndex++) {
+            for (int neuronIndex = 0; neuronIndex < this.getLayer(layerIndex).numberOfNeurons(); neuronIndex++) {
+                double sum = this.getLayer(layerIndex).getNeuron(neuronIndex).threshold; // sum <- threshold
+                for (int inputIndex = 0; inputIndex < this.getLayer(layerIndex).getNeuron(neuronIndex).numberOfInputs();
+                        inputIndex++) { // vstupy
+                    // vynasobi vahu so vstupom
+                    if (layerIndex == 0) { // ak sme na najspodnejsej vrstve, nasobime vahy so vstupmi
+                        sum += this.getLayer(layerIndex).getNeuron(neuronIndex).getInput(inputIndex).weight * inputs
+                                .elementAt(neuronIndex);
+                    } else { // na hornych vrstvach nasobime vahy s vystupmi nizsej vrstvy
+                        sum += this.getLayer(layerIndex).getNeuron(neuronIndex).getInput(inputIndex).weight * this
+                                .getLayer(layerIndex - 1).getNeuron(inputIndex).output;
+                    }
+                }
+                this.getLayer(layerIndex).getNeuron(neuronIndex).output = this.gainFunction(sum);
+            }
+        }
+        Vector<Double> output = new Vector<Double>();
+        for (int i = 0; i < this.getLayer(this.numberOfLayers() - 1).numberOfNeurons(); i++) {
+            output.add(this.getLayer(this.numberOfLayers() - 1).getNeuron(i).output);
+        }
+        return output;
+    }
+
+    private double gainFunction(double x) {
+        return 1 / (1 + Math.exp(-x));
+    }
+
+    private NeuralLayer getLayer(int index) {
+        return this.listLayers.elementAt(index);
+    }
+
+    public void printNeuralNetwork() { // TODO logger
+        for (int layerIndex = 0; layerIndex < this.numberOfLayers(); layerIndex++) {
+            System.out.println("Layer " + layerIndex);
+            for (int neuronIndex = 0; neuronIndex < this.getLayer(layerIndex).numberOfNeurons(); neuronIndex++) {
+                System.out.print("      Neuron " + neuronIndex + " (threshold=" + this.getLayer(layerIndex)
+                        .getNeuron(neuronIndex).threshold + ") : ");
+                for (int inputIndex = 0; inputIndex < this.getLayer(layerIndex).getNeuron(neuronIndex).numberOfInputs();
+                        inputIndex++) {
+                    System.out
+                            .print(this.getLayer(layerIndex).getNeuron(neuronIndex).getInput(inputIndex).weight + " ");
+                }
+                System.out.println();
+            }
+        }
+    }
+
+    public static class SetOfIOPairs {
+
+        private Vector<IOPair> pairs;
 
         public SetOfIOPairs() {
             this.pairs = new Vector<IOPair>();
@@ -249,42 +419,57 @@ public class NeuralNetwork {
         int size() {
             return this.pairs.size();
         }
+
+        public static class IOPair {
+            private Vector<Double> inputs;
+            private Vector<Double> outputs;
+
+            public IOPair(Vector<Double> inputs, Vector<Double> outputs) {
+                this.inputs = new Vector<Double>(inputs);
+                this.outputs = new Vector<Double>(outputs);
+            }
+        }
     }
 
-    private class NeuralInput {
-        double weight;
-        int index;
-        Neuron neuron;
+    private final class NeuralInput {
+        private double weight;
+        private int index;
+        private Neuron neuron;
 
-        NeuralInput(double weight, Neuron neuron) {
+        private NeuralInput(double weight, Neuron neuron) {
             this.neuron = neuron;
             this.weight = weight;
             this.index = this.neuron.numberOfInputs();
-            // System.out.println("Created neural input "+this.index+" with weight "+this.weight);
+            // System.out.println("Created neural input "+this.index+" with weight "+this.weight); // TODO logger
         }
-    } // end class NeuralInput
+    }
 
-    private class Neuron {
-        private Vector<NeuralInput> listInputs = new Vector<NeuralInput>(); // holds list of inputs
-        int index;
-        public double threshold;
-        public double output;
-        NeuralLayer neuralLayer;
+    private final class Neuron {
+        private double threshold;
+        private double output;
+        private int index;
+        private NeuralLayer neuralLayer;
+        private Vector<NeuralInput> listInputs = new Vector<NeuralInput>();
 
-        // initializes all neuron weights to 1 parameter specifies number of weights
-
-        Neuron(double threshold, NeuralLayer neuralLayer) {
+        private Neuron(double threshold, NeuralLayer neuralLayer) {
             this.threshold = threshold;
             this.neuralLayer = neuralLayer;
             this.index = this.neuralLayer.numberOfNeurons();
         }
 
-        Neuron(int numberOfInputs, double threshold, NeuralLayer neuralLayer) {
+        /**
+         * Initializes all neuron weights to 1.0d.
+         *
+         * @param numberOfInputs number of weights of the neuron
+         * @param threshold the threshold of the neuron
+         * @param neuralLayer which layer the neuron belongs to
+         */
+        private Neuron(int numberOfInputs, double threshold, NeuralLayer neuralLayer) {
             this.threshold = threshold;
             this.neuralLayer = neuralLayer;
             this.index = this.neuralLayer.numberOfNeurons();
             for (int i = 0; i < numberOfInputs; i++) {
-                this.listInputs.add(new NeuralInput(1.0, this));
+                this.listInputs.add(new NeuralInput(1.0d, this));
             }
         }
 
@@ -296,43 +481,42 @@ public class NeuralNetwork {
             return this.listInputs.elementAt(index);
         }
 
-    } // end class Neuron
+    }
 
-    private class NeuralLayer {
-        // holds list od neurons
+    private final class NeuralLayer {
+        private int index;
+        private NeuralNetwork neuralNetwork;
         private Vector<Neuron> listNeurons = new Vector<Neuron>();
-        int index;
-        NeuralNetwork neuralNetwork;
 
-        NeuralLayer(NeuralNetwork neuralNetwork) {
+        private NeuralLayer(NeuralNetwork neuralNetwork) {
             this.neuralNetwork = neuralNetwork;
             this.index = this.neuralNetwork.numberOfLayers();
         }
 
-        // initializes all neurons in layer
-        NeuralLayer(int numberOfNeurons, NeuralNetwork neuralNetwork) {
+        /**
+         * Initializes all neurons in the layer.
+         *
+         * @param numberOfNeurons the number of neurons in this layer
+         * @param neuralNetwork the network
+         */
+        private NeuralLayer(int numberOfNeurons, NeuralNetwork neuralNetwork) {
             this.neuralNetwork = neuralNetwork;
             this.index = this.neuralNetwork.numberOfLayers();
-            // ak sa jedna o najnizsiu vrstvu (0), kazdy neuron bude mat iba 1
-            // vstup
             for (int i = 0; i < numberOfNeurons; i++) {
                 if (this.index == 0) {
+                    // on the lowest layer (0), each neuron has 1 input
                     this.listNeurons.add(new Neuron(1, 0.0, this));
-                    /*
-                     * prahy neuronov najnizsej vrstvy su vzdy 0.0, vrstva iba distribuuje vstupy, aspon tak to vyplyva
-                     * z algoritmu na strane 111
-                     */
-                } else { // v opacnom pripade bude mat neuron tolko vstupov
-                    // kolko je neuronov nizsej vrstvy
-                    this.listNeurons.add(
-                        /*
-                         * prahy neuronou na vyssich vrstvach budu tiez 0.0, ale nemusia byt
-                         */
-                            new Neuron(this.neuralNetwork.getLayer(this.index - 1).numberOfNeurons(), 0.0, this));
+                    // threshold of neurons on the lowest layer are always 0.0, the layer only distributes inputs
+                    // (algorithm, page 111)
+                } else {
+                    // the thresholds of neurons on higher layers are also 0.0, but they don't have to be
+                    this.listNeurons
+                            .add(new Neuron(this.neuralNetwork.getLayer(this.index - 1).numberOfNeurons(), 0.0, this));
                 }
             }
             // System.out.println("Created neural layer "+this.index+" with "+numberOfNeurons+" neurons");
-        } // end constructor
+            // TODO logger
+        }
 
         public int numberOfNeurons() {
             return this.listNeurons.size();
@@ -364,84 +548,85 @@ public class NeuralNetwork {
             return this.listNeurons.elementAt(index);
         }
 
-    } // end class NeuralLayer
+    }
 
-    private class Gradients {
-        Vector<Vector<Double>> thresholds;
-        Vector<Vector<Vector<Double>>> weights;
-        NeuralNetwork neuralNetwork;
+    private final class Gradients {
+        private Vector<Vector<Double>> thresholds;
+        private Vector<Vector<Vector<Double>>> weights;
+        private NeuralNetwork neuralNetwork;
 
-        Gradients(NeuralNetwork network) {
+        private Gradients(NeuralNetwork network) {
             this.neuralNetwork = network;
             this.initGradients();
         }
 
-        public void initGradients() {
+        private void initGradients() {
             this.thresholds = new Vector<Vector<Double>>();
             this.weights = new Vector<Vector<Vector<Double>>>();
-            // System.out.println("init for threshold gradient "+this.toString());
-            for (int il = 0; il < this.neuralNetwork.numberOfLayers(); il++) {
+            // System.out.println("init for threshold gradient "+this.toString()); // TODO logger
+            for (int layerIndex = 0; layerIndex < this.neuralNetwork.numberOfLayers(); layerIndex++) {
                 this.thresholds.add(new Vector<Double>());
                 this.weights.add(new Vector<Vector<Double>>());
-                for (int in = 0; in < this.neuralNetwork.getLayer(il).numberOfNeurons(); in++) {
-                    this.thresholds.elementAt(il).add(0.0);
-                    this.weights.elementAt(il).add(new Vector<Double>());
-                    for (int ii = 0; ii < this.neuralNetwork.getLayer(il).getNeuron(in).numberOfInputs(); ii++) {
-                        this.weights.elementAt(il).elementAt(in).add(0.0);
-                    } // for each input
-                } // for each neuron
-            } // for each layer
-        }
-
-        public void resetGradients() { // resets to 0
-            for (int il = 0; il < this.neuralNetwork.numberOfLayers(); il++) {
-                for (int in = 0; in < this.neuralNetwork.getLayer(il).numberOfNeurons(); in++) {
-                    this.setThreshold(il, in, 0.0);
-                    for (int ii = 0; ii < this.neuralNetwork.getLayer(il).getNeuron(in).numberOfInputs(); ii++) {
-                        this.setWeight(il, in, ii, 0.0);
+                for (int neuronIndex = 0; neuronIndex < this.neuralNetwork.getLayer(layerIndex).numberOfNeurons();
+                        neuronIndex++) {
+                    this.thresholds.elementAt(layerIndex).add(0.0);
+                    this.weights.elementAt(layerIndex).add(new Vector<Double>());
+                    for (int inputIndex = 0; inputIndex < this.neuralNetwork.getLayer(layerIndex).getNeuron(neuronIndex)
+                            .numberOfInputs(); inputIndex++) {
+                        this.weights.elementAt(layerIndex).elementAt(neuronIndex).add(0.0);
                     }
                 }
             }
         }
 
-        public double getThreshold(int il, int in) {
-            return this.thresholds.elementAt(il).elementAt(in);
+        /**
+         * Resets gradients to 0.
+         */
+        public void resetGradients() {
+            for (int layerIndex = 0; layerIndex < this.neuralNetwork.numberOfLayers(); layerIndex++) {
+                for (int neuronIndex = 0; neuronIndex < this.neuralNetwork.getLayer(layerIndex).numberOfNeurons();
+                        neuronIndex++) {
+                    this.setThreshold(layerIndex, neuronIndex, 0.0d);
+                    for (int inputIndex = 0; inputIndex < this.neuralNetwork.getLayer(layerIndex).getNeuron(neuronIndex)
+                            .numberOfInputs(); inputIndex++) {
+                        this.setWeight(layerIndex, neuronIndex, inputIndex, 0.0d);
+                    }
+                }
+            }
         }
 
-        public void setThreshold(int il, int in, double value) {
-            this.thresholds.elementAt(il).setElementAt(value, in);
+        public double getThreshold(int layerIndex, int neuronIndex) {
+            return this.thresholds.elementAt(layerIndex).elementAt(neuronIndex);
         }
 
-        public void incrementThreshold(int il, int in, double value) {
-            this.setThreshold(il, in, this.getThreshold(il, in) + value);
+        public void setThreshold(int layerIndex, int neuronIndex, double value) {
+            this.thresholds.elementAt(layerIndex).setElementAt(value, neuronIndex);
         }
 
-        public double getWeight(int il, int in, int ii) {
-            return this.weights.elementAt(il).elementAt(in).elementAt(ii);
+        public void incrementThreshold(int layerIndex, int neuronIndex, double value) {
+            this.setThreshold(layerIndex, neuronIndex, this.getThreshold(layerIndex, neuronIndex) + value);
         }
 
-        public void setWeight(int il, int in, int ii, double value) {
-            this.weights.elementAt(il).elementAt(in).setElementAt(value, ii);
+        public double getWeight(int layerIndex, int neuronIndex, int inputIndex) {
+            return this.weights.elementAt(layerIndex).elementAt(neuronIndex).elementAt(inputIndex);
         }
 
-        public void incrementWeight(int il, int in, int ii, double value) {
-            this.setWeight(il, in, ii, this.getWeight(il, in, ii) + value);
+        public void setWeight(int layerIndex, int neuronIndex, int inputIndex, double value) {
+            this.weights.elementAt(layerIndex).elementAt(neuronIndex).setElementAt(value, inputIndex);
+        }
+
+        public void incrementWeight(int layerIndex, int neuronIndex, int inputIndex, double value) {
+            this.setWeight(layerIndex, neuronIndex, inputIndex,
+                    this.getWeight(layerIndex, neuronIndex, inputIndex) + value);
         }
 
         public double getGradientAbs() {
             double currE = 0;
-
-            for (int il = 1; il < this.neuralNetwork.numberOfLayers(); il++) {
-                currE += this.vectorAbs(this.thresholds.elementAt(il));
-                currE += this.doubleVectorAbs(this.weights.elementAt(il));
+            for (int layerIndex = 1; layerIndex < this.neuralNetwork.numberOfLayers(); layerIndex++) {
+                currE += this.vectorAbs(this.thresholds.elementAt(layerIndex));
+                currE += this.doubleVectorAbs(this.weights.elementAt(layerIndex));
             }
             return currE;
-
-            // for (Vector<Double> vector : this.thresholds) currE +=
-            // this.vectorAbs(vector);
-            // for (Vector<Vector<Double>> doubleVector : this.weights) currE +=
-            // this.doubleVectorAbs(doubleVector);
-            // return currE;
         }
 
         private double doubleVectorAbs(Vector<Vector<Double>> doubleVector) {
@@ -459,286 +644,5 @@ public class NeuralNetwork {
             }
             return Math.sqrt(totalX);
         }
-
     }
-
-    private double random() {
-        return this.randomGenerator.nextDouble();
-    }
-
-    private void computeGradient(Gradients gradients, Vector<Double> inputs, Vector<Double> requiredOutputs) {
-        // Gradients gradients = new Gradients(this);
-        this.activities(inputs);
-        for (int il = this.numberOfLayers() - 1; il >= 1; il--) { // backpropagation
-            // cez
-            // vsetky
-            // vrstvy
-            // okrem
-            // poslednej
-            NeuralLayer currentLayer = this.getLayer(il);
-
-            if (currentLayer.isLayerTop()) { // ak sa jedna o najvyssiu vrstvu
-                // pridame gradient prahov pre danu vrstvu do odpovedajuceho
-                // vektora a tento gradient pocitame cez neurony :
-                // gradients.thresholds.add(il, new Vector<Double>());
-                for (int in = 0; in < currentLayer.numberOfNeurons(); in++) { // pre
-                    // vsetky
-                    // neurony
-                    // na
-                    // vrstve
-                    Neuron currentNeuron = currentLayer.getNeuron(in);
-                    gradients.setThreshold(il, in, currentNeuron.output * (1 - currentNeuron.output)
-                            * (currentNeuron.output - requiredOutputs.elementAt(in)));
-                } // end for each neuron
-
-                for (int in = 0; in < currentLayer.numberOfNeurons(); in++) { // for
-                    // each
-                    // neuron
-                    Neuron currentNeuron = currentLayer.getNeuron(in);
-                    for (int ii = 0; ii < currentNeuron.numberOfInputs(); ii++) { // for
-                        // each
-                        // neuron's
-                        // input
-                        NeuralInput currentInput = currentNeuron.getInput(ii);
-                        gradients.setWeight(il, in, ii, gradients.getThreshold(il, in)
-                                * currentLayer.lowerLayer().getNeuron(ii).output);
-                    } // end for each input
-                } // end for each neuron
-
-            } else { // ak sa jedna o spodnejsie vrstvy (najnizsiu vrstvu
-                // nepocitame, ideme len po 1.)
-                // pocitame gradient prahov :
-                // gradients.thresholds.add(il, new Vector<Double>());
-                for (int in = 0; in < currentLayer.numberOfNeurons(); in++) { // for
-                    // each
-                    // neuron
-                    double aux = 0;
-                    // iterujeme cez vsetky axony neuronu (resp. synapsie
-                    // neuronov na vyssej vrstve)
-                    for (int ia = 0; ia < currentLayer.upperLayer().numberOfNeurons(); ia++) {
-                        aux += gradients.getThreshold(il + 1, ia)
-                                * currentLayer.upperLayer().getNeuron(ia).getInput(in).weight;
-                    }
-                    gradients.setThreshold(il, in, currentLayer.getNeuron(in).output
-                            * (1 - currentLayer.getNeuron(in).output) * aux);
-                } // end for each neuron
-
-                // pocitame gradienty vah :
-                for (int in = 0; in < currentLayer.numberOfNeurons(); in++) { // for
-                    // each
-                    // neuron
-                    Neuron currentNeuron = currentLayer.getNeuron(in);
-                    for (int ii = 0; ii < currentNeuron.numberOfInputs(); ii++) { // for
-                        // each
-                        // neuron's
-                        // input
-                        NeuralInput currentInput = currentNeuron.getInput(ii);
-                        gradients.setWeight(il, in, ii, gradients.getThreshold(il, in)
-                                * currentLayer.lowerLayer().getNeuron(ii).output);
-                    } // end for each input
-                } // end for each neuron
-
-            } // end layer IF
-
-        } // end backgropagation for each layer
-        // return gradients;
-    }
-
-    private void computeTotalGradient(Gradients totalGradients, Gradients partialGradients, SetOfIOPairs trainingSet) {
-        // na zaciatku sa inicializuju gradienty (total)
-        totalGradients.resetGradients();
-        // partialGradients.resetGradients();
-        // Gradients totalGradients = new Gradients(this);
-        // Gradients partialGradients = new Gradients(this); /***/
-
-        for (SetOfIOPairs.IOPair pair : trainingSet.pairs) { // pre kazdy par
-            // trenovacej
-            // mnoziny
-            // partialGradients = computeGradient(pair.inputs, pair.outputs);
-            this.computeGradient(partialGradients, pair.inputs, pair.outputs);
-            for (int il = this.numberOfLayers() - 1; il >= 1; il--) { // pre
-                // vsetky
-                // vrstvy
-                // okrem
-                // poslednej
-                NeuralLayer currentLayer = this.getLayer(il);
-                for (int in = 0; in < currentLayer.numberOfNeurons(); in++) { // pre
-                    // vsetky
-                    // neurony
-                    // na
-                    // currentLayer
-                    // upravime gradient prahov :
-                    totalGradients.incrementThreshold(il, in, partialGradients.getThreshold(il, in));
-                    for (int ii = 0; ii < currentLayer.lowerLayer().numberOfNeurons(); ii++) { // pre vsetky vstupy
-                        totalGradients.incrementWeight(il, in, ii, partialGradients.getWeight(il, in, ii));
-                    }
-                }
-
-            } // end for layer
-        } // end foreach
-        // return totalGradients;
-    } // end method
-
-    private void adaptation(SetOfIOPairs trainingSet, int maxK, double eps, double lambda, double micro) {
-        // trainingSet : trenovacia mnozina
-        // maxK : maximalny pocet iteracii
-        // eps : pozadovana presnost normovanej dlzky gradientu
-        // lambda : rychlost ucenia (0.1)
-        // micro : momentovy clen
-        double delta;
-        Gradients deltaGradients = new Gradients(this);
-        Gradients totalGradients = new Gradients(this);
-        Gradients partialGradients = new Gradients(this);
-
-        System.out.println("setting up random weights and thresholds ...");
-
-        // prahy a vahy neuronovej siete nastavime na nahodne hodnoty,
-        // delta-gradienty vynulujeme (oni sa nuluju uz pri init)
-        for (int il = this.numberOfLayers() - 1; il >= 1; il--) { // iteracia
-            // cez
-            // vsetky
-            // vrstvy
-            // nadol
-            // okrem
-            // poslednej
-            NeuralLayer currentLayer = this.getLayer(il);
-            for (int in = 0; in < currentLayer.numberOfNeurons(); in++) { // pre
-                // kazdy
-                // neuron
-                // na
-                // vrstve
-                Neuron currentNeuron = currentLayer.getNeuron(in);
-                currentNeuron.threshold = (2 * this.random()) - 1;
-                // deltaGradients.setThreshold(il,in,0.0);
-                for (int ii = 0; ii < currentNeuron.numberOfInputs(); ii++) {
-                    currentNeuron.getInput(ii).weight = (2 * this.random()) - 1;
-                    // deltaGradients.setWeight(il,in,ii,0.0);
-                } // end ii
-            } // end in
-        } // end il
-
-        int currK = 0; // citac iteracii
-        double currE = Double.POSITIVE_INFINITY; // pociatocna aktualna presnost
-        // bude nekonecna (tendencia
-        // znizovania)
-
-        System.out.println("entering adaptation loop ... (maxK = " + maxK + ")");
-
-        while ((currK < maxK) && (currE > eps)) {
-            this.computeTotalGradient(totalGradients, partialGradients, trainingSet);
-            for (int il = this.numberOfLayers() - 1; il >= 1; il--) { // iteracia
-                // cez
-                // vsetky
-                // vrstvy
-                // nadol
-                // okrem
-                // poslednej
-                NeuralLayer currentLayer = this.getLayer(il);
-
-                for (int in = 0; in < currentLayer.numberOfNeurons(); in++) { // pre
-                    // kazdy
-                    // neuron
-                    // na
-                    // vrstve
-                    Neuron currentNeuron = currentLayer.getNeuron(in);
-                    delta = (-lambda * totalGradients.getThreshold(il, in))
-                            + (micro * deltaGradients.getThreshold(il, in));
-                    currentNeuron.threshold += delta;
-                    deltaGradients.setThreshold(il, in, delta);
-                } // end for ii 1
-
-                for (int in = 0; in < currentLayer.numberOfNeurons(); in++) { // pre
-                    // kazdy
-                    // neuron
-                    // na
-                    // vrstve
-                    Neuron currentNeuron = currentLayer.getNeuron(in);
-                    for (int ii = 0; ii < currentNeuron.numberOfInputs(); ii++) { // a
-                        // pre
-                        // kazdy
-                        // vstup
-                        // neuronu
-                        delta = (-lambda * totalGradients.getWeight(il, in, ii))
-                                + (micro * deltaGradients.getWeight(il, in, ii));
-                        currentNeuron.getInput(ii).weight += delta;
-                        deltaGradients.setWeight(il, in, ii, delta);
-                    } // end for ii
-                } // end for in 2
-            } // end for il
-
-            currE = totalGradients.getGradientAbs();
-            currK++;
-            if ((currK % 25) == 0) {
-                System.out.println("currK=" + currK + "   currE=" + currE);
-            }
-        } // end while
-    }
-
-    private Vector<Double> activities(Vector<Double> inputs) {
-        for (int il = 0; il < this.numberOfLayers(); il++) { // pre kazdu vrstvu
-            for (int in = 0; in < this.getLayer(il).numberOfNeurons(); in++) { // pre
-                // kazdy
-                // neuron
-                // vo
-                // vrstve
-                double sum = this.getLayer(il).getNeuron(in).threshold; // sum
-                // <-
-                // threshold
-                for (int ii = 0; ii < this.getLayer(il).getNeuron(in).numberOfInputs(); ii++) { // vstupy
-                    // vynasobi vahu so vstupom
-                    if (il == 0) { // ak sme na najspodnejsej vrstve, nasobime
-                        // vahy so vstupmi
-                        sum += this.getLayer(il).getNeuron(in).getInput(ii).weight * inputs.elementAt(in);
-                    } else { // na hornych vrstvach nasobime vahy s vystupmi
-                        // nizsej vrstvy
-                        sum += this.getLayer(il).getNeuron(in).getInput(ii).weight
-                                * this.getLayer(il - 1).getNeuron(ii).output;
-                    }
-                }
-
-                // !!! TU SOM ROZLISIL CI SA JEDNA O PRVU VRSTVU :
-                // if (il == 0)
-                // this.getLayer(il).getNeuron(in).output = sum; // vystup
-                // neuronu
-                // else
-                this.getLayer(il).getNeuron(in).output = this.gainFunction(sum);
-
-                // this.getLayer(il).getNeuron(in).output =
-                // this.gainFunction(sum); // vystup neuronu
-            }
-        }
-        // nazaver vystupy neuronov najvyssej vrstvy zapiseme do vektora :
-        Vector<Double> output = new Vector<Double>();
-
-        for (int i = 0; i < this.getLayer(this.numberOfLayers() - 1).numberOfNeurons(); i++) {
-            output.add(this.getLayer(this.numberOfLayers() - 1).getNeuron(i).output);
-        }
-
-        return output;
-    }
-
-    private double gainFunction(double x) {
-        return 1 / (1 + Math.exp(-x));
-    }
-
-    private NeuralLayer getLayer(int index) {
-        return this.listLayers.elementAt(index);
-    }
-
-
-//    public void printNeuralNetwork() {
-//        for (int il = 0; il < this.numberOfLayers(); il++) {
-//            System.out.println("Layer " + il);
-//            for (int in = 0; in < this.getLayer(il).numberOfNeurons(); in++) {
-//                System.out.print("      Neuron " + in + " (threshold=" + this.getLayer(il).getNeuron(in).threshold +
-//                        ") : ");
-//                for (int ii = 0; ii < this.getLayer(il).getNeuron(in).numberOfInputs(); ii++) {
-//                    System.out.print(this.getLayer(il).getNeuron(in).getInput(ii).weight + " ");
-//                }
-//                System.out.println();
-//            }
-//        }
-//    }
-
-
 }

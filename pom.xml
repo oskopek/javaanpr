@@ -53,6 +53,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <skipTests>false</skipTests>
         <skipUTs>${skipTests}</skipUTs>
         <skipITs>true</skipITs>
@@ -233,6 +234,13 @@
                                         <module name="OperatorWrap"/>
                                         <module name="ParenPad"/>
                                         <module name="TypecastParenPad"/>
+                                        <module name="SeparatorWrap">
+                                            <property name="tokens" value="DOT"/>
+                                            <property name="option" value="nl"/>
+                                        </module>
+                                        <module name="SeparatorWrap">
+                                            <property name="tokens" value="COMMA"/>
+                                        </module>
                                         <module name="WhitespaceAfter"/>
                                         <module name="WhitespaceAround"/>
                                         <!-- Modifier Checks                                    -->
@@ -264,10 +272,6 @@
                                         <!-- Miscellaneous other checks.                   -->
                                         <!-- See http://checkstyle.sf.net/config_misc.html -->
                                         <module name="ArrayTypeStyle"/>
-                                        <module name="TodoComment">
-                                            <property name="severity" value="info"/>
-                                            <property name="format" value="(TODO)|(FIXME)"/>
-                                        </module>
                                         <module name="UpperEll"/>
                                     </module>
                                 </module>

@@ -21,15 +21,11 @@ import net.sf.javaanpr.configurator.Configurator;
 import java.util.Vector;
 
 public class PlateHorizontalGraph extends Graph {
-    /*
-     * private static double peakFootConstant = // 0.1; //CONSTANT Intelligence.configurator
-     * .getDoubleProperty("platehorizontalgraph_peakfootconstant");
-     */
 
-    private static int horizontalDetectionType = Configurator.getConfigurator().getIntProperty(
-            "platehorizontalgraph_detectionType");
+    private static int horizontalDetectionType =
+            Configurator.getConfigurator().getIntProperty("platehorizontalgraph_detectionType");
 
-    Plate handle;
+    private Plate handle;
 
     public PlateHorizontalGraph(Plate handle) {
         this.handle = handle;
@@ -43,10 +39,10 @@ public class PlateHorizontalGraph extends Graph {
         if (PlateHorizontalGraph.horizontalDetectionType == 1) {
             return this.findPeak_edgedetection(count);
         }
-        return this.findPeak_derivate(count);
+        return this.findPeak_derivative(count);
     }
 
-    public Vector<Peak> findPeak_derivate(int count) { // RIESENIE DERIVACIOU
+    public Vector<Peak> findPeak_derivative(int count) {
         int a, b;
         float maxVal = this.getMaxValue();
         for (a = 2; (-this.derivation(a, a + 4) < (maxVal * 0.2)) && (a < (this.yValues.size() - 2 - 2 - 4)); a++) {

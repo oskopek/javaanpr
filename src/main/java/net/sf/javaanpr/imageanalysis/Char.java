@@ -56,53 +56,68 @@ public class Char extends Photo {
     }
 
     /**
-     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze
-     * znaky sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu
-     * nezodpoveda, cize spravime prahovanie zvlast.
+     * Reads a character from file and executes thresholding.
+     * <p>
+     * Thresholding isn't usually done on individual characters because they're extracted from the plates
+     * which is in itself already thresholded, but loading from a file doesn't follow this principle.
      *
      * @param fileName name of character file
-     * @throws IOException if the fileName couldn't be loaded
+     * @throws IOException if the file couldn't be loaded
      */
     public Char(String fileName) throws IOException {
         super(Configurator.getConfigurator().getResourceAsStream(fileName));
-        // this.thresholdedImage = this.image; povodny kod, zakomentovany dna
-        // 23.12.2006 2:33 AM
-
-        // nasledovne 4 riadky pridane 23.12.2006 2:33 AM
-        BufferedImage origin = Photo.duplicateBufferedImage(this.image);
-        this.adaptiveThresholding(); // s ucinnostou nad this.image // TODO deprecated
-        this.thresholdedImage = this.image;
-        this.image = origin;
-
+        BufferedImage origin = Photo.duplicateBufferedImage(getImage());
+        this.adaptiveThresholding(); // act on this.image // TODO deprecated
+        this.thresholdedImage = getImage();
+        this.setImage(origin);
         this.init();
     }
 
     /**
-     * Nacita znak zo suboru a hned vykona aj thresholding prahovanie(thresholding) sa vacsinou u znakov nerobi, pretoze
-     * znaky sa vysekavaju zo znacky, ktora uz je sama o sebe prahovana, ale nacitavanie zo suboru tomuto principu
-     * nezodpoveda, cize spravime prahovanie zvlast.
+     * Reads a character from file and executes thresholding.
+     * <p>
+     * Thresholding isn't usually done on individual characters because they're extracted from the plates
+     * which is in itself already thresholded, but loading from a file doesn't follow this principle.
      *
      * @param is loads Char from this InputStream
      * @throws IOException an IOException
      */
     public Char(InputStream is) throws IOException { // TODO javadoc
         super(is);
-        // this.thresholdedImage = this.image; povodny kod, zakomentovany dna
-        // 23.12.2006 2:33 AM
-
-        // nasledovne 4 riadky pridane 23.12.2006 2:33 AM
-        BufferedImage origin = Photo.duplicateBufferedImage(this.image);
-        this.adaptiveThresholding(); // s ucinnostou nad this.image
-        this.thresholdedImage = this.image;
-        this.image = origin;
-
+        BufferedImage origin = Photo.duplicateBufferedImage(getImage());
+        this.adaptiveThresholding(); // act on this.image // TODO deprecated
+        this.thresholdedImage = getImage();
+        this.setImage(origin);
         this.init();
+    }
+
+    private static String getSuffix(String directoryName) {
+        if (directoryName.endsWith("/")) {
+            directoryName = directoryName.substring(0, directoryName.length() - 1); // cuts last char off
+        }
+        return directoryName.substring(directoryName.lastIndexOf('_'));
+    }
+
+    public static List<String> getAlphabetList(String directory) {
+        final String alphaString = "0123456789abcdefghijklmnopqrstuvwxyz";
+        final String suffix = getSuffix(directory);
+        if (directory.endsWith("/")) {
+            directory = directory.substring(0, directory.length() - 1);
+        }
+        ArrayList<String> filenames = new ArrayList<String>();
+        for (int i = 0; i < alphaString.length(); i++) {
+            String s = directory + File.separator + alphaString.charAt(i) + suffix + ".jpg";
+            if (Configurator.getConfigurator().getResourceAsStream(s) != null) {
+                filenames.add(s);
+            }
+        }
+        return filenames;
     }
 
     @Override
     public Char clone() throws CloneNotSupportedException {
         super.clone();
-        return new Char(duplicateBufferedImage(this.image), duplicateBufferedImage(this.thresholdedImage),
+        return new Char(duplicateBufferedImage(getImage()), duplicateBufferedImage(this.thresholdedImage),
                 this.positionInPlate);
     }
 
@@ -112,72 +127,52 @@ public class Char extends Photo {
     }
 
     public void normalize() {
-
         if (this.normalized) {
             return;
         }
-
-        BufferedImage colorImage = duplicateBufferedImage(this.getBi());
-        this.image = this.thresholdedImage;
-
-        /*
-         * NEBUDEME POUZIVAT // tu treba osetrit pripady, ked je prvy alebo posledny riadok cely cierny (zmenime na
-         * biely)
-         * boolean flag = false; for (int x=0; x<this.getWidth(); x++) if (this.getBrightness(x,0) > 0.5f) flag =
-         * true; if (flag
-         * == false) for (int x=0; x<this.getWidth(); x++) this.setBrightness(x,0,1.0f);
-         */
+        BufferedImage colorImage = duplicateBufferedImage(this.getImage());
+        this.setImage(this.thresholdedImage);
         PixelMap pixelMap = this.getPixelMap();
-
         PixelMap.Piece bestPiece = pixelMap.getBestPiece();
-
         colorImage = this.getBestPieceInFullColor(colorImage, bestPiece);
 
-        // vypocet statistik
+        // Compute statistics
         this.computeStatisticBrightness(colorImage);
         this.computeStatisticContrast(colorImage);
         this.computeStatisticHue(colorImage);
         this.computeStatisticSaturation(colorImage);
 
-        this.image = bestPiece.render();
-
-        if (this.image == null) {
-            this.image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+        this.setImage(bestPiece.render());
+        if (getImage() == null) {
+            this.setImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB));
         }
-
         this.pieceWidth = super.getWidth();
         this.pieceHeight = super.getHeight();
-
         this.normalizeResizeOnly();
         this.normalized = true;
     }
 
     private BufferedImage getBestPieceInFullColor(BufferedImage bi, PixelMap.Piece piece) {
-        if ((piece.width <= 0) || (piece.height <= 0)) {
+        if ((piece.getWidth() <= 0) || (piece.getHeight() <= 0)) {
             return bi;
         }
-        return bi.getSubimage(piece.mostLeftPoint, piece.mostTopPoint, piece.width, piece.height);
+        return bi.getSubimage(piece.getMostLeftPoint(), piece.getMostTopPoint(), piece.getWidth(), piece.getHeight());
     }
 
-    private void normalizeResizeOnly() { // vracia ten isty Char, nie novy
-
+    private void normalizeResizeOnly() { // returns the same Char object
         int x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
         int y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
         if ((x == 0) || (y == 0)) {
-            return; // nebude resize
-            // this.linearResize(x,y);
+            return;
         }
-
         if (Configurator.getConfigurator().getIntProperty("char_resizeMethod") == 0) {
-            this.linearResize(x, y); // radsej weighted average
+            this.linearResize(x, y); // do a weighted average
         } else {
             this.averageResize(x, y);
         }
-
         this.normalizeBrightness(0.5f);
     }
 
-    // /////////////////////////////////////////////////////
     private void computeStatisticContrast(BufferedImage bi) {
         float sum = 0;
         int w = bi.getWidth();
@@ -238,25 +233,19 @@ public class Char extends Photo {
         return new PixelMap(this);
     }
 
-    // //////
-
     public Vector<Double> extractEdgeFeatures() {
-        int w = this.image.getWidth();
-        int h = this.image.getHeight();
+        int width = getImage().getWidth();
+        int height = getImage().getHeight();
         double featureMatch;
-
-        float[][] array = this.bufferedImageToArrayWithBounds(this.image, w, h);
-        w += 2; // pridame okraje
-        h += 2;
-
-        float[][] features = CharacterRecognizer.features;
-        // Vector<Double> output = new Vector<Double>(features.length*4);
+        float[][] array = this.bufferedImageToArrayWithBounds(getImage(), width, height);
+        width += 2; // add edges
+        height += 2;
+        float[][] features = CharacterRecognizer.FEATURES;
         double[] output = new double[features.length * 4];
 
-        for (int f = 0; f < features.length; f++) { // cez vsetky features
-            for (int my = 0; my < (h - 1); my++) {
-                for (int mx = 0; mx < (w - 1); mx++) { // dlazdice x 0,2,4,..8
-                    // vcitane
+        for (int f = 0; f < features.length; f++) {
+            for (int my = 0; my < (height - 1); my++) {
+                for (int mx = 0; mx < (width - 1); mx++) {
                     featureMatch = 0;
                     featureMatch += Math.abs(array[mx][my] - features[f][0]);
                     featureMatch += Math.abs(array[mx + 1][my] - features[f][1]);
@@ -264,20 +253,16 @@ public class Char extends Photo {
                     featureMatch += Math.abs(array[mx + 1][my + 1] - features[f][3]);
 
                     int bias = 0;
-                    if (mx >= (w / 2)) {
-                        bias += features.length; // ak je v kvadrante napravo ,
+                    if (mx >= (width / 2)) {
+                        bias += features.length; // if we are in the right quadrant, move the bias by one class
                     }
-                    // posunieme bias o jednu
-                    // triedu
-                    if (my >= (h / 2)) {
-                        bias += features.length * 2; // ak je v dolnom
+                    if (my >= (height / 2)) {
+                        bias += features.length * 2; // if we are in the left quadrant, move the bias by two classes
                     }
-                    // kvadrante, posuvame
-                    // bias o 2 triedy
                     output[bias + f] += featureMatch < 0.05 ? 1 : 0;
-                } // end my
-            } // end mx
-        } // end f
+                }
+            }
+        }
         Vector<Double> outputVector = new Vector<Double>();
         for (Double value : output) {
             outputVector.add(value);
@@ -304,34 +289,5 @@ public class Char extends Photo {
         }
     }
 
-    private static String getSuffix(String directoryName) {
-        if (directoryName.endsWith("/")) {
-            directoryName = directoryName.substring(0, directoryName.length() - 1); // cuts last char off
-        }
-
-        return directoryName.substring(directoryName.lastIndexOf('_'));
-    }
-
-    public static List<String> getAlphabetList(String directory) {
-        final String alphaString = "0123456789abcdefghijklmnopqrstuvwxyz";
-        final String suffix = getSuffix(directory);
-
-        if (directory.endsWith("/")) {
-            directory = directory.substring(0, directory.length() - 1);
-        }
-
-        ArrayList<String> filenames = new ArrayList<String>();
-
-        String s;
-        for (int i = 0; i < alphaString.length(); i++) {
-            s = directory + File.separator + alphaString.charAt(i) + suffix + ".jpg";
-
-            if (Configurator.getConfigurator().getResourceAsStream(s) != null) {
-                filenames.add(s);
-            }
-        }
-
-        return filenames;
-    }
 
 }

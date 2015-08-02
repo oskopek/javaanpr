@@ -16,12 +16,22 @@
 
 package net.sf.javaanpr.imageanalysis;
 
-public class PositionInPlate { // objekt nesie suradnice znaku v ZNACKE (left X,
-    // right X)
+/**
+ * The coordinates of a character in the plate.
+ */
+public class PositionInPlate { // TODO refactor
+
+    /**
+     * Left X coordinate.
+     */
     public int x1;
+
+    /**
+     * Right X coordinate.
+     */
     public int x2;
 
-    PositionInPlate(int x1, int x2) {
+    public PositionInPlate(int x1, int x2) {
         this.x1 = x1;
         this.x2 = x2;
     }

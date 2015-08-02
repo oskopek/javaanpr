@@ -21,7 +21,8 @@ import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
 import java.util.Vector;
 
 public class RecognizedPlate {
-    Vector<RecognizedChar> chars;
+
+    private Vector<RecognizedChar> chars;
 
     public RecognizedPlate() {
         this.chars = new Vector<RecognizedChar>();
@@ -38,10 +39,12 @@ public class RecognizedPlate {
     public String getString() {
         String ret = new String("");
         for (int i = 0; i < this.chars.size(); i++) {
-
             ret = ret + this.chars.elementAt(i).getPattern(0).getChar();
         }
         return ret;
     }
 
+    public Vector<RecognizedChar> getChars() {
+        return chars;
+    }
 }

@@ -19,6 +19,7 @@ package net.sf.javaanpr.gui;
 import java.util.Calendar;
 
 public class TimeMeter {
+
     private long startTime;
 
     public TimeMeter() {

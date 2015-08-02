@@ -33,7 +33,7 @@ public class PhotoTest {
         fstream.close();
 
         assertNotNull(photo);
-        assertNotNull(photo.image);
+        assertNotNull(photo.getImage());
 
         Photo clone = photo.clone();
         assertEquals(photo, clone);
