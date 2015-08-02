@@ -278,7 +278,7 @@ public class Char extends Photo {
                 } // end my
             } // end mx
         } // end f
-        Vector<Double> outputVector = new Vector<>();
+        Vector<Double> outputVector = new Vector<Double>();
         for (Double value : output) {
             outputVector.add(value);
         }
@@ -286,7 +286,7 @@ public class Char extends Photo {
     }
 
     public Vector<Double> extractMapFeatures() {
-        Vector<Double> vectorInput = new Vector<>();
+        Vector<Double> vectorInput = new Vector<Double>();
         for (int y = 0; y < this.getHeight(); y++) {
             for (int x = 0; x < this.getWidth(); x++) {
                 vectorInput.add((double) this.getBrightness(x, y));
@@ -320,7 +320,7 @@ public class Char extends Photo {
             directory = directory.substring(0, directory.length() - 1);
         }
 
-        ArrayList<String> filenames = new ArrayList<>();
+        ArrayList<String> filenames = new ArrayList<String>();
 
         String s;
         for (int i = 0; i < alphaString.length(); i++) {

@@ -123,7 +123,7 @@ public final class TestStatistics {
         Vector<TestRecord> records;
 
         TestReport() {
-            this.records = new Vector<>();
+            this.records = new Vector<TestRecord>();
         }
 
         void addRecord(TestRecord testRecord) {

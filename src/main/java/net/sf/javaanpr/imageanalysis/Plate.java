@@ -61,7 +61,7 @@ public class Plate extends Photo {
     }
 
     public Vector<Char> getChars() {
-        Vector<Char> out = new Vector<>();
+        Vector<Char> out = new Vector<Char>();
 
         Vector<Graph.Peak> peaks = this.computeGraph();
 

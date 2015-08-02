@@ -63,7 +63,7 @@ public class BandGraph extends Graph {
     }
 
     public Vector<Peak> findPeaks(int count) {
-        Vector<Graph.Peak> outPeaks = new Vector<>();
+        Vector<Graph.Peak> outPeaks = new Vector<Graph.Peak>();
 
         for (int c = 0; c < count; c++) { // for count
             float maxValue = 0.0f;
@@ -91,7 +91,7 @@ public class BandGraph extends Graph {
         } // end for count
 
         // treba filtrovat kandidatov, ktory nezodpovedaju proporciam znacky
-        Vector<Peak> outPeaksFiltered = new Vector<>();
+        Vector<Peak> outPeaksFiltered = new Vector<Peak>();
         for (Peak p : outPeaks) {
             if ((p.getDiff() > (2 * this.handle.getHeight())) && // ak nieje znacka
                     (// prilis uzka

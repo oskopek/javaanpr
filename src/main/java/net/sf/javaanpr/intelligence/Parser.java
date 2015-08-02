@@ -58,7 +58,7 @@ public class Parser {
 
         public PlateForm(String name) {
             this.name = name;
-            this.positions = new Vector<>();
+            this.positions = new Vector<Position>();
         }
 
         public void addPosition(Position p) {
@@ -98,7 +98,7 @@ public class Parser {
      * @throws IOException an IOException
      */
     public Parser() throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
-        this.plateForms = new Vector<>();
+        this.plateForms = new Vector<PlateForm>();
 
         String fileName = Configurator.getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
 
@@ -114,7 +114,13 @@ public class Parser {
 
         try {
             this.plateForms = this.loadFromXml(inStream);
-        } catch (ParserConfigurationException | SAXException | IOException e) {
+        } catch (ParserConfigurationException e) { // TODO fix this
+            System.err.println("Failed to load from parser syntax description file");
+            throw e;
+        } catch (SAXException e) {
+            System.err.println("Failed to load from parser syntax description file");
+            throw e;
+        } catch (IOException e) {
             System.err.println("Failed to load from parser syntax description file");
             throw e;
         }
@@ -144,7 +150,7 @@ public class Parser {
      */
     public Vector<PlateForm> loadFromXml(InputStream inStream) throws ParserConfigurationException, SAXException,
             IOException {  // TODO javadoc
-        Vector<PlateForm> plateForms = new Vector<>();
+        Vector<PlateForm> plateForms = new Vector<PlateForm>();
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
@@ -228,7 +234,7 @@ public class Parser {
             this.flagEqualOrShorterLength(length);
         }
 
-        Vector<FinalPlate> finalPlates = new Vector<>();
+        Vector<FinalPlate> finalPlates = new Vector<FinalPlate>();
 
         for (PlateForm form : this.plateForms) {
             if (!form.flagged) {

@@ -41,7 +41,7 @@ import java.util.Vector;
 // have a lot of them and need those variables
 public class NeuralNetwork {
     // holds list of layers
-    private Vector<NeuralLayer> listLayers = new Vector<>();
+    private Vector<NeuralLayer> listLayers = new Vector<NeuralLayer>();
     private Random randomGenerator;
 
     // rozmery su v poradi od najspodnejsej (input) po najvrchnejsiu (output)
@@ -227,15 +227,15 @@ public class NeuralNetwork {
 
             public IOPair(Vector<Double> inputs, Vector<Double> outputs) {
                 // corrected warning
-                // this.inputs = (Vector<>)inputs.clone();
-                // this.outputs = (Vector<>)outputs.clone();
-                this.inputs = new Vector<>(inputs);
-                this.outputs = new Vector<>(outputs);
+                // this.inputs = (Vector<Double>)inputs.clone();
+                // this.outputs = (Vector<Double>)outputs.clone();
+                this.inputs = new Vector<Double>(inputs);
+                this.outputs = new Vector<Double>(outputs);
             }
         }
 
         public SetOfIOPairs() {
-            this.pairs = new Vector<>();
+            this.pairs = new Vector<IOPair>();
         }
 
         public void addIOPair(Vector<Double> inputs, Vector<Double> outputs) {
@@ -265,7 +265,7 @@ public class NeuralNetwork {
     } // end class NeuralInput
 
     private class Neuron {
-        private Vector<NeuralInput> listInputs = new Vector<>(); // holds list of inputs
+        private Vector<NeuralInput> listInputs = new Vector<NeuralInput>(); // holds list of inputs
         int index;
         public double threshold;
         public double output;
@@ -300,7 +300,7 @@ public class NeuralNetwork {
 
     private class NeuralLayer {
         // holds list od neurons
-        private Vector<Neuron> listNeurons = new Vector<>();
+        private Vector<Neuron> listNeurons = new Vector<Neuron>();
         int index;
         NeuralNetwork neuralNetwork;
 
@@ -377,8 +377,8 @@ public class NeuralNetwork {
         }
 
         public void initGradients() {
-            this.thresholds = new Vector<>();
-            this.weights = new Vector<>();
+            this.thresholds = new Vector<Vector<Double>>();
+            this.weights = new Vector<Vector<Vector<Double>>>();
             // System.out.println("init for threshold gradient "+this.toString());
             for (int il = 0; il < this.neuralNetwork.numberOfLayers(); il++) {
                 this.thresholds.add(new Vector<Double>());
@@ -708,7 +708,7 @@ public class NeuralNetwork {
             }
         }
         // nazaver vystupy neuronov najvyssej vrstvy zapiseme do vektora :
-        Vector<Double> output = new Vector<>();
+        Vector<Double> output = new Vector<Double>();
 
         for (int i = 0; i < this.getLayer(this.numberOfLayers() - 1).numberOfNeurons(); i++) {
             output.add(this.getLayer(this.numberOfLayers() - 1).getNeuron(i).output);
