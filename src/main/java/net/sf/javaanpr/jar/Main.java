@@ -24,6 +24,8 @@ import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.imageanalysis.Char;
 import net.sf.javaanpr.intelligence.Intelligence;
 import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.io.File;
@@ -47,16 +49,15 @@ import java.io.IOException;
  */
 public final class Main {
 
+    private static final transient Logger logger = LoggerFactory.getLogger(Main.class);
     /**
      * The report generator.
      */
     public static ReportGenerator rg = new ReportGenerator();
-
     /**
      * The intelligence.
      */
     public static Intelligence systemLogic;
-
     /**
      * The help message.
      */
@@ -91,12 +92,12 @@ public final class Main {
     public static void newAlphabet(String srcdir, String dstdir) throws IOException {
         int x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
         int y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
-        System.out.println("\nCreating new alphabet (" + x + " x " + y + " px)... \n");
+        logger.info("\nCreating new alphabet (" + x + " x " + y + " px)... \n");
         for (String fileName : Char.getAlphabetList(srcdir)) {
             Char c = new Char(fileName);
             c.normalize();
             c.saveImage(dstdir + File.separator + fileName);
-            System.out.println(fileName + " done");
+            logger.info(fileName + " done");
             c.close();
         }
     }
@@ -115,7 +116,6 @@ public final class Main {
         } catch (Exception e) {
             throw new IOException("Can't find the path specified");
         }
-        System.out.println();
         NeuralPatternClassificator npc = new NeuralPatternClassificator(true);
         npc.getNetwork().saveToXml(destinationFile);
     }
@@ -135,43 +135,23 @@ public final class Main {
             new FrameMain();
         } else if ((args.length == 3) && args[0].equals("-recognize") && args[1].equals("-i")) {
             // load snapshot args[2] and recognize it
-            try {
-                Main.systemLogic = new Intelligence();
-                System.out.println(Main.systemLogic.recognize(new CarSnapshot(args[2]), false));
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+            Main.systemLogic = new Intelligence();
+            System.out.println(Main.systemLogic.recognize(new CarSnapshot(args[2]), false));
         } else if ((args.length == 5) && args[0].equals("-recognize") && args[1].equals("-i") && args[3].equals("-o")) {
             // load snapshot arg[2] and generate report into arg[4]
-            try {
-                Main.rg = new ReportGenerator(args[4]);
-                Main.systemLogic = new Intelligence();
-                Main.systemLogic.recognize(new CarSnapshot(args[2]), false);
-                Main.rg.finish();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+            Main.rg = new ReportGenerator(args[4]);
+            Main.systemLogic = new Intelligence();
+            Main.systemLogic.recognize(new CarSnapshot(args[2]), false);
+            Main.rg.finish();
         } else if ((args.length == 3) && args[0].equals("-newconfig") && args[1].equals("-o")) {
             // save default config into args[2]
-            try {
-                Configurator.getConfigurator().saveConfiguration(args[2]);
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+            Configurator.getConfigurator().saveConfiguration(args[2]);
         } else if ((args.length == 3) && args[0].equals("-newnetwork") && args[1].equals("-o")) {
             // learn new neural network and save it into into args[2]
-            try {
-                Main.learnAlphabet(args[2]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            Main.learnAlphabet(args[2]);
         } else if ((args.length == 5) && args[0].equals("-newalphabet") && args[1].equals("-i") && args[3]
                 .equals("-o")) { // transform alphabets from args[2] -> args[4]
-            try {
-                Main.newAlphabet(args[2], args[4]);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            Main.newAlphabet(args[2], args[4]);
         } else { // display help
             System.out.println(Main.helpText);
         }

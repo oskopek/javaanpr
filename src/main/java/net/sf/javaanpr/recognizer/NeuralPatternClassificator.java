@@ -19,6 +19,8 @@ package net.sf.javaanpr.recognizer;
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.imageanalysis.Char;
 import net.sf.javaanpr.neuralnetwork.NeuralNetwork;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +29,7 @@ import java.util.Vector;
 
 public class NeuralPatternClassificator extends CharacterRecognizer {
 
+    private static final transient Logger logger = LoggerFactory.getLogger(NeuralPatternClassificator.class);
     private static int normalize_x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
     private static int normalize_y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
     /**
@@ -60,9 +63,8 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
             String learnAlphabetPath = configurator.getStrProperty("char_learnAlphabetPath");
             try {
                 this.learnAlphabet(learnAlphabetPath);
-            } catch (IOException e) { // TODO logger
-                System.err.println("Failed to load alphabet: " + learnAlphabetPath);
-                e.printStackTrace();
+            } catch (IOException e) {
+                logger.error("Failed to load alphabet: {}", learnAlphabetPath);
             }
         } else {
             // or load network from xml
@@ -110,19 +112,8 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
                 vectorOutput.add(0.0);
             }
         }
-        System.out.println(); // TODO logger
-        for (Double d : vectorInput) {
-            System.out.print(d + " ");
-        }
-        System.out.println();
-        for (Double d : vectorOutput) {
-            System.out.print(d + " ");
-        }
-        System.out.println();
         return (new NeuralNetwork.SetOfIOPairs.IOPair(vectorInput, vectorOutput));
     }
-
-    // NAUCI NEURONOVU SIET ABECEDE, KTORU NAJDE V ADRESARI PATH
 
     /**
      * Learn the neural network with an alphabet in given folder.

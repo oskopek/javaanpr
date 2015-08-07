@@ -16,13 +16,18 @@
 
 package net.sf.javaanpr.tools;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Vector;
 
 public final class TestStatistics {
 
+    private static final transient Logger logger = LoggerFactory.getLogger(TestStatistics.class);
     private static String helpText =
             "-----------------------------------------------------------\n" + "ANPR Statistics Generator\n"
                     + "Copyright (c) Ondrej Martinsky, 2006-2007\n" + "\n"
@@ -36,30 +41,25 @@ public final class TestStatistics {
         // intentionally empty
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if ((args.length == 2) && args[0].equals("-i")) { // proceed analysis
-            try {
-                File f = new File(args[1]);
-                BufferedReader input = new BufferedReader(new FileReader(f));
-                String line;
-                int lineCount = 0;
-                String[] split;
-                TestReport testReport = new TestReport();
-                while ((line = input.readLine()) != null) {
-                    lineCount++;
-                    split = line.split(",", 4);
-                    if (split.length != 3) {
-                        System.out.println("Warning: line " + lineCount + " contains invalid CSV data (skipping)");
-                        continue;
-                    }
-                    testReport.addRecord(testReport.new TestRecord(split[0], split[1], split[2]));
+            File f = new File(args[1]);
+            BufferedReader input = new BufferedReader(new FileReader(f));
+            String line;
+            int lineCount = 0;
+            String[] split;
+            TestReport testReport = new TestReport();
+            while ((line = input.readLine()) != null) {
+                lineCount++;
+                split = line.split(",", 4);
+                if (split.length != 3) {
+                    logger.warn("Line ( {} ) contains invalid CSV data (skipping)", lineCount);
+                    continue;
                 }
-                input.close();
-                testReport.printStatistics();
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println(e.getMessage());
+                testReport.addRecord(testReport.new TestRecord(split[0], split[1], split[2]));
             }
+            input.close();
+            testReport.printStatistics();
         } else {
             System.out.println(TestStatistics.helpText);
         }

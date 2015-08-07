@@ -16,6 +16,8 @@
 
 package net.sf.javaanpr.neuralnetwork;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -40,13 +42,13 @@ import java.util.Vector;
 /**
  * Have a lot of them and need those variables.
  */
-public class NeuralNetwork {
+public class NeuralNetwork { // TODO: finish translation
 
+    private static final transient Logger logger = LoggerFactory.getLogger(NeuralNetwork.class);
     /**
      * Holds a list of layers.
      */
     private Vector<NeuralLayer> listLayers = new Vector<NeuralLayer>();
-
     private Random randomGenerator;
 
     /**
@@ -59,7 +61,7 @@ public class NeuralNetwork {
             this.listLayers.add(new NeuralLayer(dimensions.elementAt(i), this));
         }
         this.randomGenerator = new Random();
-        // TODO logger System.out.println("Created neural network with "+dimensions.size()+" layers");
+        logger.info("Created neural network with " + dimensions.size() + " layers");
     }
 
     public NeuralNetwork(InputStream inStream) {
@@ -103,7 +105,7 @@ public class NeuralNetwork {
     }
 
     private void loadFromXml(InputStream inStream) {
-        System.out.println("NeuralNetwork : loading network topology from InputStream"); // TODO logger
+        logger.debug("Loading network topology from InputStream");
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         Document doc = null;
         try {
@@ -115,28 +117,24 @@ public class NeuralNetwork {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         Node nodeNeuralNetwork = doc.getDocumentElement();
-        if (!nodeNeuralNetwork.getNodeName().equals("neuralNetwork")) { // TODO logger
-            System.err.println("[Error] NN-Load: Parse error in XML file, neural network couldn't be loaded.");
+        if (!nodeNeuralNetwork.getNodeName().equals("neuralNetwork")) {
+            logger.error("Parse error in XML file, neural network couldn't be loaded.");
         }
-        // nodeNeuralNetwork ok
-        // indexNeuralNetworkContent -> indexStructureContent ->
-        // indexLayerContent -> indexNeuronContent -> indexNeuralInputContent
         NodeList nodeNeuralNetworkContent = nodeNeuralNetwork.getChildNodes();
         for (int innc = 0; innc < nodeNeuralNetworkContent.getLength(); innc++) {
             Node nodeStructure = nodeNeuralNetworkContent.item(innc);
-            if (nodeStructure.getNodeName().equals("structure")) { // for structure element
+            if (nodeStructure.getNodeName().equals("structure")) {
                 NodeList nodeStructureContent = nodeStructure.getChildNodes();
                 for (int isc = 0; isc < nodeStructureContent.getLength(); isc++) {
                     Node nodeLayer = nodeStructureContent.item(isc);
-                    if (nodeLayer.getNodeName().equals("layer")) { // for layer element
+                    if (nodeLayer.getNodeName().equals("layer")) {
                         NeuralLayer neuralLayer = new NeuralLayer(this);
                         this.listLayers.add(neuralLayer);
                         NodeList nodeLayerContent = nodeLayer.getChildNodes();
                         for (int ilc = 0; ilc < nodeLayerContent.getLength(); ilc++) {
                             Node nodeNeuron = nodeLayerContent.item(ilc);
-                            if (nodeNeuron.getNodeName().equals("neuron")) { // for neuron in layer
+                            if (nodeNeuron.getNodeName().equals("neuron")) {
                                 Neuron neuron =
                                         new Neuron(Double.parseDouble(((Element) nodeNeuron).getAttribute("threshold")),
                                                 neuralLayer);
@@ -144,12 +142,8 @@ public class NeuralNetwork {
                                 NodeList nodeNeuronContent = nodeNeuron.getChildNodes();
                                 for (int inc = 0; inc < nodeNeuronContent.getLength(); inc++) {
                                     Node nodeNeuralInput = nodeNeuronContent.item(inc);
-                                    // if (nodeNeuralInput==null)  // TODO logger
-                                    // System.out.print("-"); else
-                                    // System.out.print("*");
-
                                     if (nodeNeuralInput.getNodeName().equals("input")) {
-                                        //System.out.println("neuron at STR:"+innc+" LAY:"+isc+" NEU:"+ilc+" INP:"+inc);
+                                        logger.debug("neuron at STR: {} LAY: {} NEU: {} INP: {}", innc, isc, ilc, inc);
                                         NeuralInput neuralInput = new NeuralInput(
                                                 Double.parseDouble(((Element) nodeNeuralInput).getAttribute("weight")),
                                                 neuron);
@@ -167,7 +161,7 @@ public class NeuralNetwork {
 
     public void saveToXml(String fileName)
             throws ParserConfigurationException, FileNotFoundException, TransformerException {
-        System.out.println("Saving network topology to file " + fileName); // TODO logger
+        logger.info("Saving network topology to file " + fileName);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder parser = factory.newDocumentBuilder();
         Document doc = parser.newDocument();
@@ -302,7 +296,7 @@ public class NeuralNetwork {
         Gradients deltaGradients = new Gradients(this);
         Gradients totalGradients = new Gradients(this);
         Gradients partialGradients = new Gradients(this);
-        System.out.println("setting up random weights and thresholds ..."); // TODO logger
+        logger.debug("Setting up random weights and thresholds ...");
         // prahy a vahy neuronovej siete nastavime na nahodne hodnoty,
         // delta-gradienty vynulujeme (oni sa nuluju uz pri init)
         for (int layerIndex = this.numberOfLayers() - 1; layerIndex >= 1;
@@ -319,7 +313,7 @@ public class NeuralNetwork {
 
         int curK = 0;
         double curE = Double.POSITIVE_INFINITY; // pociatocna aktualna presnost bude nekonecna (tendencia znizovania)
-        System.out.println("entering adaptation loop ... (maxK = " + maxK + ")"); // TODO logger
+        logger.debug("Entering adaptation loop ... (maxK = " + maxK + ")");
         while ((curK < maxK) && (curE > eps)) {
             this.computeTotalGradient(totalGradients, partialGradients, trainingSet);
             for (int layerIndex = this.numberOfLayers() - 1; layerIndex >= 1;
@@ -346,7 +340,7 @@ public class NeuralNetwork {
             curE = totalGradients.getGradientAbs();
             curK++;
             if ((curK % 25) == 0) {
-                System.out.println("curK=" + curK + "   curE=" + curE); // TODO logger
+                logger.debug("curK=" + curK + ", curE=" + curE);
             }
         }
     }
@@ -384,7 +378,7 @@ public class NeuralNetwork {
         return this.listLayers.elementAt(index);
     }
 
-    public void printNeuralNetwork() { // TODO logger
+    public void printNeuralNetwork() {
         for (int layerIndex = 0; layerIndex < this.numberOfLayers(); layerIndex++) {
             System.out.println("Layer " + layerIndex);
             for (int neuronIndex = 0; neuronIndex < this.getLayer(layerIndex).numberOfNeurons(); neuronIndex++) {
@@ -440,7 +434,7 @@ public class NeuralNetwork {
             this.neuron = neuron;
             this.weight = weight;
             this.index = this.neuron.numberOfInputs();
-            // System.out.println("Created neural input "+this.index+" with weight "+this.weight); // TODO logger
+            logger.debug("Created neural input {} with weight {}.", this.index, this.weight);
         }
     }
 
@@ -514,8 +508,7 @@ public class NeuralNetwork {
                             .add(new Neuron(this.neuralNetwork.getLayer(this.index - 1).numberOfNeurons(), 0.0, this));
                 }
             }
-            // System.out.println("Created neural layer "+this.index+" with "+numberOfNeurons+" neurons");
-            // TODO logger
+            logger.debug("Created neural layer {} with {} neurons.", this.index, numberOfNeurons);
         }
 
         public int numberOfNeurons() {
@@ -563,7 +556,7 @@ public class NeuralNetwork {
         private void initGradients() {
             this.thresholds = new Vector<Vector<Double>>();
             this.weights = new Vector<Vector<Vector<Double>>>();
-            // System.out.println("init for threshold gradient "+this.toString()); // TODO logger
+            logger.debug("Init for threshold gradient: {} ", this);
             for (int layerIndex = 0; layerIndex < this.neuralNetwork.numberOfLayers(); layerIndex++) {
                 this.thresholds.add(new Vector<Double>());
                 this.weights.add(new Vector<Vector<Double>>());

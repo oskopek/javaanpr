@@ -18,6 +18,8 @@ package net.sf.javaanpr.recognizer;
 
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.imageanalysis.Char;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,9 +28,10 @@ import java.util.Vector;
 
 public class KnnPatternClassificator extends CharacterRecognizer {
 
+    private static final transient Logger logger = LoggerFactory.getLogger(KnnPatternClassificator.class);
     private Vector<Vector<Double>> learnVectors;
 
-    public KnnPatternClassificator() {  // TODO logger
+    public KnnPatternClassificator() {
         String path = Configurator.getConfigurator().getPathProperty("char_learnAlphabetPath");
         this.learnVectors = new Vector<Vector<Double>>(36);
         ArrayList<String> filenames = (ArrayList<String>) Char.getAlphabetList(path);
@@ -38,8 +41,7 @@ public class KnnPatternClassificator extends CharacterRecognizer {
             try {
                 imgChar = new Char(is);
             } catch (IOException e) {
-                System.err.println("Failed to load Char: " + fileName);
-                e.printStackTrace();
+                logger.error("Failed to load Char: {}", fileName, e);
             }
             imgChar.normalize();
             this.learnVectors.add(imgChar.extractFeatures());
@@ -47,7 +49,7 @@ public class KnnPatternClassificator extends CharacterRecognizer {
         // check vector elements
         for (int i = 0; i < this.learnVectors.size(); i++) {
             if (this.learnVectors.elementAt(i) == null) {
-                System.err.println("Warning : alphabet in " + path + " is not complete");
+                logger.warn("Alphabet in {} is not complete", path);
             }
         }
     }
