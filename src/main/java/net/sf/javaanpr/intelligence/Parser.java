@@ -19,6 +19,8 @@ package net.sf.javaanpr.intelligence;
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -34,6 +36,7 @@ import java.util.Vector;
 
 public class Parser {
 
+    private static final transient Logger logger = LoggerFactory.getLogger(Parser.class);
     private Vector<PlateForm> plateForms;
 
     /**
@@ -55,14 +58,14 @@ public class Parser {
         }
         try {
             this.plateForms = this.loadFromXml(inStream);
-        } catch (ParserConfigurationException e) { // TODO fix this TODO logger
-            System.err.println("Failed to load from parser syntax description file");
+        } catch (ParserConfigurationException e) { // TODO fix
+            logger.error("Failed to load from parser syntax description file");
             throw e;
         } catch (SAXException e) {
-            System.err.println("Failed to load from parser syntax description file");
+            logger.error("Failed to load from parser syntax description file");
             throw e;
         } catch (IOException e) {
-            System.err.println("Failed to load from parser syntax description file");
+            logger.error("Failed to load from parser syntax description file");
             throw e;
         }
     }
@@ -191,8 +194,7 @@ public class Parser {
                 continue;
             }
             for (int i = 0; i <= (length - form.length()); i++) { // moving the form on the plate
-                // System.out.println("comparing "+recognizedPlate.getString()+" with form "+form.name+" and offset "+i
-                // ); TODO logger
+                logger.debug("Comparing {} with form {} and offset {}.", recognizedPlate, form.name, i);
                 FinalPlate finalPlate = new FinalPlate();
                 for (int j = 0; j < form.length(); j++) { // all chars of the form
                     RecognizedChar rc = recognizedPlate.getChar(j + i);
@@ -210,8 +212,7 @@ public class Parser {
                         }
                     }
                 }
-                // System.out.println("adding "+finalPlate.plate+" with required changes "+finalPlate.requiredChanges);
-                // TODO logger
+                logger.debug("Adding {} with required changes {}.", finalPlate.plate, finalPlate.requiredChanges);
                 finalPlates.add(finalPlate);
             }
         }
@@ -221,10 +222,9 @@ public class Parser {
         // else: find the plate with lowest number of swaps
         float minimalChanges = Float.POSITIVE_INFINITY;
         int minimalIndex = 0;
-        // System.out.println("---"); // TODO logger
         for (int i = 0; i < finalPlates.size(); i++) {
-            // System.out.println("::"+finalPlates.elementAt(i).plate+" "+finalPlates.elementAt(i).requiredChanges);
-            // TODO logger
+            logger.debug("Plate {} : {} with required changes {}.", i, finalPlates.elementAt(i).plate,
+                    finalPlates.elementAt(i).requiredChanges);
             if (finalPlates.elementAt(i).requiredChanges <= minimalChanges) {
                 minimalChanges = finalPlates.elementAt(i).requiredChanges;
                 minimalIndex = i;
