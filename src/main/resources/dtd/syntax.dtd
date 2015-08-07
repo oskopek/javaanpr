@@ -15,7 +15,7 @@
   ~ permissions and limitations under the License.
   -->
 
-<!ELEMENT char EMPTY >
+        <!ELEMENT char EMPTY >
         <!ATTLIST char content NMTOKEN #REQUIRED >
 
         <!ELEMENT structure ( type+ ) >

@@ -19,21 +19,25 @@ package net.sf.javaanpr.imageanalysis;
 import java.awt.image.BufferedImage;
 
 public class Statistics {
-    public float maximum;
-    public float minimum;
-    public float average;
-    public float dispersion;
 
-    Statistics(BufferedImage bi) {
+    private float maximum;
+    private float minimum;
+    private float average;
+
+    /**
+     * {@code dispersion = average of squares - square of average}.
+     */
+    private float dispersion;
+
+    public Statistics(BufferedImage bi) {
         this(new Photo(bi));
     }
 
-    Statistics(Photo photo) {
+    public Statistics(Photo photo) {
         float sum = 0;
         float sum2 = 0;
         int w = photo.getWidth();
         int h = photo.getHeight();
-
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
                 float pixelValue = photo.getBrightness(x, y);
@@ -45,7 +49,6 @@ public class Statistics {
         }
         int count = (w * h);
         this.average = sum / count;
-        // rozptyl = priemer stvorcov + stvorec priemeru
         this.dispersion = (sum2 / count) - (this.average * this.average);
     }
 

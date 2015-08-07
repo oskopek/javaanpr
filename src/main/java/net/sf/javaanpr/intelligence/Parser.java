@@ -33,62 +33,8 @@ import java.io.InputStream;
 import java.util.Vector;
 
 public class Parser {
-    public class PlateForm {
-        public class Position {
-            public char[] allowedChars;
 
-            public Position(String data) {
-                this.allowedChars = data.toCharArray();
-            }
-
-            public boolean isAllowed(char chr) {
-                boolean ret = false;
-                for (int i = 0; i < this.allowedChars.length; i++) {
-                    if (this.allowedChars[i] == chr) {
-                        ret = true;
-                    }
-                }
-                return ret;
-            }
-        }
-
-        Vector<Position> positions;
-        String name;
-        public boolean flagged = false;
-
-        public PlateForm(String name) {
-            this.name = name;
-            this.positions = new Vector<>();
-        }
-
-        public void addPosition(Position p) {
-            this.positions.add(p);
-        }
-
-        public Position getPosition(int index) {
-            return this.positions.elementAt(index);
-        }
-
-        public int length() {
-            return this.positions.size();
-        }
-
-    }
-
-    public class FinalPlate {
-        public String plate;
-        public float requiredChanges = 0;
-
-        FinalPlate() {
-            this.plate = "";
-        }
-
-        public void addChar(char chr) {
-            this.plate = this.plate + chr;
-        }
-    }
-
-    Vector<PlateForm> plateForms;
+    private Vector<PlateForm> plateForms;
 
     /**
      * Creates a new instance of Parser.
@@ -98,23 +44,24 @@ public class Parser {
      * @throws IOException an IOException
      */
     public Parser() throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
-        this.plateForms = new Vector<>();
-
+        this.plateForms = new Vector<PlateForm>();
         String fileName = Configurator.getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
-
         if (fileName == null || fileName.isEmpty()) {
             throw new IOException("Failed to get syntax description file from Configurator");
         }
-
         InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
-
         if (inStream == null) {
             throw new IOException("Couldn't find parser syntax description file");
         }
-
         try {
             this.plateForms = this.loadFromXml(inStream);
-        } catch (ParserConfigurationException | SAXException | IOException e) {
+        } catch (ParserConfigurationException e) { // TODO fix this TODO logger
+            System.err.println("Failed to load from parser syntax description file");
+            throw e;
+        } catch (SAXException e) {
+            System.err.println("Failed to load from parser syntax description file");
+            throw e;
+        } catch (IOException e) {
             System.err.println("Failed to load from parser syntax description file");
             throw e;
         }
@@ -129,8 +76,8 @@ public class Parser {
      * @deprecated use {@link Parser#loadFromXml(InputStream)}
      */
     @Deprecated
-    public Vector<PlateForm> loadFromXml(String fileName) throws ParserConfigurationException, SAXException,
-            IOException { // TODO javadoc
+    public Vector<PlateForm> loadFromXml(String fileName)
+            throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
         InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
         return this.loadFromXml(inStream);
     }
@@ -142,15 +89,12 @@ public class Parser {
      * @throws SAXException a SAXException
      * @throws IOException an IOException
      */
-    public Vector<PlateForm> loadFromXml(InputStream inStream) throws ParserConfigurationException, SAXException,
-            IOException {  // TODO javadoc
-        Vector<PlateForm> plateForms = new Vector<>();
-
+    public Vector<PlateForm> loadFromXml(InputStream inStream)
+            throws ParserConfigurationException, SAXException, IOException {  // TODO javadoc
+        Vector<PlateForm> plateForms = new Vector<PlateForm>();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-
         DocumentBuilder parser = factory.newDocumentBuilder();
         Document doc = parser.parse(inStream);
-
         Node structureNode = doc.getDocumentElement();
         NodeList structureNodeContent = structureNode.getChildNodes();
         for (int i = 0; i < structureNodeContent.getLength(); i++) {
@@ -166,7 +110,6 @@ public class Parser {
                     continue;
                 }
                 String content = ((Element) charNode).getAttribute("content");
-
                 form.addPosition(form.new Position(content.toUpperCase()));
             }
             plateForms.add(form);
@@ -174,16 +117,18 @@ public class Parser {
         return plateForms;
     }
 
-    // //
     public void unFlagAll() {
         for (PlateForm form : this.plateForms) {
             form.flagged = false;
         }
     }
 
-    // pre danu dlzku znacky sa pokusi najst nejaky plateform o rovnakej dlzke
-    // v pripade ze nenajde ziadny, pripusti moznost ze je nejaky znak navyse
-    // a hlada plateform s mensim poctom pismen
+    /**
+     * For given {@code length}, finds a {@link net.sf.javaanpr.intelligence.Parser.PlateForm} of the same length. If
+     * no such {@link net.sf.javaanpr.intelligence.Parser.PlateForm} is found, tries to find one with less characters.
+     *
+     * @param length the number of characters of the PlateForm
+     */
     public void flagEqualOrShorterLength(int length) {
         boolean found = false;
         for (int i = length; (i >= 1) && !found; i--) {
@@ -210,17 +155,28 @@ public class Parser {
         }
     }
 
-    // syntax analysis mode : 0 (do not parse)
-    // : 1 (only equal length)
-    // : 2 (equal or shorter)
-    public String parse(RecognizedPlate recognizedPlate, int syntaxAnalysisMode) {
+    /**
+     * Syntactically parses text from the given {@link RecognizedPlate} in the specified analysis mode.
+     * <p>
+     * Syntax analysis mode: <ul>
+     * <li>0 (do not parse)</li>
+     * <li>1 (only equal length)</li>
+     * <li>2 (equal or shorter)</li>
+     * </ul>
+     *
+     * @param recognizedPlate the plate to parse
+     * @param syntaxAnalysisMode the mode in which to parse
+     * @return the parsed recognized plate text
+     */
+    public String parse(RecognizedPlate recognizedPlate, int syntaxAnalysisMode) { // TODO enum
         if (syntaxAnalysisMode == 0) {
-            Main.rg.insertText(" result : " + recognizedPlate.getString() + " --> <font size=15>"
-                    + recognizedPlate.getString() + "</font><hr><br>");
+            Main.rg.insertText(
+                    " result : " + recognizedPlate.getString() + " --> <font size=15>" + recognizedPlate.getString()
+                            + "</font><hr><br>");
             return recognizedPlate.getString();
         }
 
-        int length = recognizedPlate.chars.size();
+        int length = recognizedPlate.getChars().size();
         this.unFlagAll();
         if (syntaxAnalysisMode == 1) {
             this.flagEqualLength(length);
@@ -228,36 +184,26 @@ public class Parser {
             this.flagEqualOrShorterLength(length);
         }
 
-        Vector<FinalPlate> finalPlates = new Vector<>();
+        Vector<FinalPlate> finalPlates = new Vector<FinalPlate>();
 
         for (PlateForm form : this.plateForms) {
             if (!form.flagged) {
-                continue; // skip unflagged
+                continue;
             }
-            for (int i = 0; i <= (length - form.length()); i++) { // posuvanie
-                // formy po
-                // znacke
+            for (int i = 0; i <= (length - form.length()); i++) { // moving the form on the plate
                 // System.out.println("comparing "+recognizedPlate.getString()+" with form "+form.name+" and offset "+i
-                // );
+                // ); TODO logger
                 FinalPlate finalPlate = new FinalPlate();
-                for (int ii = 0; ii < form.length(); ii++) { // prebehnut vsetky
-                    // znaky formy
-                    // form.getPosition(ii).allowedChars // zoznam povolenych
-                    RecognizedChar rc = recognizedPlate.getChar(ii + i); // znak
-                    // na
-                    // znacke
-
-                    if (form.getPosition(ii).isAllowed(rc.getPattern(0).getChar())) {
+                for (int j = 0; j < form.length(); j++) { // all chars of the form
+                    RecognizedChar rc = recognizedPlate.getChar(j + i);
+                    if (form.getPosition(j).isAllowed(rc.getPattern(0).getChar())) {
                         finalPlate.addChar(rc.getPattern(0).getChar());
-                    } else { // treba vymenu
-                        finalPlate.requiredChanges++; // +1 za pismeno
+                    } else { // a swap needed
+                        finalPlate.requiredChanges++; // +1 for every char
                         for (int x = 0; x < rc.getPatterns().size(); x++) {
-                            if (form.getPosition(ii).isAllowed(rc.getPattern(x).getChar())) {
+                            if (form.getPosition(j).isAllowed(rc.getPattern(x).getChar())) {
                                 RecognizedChar.RecognizedPattern rp = rc.getPattern(x);
-                                finalPlate.requiredChanges += (rp.getCost() / 100); // +x
-                                // za
-                                // jeho
-                                // cost
+                                finalPlate.requiredChanges += (rp.getCost() / 100); // +x for its cost
                                 finalPlate.addChar(rp.getChar());
                                 break;
                             }
@@ -265,34 +211,86 @@ public class Parser {
                     }
                 }
                 // System.out.println("adding "+finalPlate.plate+" with required changes "+finalPlate.requiredChanges);
+                // TODO logger
                 finalPlates.add(finalPlate);
             }
         }
-        //
-
-        // tu este osetrit nespracovanie znacky v pripade ze nebola oznacena
-        // ziadna
         if (finalPlates.size() == 0) {
             return recognizedPlate.getString();
         }
-        // else :
-        // najst tu s najmensim poctom vymen
+        // else: find the plate with lowest number of swaps
         float minimalChanges = Float.POSITIVE_INFINITY;
         int minimalIndex = 0;
-        // System.out.println("---");
+        // System.out.println("---"); // TODO logger
         for (int i = 0; i < finalPlates.size(); i++) {
             // System.out.println("::"+finalPlates.elementAt(i).plate+" "+finalPlates.elementAt(i).requiredChanges);
+            // TODO logger
             if (finalPlates.elementAt(i).requiredChanges <= minimalChanges) {
                 minimalChanges = finalPlates.elementAt(i).requiredChanges;
                 minimalIndex = i;
             }
         }
-
         String toReturn = recognizedPlate.getString();
         if (finalPlates.elementAt(minimalIndex).requiredChanges <= 2) {
             toReturn = finalPlates.elementAt(minimalIndex).plate;
         }
         return toReturn;
+    }
+
+    private class PlateForm {
+
+        private boolean flagged = false;
+        private Vector<Position> positions;
+        private String name;
+
+        public PlateForm(String name) {
+            this.name = name;
+            this.positions = new Vector<Position>();
+        }
+
+        public void addPosition(Position p) {
+            this.positions.add(p);
+        }
+
+        public Position getPosition(int index) {
+            return this.positions.elementAt(index);
+        }
+
+        public int length() {
+            return this.positions.size();
+        }
+
+        public class Position {
+
+            public char[] allowedChars;
+
+            public Position(String data) {
+                this.allowedChars = data.toCharArray();
+            }
+
+            public boolean isAllowed(char chr) {
+                boolean ret = false;
+                for (int i = 0; i < this.allowedChars.length; i++) {
+                    if (this.allowedChars[i] == chr) {
+                        ret = true;
+                    }
+                }
+                return ret;
+            }
+        }
+    }
+
+    public final class FinalPlate {
+        private String plate;
+        private float requiredChanges = 0;
+
+        private FinalPlate() {
+            this.plate = "";
+        }
+
+        public void addChar(char chr) {
+            this.plate = this.plate + chr;
+        }
     }
 
 }

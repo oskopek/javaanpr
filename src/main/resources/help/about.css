@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 JavaANPR contributors
+ * Copyright 2015 JavaANPR contributors
  * Copyright 2006 Ondrej Martinsky
  * Licensed under the Educational Community License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,39 @@
  * permissions and limitations under the License.
  */
 
-package net.sf.javaanpr.gui;
+body {
+    font-family: tahoma;
+    font-size: 12pt;
+    color: #444444;
+}
 
-import java.util.Calendar;
+p {
+    margin-left: 20pt;
+    margin-top: 0;
+    margin-right: 20pt;
+}
 
-public class TimeMeter {
+p.left {
+    text-align: left;
+}
 
-    private long startTime;
+p.justify {
+    text-align: justify;
+}
 
-    public TimeMeter() {
-        this.startTime = Calendar.getInstance().getTimeInMillis();
-    }
+p.right {
+    text-align: right;
+}
 
-    public long getTime() {
-        return Calendar.getInstance().getTimeInMillis() - this.startTime;
-    }
+p.code {
+    text-align: left;
+    font-family: times;
+}
+
+a {
+    color: black;
+}
+
+a:hover {
+    color: red;
 }

@@ -28,7 +28,7 @@ public class TestUtility {
     public StringBuilder readFile(final String filename) throws IOException {
         final BufferedReader br = new BufferedReader(new FileReader(filename));
         final StringBuilder sb = new StringBuilder();
-        String currentLine = null;
+        String currentLine;
         while ((currentLine = br.readLine()) != null) {
             sb.append(currentLine);
         }

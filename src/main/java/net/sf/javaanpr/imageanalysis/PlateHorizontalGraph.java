@@ -21,15 +21,11 @@ import net.sf.javaanpr.configurator.Configurator;
 import java.util.Vector;
 
 public class PlateHorizontalGraph extends Graph {
-    /*
-     * private static double peakFootConstant = // 0.1; //CONSTANT Intelligence.configurator
-     * .getDoubleProperty("platehorizontalgraph_peakfootconstant");
-     */
 
-    private static int horizontalDetectionType = Configurator.getConfigurator().getIntProperty(
-            "platehorizontalgraph_detectionType");
+    private static int horizontalDetectionType =
+            Configurator.getConfigurator().getIntProperty("platehorizontalgraph_detectionType");
 
-    Plate handle;
+    private Plate handle;
 
     public PlateHorizontalGraph(Plate handle) {
         this.handle = handle;
@@ -43,10 +39,10 @@ public class PlateHorizontalGraph extends Graph {
         if (PlateHorizontalGraph.horizontalDetectionType == 1) {
             return this.findPeak_edgedetection(count);
         }
-        return this.findPeak_derivate(count);
+        return this.findPeak_derivative(count);
     }
 
-    public Vector<Peak> findPeak_derivate(int count) { // RIESENIE DERIVACIOU
+    public Vector<Peak> findPeak_derivative(int count) {
         int a, b;
         float maxVal = this.getMaxValue();
         for (a = 2; (-this.derivation(a, a + 4) < (maxVal * 0.2)) && (a < (this.yValues.size() - 2 - 2 - 4)); a++) {
@@ -55,7 +51,7 @@ public class PlateHorizontalGraph extends Graph {
         for (b = this.yValues.size() - 1 - 2; (this.derivation(b - 4, b) < (maxVal * 0.2)) && (b > (a + 2)); b--) {
             // intentionally empty
         }
-        Vector<Peak> outPeaks = new Vector<>();
+        Vector<Peak> outPeaks = new Vector<Peak>();
         outPeaks.add(new Peak(a, b));
         super.peaks = outPeaks;
         return outPeaks;
@@ -70,7 +66,7 @@ public class PlateHorizontalGraph extends Graph {
         for (b = this.yValues.size() - 1; this.yValues.elementAt(b) < average; b--) {
             // intentionally empty
         }
-        Vector<Peak> outPeaks = new Vector<>();
+        Vector<Peak> outPeaks = new Vector<Peak>();
         a = Math.max(a - 5, 0);
         b = Math.min(b + 5, this.yValues.size());
         outPeaks.add(new Peak(a, b));

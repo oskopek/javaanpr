@@ -29,101 +29,88 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
 
     private static int normalize_x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
     private static int normalize_y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
+    /**
+     * Dimensions of an input character after transformation: 10 * 16 = 160 neurons.
+     */
+    private NeuralNetwork network;
 
-    // rozmer vstupneho pismena po transformacii : 10 x 16 = 160 neuronov
-
-    public NeuralNetwork network;
-
-    // do not learn netwotk, but load if from file (default)
+    /**
+     * Do not learn network, but load it from file (default).
+     */
     public NeuralPatternClassificator() {
         this(false);
     }
 
     public NeuralPatternClassificator(boolean learn) {
         Configurator configurator = Configurator.getConfigurator();
-
-        // zakomentovane dna 2.1.2007
-        // this.normalize_x =
-        // configurator.getIntProperty("char_normalizeddimensions_x");
-        // this.normalize_y =
-        // configurator.getIntProperty("char_normalizeddimensions_y");
-
         Vector<Integer> dimensions = new Vector<Integer>();
-
-        // determine size of input layer according to chosen feature extraction
-        // method.
+        // determine size of input layer according to chosen feature extraction method
         int inputLayerSize;
         if (configurator.getIntProperty("char_featuresExtractionMethod") == 0) {
             inputLayerSize = NeuralPatternClassificator.normalize_x * NeuralPatternClassificator.normalize_y;
         } else {
-            inputLayerSize = CharacterRecognizer.features.length * 4;
+            inputLayerSize = CharacterRecognizer.FEATURES.length * 4;
         }
-
-        // construct new neural network with specified dimensions.
+        // construct new neural network with specified dimensions
         dimensions.add(inputLayerSize);
         dimensions.add(configurator.getIntProperty("neural_topology"));
-        dimensions.add(CharacterRecognizer.alphabet.length);
+        dimensions.add(CharacterRecognizer.ALPHABET.length);
         this.network = new NeuralNetwork(dimensions);
-
         if (learn) {
-            // learn network
             String learnAlphabetPath = configurator.getStrProperty("char_learnAlphabetPath");
             try {
                 this.learnAlphabet(learnAlphabetPath);
-            } catch (IOException e) {
+            } catch (IOException e) { // TODO logger
                 System.err.println("Failed to load alphabet: " + learnAlphabetPath);
                 e.printStackTrace();
             }
         } else {
             // or load network from xml
             String neuralNetPath = configurator.getPathProperty("char_neuralNetworkPath");
-
             InputStream is = configurator.getResourceAsStream(neuralNetPath);
-
             this.network = new NeuralNetwork(is);
         }
     }
 
-    // IMAGE -> CHAR
+    public NeuralNetwork getNetwork() {
+        return network;
+    }
+
+    /**
+     * Image to character.
+     *
+     * @param imgChar the Char to recognize
+     * @return the {@link net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar}
+     */
     @Override
-    public RecognizedChar recognize(Char imgChar) { // rozpozna UZ normalizovany
-        // char
+    public RecognizedChar recognize(Char imgChar) {
         imgChar.normalize();
         Vector<Double> output = this.network.test(imgChar.extractFeatures());
-        // double max = 0.0;
-        // int indexMax = 0;
-
         RecognizedChar recognized = new RecognizedChar();
-
         for (int i = 0; i < output.size(); i++) {
-            recognized.addPattern(recognized.new RecognizedPattern(alphabet[i], output.elementAt(i).floatValue()));
+            recognized.addPattern(recognized.new RecognizedPattern(ALPHABET[i], output.elementAt(i).floatValue()));
         }
         recognized.render();
         recognized.sort(1);
         return recognized;
     }
 
-    // public Vector<Double> imageToVector(Char imgChar) {
-    // Vector<Double> vectorInput = new Vector<Double>();
-    // for (int x = 0; x<imgChar.getWidth(); x++)
-    // for (int y = 0; y<imgChar.getHeight(); y++)
-    // vectorInput.add(new Double(imgChar.getBrightness(x,y)));
-    // return vectorInput;
-    // }
-    public NeuralNetwork.SetOfIOPairs.IOPair createNewPair(char chr, Char imgChar) { // uz normalizonvany
+    /**
+     * @param chr the char
+     * @param imgChar already normalized!
+     * @return an {@link net.sf.javaanpr.neuralnetwork.NeuralNetwork.SetOfIOPairs.IOPair}
+     */
+    public NeuralNetwork.SetOfIOPairs.IOPair createNewPair(char chr, Char imgChar) {
         Vector<Double> vectorInput = imgChar.extractFeatures();
-
         Vector<Double> vectorOutput = new Vector<Double>();
-        for (int i = 0; i < alphabet.length; i++) {
-            if (chr == alphabet[i]) {
+        for (int i = 0; i < ALPHABET.length; i++) {
+            if (chr == ALPHABET[i]) {
                 vectorOutput.add(1.0);
             } else {
                 vectorOutput.add(0.0);
             }
         }
-
-
-        System.out.println();
+        System.out.println(); // TODO logger
         for (Double d : vectorInput) {
             System.out.print(d + " ");
         }
@@ -132,27 +119,27 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
             System.out.print(d + " ");
         }
         System.out.println();
-
-
         return (new NeuralNetwork.SetOfIOPairs.IOPair(vectorInput, vectorOutput));
     }
 
     // NAUCI NEURONOVU SIET ABECEDE, KTORU NAJDE V ADRESARI PATH
+
+    /**
+     * Learn the neural network with an alphabet in given folder.
+     *
+     * @param folder the alphabet folder
+     * @throws IOException if the alphabet failed to load
+     */
     public void learnAlphabet(String folder) throws IOException {
         NeuralNetwork.SetOfIOPairs train = new NeuralNetwork.SetOfIOPairs();
-
         ArrayList<String> fileList = (ArrayList<String>) Char.getAlphabetList(folder);
-
         for (String fileName : fileList) {
             InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
-
             Char imgChar = new Char(is);
             imgChar.normalize();
             train.addIOPair(this.createNewPair(fileName.toUpperCase().charAt(0), imgChar));
-
             is.close();
         }
-
         this.network.learn(train, Configurator.getConfigurator().getIntProperty("neural_maxk"),
                 Configurator.getConfigurator().getDoubleProperty("neural_eps"),
                 Configurator.getConfigurator().getDoubleProperty("neural_lambda"),

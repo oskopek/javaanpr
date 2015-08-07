@@ -24,10 +24,10 @@ import java.awt.image.Kernel;
 import java.util.Vector;
 
 public class Band extends Photo {
-    public static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 25, 25);
-    private static int numberOfCandidates = Configurator.getConfigurator()
-            .getIntProperty("intelligence_numberOfPlates");
 
+    private static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 25, 25);
+    private static int numberOfCandidates =
+            Configurator.getConfigurator().getIntProperty("intelligence_numberOfPlates");
     private BandGraph graphHandle = null;
 
     public Band(BufferedImage bi) {
@@ -41,42 +41,34 @@ public class Band extends Photo {
 
     private Vector<Graph.Peak> computeGraph() {
         if (this.graphHandle != null) {
-            return this.graphHandle.peaks; // graf uz bol vypocitany
+            return this.graphHandle.peaks;
         }
-        BufferedImage imageCopy = Photo.duplicateBufferedImage(this.image);
+        BufferedImage imageCopy = Photo.duplicateBufferedImage(getImage());
         this.fullEdgeDetector(imageCopy);
         this.graphHandle = this.histogram(imageCopy);
-        this.graphHandle.rankFilter(this.image.getHeight());
+        this.graphHandle.rankFilter(getImage().getHeight());
         this.graphHandle.applyProbabilityDistributor(Band.distributor);
         this.graphHandle.findPeaks(Band.numberOfCandidates);
         return this.graphHandle.peaks;
     }
 
+    /**
+     * Recommended: 3 plates.
+     *
+     * @return plates
+     */
     public Vector<Plate> getPlates() {
         Vector<Plate> out = new Vector<Plate>();
-
         Vector<Graph.Peak> peaks = this.computeGraph();
-
         for (int i = 0; i < peaks.size(); i++) {
-            // vyseknut z povodneho! obrazka znacky, a ulozit do vektora. POZOR
-            // !!!!!! Vysekavame z povodneho, takze
-            // na suradnice vypocitane z imageCopy musime uplatnit inverznu
-            // transformaciu
+            // Cut from the original image of the plate and save to a vector.
+            // ATTENTION: Cutting from original,
+            // we have to apply an inverse transformation to the coordinates calculated from imageCopy
             Graph.Peak p = peaks.elementAt(i);
-            out.add(new Plate(this.image.getSubimage(p.getLeft(), 0, p.getDiff(), this.image.getHeight())));
+            out.add(new Plate(getImage().getSubimage(p.getLeft(), 0, p.getDiff(), getImage().getHeight())));
         }
         return out;
     }
-
-    // public void horizontalRankBi(BufferedImage image) {
-    // BufferedImage imageCopy = duplicateBi(image);
-    //
-    // float data[] = new float[image.getHeight()];
-    // for (int i=0; i<data.length; i++) data[i] = 1.0f/data.length;
-    //
-    // new ConvolveOp(new Kernel(data.length,1, data), ConvolveOp.EDGE_NO_OP,
-    // null).filter(imageCopy, image);
-    // }
 
     public BandGraph histogram(BufferedImage bi) {
         BandGraph graph = new BandGraph(this);
@@ -93,16 +85,12 @@ public class Band extends Photo {
     public void fullEdgeDetector(BufferedImage source) {
         float[] verticalMatrix = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
         float[] horizontalMatrix = {-1, -2, -1, 0, 0, 0, 1, 2, 1};
-
         BufferedImage i1 = Photo.createBlankBi(source);
         BufferedImage i2 = Photo.createBlankBi(source);
-
         new ConvolveOp(new Kernel(3, 3, verticalMatrix), ConvolveOp.EDGE_NO_OP, null).filter(source, i1);
         new ConvolveOp(new Kernel(3, 3, horizontalMatrix), ConvolveOp.EDGE_NO_OP, null).filter(source, i2);
-
         int w = source.getWidth();
         int h = source.getHeight();
-
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
                 float sum = 0.0f;
@@ -111,7 +99,5 @@ public class Band extends Photo {
                 Photo.setBrightness(source, x, y, Math.min(1.0f, sum));
             }
         }
-
     }
-
 }

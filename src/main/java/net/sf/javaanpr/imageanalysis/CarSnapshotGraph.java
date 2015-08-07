@@ -22,34 +22,65 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
+/**
+ * Configuration for searching bands in an image.
+ */
 public class CarSnapshotGraph extends Graph {
-    // configuration for searching bands in image !
-    private static double peakFootConstant = Configurator.getConfigurator().getDoubleProperty(
-            "carsnapshotgraph_peakfootconstant"); // 0.55
-    private static double peakDiffMultiplicationConstant = Configurator.getConfigurator().getDoubleProperty(
-            "carsnapshotgraph_peakDiffMultiplicationConstant"); // 0.1
 
-    CarSnapshot handle;
+    private static double peakFootConstant =
+            Configurator.getConfigurator().getDoubleProperty("carsnapshotgraph_peakfootconstant"); // 0.55
+    private static double peakDiffMultiplicationConstant =
+            Configurator.getConfigurator().getDoubleProperty("carsnapshotgraph_peakDiffMultiplicationConstant"); // 0.1
+    private CarSnapshot handle;
 
     public CarSnapshotGraph(CarSnapshot handle) {
         this.handle = handle;
     }
 
+    public Vector<Peak> findPeaks(int count) {
+        Vector<Peak> outPeaks = new Vector<Peak>();
+        for (int c = 0; c < count; c++) {
+            float maxValue = 0.0f;
+            int maxIndex = 0;
+            for (int i = 0; i < this.yValues.size(); i++) { // left to right
+                if (this.allowedInterval(outPeaks, i)) {
+                    if (this.yValues.elementAt(i) >= maxValue) {
+                        maxValue = this.yValues.elementAt(i);
+                        maxIndex = i;
+                    }
+                }
+            }
+            // we found the biggest peak
+            int leftIndex = this.indexOfLeftPeakRel(maxIndex, CarSnapshotGraph.peakFootConstant);
+            int rightIndex = this.indexOfRightPeakRel(maxIndex, CarSnapshotGraph.peakFootConstant);
+            int diff = rightIndex - leftIndex;
+            leftIndex -= CarSnapshotGraph.peakDiffMultiplicationConstant * diff;
+            rightIndex += CarSnapshotGraph.peakDiffMultiplicationConstant * diff;
+            outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(this.yValues.size() - 1, rightIndex)));
+        }
+        Collections.sort(outPeaks, new PeakComparer(this.yValues));
+        super.peaks = outPeaks;
+        return outPeaks;
+    }
+
     public class PeakComparer implements Comparator<Object> {
-        Vector<Float> yValues = null;
+
+        private Vector<Float> yValues = null;
 
         public PeakComparer(Vector<Float> yValues) {
             this.yValues = yValues;
         }
 
+        /**
+         * @param peak the peak
+         * @return its value according to intensity
+         */
         private float getPeakValue(Object peak) {
-            return this.yValues.elementAt(((Peak) peak).getCenter()); // podla
-            // intenzity
-            // return ((Peak)peak).getDiff();
+            return this.yValues.elementAt(((Peak) peak).getCenter());
         }
 
         @Override
-        public int compare(Object peak1, Object peak2) { // Peak
+        public int compare(Object peak1, Object peak2) {
             double comparison = this.getPeakValue(peak2) - this.getPeakValue(peak1);
             if (comparison < 0) {
                 return -1;
@@ -60,57 +91,4 @@ public class CarSnapshotGraph extends Graph {
             return 0;
         }
     }
-
-    public Vector<Peak> findPeaks(int count) {
-
-        Vector<Peak> outPeaks = new Vector<Peak>();
-
-        for (int c = 0; c < count; c++) { // for count
-            float maxValue = 0.0f;
-            int maxIndex = 0;
-            for (int i = 0; i < this.yValues.size(); i++) { // zlava doprava
-                if (this.allowedInterval(outPeaks, i)) { // ak potencialny vrchol sa
-                    // nachadza vo "volnom"
-                    // intervale, ktory nespada
-                    // pod ine vrcholy
-                    if (this.yValues.elementAt(i) >= maxValue) {
-                        maxValue = this.yValues.elementAt(i);
-                        maxIndex = i;
-                    }
-                }
-            } // end for int 0->max
-            // nasli sme najvacsi peak
-            int leftIndex = this.indexOfLeftPeakRel(maxIndex, CarSnapshotGraph.peakFootConstant);
-            int rightIndex = this.indexOfRightPeakRel(maxIndex, CarSnapshotGraph.peakFootConstant);
-            int diff = rightIndex - leftIndex;
-            leftIndex -= CarSnapshotGraph.peakDiffMultiplicationConstant * diff; /* CONSTANT */
-            rightIndex += CarSnapshotGraph.peakDiffMultiplicationConstant * diff; /* CONSTANT */
-
-            outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(this.yValues.size() - 1, rightIndex)));
-        } // end for count
-
-        Collections.sort(outPeaks, new PeakComparer(this.yValues));
-
-        super.peaks = outPeaks;
-        return outPeaks;
-    }
-    // public int indexOfLeftPeak(int peak, double peakFootConstant) {
-    // int index=peak;
-    // for (int i=peak; i>=0; i--) {
-    // index = i;
-    // if (yValues.elementAt(index) < peakFootConstant*yValues.elementAt(peak) )
-    // break;
-    // }
-    // return Math.max(0,index);
-    // }
-    // public int indexOfRightPeak(int peak, double peakFootConstant) {
-    // int index=peak;
-    // for (int i=peak; i<yValues.size(); i++) {
-    // index = i;
-    // if (yValues.elementAt(index) < peakFootConstant*yValues.elementAt(peak) )
-    // break;
-    // }
-    // return Math.min(yValues.size(), index);
-    // }
-
 }

@@ -21,22 +21,6 @@ import javax.swing.event.ListDataListener;
 import java.util.Vector;
 
 public class FileListModel implements ListModel<Object> {
-    public class FileListModelEntry {
-        public String fileName;
-        public String fullPath;
-        public String recognizedPlate;
-
-        public FileListModelEntry(String fileName, String fullPath) {
-            this.fileName = fileName;
-            this.fullPath = fullPath;
-            this.recognizedPlate = "?";
-        }
-
-        @Override
-        public String toString() {
-            return this.fileName;
-        }
-    }
 
     public Vector<FileListModelEntry> fileList;
 
@@ -63,10 +47,30 @@ public class FileListModel implements ListModel<Object> {
 
     @Override
     public void addListDataListener(ListDataListener l) {
+        throw new NoSuchMethodError("Method addListDataListener not implemented");
     }
 
     @Override
     public void removeListDataListener(ListDataListener l) {
+        throw new NoSuchMethodError("Method removeListDataListener not implemented");
+    }
+
+    public class FileListModelEntry {
+
+        public String fileName;
+        public String fullPath;
+        public String recognizedPlate;
+
+        public FileListModelEntry(String fileName, String fullPath) {
+            this.fileName = fileName;
+            this.fullPath = fullPath;
+            this.recognizedPlate = "?";
+        }
+
+        @Override
+        public String toString() {
+            return this.fileName;
+        }
     }
 
 }

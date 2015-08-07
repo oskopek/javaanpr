@@ -16,66 +16,74 @@
   -->
 
 <html>
-<head>
-    <style>
-        body {
-            font-family: tahoma;
-            font-size: 12;
-            color: #444444
-        }
+    <head>
+        <title>JavaANPR - Help</title>
+        <link rel="stylesheet" type="text/css" href="about.css">
+    </head>
+    <body>
+        <p><img src="./logo.png" alt=""></p>
+        <p class="justify"></p>
 
-        p {
-            margin-left: 20;
-            margin-top: 0;
-            margin-right: 20
-        }
+        <p class='code'>JavaANPR is an automatic number plate recognition software, which implements algorithmic and
+            mathematical principles from field of artificial intelligence, machine vision and neural networks.</p>
+        <p class="justify"></p>
 
-        p.left {
-            text-align: left
-        }
+        <p class="justify"></p>
+        <p class='code'>Usage : (mvn exec:java)/(java -jar anpr.jar) [-options]</p>
+        <p class="justify"></p>
 
-        p.justify {
-            text-align: justify
-        }
+        <p class='code'>Where options include:</p>
 
-        p.right {
-            text-align: right
-        }
+        <p class="justify"></p>
 
-        p.code {
-            text-align: left;
-            font-family: times
-        }
+        <p class='code'><b>-help</b></p>
+        <p class='code'>Displays this help</p>
 
-        a {
-            color: black
-        }
+        <p class="justify"></p>
 
-        a:hover {
-            color: red
-        }
-    </style>
-</head>
-<body>
+        <p class='code'><b>-gui</b></p>
+        <p class='code'>Run GUI viewer (default choice)</p>
 
-<img src='./logo.png' alt=''>
+        <p class="justify"></p>
 
-<p class='code'>
+        <p class='code'><b>-recognize -i &lt;snapshot&gt;</b></p>
+        <p class='code'>Recognize single snapshot</p>
 
-    <br>JavaANPR is an automatic number plate recognition software, which implements algorithmic and mathematical
-    principles from field of artificial intelligence, machine vision and neural networks.<br> <br> Usage : java -jar
-    anpr.jar [-options]<br> <br> Where options include:<br> <br> <b>-help</b><br> Displays this help<br>
-    <br> <b>-gui</b><br> Run GUI viewer (default choice)<br> <br> <b>-recognize -i &lt;snapshot&gt;</b><br>
-    Recognize single snapshot<br> <br> <b>-recognize -i &lt;snapshot&gt; -o &lt;dstdir&gt;</b><br> Recognize
-    single snapshot and save report html into specified directory<br> <br> <b>-newconfig -o &lt;file&gt;</b><br>
-    Generate default configuration file<br> <br> <b>-newnetwork -o &lt;file&gt;</b><br> Train neural network
-    according to specified feature extraction method and learning parameters (in config. file) and saves it into output
-    file<br>
-    <br> <b>-newalphabet -i &lt;srcdir&gt; -o &lt;dstdir&gt;</b><br> Normalize all images in &lt;srcdir&gt; and save
-    it to &lt;dstdir&gt;<br> <br>
+        <p class="justify"></p>
 
-</p>
+        <p class='code'><b>-recognize -i &lt;snapshot&gt; -o &lt;dstdir&gt;</b></p>
+        <p class='code'>Recognize single snapshot and save report html into specified directory</p>
 
+        <p class="justify"></p>
 
-</body>
+        <p class='code'><b>-newconfig -o &lt;file&gt;</b></p>
+        <p class='code'>Generate default configuration file</p>
+
+        <p class="justify"></p>
+
+        <p class='code'><b>-newnetwork -o &lt;file&gt;</b>
+        <p class='code'>Train neural network according to specified feature extraction method and learning parameters
+            (in config. file) and saves it into output file</p>
+
+        <p class="justify"></p>
+
+        <p class='code'><b>-newalphabet -i &lt;srcdir&gt; -o &lt;dstdir&gt;</b></p>
+        <p class='code'>Normalize all images in &lt;srcdir&gt; and save it to &lt;dstdir&gt;</p>
+
+        <p class="justify"></p>
+
+        <p class="justify">
+            <img style="border:0;width:88px;height:31px"
+                    src="http://jigsaw.w3.org/css-validator/images/vcss"
+                    alt="Valid CSS!">
+        </p>
+
+        <p class="justify"></p>
+
+        <p class="justify">
+            <img style="border:0;width:88px;height:31px"
+                    src="http://www.w3.org/Icons/valid-html401"
+                    alt="Valid HTML 4.01!">
+        </p>
+    </body>
 </html>

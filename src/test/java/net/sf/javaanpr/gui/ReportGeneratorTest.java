@@ -32,8 +32,8 @@ import static org.junit.Assert.*;
  * Tests the class {@link ReportGenerator}.
  */
 public class ReportGeneratorTest {
-    TestUtility testUtility = new TestUtility();
-    private CarSnapshot carSnapshot;
+
+    private final TestUtility testUtility = new TestUtility();
 
     /**
      * Tests {@link ReportGenerator#insertImage(BufferedImage, String, int, int)} with valid inputs.
@@ -122,7 +122,7 @@ public class ReportGeneratorTest {
             final ReportGenerator reportGenerator = new ReportGenerator("target/test-classes/");
             final InputStream inStream = null;
             final File io = new File("target/test-classes/out.txt");
-            reportGenerator.saveStreamToFile(null, io);
+            reportGenerator.saveStreamToFile(inStream, io);
         } catch (final Exception e) {
             assertEquals(null, e.getMessage());
         }
@@ -158,8 +158,7 @@ public class ReportGeneratorTest {
         final InputStream inStream = new FileInputStream("src/test/resources/snapshots/test_001.jpg");
         final File io = new File("target/test-classes/out.txt");
         reportGenerator.saveStreamToFile(inStream, io);
-        StringBuilder sb = new StringBuilder();
-        sb = testUtility.readFile("target/test-classes/out.txt");
+        StringBuilder sb = testUtility.readFile("target/test-classes/out.txt");
         assertEquals(true, sb.toString().contains("Hewlett-Packard"));
     }
 
@@ -175,9 +174,6 @@ public class ReportGeneratorTest {
             final ReportGenerator reportGenerator = new ReportGenerator("target/test-classes/");
             final CarSnapshot carSnapshot = new CarSnapshot("snapshots/test_001.jpg");
             final BufferedImage image = carSnapshot.renderGraph();
-            final String cls = "test";
-            final int h = 0;
-            final int w = 0;
             reportGenerator.saveImage(image, "png");
         } catch (final Exception e) {
             fail(e.getMessage());

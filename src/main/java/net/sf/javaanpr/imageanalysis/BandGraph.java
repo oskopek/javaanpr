@@ -22,31 +22,98 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
 
+/**
+ * Processing of the horizontal projection of the detected region of the plate.
+ * <p/>
+ * The {@code peak} and {@code peakfoot} are detected on the X axis and multiplied with the {@code
+ * peakDiffMultiplicationConstant}
+ */
 public class BandGraph extends Graph {
+
+    private static double peakFootConstant =
+            Configurator.getConfigurator().getDoubleProperty("bandgraph_peakfootconstant"); // 0.75
+    private static double peakDiffMultiplicationConstant =
+            Configurator.getConfigurator().getDoubleProperty("bandgraph_peakDiffMultiplicationConstant"); // 0.2
+
+    /**
+     * The Band to which this Graph is related.
+     */
     private Band handle;
 
-    private static double peakFootConstant = Configurator.getConfigurator().getDoubleProperty(
-            "bandgraph_peakfootconstant"); // 0.75
-    private static double peakDiffMultiplicationConstant = Configurator.getConfigurator().getDoubleProperty(
-            "bandgraph_peakDiffMultiplicationConstant"); // 0.2
-
     public BandGraph(Band handle) {
-        this.handle = handle; // nesie odkaz na obrazok (band), ku ktoremu sa
-        // graf vztahuje
+        this.handle = handle;
+    }
+
+    public Vector<Peak> findPeaks(int count) {
+        Vector<Graph.Peak> outPeaks = new Vector<Graph.Peak>();
+        for (int c = 0; c < count; c++) {
+            float maxValue = 0.0f;
+            int maxIndex = 0;
+            for (int i = 0; i < this.yValues.size(); i++) { // left to right
+                if (allowedInterval(outPeaks, i)) {
+                    if (this.yValues.elementAt(i) >= maxValue) {
+                        maxValue = this.yValues.elementAt(i);
+                        maxIndex = i;
+                    }
+                }
+            }
+            // we found the biggest peak, let's do the first cut
+            int leftIndex = this.indexOfLeftPeakRel(maxIndex, BandGraph.peakFootConstant);
+            int rightIndex = this.indexOfRightPeakRel(maxIndex, BandGraph.peakFootConstant);
+            int diff = rightIndex - leftIndex;
+            leftIndex -= BandGraph.peakDiffMultiplicationConstant * diff;
+            rightIndex += BandGraph.peakDiffMultiplicationConstant * diff;
+            outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(this.yValues.size() - 1, rightIndex)));
+        }
+        // filter the candidates that don't correspond with plate proportions
+        Vector<Peak> outPeaksFiltered = new Vector<Peak>();
+        for (Peak p : outPeaks) {
+            if ((p.getDiff() > (2 * this.handle.getHeight())) // plate too thin
+                    && (p.getDiff() < (15 * this.handle.getHeight()))) { // plate too wide
+                outPeaksFiltered.add(p);
+            }
+        }
+        Collections.sort(outPeaksFiltered, new PeakComparer(this.yValues));
+        super.peaks = outPeaksFiltered;
+        return outPeaksFiltered;
+    }
+
+    public int indexOfLeftPeakAbs(int peak, double peakFootConstantAbs) {
+        int index = peak;
+        for (int i = peak; i >= 0; i--) {
+            index = i;
+            if (this.yValues.elementAt(index) < peakFootConstantAbs) {
+                break;
+            }
+        }
+        return Math.max(0, index);
+    }
+
+    public int indexOfRightPeakAbs(int peak, double peakFootConstantAbs) {
+        int index = peak;
+        for (int i = peak; i < this.yValues.size(); i++) {
+            index = i;
+            if (this.yValues.elementAt(index) < peakFootConstantAbs) {
+                break;
+            }
+        }
+        return Math.min(this.yValues.size(), index);
     }
 
     public class PeakComparer implements Comparator<Object> {
-        Vector<Float> yValues = null;
+
+        private Vector<Float> yValues = null;
 
         public PeakComparer(Vector<Float> yValues) {
             this.yValues = yValues;
         }
 
+        /**
+         * @param peak the peak
+         * @return the peak size
+         */
         private float getPeakValue(Object peak) {
-            // return ((Peak)peak).center(); // left > right
-
-            return this.yValues.elementAt(((Peak) peak).getCenter()); // velkost
-            // peaku
+            return this.yValues.elementAt(((Peak) peak).getCenter());
         }
 
         @Override
@@ -60,76 +127,5 @@ public class BandGraph extends Graph {
             }
             return 0;
         }
-    }
-
-    public Vector<Peak> findPeaks(int count) {
-        Vector<Graph.Peak> outPeaks = new Vector<>();
-
-        for (int c = 0; c < count; c++) { // for count
-            float maxValue = 0.0f;
-            int maxIndex = 0;
-            for (int i = 0; i < this.yValues.size(); i++) { // zlava doprava
-                if (this.allowedInterval(outPeaks, i)) { // ak potencialny vrchol sa
-                    // nachadza vo "volnom"
-                    // intervale, ktory nespada
-                    // pod ine vrcholy
-                    if (this.yValues.elementAt(i) >= maxValue) {
-                        maxValue = this.yValues.elementAt(i);
-                        maxIndex = i;
-                    }
-                }
-            } // end for int 0->max
-
-            // nasli sme najvacsi peak // urobime 1. vysek
-            int leftIndex = this.indexOfLeftPeakRel(maxIndex, BandGraph.peakFootConstant);
-            int rightIndex = this.indexOfRightPeakRel(maxIndex, BandGraph.peakFootConstant);
-            int diff = rightIndex - leftIndex;
-            leftIndex -= BandGraph.peakDiffMultiplicationConstant * diff; /* CONSTANT */
-            rightIndex += BandGraph.peakDiffMultiplicationConstant * diff; /* CONSTANT */
-
-            outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(this.yValues.size() - 1, rightIndex)));
-        } // end for count
-
-        // treba filtrovat kandidatov, ktory nezodpovedaju proporciam znacky
-        Vector<Peak> outPeaksFiltered = new Vector<>();
-        for (Peak p : outPeaks) {
-            if ((p.getDiff() > (2 * this.handle.getHeight())) && // ak nieje znacka
-                    (// prilis uzka
-                            p.getDiff() < (15 * this.handle.getHeight() // alebo nie je
-                                    // prilis siroka
-                            ))) {
-                outPeaksFiltered.add(p); // znacka ok, bereme ju
-                // else outPeaksFiltered.add(p);// znacka ok, bereme ju
-            }
-        }
-
-        Collections.sort(outPeaksFiltered, new PeakComparer(this.yValues));
-        super.peaks = outPeaksFiltered;
-        return outPeaksFiltered;
-
-    }
-
-    public int indexOfLeftPeakAbs(int peak, double peakFootConstantAbs) {
-        int index = peak;
-        // int counter = 0;
-        for (int i = peak; i >= 0; i--) {
-            index = i;
-            if (this.yValues.elementAt(index) < peakFootConstantAbs) {
-                break;
-            }
-        }
-        return Math.max(0, index);
-    }
-
-    public int indexOfRightPeakAbs(int peak, double peakFootConstantAbs) {
-        int index = peak;
-        // int counter = 0;
-        for (int i = peak; i < this.yValues.size(); i++) {
-            index = i;
-            if (this.yValues.elementAt(index) < peakFootConstantAbs) {
-                break;
-            }
-        }
-        return Math.min(this.yValues.size(), index);
     }
 }

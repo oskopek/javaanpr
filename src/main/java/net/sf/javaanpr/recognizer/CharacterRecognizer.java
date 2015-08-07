@@ -26,14 +26,11 @@ import java.util.Vector;
 
 public abstract class CharacterRecognizer {
 
-    // rozpoznavane pismena :
-    // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
-    // 28 29 30 31 32 33 34 35
-    // 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
-    public static char[] alphabet = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
-            'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+    public static final char[] ALPHABET =
+            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                    'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
-    public static float[][] features = {{0, 1, 0, 1}, // 0
+    public static final float[][] FEATURES = {{0, 1, 0, 1}, // 0
             {1, 0, 1, 0}, // 1
             {0, 0, 1, 1}, // 2
             {1, 1, 0, 0}, // 3
@@ -47,56 +44,13 @@ public abstract class CharacterRecognizer {
             {1, 1, 0, 1} // 11
     };
 
+    public abstract RecognizedChar recognize(Char chr);
+
     public class RecognizedChar {
-        public class RecognizedPattern {
-            private char chr;
-            private float cost;
-
-            RecognizedPattern(char chr, float value) {
-                this.chr = chr;
-                this.cost = value;
-            }
-
-            public char getChar() {
-                return this.chr;
-            }
-
-            public float getCost() {
-                return this.cost;
-            }
-        }
-
-        public class PatternComparer implements Comparator<Object> {
-            int direction;
-
-            public PatternComparer(int direction) {
-                this.direction = direction;
-            }
-
-            @Override
-            public int compare(Object o1, Object o2) {
-                float cost1 = ((RecognizedPattern) o1).getCost();
-                float cost2 = ((RecognizedPattern) o2).getCost();
-
-                int ret = 0;
-
-                if (cost1 < cost2) {
-                    ret = -1;
-                }
-                if (cost1 > cost2) {
-                    ret = 1;
-                }
-                if (this.direction == 1) {
-                    ret *= -1;
-                }
-                return ret;
-            }
-        }
-
         private Vector<RecognizedPattern> patterns;
         private boolean isSorted;
 
-        RecognizedChar() {
+        public RecognizedChar() {
             this.patterns = new Vector<RecognizedPattern>();
             this.isSorted = false;
         }
@@ -117,11 +71,14 @@ public abstract class CharacterRecognizer {
             Collections.sort(this.patterns, new PatternComparer(direction));
         }
 
+        /**
+         * @return null if not sorted
+         */
         public Vector<RecognizedPattern> getPatterns() {
             if (this.isSorted) {
                 return this.patterns;
             }
-            return null; // if not sorted
+            return null;
         }
 
         public RecognizedPattern getPattern(int i) {
@@ -136,36 +93,72 @@ public abstract class CharacterRecognizer {
             int height = 200;
             BufferedImage histogram = new BufferedImage(width + 20, height + 20, BufferedImage.TYPE_INT_RGB);
             Graphics2D graphic = histogram.createGraphics();
-
             graphic.setColor(Color.LIGHT_GRAY);
             Rectangle backRect = new Rectangle(0, 0, width + 20, height + 20);
             graphic.fill(backRect);
             graphic.draw(backRect);
-
             graphic.setColor(Color.BLACK);
 
             int colWidth = width / this.patterns.size();
             int left, top;
-
             for (int ay = 0; ay <= 100; ay += 10) {
                 int y = 15 + (int) (((100 - ay) / 100.0f) * (height - 20));
                 graphic.drawString(new Integer(ay).toString(), 3, y + 11);
                 graphic.drawLine(25, y + 5, 35, y + 5);
             }
             graphic.drawLine(35, 19, 35, height);
-
             graphic.setColor(Color.BLUE);
-
             for (int i = 0; i < this.patterns.size(); i++) {
                 left = (i * colWidth) + 42;
                 top = height - (int) (this.patterns.elementAt(i).cost * (height - 20));
-
                 graphic.drawRect(left, top, colWidth - 2, height - top);
                 graphic.drawString(this.patterns.elementAt(i).chr + " ", left + 2, top - 8);
             }
             return histogram;
         }
-    }
 
-    public abstract RecognizedChar recognize(Char chr);
+        public final class RecognizedPattern {
+            private char chr;
+            private float cost;
+
+            public RecognizedPattern(char chr, float value) {
+                this.chr = chr;
+                this.cost = value;
+            }
+
+            public char getChar() {
+                return this.chr;
+            }
+
+            public float getCost() {
+                return this.cost;
+            }
+        }
+
+        public class PatternComparer implements Comparator<Object> {
+
+            private int direction;
+
+            public PatternComparer(int direction) {
+                this.direction = direction;
+            }
+
+            @Override
+            public int compare(Object o1, Object o2) {
+                float cost1 = ((RecognizedPattern) o1).getCost();
+                float cost2 = ((RecognizedPattern) o2).getCost();
+                int ret = 0;
+                if (cost1 < cost2) {
+                    ret = -1;
+                }
+                if (cost1 > cost2) {
+                    ret = 1;
+                }
+                if (this.direction == 1) {
+                    ret *= -1;
+                }
+                return ret;
+            }
+        }
+    }
 }

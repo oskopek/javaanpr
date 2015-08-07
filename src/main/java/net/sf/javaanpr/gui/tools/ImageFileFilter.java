@@ -20,14 +20,6 @@ import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
 public class ImageFileFilter extends FileFilter {
-    @Override
-    public boolean accept(File f) {
-        if (f.isDirectory()) {
-            return true;
-        }
-        String name = f.getName();
-        return accept(name);
-    }
 
     public static boolean accept(String name) {
         int lastIndex = name.lastIndexOf('.');
@@ -35,8 +27,17 @@ public class ImageFileFilter extends FileFilter {
             return false;
         }
         String type = name.substring(lastIndex + 1, name.length()).toLowerCase();
-        return type.equals("bmp") || type.equals("jpg") || type.equals("jpeg") || type.equals("png")
-                || type.equals("gif");
+        return type.equals("bmp") || type.equals("jpg") || type.equals("jpeg") || type.equals("png") || type
+                .equals("gif");
+    }
+
+    @Override
+    public boolean accept(File f) {
+        if (f.isDirectory()) {
+            return true;
+        }
+        String name = f.getName();
+        return accept(name);
     }
 
     @Override
