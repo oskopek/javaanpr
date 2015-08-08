@@ -55,7 +55,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <skipTests>false</skipTests>
-        <skipUTs>${skipTests}</skipUTs>
         <skipITs>true</skipITs>
     </properties>
 
@@ -100,7 +99,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.17</version>
                 <configuration>
-                    <skipTests>${skipUTs}</skipTests>
+                    <skipTests>${skipTests}</skipTests>
                 </configuration>
             </plugin>
             <plugin>
@@ -362,7 +361,6 @@
             <properties>
                 <skipTests>false</skipTests>
                 <skipITs>${skipTests}</skipITs>
-                <skipUTs>${skipTests}</skipUTs>
             </properties>
         </profile>
     </profiles>
