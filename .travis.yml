@@ -26,8 +26,8 @@ after_success:
 notifications:
   irc:
     channels:
-      - irc.freenode.org#carcv
-    on_success: change
+      - irc.freenode.org#javaanpr
+    on_success: always
     on_failure: always
     template:
       - '%{repository} (%{branch}:%{commit} by %{author}): %{message} (%{build_url})'
