@@ -15,7 +15,7 @@
  */
 package net.sf.javaanpr.gui.windows;
 
-import net.sf.javaanpr.gui.tools.FileListModel;
+import net.sf.javaanpr.gui.tools.FileListModelEntry;
 import net.sf.javaanpr.gui.tools.ImageFileFilter;
 import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.imageanalysis.Photo;
@@ -40,13 +40,13 @@ public class FrameMain extends JFrame {
     private CarSnapshot car;
     private BufferedImage panelCarContent;
     private JFileChooser fileChooser;
-    private FileListModel fileListModel;
+    private DefaultListModel<FileListModelEntry> fileListModel;
     private int selectedIndex = -1;
 
     private JMenuItem aboutItem;
     private JLabel bottomLine;
     private JMenuItem exitItem;
-    private JList<Object> fileList;
+    private JList<FileListModelEntry> fileList;
     private JScrollPane fileListScrollPane;
     private JMenuItem helpItem;
     private JMenu helpMenu;
@@ -94,7 +94,7 @@ public class FrameMain extends JFrame {
             }
         };
         this.fileListScrollPane = new JScrollPane();
-        this.fileList = new JList<Object>();
+        this.fileList = new JList<FileListModelEntry>();
         this.recognizeButton = new JButton();
         this.bottomLine = new JLabel();
         this.menuBar = new JMenuBar();
@@ -235,9 +235,9 @@ public class FrameMain extends JFrame {
     private void fileListValueChanged(ListSelectionEvent evt) {
         int selectedNow = this.fileList.getSelectedIndex();
         if ((selectedNow != -1)) {
-            this.recognitionLabel.setText(this.fileListModel.fileList.elementAt(selectedNow).recognizedPlate);
+            this.recognitionLabel.setText(this.fileListModel.elementAt(selectedNow).recognizedPlate);
             this.selectedIndex = selectedNow;
-            String path = ((FileListModel.FileListModelEntry) this.fileListModel.getElementAt(selectedNow)).fullPath;
+            String path = this.fileListModel.getElementAt(selectedNow).fullPath;
             new LoadImageThread(this, path).start();
         }
     }
@@ -253,14 +253,16 @@ public class FrameMain extends JFrame {
             return;
         }
         File[] selectedFiles = this.fileChooser.getSelectedFiles();
-        this.fileListModel = new FileListModel();
+        this.fileListModel = new DefaultListModel<FileListModelEntry>();
         for (File selectedFile : selectedFiles) {
             if (selectedFile.isFile()) {
-                this.fileListModel.addFileListModelEntry(selectedFile.getName(), selectedFile.getAbsolutePath());
+                this.fileListModel.addElement(
+                        new FileListModelEntry(selectedFile.getName(), selectedFile.getAbsolutePath()));
             } else if (selectedFile.isDirectory()) {
                 for (String fileName : selectedFile.list()) {
                     if (ImageFileFilter.accept(fileName)) {
-                        this.fileListModel.addFileListModelEntry(fileName, selectedFile + File.separator + fileName);
+                        this.fileListModel.addElement(
+                                new FileListModelEntry(fileName, selectedFile + File.separator + fileName));
                     }
                 }
             }
@@ -288,7 +290,7 @@ public class FrameMain extends JFrame {
                 return;
             }
             this.parentFrame.recognitionLabel.setText(recognizedText);
-            this.parentFrame.fileListModel.fileList.elementAt(index).recognizedPlate = recognizedText;
+            this.parentFrame.fileListModel.elementAt(index).recognizedPlate = recognizedText;
         }
     }
 
