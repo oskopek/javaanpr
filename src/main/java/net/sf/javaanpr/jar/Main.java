@@ -141,7 +141,7 @@ public final class Main {
             // load snapshot arg[2] and generate report into arg[4]
             Main.rg = new ReportGenerator(args[4]);
             Main.systemLogic = new Intelligence();
-            Main.systemLogic.recognize(new CarSnapshot(args[2]), false);
+            Main.systemLogic.recognize(new CarSnapshot(args[2]), true);
             Main.rg.finish();
         } else if ((args.length == 3) && args[0].equals("-newconfig") && args[1].equals("-o")) {
             // save default config into args[2]
