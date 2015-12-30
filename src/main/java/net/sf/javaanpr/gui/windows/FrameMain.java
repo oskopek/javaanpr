@@ -256,13 +256,13 @@ public class FrameMain extends JFrame {
         this.fileListModel = new DefaultListModel<FileListModelEntry>();
         for (File selectedFile : selectedFiles) {
             if (selectedFile.isFile()) {
-                this.fileListModel.addElement(
-                        new FileListModelEntry(selectedFile.getName(), selectedFile.getAbsolutePath()));
+                this.fileListModel
+                        .addElement(new FileListModelEntry(selectedFile.getName(), selectedFile.getAbsolutePath()));
             } else if (selectedFile.isDirectory()) {
                 for (String fileName : selectedFile.list()) {
                     if (ImageFileFilter.accept(fileName)) {
-                        this.fileListModel.addElement(
-                                new FileListModelEntry(fileName, selectedFile + File.separator + fileName));
+                        this.fileListModel
+                                .addElement(new FileListModelEntry(fileName, selectedFile + File.separator + fileName));
                     }
                 }
             }

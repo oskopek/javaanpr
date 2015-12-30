@@ -214,11 +214,11 @@ public class Photo implements AutoCloseable, Cloneable {
 
     public void loadImage(InputStream is) throws IOException {
         BufferedImage image = ImageIO.read(is);
-        BufferedImage outimage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = outimage.createGraphics();
+        BufferedImage outImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = outImage.createGraphics();
         g.drawImage(image, 0, 0, null);
         g.dispose();
-        this.image = outimage;
+        this.image = outImage;
     }
 
     public void saveImage(String filepath) throws IOException {
