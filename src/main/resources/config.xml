@@ -126,7 +126,7 @@
         characters) -->
     <entry key="intelligence_syntaxanalysis">2</entry>
     <!-- syntax analysis mode -->
-    <entry key="intelligence_syntaxDescriptionFile">syntax/syntax.xml</entry>
+    <entry key="intelligence_syntaxDescriptionFile">syntax.xml</entry>
 
     <!-- CAR SNAPSHOT, BAND, PLATE GRAPH ANALYSIS -->
 

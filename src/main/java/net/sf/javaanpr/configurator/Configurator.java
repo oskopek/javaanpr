@@ -99,7 +99,7 @@ public final class Configurator {
         this.setDoubleProperty("intelligence_maxSimilarityCostDispersion", 100);
         // recognition
         this.setIntProperty("intelligence_syntaxanalysis", 2);
-        this.setStrProperty("intelligence_syntaxDescriptionFile", "/syntax/syntax.xml");
+        this.setStrProperty("intelligence_syntaxDescriptionFile", "/syntax.xml");
 
         this.setIntProperty("neural_maxk", 8000); // maximum K - maximalny pocet iteracii
         this.setDoubleProperty("neural_eps", 0.07); // epsilon - pozadovana presnost
