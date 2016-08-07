@@ -289,12 +289,16 @@ public class Intelligence {
                     Main.rg.insertText("<span class='recognized'>");
                     Main.rg.insertText("Recognized plate : " + parsedOutput);
                     Main.rg.insertText("</span>");
+                    Main.rg.finish();
                 }
                 return parsedOutput;
             }
         }
         // TODO failed!
         lastProcessDuration = time.getTime();
+        if (enableReportGeneration) {
+            Main.rg.finish();
+        }
         return null;
     }
 }

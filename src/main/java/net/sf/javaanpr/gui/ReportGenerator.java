@@ -31,14 +31,12 @@ public class ReportGenerator {
 
     private String directory;
     private StringBuilder output; // TODO refactor into a form
-    private boolean enabled;
 
     public ReportGenerator(String directory) throws IOException {
         this.directory = directory;
-        this.enabled = true;
         File f = new File(directory);
-        if (!f.exists() || !f.isDirectory()) {
-            throw new IOException("Report directory '" + directory + "' doesn't exist or isn't a directory");
+        if (!f.exists() && !f.mkdirs()) {
+            throw new IOException("Report directory '" + directory + "' doesn't exist and couldn't be created");
         }
         this.output = new StringBuilder();
         this.output.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" + "<html>"
@@ -46,22 +44,12 @@ public class ReportGenerator {
                 + "@import \"style.css\";" + "</style>");
     }
 
-    public ReportGenerator() {
-        this.enabled = false;
-    }
-
     public void insertText(String text) {
-        if (!this.enabled) {
-            return;
-        }
         this.output.append(text + "\n");
     }
 
     public void insertImage(BufferedImage image, String cls, int w, int h)
             throws IllegalArgumentException, IOException {
-        if (!this.enabled) {
-            return;
-        }
         String imageName = String.valueOf(image.hashCode()) + ".jpg";
         this.saveImage(image, imageName);
         if ((w != 0) && (h != 0)) {
@@ -73,9 +61,6 @@ public class ReportGenerator {
     }
 
     public void finish() throws IOException {
-        if (!this.enabled) {
-            return;
-        }
         this.output.append("</html>");
         FileOutputStream os = new FileOutputStream(this.directory + File.separator + "index.html");
         Writer writer = new OutputStreamWriter(os);
@@ -99,9 +84,6 @@ public class ReportGenerator {
     }
 
     public void saveImage(BufferedImage bi, String filename) throws IOException, IllegalArgumentException {
-        if (!this.enabled) {
-            return;
-        }
         String type = new String(filename.substring(filename.lastIndexOf('.') + 1, filename.length()).toLowerCase());
         if (!type.equals("bmp") && !type.equals("jpg") && !type.equals("jpeg") && !type.equals("png")) {
             throw new IllegalArgumentException("Unsupported file format");

@@ -53,7 +53,7 @@ public final class Main {
     /**
      * The report generator.
      */
-    public static ReportGenerator rg = new ReportGenerator();
+    public static ReportGenerator rg;
     /**
      * The intelligence.
      */
@@ -76,6 +76,14 @@ public final class Main {
             + "                  learning parameters (in config. file)\n"
             + "                  and saves it into output file\n" + "    -newalphabet -i <srcdir> -o <dstdir>\n"
             + "                  Normalize all images in <srcdir> and save\n" + "                  it to <dstdir>.";
+
+    static {
+        try {
+            rg = new ReportGenerator("report");
+        } catch (IOException e) {
+            throw new IllegalStateException("Error during report generator initialization.", e);
+        }
+    }
 
     private Main() {
         // intentionally empty
@@ -142,7 +150,6 @@ public final class Main {
             Main.rg = new ReportGenerator(args[4]);
             Main.systemLogic = new Intelligence();
             Main.systemLogic.recognize(new CarSnapshot(args[2]), true);
-            Main.rg.finish();
         } else if ((args.length == 3) && args[0].equals("-newconfig") && args[1].equals("-o")) {
             // save default config into args[2]
             Configurator.getConfigurator().saveConfiguration(args[2]);
