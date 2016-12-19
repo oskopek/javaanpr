@@ -46,7 +46,7 @@ public abstract class CharacterRecognizer {
 
     public abstract RecognizedChar recognize(Char chr);
 
-    public class RecognizedChar {
+    public static class RecognizedChar {
         private Vector<RecognizedPattern> patterns;
         private boolean isSorted;
 
@@ -117,7 +117,7 @@ public abstract class CharacterRecognizer {
             return histogram;
         }
 
-        public final class RecognizedPattern {
+        public static final class RecognizedPattern {
             private char chr;
             private float cost;
 
@@ -135,7 +135,7 @@ public abstract class CharacterRecognizer {
             }
         }
 
-        public class PatternComparer implements Comparator<Object> {
+        public static class PatternComparer implements Comparator<Object> {
 
             private int direction;
 

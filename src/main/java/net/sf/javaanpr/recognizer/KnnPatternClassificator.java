@@ -60,7 +60,7 @@ public class KnnPatternClassificator extends CharacterRecognizer {
         RecognizedChar recognized = new RecognizedChar();
         for (int x = 0; x < this.learnVectors.size(); x++) {
             float fx = this.simplifiedEuclideanDistance(tested, this.learnVectors.elementAt(x));
-            recognized.addPattern(recognized.new RecognizedPattern(ALPHABET[x], fx));
+            recognized.addPattern(new RecognizedChar.RecognizedPattern(ALPHABET[x], fx));
         }
         recognized.sort(0);
         return recognized;
