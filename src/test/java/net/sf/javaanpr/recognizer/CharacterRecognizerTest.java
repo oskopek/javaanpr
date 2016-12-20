@@ -16,57 +16,55 @@
 
 package net.sf.javaanpr.recognizer;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Vector;
 
 import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 
 public class CharacterRecognizerTest {
+    private static final double epsilon = 5.96e-08;
+    private CharacterRecognizer.RecognizedChar recognizedChar;
 
-    private CharacterRecognizer.RecognizedChar getRecognizedCharWithThreePatterns() {
-        CharacterRecognizer.RecognizedChar recognizedChar = new CharacterRecognizer.RecognizedChar();
+    @Before
+    public void setup() {
+        recognizedChar = new CharacterRecognizer.RecognizedChar();
         recognizedChar.addPattern(new CharacterRecognizer.RecognizedChar.RecognizedPattern('A', 3.0f));
         recognizedChar.addPattern(new CharacterRecognizer.RecognizedChar.RecognizedPattern('B', 1.0f));
         recognizedChar.addPattern(new CharacterRecognizer.RecognizedChar.RecognizedPattern('C', 4.0f));
-        return recognizedChar;
     }
 
     @Test
     public void testPatternsCorrectlySortedAscending() {
-        CharacterRecognizer.RecognizedChar recognizedChar = getRecognizedCharWithThreePatterns();
         assertFalse(recognizedChar.isSorted());
         recognizedChar.sort(0);
         assertTrue(recognizedChar.isSorted());
         Vector<CharacterRecognizer.RecognizedChar.RecognizedPattern> patterns = recognizedChar.getPatterns();
-        assertThat(patterns.get(0).getCost(), is(1.0f));
-        assertThat(patterns.get(1).getCost(), is(3.0f));
-        assertThat(patterns.get(2).getCost(), is(4.0f));
+        assertEquals(patterns.get(0).getCost(), 1.0f, epsilon);
+        assertEquals(patterns.get(1).getCost(), 3.0f, epsilon);
+        assertEquals(patterns.get(2).getCost(), 4.0f, epsilon);
     }
 
     @Test
     public void testPatternsCorrectlySortedDescending() {
-        CharacterRecognizer.RecognizedChar recognizedChar = getRecognizedCharWithThreePatterns();
         assertFalse(recognizedChar.isSorted());
         recognizedChar.sort(1);
         assertTrue(recognizedChar.isSorted());
         Vector<CharacterRecognizer.RecognizedChar.RecognizedPattern> patterns = recognizedChar.getPatterns();
-        assertThat(patterns.get(0).getCost(), is(4.0f));
-        assertThat(patterns.get(1).getCost(), is(3.0f));
-        assertThat(patterns.get(2).getCost(), is(1.0f));
+        assertEquals(patterns.get(0).getCost(), 4.0f, epsilon);
+        assertEquals(patterns.get(1).getCost(), 3.0f, epsilon);
+        assertEquals(patterns.get(2).getCost(), 1.0f, epsilon);
     }
 
     @Test
     public void testGetPatternReturnsCorrectPatternWhenPatternsSorted() {
-        CharacterRecognizer.RecognizedChar recognizedChar = getRecognizedCharWithThreePatterns();
         recognizedChar.sort(0);
-        assertThat(recognizedChar.getPattern(2).getCost(), is(4.0f));
+        assertEquals(recognizedChar.getPattern(2).getCost(), 4.0f, epsilon);
     }
 
     @Test
     public void testGetPatternReturnsNullWhenPatternsNotSorted() {
-        CharacterRecognizer.RecognizedChar recognizedChar = getRecognizedCharWithThreePatterns();
         assertNull(recognizedChar.getPattern(2));
     }
 }
