@@ -25,14 +25,14 @@ import static org.junit.Assert.*;
 
 public class CharacterRecognizerTest {
     private static final double epsilon = 5.96e-08;
-    private CharacterRecognizer.RecognizedChar recognizedChar;
+    private RecognizedChar recognizedChar;
 
     @Before
     public void setup() {
-        recognizedChar = new CharacterRecognizer.RecognizedChar();
-        recognizedChar.addPattern(new CharacterRecognizer.RecognizedChar.RecognizedPattern('A', 3.0f));
-        recognizedChar.addPattern(new CharacterRecognizer.RecognizedChar.RecognizedPattern('B', 1.0f));
-        recognizedChar.addPattern(new CharacterRecognizer.RecognizedChar.RecognizedPattern('C', 4.0f));
+        recognizedChar = new RecognizedChar();
+        recognizedChar.addPattern(new RecognizedPattern('A', 3.0f));
+        recognizedChar.addPattern(new RecognizedPattern('B', 1.0f));
+        recognizedChar.addPattern(new RecognizedPattern('C', 4.0f));
     }
 
     @Test
@@ -40,7 +40,7 @@ public class CharacterRecognizerTest {
         assertFalse(recognizedChar.isSorted());
         recognizedChar.sort(0);
         assertTrue(recognizedChar.isSorted());
-        Vector<CharacterRecognizer.RecognizedChar.RecognizedPattern> patterns = recognizedChar.getPatterns();
+        Vector<RecognizedPattern> patterns = recognizedChar.getPatterns();
         assertEquals(patterns.get(0).getCost(), 1.0f, epsilon);
         assertEquals(patterns.get(1).getCost(), 3.0f, epsilon);
         assertEquals(patterns.get(2).getCost(), 4.0f, epsilon);
@@ -51,7 +51,7 @@ public class CharacterRecognizerTest {
         assertFalse(recognizedChar.isSorted());
         recognizedChar.sort(1);
         assertTrue(recognizedChar.isSorted());
-        Vector<CharacterRecognizer.RecognizedChar.RecognizedPattern> patterns = recognizedChar.getPatterns();
+        Vector<RecognizedPattern> patterns = recognizedChar.getPatterns();
         assertEquals(patterns.get(0).getCost(), 4.0f, epsilon);
         assertEquals(patterns.get(1).getCost(), 3.0f, epsilon);
         assertEquals(patterns.get(2).getCost(), 1.0f, epsilon);
