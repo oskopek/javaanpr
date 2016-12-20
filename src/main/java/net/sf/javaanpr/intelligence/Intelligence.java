@@ -26,7 +26,7 @@ import net.sf.javaanpr.imageanalysis.Photo;
 import net.sf.javaanpr.imageanalysis.Plate;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.CharacterRecognizer;
-import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
+import net.sf.javaanpr.recognizer.RecognizedChar;
 import net.sf.javaanpr.recognizer.KnnPatternClassificator;
 import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
 import org.xml.sax.SAXException;

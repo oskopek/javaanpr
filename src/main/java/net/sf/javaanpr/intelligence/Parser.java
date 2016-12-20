@@ -18,7 +18,8 @@ package net.sf.javaanpr.intelligence;
 
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.jar.Main;
-import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
+import net.sf.javaanpr.recognizer.RecognizedChar;
+import net.sf.javaanpr.recognizer.RecognizedPattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -204,7 +205,7 @@ public class Parser {
                         finalPlate.requiredChanges++; // +1 for every char
                         for (int x = 0; x < rc.getPatterns().size(); x++) {
                             if (form.getPosition(j).isAllowed(rc.getPattern(x).getChar())) {
-                                RecognizedChar.RecognizedPattern rp = rc.getPattern(x);
+                                RecognizedPattern rp = rc.getPattern(x);
                                 finalPlate.requiredChanges += (rp.getCost() / 100); // +x for its cost
                                 finalPlate.addChar(rp.getChar());
                                 break;

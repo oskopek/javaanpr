@@ -82,7 +82,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
      * Image to character.
      *
      * @param imgChar the Char to recognize
-     * @return the {@link net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar}
+     * @return the {@link net.sf.javaanpr.recognizer.RecognizedChar}
      */
     @Override
     public RecognizedChar recognize(Char imgChar) {
@@ -90,7 +90,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
         Vector<Double> output = this.network.test(imgChar.extractFeatures());
         RecognizedChar recognized = new RecognizedChar();
         for (int i = 0; i < output.size(); i++) {
-            recognized.addPattern(new RecognizedChar.RecognizedPattern(ALPHABET[i], output.elementAt(i).floatValue()));
+            recognized.addPattern(new RecognizedPattern(ALPHABET[i], output.elementAt(i).floatValue()));
         }
         recognized.render();
         recognized.sort(1);
