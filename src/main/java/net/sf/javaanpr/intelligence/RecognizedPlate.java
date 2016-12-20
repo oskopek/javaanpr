@@ -16,7 +16,7 @@
 
 package net.sf.javaanpr.intelligence;
 
-import net.sf.javaanpr.recognizer.CharacterRecognizer.RecognizedChar;
+import net.sf.javaanpr.recognizer.RecognizedChar;
 
 import java.util.Vector;
 
