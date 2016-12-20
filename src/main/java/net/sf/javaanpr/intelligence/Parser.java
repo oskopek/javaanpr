@@ -162,30 +162,31 @@ public class Parser {
     /**
      * Syntactically parses text from the given {@link RecognizedPlate} in the specified analysis mode.
      * <p>
-     * Syntax analysis mode: <ul>
-     * <li>0 (do not parse)</li>
-     * <li>1 (only equal length)</li>
-     * <li>2 (equal or shorter)</li>
-     * </ul>
      *
      * @param recognizedPlate the plate to parse
      * @param syntaxAnalysisMode the mode in which to parse
      * @return the parsed recognized plate text
      */
-    public String parse(RecognizedPlate recognizedPlate, int syntaxAnalysisMode) { // TODO enum
-        if (syntaxAnalysisMode == 0) {
-            Main.rg.insertText(
-                    " result : " + recognizedPlate.getString() + " --> <font size=15>" + recognizedPlate.getString()
-                            + "</font><hr><br>");
-            return recognizedPlate.getString();
-        }
-
+    public String parse(RecognizedPlate recognizedPlate, SyntaxAnalysisMode syntaxAnalysisMode) {
         int length = recognizedPlate.getChars().size();
-        this.unFlagAll();
-        if (syntaxAnalysisMode == 1) {
-            this.flagEqualLength(length);
-        } else {
-            this.flagEqualOrShorterLength(length);
+
+        switch (syntaxAnalysisMode) {
+            case DO_NOT_PARSE:
+                Main.rg.insertText(
+                        " result : " + recognizedPlate.getString() + " --> <font size=15>" + recognizedPlate.getString()
+                                + "</font><hr><br>");
+                return recognizedPlate.getString();
+            case ONLY_EQUAL_LENGTH:
+                this.unFlagAll();
+                this.flagEqualLength(length);
+                break;
+            case EQUAL_OR_SHORTER_LENGTH:
+                this.unFlagAll();
+                this.flagEqualOrShorterLength(length);
+                break;
+            default:
+                throw new IllegalArgumentException("Expected SyntaxAnalysisMode.DO_NOT_PARSE, "
+                        + "SyntaxAnalysisMode.ONLY_EQUAL_LENGTH or SyntaxAnalysisMode.EQUAL_OR_SHORTER_LENGTH.");
         }
 
         Vector<FinalPlate> finalPlates = new Vector<FinalPlate>();
@@ -294,4 +295,22 @@ public class Parser {
         }
     }
 
+    public enum SyntaxAnalysisMode {
+        DO_NOT_PARSE,
+        ONLY_EQUAL_LENGTH,
+        EQUAL_OR_SHORTER_LENGTH
+    }
+
+    public static SyntaxAnalysisMode getSyntaxAnalysisModeFromInt(int syntaxAnalysisModeInt) {
+        switch (syntaxAnalysisModeInt) {
+            case 0:
+                return SyntaxAnalysisMode.DO_NOT_PARSE;
+            case 1:
+                return SyntaxAnalysisMode.ONLY_EQUAL_LENGTH;
+            case 2:
+                return SyntaxAnalysisMode.EQUAL_OR_SHORTER_LENGTH;
+            default:
+                throw new IllegalArgumentException("Expected: 0, 1, or 2. Got: " + syntaxAnalysisModeInt);
+        }
+    }
 }

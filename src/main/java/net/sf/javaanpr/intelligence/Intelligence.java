@@ -18,12 +18,7 @@ package net.sf.javaanpr.intelligence;
 
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.gui.TimeMeter;
-import net.sf.javaanpr.imageanalysis.Band;
-import net.sf.javaanpr.imageanalysis.CarSnapshot;
-import net.sf.javaanpr.imageanalysis.Char;
-import net.sf.javaanpr.imageanalysis.HoughTransformation;
-import net.sf.javaanpr.imageanalysis.Photo;
-import net.sf.javaanpr.imageanalysis.Plate;
+import net.sf.javaanpr.imageanalysis.*;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.CharacterRecognizer;
 import net.sf.javaanpr.recognizer.RecognizedChar;
@@ -66,7 +61,8 @@ public class Intelligence {
     public String recognize(CarSnapshot carSnapshot, final boolean enableReportGeneration)
             throws IllegalArgumentException, IOException {
         TimeMeter time = new TimeMeter();
-        int syntaxAnalysisMode = configurator.getIntProperty("intelligence_syntaxanalysis");
+        int syntaxAnalysisModeInt = configurator.getIntProperty("intelligence_syntaxanalysis");
+        Parser.SyntaxAnalysisMode syntaxAnalysisMode = Parser.getSyntaxAnalysisModeFromInt(syntaxAnalysisModeInt);
         int skewDetectionMode = configurator.getIntProperty("intelligence_skewdetection");
         if (enableReportGeneration) {
             Main.rg.insertText("<h1>Automatic Number Plate Recognition Report</h1>");
