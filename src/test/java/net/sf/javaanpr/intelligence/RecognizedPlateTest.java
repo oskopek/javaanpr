@@ -22,8 +22,7 @@ import org.junit.Test;
 
 import java.util.Vector;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class RecognizedPlateTest {
 
@@ -48,25 +47,25 @@ public class RecognizedPlateTest {
     @Test
     public void testCanAddAndGetChars() {
         RecognizedPlate recognizedPlate = getRecognizedPlateWithThreeRecognizedChars();
-        assertThat(recognizedPlate.getChar(0).getPattern(0).getChar(), is('A'));
-        assertThat(recognizedPlate.getChar(1).getPattern(0).getChar(), is('B'));
-        assertThat(recognizedPlate.getChar(1).getPattern(1).getChar(), is('C'));
-        assertThat(recognizedPlate.getChar(2).getPattern(0).getChar(), is('D'));
+        assertEquals(recognizedPlate.getChar(0).getPattern(0).getChar(), 'A');
+        assertEquals(recognizedPlate.getChar(1).getPattern(0).getChar(), 'B');
+        assertEquals(recognizedPlate.getChar(1).getPattern(1).getChar(), 'C');
+        assertEquals(recognizedPlate.getChar(2).getPattern(0).getChar(), 'D');
     }
 
     @Test
     public void testCanAddAndGetAllChars() {
         RecognizedPlate recognizedPlate = getRecognizedPlateWithThreeRecognizedChars();
         Vector<RecognizedChar> recognizedChars = recognizedPlate.getChars();
-        assertThat(recognizedChars.get(0).getPattern(0).getChar(), is('A'));
-        assertThat(recognizedChars.get(1).getPattern(0).getChar(), is('B'));
-        assertThat(recognizedChars.get(1).getPattern(1).getChar(), is('C'));
-        assertThat(recognizedChars.get(2).getPattern(0).getChar(), is('D'));
+        assertEquals(recognizedChars.get(0).getPattern(0).getChar(), 'A');
+        assertEquals(recognizedChars.get(1).getPattern(0).getChar(), 'B');
+        assertEquals(recognizedChars.get(1).getPattern(1).getChar(), 'C');
+        assertEquals(recognizedChars.get(2).getPattern(0).getChar(), 'D');
     }
 
     @Test
     public void testCanGetStringFromChars() {
         RecognizedPlate recognizedPlate = getRecognizedPlateWithThreeRecognizedChars();
-        assertThat(recognizedPlate.getString(), is("ABD"));
+        assertEquals(recognizedPlate.getString(), "ABD");
     }
 }
