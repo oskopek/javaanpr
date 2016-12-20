@@ -23,7 +23,7 @@ import java.util.Vector;
 
 import static org.junit.Assert.*;
 
-public class CharacterRecognizerTest {
+public class RecognizedCharTest {
     private static final double epsilon = 5.96e-08;
     private RecognizedChar recognizedChar;
 
