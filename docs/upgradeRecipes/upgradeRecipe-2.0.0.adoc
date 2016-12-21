@@ -4,3 +4,8 @@ JavaANPR Contributors <javaanpr@googlegroups.com>
 == Major API changes
 
 == Minor API changes
+=== `Parser.parse` method parameters
+
+The method `String Parser.parse(RecognizedPlate, int)` changed to `String Parser.parse(RecognizedPlate, SyntaxAnalysisMode)`.
+
+Workaround: `parse(plate, syntaxAnalysisModeInt)` -> `parse(plate, SyntaxAnalysisMode.getSyntaxAnalysisModeFromInt(syntaxAnalysisModeInt))`
