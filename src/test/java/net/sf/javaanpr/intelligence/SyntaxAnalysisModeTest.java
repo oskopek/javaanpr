@@ -20,25 +20,25 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class ParserTest {
+public class SyntaxAnalysisModeTest {
 
     @Test
     public void testGetSyntaxAnalysisModeFromIntReturnsDoNotParseWhenIntIsZero() {
-        assertEquals(Parser.getSyntaxAnalysisModeFromInt(0), Parser.SyntaxAnalysisMode.DO_NOT_PARSE);
+        assertEquals(SyntaxAnalysisMode.getSyntaxAnalysisModeFromInt(0), SyntaxAnalysisMode.DO_NOT_PARSE);
     }
 
     @Test
     public void testGetSyntaxAnalysisModeFromIntReturnsOnlyEqualLengthWhenIntIsOne() {
-        assertEquals(Parser.getSyntaxAnalysisModeFromInt(1), Parser.SyntaxAnalysisMode.ONLY_EQUAL_LENGTH);
+        assertEquals(SyntaxAnalysisMode.getSyntaxAnalysisModeFromInt(1), SyntaxAnalysisMode.ONLY_EQUAL_LENGTH);
     }
 
     @Test
     public void testGetSyntaxAnalysisModeFromIntReturnsEqualOrShorterLengthWhenIntIsTwo() {
-        assertEquals(Parser.getSyntaxAnalysisModeFromInt(2), Parser.SyntaxAnalysisMode.EQUAL_OR_SHORTER_LENGTH);
+        assertEquals(SyntaxAnalysisMode.getSyntaxAnalysisModeFromInt(2), SyntaxAnalysisMode.EQUAL_OR_SHORTER_LENGTH);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetSyntaxAnalysisModeThrowsIllegalArgumentExceptionWhenGivenIntNotEqualToOneTwoOrThree() {
-        Parser.getSyntaxAnalysisModeFromInt(3);
+        SyntaxAnalysisMode.getSyntaxAnalysisModeFromInt(3);
     }
 }

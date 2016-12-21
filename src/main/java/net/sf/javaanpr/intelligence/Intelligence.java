@@ -62,7 +62,7 @@ public class Intelligence {
             throws IllegalArgumentException, IOException {
         TimeMeter time = new TimeMeter();
         int syntaxAnalysisModeInt = configurator.getIntProperty("intelligence_syntaxanalysis");
-        Parser.SyntaxAnalysisMode syntaxAnalysisMode = Parser.getSyntaxAnalysisModeFromInt(syntaxAnalysisModeInt);
+        SyntaxAnalysisMode syntaxAnalysisMode = SyntaxAnalysisMode.getSyntaxAnalysisModeFromInt(syntaxAnalysisModeInt);
         int skewDetectionMode = configurator.getIntProperty("intelligence_skewdetection");
         if (enableReportGeneration) {
             Main.rg.insertText("<h1>Automatic Number Plate Recognition Report</h1>");

@@ -294,23 +294,4 @@ public class Parser {
             this.plate = this.plate + chr;
         }
     }
-
-    public enum SyntaxAnalysisMode {
-        DO_NOT_PARSE,
-        ONLY_EQUAL_LENGTH,
-        EQUAL_OR_SHORTER_LENGTH
-    }
-
-    public static SyntaxAnalysisMode getSyntaxAnalysisModeFromInt(int syntaxAnalysisModeInt) {
-        switch (syntaxAnalysisModeInt) {
-            case 0:
-                return SyntaxAnalysisMode.DO_NOT_PARSE;
-            case 1:
-                return SyntaxAnalysisMode.ONLY_EQUAL_LENGTH;
-            case 2:
-                return SyntaxAnalysisMode.EQUAL_OR_SHORTER_LENGTH;
-            default:
-                throw new IllegalArgumentException("Expected: 0, 1, or 2. Got: " + syntaxAnalysisModeInt);
-        }
-    }
 }
