@@ -1,0 +1,6 @@
+= Upgrade recipe to JavaANPR 2.0.0
+JavaANPR Contributors <javaanpr@googlegroups.com>
+
+== Major API changes
+
+== Minor API changes
