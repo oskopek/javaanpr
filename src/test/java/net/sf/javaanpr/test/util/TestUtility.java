@@ -24,6 +24,7 @@ import java.io.IOException;
  * Utility class which helps in having methods for Testing.
  */
 public class TestUtility {
+    public static final double epsilon = 5.96e-08;
 
     public StringBuilder readFile(final String filename) throws IOException {
         final BufferedReader br = new BufferedReader(new FileReader(filename));
