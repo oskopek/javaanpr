@@ -62,7 +62,7 @@ public class KnnPatternClassificator extends CharacterRecognizer {
             float fx = this.simplifiedEuclideanDistance(tested, this.learnVectors.elementAt(x));
             recognized.addPattern(new RecognizedPattern(ALPHABET[x], fx));
         }
-        recognized.sort(0);
+        recognized.sort(false);
         return recognized;
     }
 
