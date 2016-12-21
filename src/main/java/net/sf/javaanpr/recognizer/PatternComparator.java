@@ -27,18 +27,8 @@ public class PatternComparator implements Comparator<RecognizedPattern> {
 
     @Override
     public int compare(RecognizedPattern recognizedPattern1, RecognizedPattern recognizedPattern2) {
-        float cost1 = recognizedPattern1.getCost();
-        float cost2 = recognizedPattern2.getCost();
-        int ret = 0;
-        if (cost1 < cost2) {
-            ret = -1;
-        }
-        if (cost1 > cost2) {
-            ret = 1;
-        }
-        if (shouldSortDescending) {
-            ret *= -1;
-        }
-        return ret;
+        Float cost1 = recognizedPattern1.getCost();
+        Float cost2 = recognizedPattern2.getCost();
+        return shouldSortDescending ? -1 * cost1.compareTo(cost2) : cost1.compareTo(cost2);
     }
 }
