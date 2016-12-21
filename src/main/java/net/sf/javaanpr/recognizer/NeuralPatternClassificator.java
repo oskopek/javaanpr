@@ -93,7 +93,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
             recognized.addPattern(new RecognizedPattern(ALPHABET[i], output.elementAt(i).floatValue()));
         }
         recognized.render();
-        recognized.sort(1);
+        recognized.sort(true);
         return recognized;
     }
 

@@ -38,12 +38,12 @@ public class RecognizedChar {
         return this.isSorted;
     }
 
-    public void sort(int direction) {
+    public void sort(boolean shouldSortDescending) {
         if (this.isSorted) {
             return;
         }
         this.isSorted = true;
-        Collections.sort(this.patterns, new PatternComparer(direction));
+        Collections.sort(this.patterns, new PatternComparator(shouldSortDescending));
     }
 
     /**

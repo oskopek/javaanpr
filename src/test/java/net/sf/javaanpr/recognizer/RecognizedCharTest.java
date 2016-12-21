@@ -38,7 +38,7 @@ public class RecognizedCharTest {
     @Test
     public void testPatternsCorrectlySortedAscending() {
         assertFalse(recognizedChar.isSorted());
-        recognizedChar.sort(0);
+        recognizedChar.sort(false);
         assertTrue(recognizedChar.isSorted());
         Vector<RecognizedPattern> patterns = recognizedChar.getPatterns();
         assertEquals(patterns.get(0).getCost(), 1.0f, epsilon);
@@ -49,7 +49,7 @@ public class RecognizedCharTest {
     @Test
     public void testPatternsCorrectlySortedDescending() {
         assertFalse(recognizedChar.isSorted());
-        recognizedChar.sort(1);
+        recognizedChar.sort(true);
         assertTrue(recognizedChar.isSorted());
         Vector<RecognizedPattern> patterns = recognizedChar.getPatterns();
         assertEquals(patterns.get(0).getCost(), 4.0f, epsilon);
@@ -59,7 +59,7 @@ public class RecognizedCharTest {
 
     @Test
     public void testGetPatternReturnsCorrectPatternWhenPatternsSorted() {
-        recognizedChar.sort(0);
+        recognizedChar.sort(false);
         assertEquals(recognizedChar.getPattern(2).getCost(), 4.0f, epsilon);
     }
 

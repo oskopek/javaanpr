@@ -18,17 +18,17 @@ package net.sf.javaanpr.recognizer;
 
 import java.util.Comparator;
 
-public class PatternComparer implements Comparator<Object> {
-    private int direction;
+public class PatternComparator implements Comparator<RecognizedPattern> {
+    private boolean shouldSortDescending;
 
-    public PatternComparer(int direction) {
-        this.direction = direction;
+    public PatternComparator(boolean shouldSortDescending) {
+        this.shouldSortDescending = shouldSortDescending;
     }
 
     @Override
-    public int compare(Object o1, Object o2) {
-        float cost1 = ((RecognizedPattern) o1).getCost();
-        float cost2 = ((RecognizedPattern) o2).getCost();
+    public int compare(RecognizedPattern recognizedPattern1, RecognizedPattern recognizedPattern2) {
+        float cost1 = recognizedPattern1.getCost();
+        float cost2 = recognizedPattern2.getCost();
         int ret = 0;
         if (cost1 < cost2) {
             ret = -1;
@@ -36,7 +36,7 @@ public class PatternComparer implements Comparator<Object> {
         if (cost1 > cost2) {
             ret = 1;
         }
-        if (this.direction == 1) {
+        if (shouldSortDescending) {
             ret *= -1;
         }
         return ret;
