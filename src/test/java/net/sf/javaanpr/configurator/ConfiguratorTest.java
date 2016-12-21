@@ -16,6 +16,7 @@
 
 package net.sf.javaanpr.configurator;
 
+import net.sf.javaanpr.test.util.TestUtility;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -64,9 +65,8 @@ public class ConfiguratorTest {
     @Test
     public void testSetAndGetDoublePropertyWithValidDouble() {
         double expectedValue = 5.0;
-        double epsilon = 5.96e-08;
         configurator.setDoubleProperty(propertyName, expectedValue);
-        assertEquals(configurator.getDoubleProperty(propertyName), expectedValue, epsilon);
+        assertEquals(configurator.getDoubleProperty(propertyName), expectedValue, TestUtility.epsilon);
     }
 
     @Test(expected = NumberFormatException.class)
