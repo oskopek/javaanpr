@@ -277,6 +277,11 @@ public class FrameMain extends JFrame {
             this.parentFrame = parentFrame;
         }
 
+        private void setFailedAndPrintStackTrace(Exception exception) {
+            this.parentFrame.recognitionLabel.setText("failed");
+            exception.printStackTrace();
+        }
+
         @Override
         public void run() {
             String recognizedText = "";
@@ -284,13 +289,13 @@ public class FrameMain extends JFrame {
             int index = this.parentFrame.selectedIndex;
             try {
                 recognizedText = Main.systemLogic.recognize(this.parentFrame.car, false);
-            } catch (Exception ex) { // TODO exception
-                this.parentFrame.recognitionLabel.setText("failed");
-                ex.printStackTrace();
-                return;
+                this.parentFrame.recognitionLabel.setText(recognizedText);
+                this.parentFrame.fileListModel.elementAt(index).recognizedPlate = recognizedText;
+            } catch (IllegalArgumentException exception) {
+                setFailedAndPrintStackTrace(exception);
+            } catch (IOException exception) {
+                setFailedAndPrintStackTrace(exception);
             }
-            this.parentFrame.recognitionLabel.setText(recognizedText);
-            this.parentFrame.fileListModel.elementAt(index).recognizedPlate = recognizedText;
         }
     }
 
