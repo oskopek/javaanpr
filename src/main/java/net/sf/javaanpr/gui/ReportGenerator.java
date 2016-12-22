@@ -16,7 +16,8 @@
 
 package net.sf.javaanpr.gui;
 
-import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
+import net.sf.javaanpr.tools.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -67,8 +68,8 @@ public class ReportGenerator {
         writer.write(this.output.toString());
         writer.flush();
         writer.close();
-        String cssPath = Configurator.getConfigurator().getPathProperty("reportgeneratorcss");
-        InputStream inStream = Configurator.getConfigurator().getResourceAsStream(cssPath);
+        String cssPath = GlobalState.getInstance().getConfigurator().getPathProperty("reportgeneratorcss");
+        InputStream inStream = FileUtils.getResourceAsStream(getClass(), cssPath);
         this.saveStreamToFile(inStream, new File(this.directory + File.separator + "style.css"));
     }
 
@@ -84,7 +85,7 @@ public class ReportGenerator {
     }
 
     public void saveImage(BufferedImage bi, String filename) throws IOException, IllegalArgumentException {
-        String type = new String(filename.substring(filename.lastIndexOf('.') + 1, filename.length()).toLowerCase());
+        String type = filename.substring(filename.lastIndexOf('.') + 1, filename.length()).toLowerCase();
         if (!type.equals("bmp") && !type.equals("jpg") && !type.equals("jpeg") && !type.equals("png")) {
             throw new IllegalArgumentException("Unsupported file format");
         }

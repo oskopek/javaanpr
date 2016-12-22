@@ -16,7 +16,7 @@
 
 package net.sf.javaanpr.imageanalysis;
 
-import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -363,7 +363,7 @@ public class Photo implements AutoCloseable, Cloneable {
      */
     public void adaptiveThresholding() {
         Statistics stat = new Statistics(this);
-        int radius = Configurator.getConfigurator().getIntProperty("photo_adaptivethresholdingradius");
+        int radius = GlobalState.getInstance().getConfigurator().getIntProperty("photo_adaptivethresholdingradius");
         if (radius == 0) {
             this.plainThresholding(stat);
             return;

@@ -17,6 +17,7 @@
 package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,9 +29,9 @@ import java.util.Vector;
 public class CarSnapshotGraph extends Graph {
 
     private static double peakFootConstant =
-            Configurator.getConfigurator().getDoubleProperty("carsnapshotgraph_peakfootconstant"); // 0.55
+            GlobalState.getInstance().getConfigurator().getDoubleProperty("carsnapshotgraph_peakfootconstant"); // 0.55
     private static double peakDiffMultiplicationConstant =
-            Configurator.getConfigurator().getDoubleProperty("carsnapshotgraph_peakDiffMultiplicationConstant"); // 0.1
+            GlobalState.getInstance().getConfigurator().getDoubleProperty("carsnapshotgraph_peakDiffMultiplicationConstant"); // 0.1
     private CarSnapshot handle;
 
     public CarSnapshotGraph(CarSnapshot handle) {

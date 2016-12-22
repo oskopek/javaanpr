@@ -17,6 +17,7 @@
 package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,9 +29,9 @@ public class PlateGraph extends Graph {
      * 0.75: Smaller numbers have a tendency to cut characters, bigger have a tendency to incorrectly merge them.
      */
     private static double plategraph_rel_minpeaksize =
-            Configurator.getConfigurator().getDoubleProperty("plategraph_rel_minpeaksize");
+            GlobalState.getInstance().getConfigurator().getDoubleProperty("plategraph_rel_minpeaksize");
     private static double peakFootConstant =
-            Configurator.getConfigurator().getDoubleProperty("plategraph_peakfootconstant");
+            GlobalState.getInstance().getConfigurator().getDoubleProperty("plategraph_peakfootconstant");
 
     /**
      * Reference to the {@link Plate} this graph refers to.

@@ -30,8 +30,8 @@ public class ConfiguratorTest {
     private final String propertyName = "new property";
 
     @Before
-    public void setup() {
-        configurator = Configurator.getConfigurator();
+    public void setup() throws Exception {
+        configurator = Configurator.build();
     }
 
     @Test

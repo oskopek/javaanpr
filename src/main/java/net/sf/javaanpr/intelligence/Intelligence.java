@@ -17,6 +17,7 @@
 package net.sf.javaanpr.intelligence;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 import net.sf.javaanpr.gui.TimeMeter;
 import net.sf.javaanpr.imageanalysis.*;
 import net.sf.javaanpr.jar.Main;
@@ -38,11 +39,11 @@ public class Intelligence {
     private static Parser parser;
     private static long lastProcessDuration = 0L;
 
-    private static Configurator configurator = Configurator.getConfigurator();
+    private static Configurator configurator = GlobalState.getInstance().getConfigurator();
 
     public Intelligence() throws ParserConfigurationException, SAXException, IOException {
-        int classification_method = configurator.getIntProperty("intelligence_classification_method");
-        if (classification_method == 0) {
+        int classificationMethod = configurator.getIntProperty("intelligence_classification_method");
+        if (classificationMethod == 0) {
             chrRecog = new KnnPatternClassificator();
         } else {
             chrRecog = new NeuralPatternClassificator();

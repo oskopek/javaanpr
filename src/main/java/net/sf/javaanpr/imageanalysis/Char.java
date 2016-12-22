@@ -17,7 +17,9 @@
 package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 import net.sf.javaanpr.recognizer.CharacterRecognizer;
+import net.sf.javaanpr.tools.FileUtils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -65,7 +67,7 @@ public class Char extends Photo {
      * @throws IOException if the file couldn't be loaded
      */
     public Char(String fileName) throws IOException {
-        super(Configurator.getConfigurator().getResourceAsStream(fileName));
+        super(FileUtils.getResourceAsStream(Char.class, fileName));
         BufferedImage origin = Photo.duplicateBufferedImage(getImage());
         this.adaptiveThresholding(); // act on this.image // TODO deprecated
         this.thresholdedImage = getImage();
@@ -107,7 +109,7 @@ public class Char extends Photo {
         ArrayList<String> filenames = new ArrayList<String>();
         for (int i = 0; i < alphaString.length(); i++) {
             String s = directory + File.separator + alphaString.charAt(i) + suffix + ".jpg";
-            if (Configurator.getConfigurator().getResourceAsStream(s) != null) {
+            if (FileUtils.getResourceAsStream(Char.class, s) != null) {
                 filenames.add(s);
             }
         }
@@ -160,12 +162,12 @@ public class Char extends Photo {
     }
 
     private void normalizeResizeOnly() { // returns the same Char object
-        int x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
-        int y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
+        int x = GlobalState.getInstance().getConfigurator().getIntProperty("char_normalizeddimensions_x");
+        int y = GlobalState.getInstance().getConfigurator().getIntProperty("char_normalizeddimensions_y");
         if ((x == 0) || (y == 0)) {
             return;
         }
-        if (Configurator.getConfigurator().getIntProperty("char_resizeMethod") == 0) {
+        if (GlobalState.getInstance().getConfigurator().getIntProperty("char_resizeMethod") == 0) {
             this.linearResize(x, y); // do a weighted average
         } else {
             this.averageResize(x, y);
@@ -281,7 +283,7 @@ public class Char extends Photo {
     }
 
     public Vector<Double> extractFeatures() {
-        int featureExtractionMethod = Configurator.getConfigurator().getIntProperty("char_featuresExtractionMethod");
+        int featureExtractionMethod = GlobalState.getInstance().getConfigurator().getIntProperty("char_featuresExtractionMethod");
         if (featureExtractionMethod == 0) {
             return this.extractMapFeatures();
         } else {

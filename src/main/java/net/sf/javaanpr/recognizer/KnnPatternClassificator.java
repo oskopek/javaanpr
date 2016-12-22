@@ -17,7 +17,9 @@
 package net.sf.javaanpr.recognizer;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 import net.sf.javaanpr.imageanalysis.Char;
+import net.sf.javaanpr.tools.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +34,11 @@ public class KnnPatternClassificator extends CharacterRecognizer {
     private Vector<Vector<Double>> learnVectors;
 
     public KnnPatternClassificator() {
-        String path = Configurator.getConfigurator().getPathProperty("char_learnAlphabetPath");
+        String path = GlobalState.getInstance().getConfigurator().getPathProperty("char_learnAlphabetPath");
         this.learnVectors = new Vector<Vector<Double>>(36);
         ArrayList<String> filenames = (ArrayList<String>) Char.getAlphabetList(path);
         for (String fileName : filenames) {
-            InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
+            InputStream is = FileUtils.getResourceAsStream(getClass(), fileName);
             Char imgChar = null;
             try {
                 imgChar = new Char(is);

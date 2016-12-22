@@ -16,7 +16,7 @@
 
 package net.sf.javaanpr.imageanalysis;
 
-import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.tools.FileUtils;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -27,7 +27,7 @@ public class PhotoTest {
 
     @Test
     public void cloneTest() throws Exception {
-        InputStream fstream = Configurator.getConfigurator().getResourceAsStream("snapshots/test_041.jpg");
+        InputStream fstream = FileUtils.getResourceAsStream(getClass(), "snapshots/test_041.jpg");
         assertNotNull(fstream);
         Photo photo = new Photo(fstream);
         fstream.close();

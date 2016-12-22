@@ -17,6 +17,7 @@
 package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,7 +26,7 @@ import java.util.Vector;
 public class PlateVerticalGraph extends Graph {
 
     private static final double peakFootConstant =
-            Configurator.getConfigurator().getDoubleProperty("plateverticalgraph_peakfootconstant"); // 0.42
+            GlobalState.getInstance().getConfigurator().getDoubleProperty("plateverticalgraph_peakfootconstant"); // 0.42
 
     private Plate handle;
 

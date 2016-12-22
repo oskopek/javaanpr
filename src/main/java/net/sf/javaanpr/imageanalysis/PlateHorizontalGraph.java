@@ -17,13 +17,14 @@
 package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 
 import java.util.Vector;
 
 public class PlateHorizontalGraph extends Graph {
 
     private static int horizontalDetectionType =
-            Configurator.getConfigurator().getIntProperty("platehorizontalgraph_detectionType");
+            GlobalState.getInstance().getConfigurator().getIntProperty("platehorizontalgraph_detectionType");
 
     private Plate handle;
 

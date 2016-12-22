@@ -17,6 +17,7 @@
 package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
@@ -26,9 +27,9 @@ import java.util.Vector;
 public class Plate extends Photo {
 
     private static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 0, 0);
-    private static int numberOfCandidates = Configurator.getConfigurator().getIntProperty("intelligence_numberOfChars");
+    private static int numberOfCandidates = GlobalState.getInstance().getConfigurator().getIntProperty("intelligence_numberOfChars");
     private static int horizontalDetectionType =
-            Configurator.getConfigurator().getIntProperty("platehorizontalgraph_detectionType");
+            GlobalState.getInstance().getConfigurator().getIntProperty("platehorizontalgraph_detectionType");
     private Plate plateCopy; // TODO refactor: remove this variable completely
     private PlateGraph graphHandle = null;
 

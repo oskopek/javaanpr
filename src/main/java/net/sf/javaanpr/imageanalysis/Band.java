@@ -17,6 +17,7 @@
 package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
@@ -27,7 +28,7 @@ public class Band extends Photo {
 
     private static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 25, 25);
     private static int numberOfCandidates =
-            Configurator.getConfigurator().getIntProperty("intelligence_numberOfPlates");
+            GlobalState.getInstance().getConfigurator().getIntProperty("intelligence_numberOfPlates");
     private BandGraph graphHandle = null;
 
     public Band(BufferedImage bi) {

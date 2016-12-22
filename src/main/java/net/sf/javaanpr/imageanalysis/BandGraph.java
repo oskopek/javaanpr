@@ -17,6 +17,7 @@
 package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -31,9 +32,9 @@ import java.util.Vector;
 public class BandGraph extends Graph {
 
     private static double peakFootConstant =
-            Configurator.getConfigurator().getDoubleProperty("bandgraph_peakfootconstant"); // 0.75
+            GlobalState.getInstance().getConfigurator().getDoubleProperty("bandgraph_peakfootconstant"); // 0.75
     private static double peakDiffMultiplicationConstant =
-            Configurator.getConfigurator().getDoubleProperty("bandgraph_peakDiffMultiplicationConstant"); // 0.2
+            GlobalState.getInstance().getConfigurator().getDoubleProperty("bandgraph_peakDiffMultiplicationConstant"); // 0.2
 
     /**
      * The Band to which this Graph is related.

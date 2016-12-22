@@ -17,8 +17,10 @@
 package net.sf.javaanpr.recognizer;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 import net.sf.javaanpr.imageanalysis.Char;
 import net.sf.javaanpr.neuralnetwork.NeuralNetwork;
+import net.sf.javaanpr.tools.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,8 +32,9 @@ import java.util.Vector;
 public class NeuralPatternClassificator extends CharacterRecognizer {
 
     private static final transient Logger logger = LoggerFactory.getLogger(NeuralPatternClassificator.class);
-    private static int normalize_x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
-    private static int normalize_y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
+    private static final Configurator configurator = GlobalState.getInstance().getConfigurator();
+    private static int normalize_x = configurator.getIntProperty("char_normalizeddimensions_x");
+    private static int normalize_y = configurator.getIntProperty("char_normalizeddimensions_y");
     /**
      * Dimensions of an input character after transformation: 10 * 16 = 160 neurons.
      */
@@ -45,7 +48,6 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
     }
 
     public NeuralPatternClassificator(boolean learn) {
-        Configurator configurator = Configurator.getConfigurator();
         Vector<Integer> dimensions = new Vector<Integer>();
         // determine size of input layer according to chosen feature extraction method
         int inputLayerSize;
@@ -69,7 +71,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
         } else {
             // or load network from xml
             String neuralNetPath = configurator.getPathProperty("char_neuralNetworkPath");
-            InputStream is = configurator.getResourceAsStream(neuralNetPath);
+            InputStream is = FileUtils.getResourceAsStream(getClass(), neuralNetPath);
             this.network = new NeuralNetwork(is);
         }
     }
@@ -125,15 +127,15 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
         NeuralNetwork.SetOfIOPairs train = new NeuralNetwork.SetOfIOPairs();
         ArrayList<String> fileList = (ArrayList<String>) Char.getAlphabetList(folder);
         for (String fileName : fileList) {
-            InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
+            InputStream is = FileUtils.getResourceAsStream(getClass(), fileName);
             Char imgChar = new Char(is);
             imgChar.normalize();
             train.addIOPair(this.createNewPair(fileName.toUpperCase().charAt(0), imgChar));
             is.close();
         }
-        this.network.learn(train, Configurator.getConfigurator().getIntProperty("neural_maxk"),
-                Configurator.getConfigurator().getDoubleProperty("neural_eps"),
-                Configurator.getConfigurator().getDoubleProperty("neural_lambda"),
-                Configurator.getConfigurator().getDoubleProperty("neural_micro"));
+        this.network.learn(train, configurator.getIntProperty("neural_maxk"),
+                configurator.getDoubleProperty("neural_eps"),
+                configurator.getDoubleProperty("neural_lambda"),
+                configurator.getDoubleProperty("neural_micro"));
     }
 }

@@ -16,10 +16,11 @@
 
 package net.sf.javaanpr.intelligence;
 
-import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.RecognizedChar;
 import net.sf.javaanpr.recognizer.RecognizedPattern;
+import net.sf.javaanpr.tools.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -49,11 +50,11 @@ public class Parser {
      */
     public Parser() throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
         this.plateForms = new Vector<PlateForm>();
-        String fileName = Configurator.getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
+        String fileName = GlobalState.getInstance().getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
         if (fileName == null || fileName.isEmpty()) {
             throw new IOException("Failed to get syntax description file from Configurator");
         }
-        InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
+        InputStream inStream = FileUtils.getResourceAsStream(getClass(), fileName);
         if (inStream == null) {
             throw new IOException("Couldn't find parser syntax description file");
         }
@@ -82,8 +83,8 @@ public class Parser {
     @Deprecated
     public Vector<PlateForm> loadFromXml(String fileName)
             throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
-        InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
-        return this.loadFromXml(inStream);
+        InputStream inStream = FileUtils.getResourceAsStream(getClass(), fileName);
+        return loadFromXml(inStream);
     }
 
     /**

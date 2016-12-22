@@ -17,6 +17,7 @@
 package net.sf.javaanpr.jar;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.configurator.GlobalState;
 import net.sf.javaanpr.gui.ReportGenerator;
 import net.sf.javaanpr.gui.windows.FrameComponentInit;
 import net.sf.javaanpr.gui.windows.FrameMain;
@@ -98,8 +99,8 @@ public final class Main {
      * @deprecated not used
      */
     public static void newAlphabet(String srcdir, String dstdir) throws IOException {
-        int x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
-        int y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
+        int x = GlobalState.getInstance().getConfigurator().getIntProperty("char_normalizeddimensions_x");
+        int y = GlobalState.getInstance().getConfigurator().getIntProperty("char_normalizeddimensions_y");
         logger.info("\nCreating new alphabet (" + x + " x " + y + " px)... \n");
         for (String fileName : Char.getAlphabetList(srcdir)) {
             Char c = new Char(fileName);
@@ -152,7 +153,7 @@ public final class Main {
             Main.systemLogic.recognize(new CarSnapshot(args[2]), true);
         } else if ((args.length == 3) && args[0].equals("-newconfig") && args[1].equals("-o")) {
             // save default config into args[2]
-            Configurator.getConfigurator().saveConfiguration(args[2]);
+            GlobalState.getInstance().getConfigurator().saveConfiguration(args[2]);
         } else if ((args.length == 3) && args[0].equals("-newnetwork") && args[1].equals("-o")) {
             // learn new neural network and save it into into args[2]
             Main.learnAlphabet(args[2]);
