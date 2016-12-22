@@ -48,7 +48,7 @@ public class Graph {
      */
     public boolean allowedInterval(Vector<Peak> peaks, int xPosition) {
         for (Peak peak : peaks) {
-            if ((peak.left <= xPosition) && (xPosition <= peak.right)) {
+            if ((peak.getLeft() <= xPosition) && (xPosition <= peak.getRight())) {
                 return false;
             }
         }
@@ -185,9 +185,9 @@ public class Graph {
             final double multConst = (double) width / this.yValues.size();
             int i = 0;
             for (Peak p : this.peaks) {
-                graphicContent.drawLine((int) (p.left * multConst), 0, (int) (p.center * multConst), 30);
-                graphicContent.drawLine((int) (p.center * multConst), 30, (int) (p.right * multConst), 0);
-                graphicContent.drawString(i + ".", (int) (p.center * multConst) - 5, 42);
+                graphicContent.drawLine((int) (p.getLeft() * multConst), 0, (int) (p.getCenter() * multConst), 30);
+                graphicContent.drawLine((int) (p.getCenter() * multConst), 30, (int) (p.getRight() * multConst), 0);
+                graphicContent.drawString(i + ".", (int) (p.getCenter() * multConst) - 5, 42);
                 i++;
             }
         }
@@ -237,9 +237,13 @@ public class Graph {
             int i = 0;
             double multConst = (double) height / this.yValues.size();
             for (Peak p : this.peaks) {
-                graphicContent.drawLine(width, (int) (p.left * multConst), width - 30, (int) (p.center * multConst));
-                graphicContent.drawLine(width - 30, (int) (p.center * multConst), width, (int) (p.right * multConst));
-                graphicContent.drawString(i + ".", width - 38, (int) (p.center * multConst) + 5);
+                graphicContent.drawLine(width,
+                        (int) (p.getLeft() * multConst),
+                        width - 30, (int) (p.getCenter() * multConst));
+                graphicContent.drawLine(width - 30,
+                        (int) (p.getCenter() * multConst), width,
+                        (int) (p.getRight() * multConst));
+                graphicContent.drawString(i + ".", width - 38, (int) (p.getCenter() * multConst) + 5);
                 i++;
             }
         }
@@ -328,50 +332,6 @@ public class Graph {
                 }
             }
             return distributedPeaks;
-        }
-    }
-
-    public class Peak {
-        private int left, center, right;
-
-        public Peak(int left, int center, int right) {
-            this.left = left;
-            this.center = center;
-            this.right = right;
-        }
-
-        public Peak(int left, int right) {
-            this.left = left;
-            this.center = (left + right) / 2;
-            this.right = right;
-        }
-
-        public int getLeft() {
-            return this.left;
-        }
-
-        public void setLeft(int left) {
-            this.left = left;
-        }
-
-        public int getRight() {
-            return this.right;
-        }
-
-        public void setRight(int right) {
-            this.right = right;
-        }
-
-        public int getCenter() {
-            return this.center;
-        }
-
-        public void setCenter(int center) {
-            this.center = center;
-        }
-
-        public int getDiff() {
-            return this.right - this.left;
         }
     }
 }

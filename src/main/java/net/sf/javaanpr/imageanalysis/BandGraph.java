@@ -45,7 +45,7 @@ public class BandGraph extends Graph {
     }
 
     public Vector<Peak> findPeaks(int count) {
-        Vector<Graph.Peak> outPeaks = new Vector<Graph.Peak>();
+        Vector<Peak> outPeaks = new Vector<Peak>();
         for (int c = 0; c < count; c++) {
             float maxValue = 0.0f;
             int maxIndex = 0;
