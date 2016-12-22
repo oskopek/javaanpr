@@ -127,7 +127,7 @@ public class Plate extends Photo {
 
     private BufferedImage cutLeftRight(BufferedImage origin, PlateHorizontalGraph graph) {
         graph.applyProbabilityDistributor(new Graph.ProbabilityDistributor(0f, 0f, 2, 2));
-        Vector<Graph.Peak> peaks = graph.findPeak(3);
+        Vector<Graph.Peak> peaks = graph.findPeak();
         if (peaks.size() != 0) {
             Graph.Peak p = peaks.elementAt(0);
             return origin.getSubimage(p.getLeft(), 0, p.getDiff(), getImage().getHeight());
@@ -162,7 +162,7 @@ public class Plate extends Photo {
     }
 
     private PlateHorizontalGraph histogramXaxis(BufferedImage bi) {
-        PlateHorizontalGraph graph = new PlateHorizontalGraph(this);
+        PlateHorizontalGraph graph = new PlateHorizontalGraph();
         int w = bi.getWidth();
         int h = bi.getHeight();
         for (int x = 0; x < w; x++) {
