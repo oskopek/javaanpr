@@ -29,7 +29,7 @@ public class RecognizedPlate {
     private Vector<RecognizedChar> chars;
 
     /**
-     * Constructs a new {@code RecognizedPlate} with no {@code RecognizedChar}s
+     * Constructs a new {@code RecognizedPlate} with no {@code RecognizedChar}s.
      */
     public RecognizedPlate() {
         this.chars = new Vector<RecognizedChar>();
