@@ -20,7 +20,7 @@ import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
 /**
- * This class filters filenames using the filename extension
+ * This class filters filenames using the filename extension.
  */
 public class ImageFileFilter extends FileFilter {
 
@@ -55,7 +55,7 @@ public class ImageFileFilter extends FileFilter {
     }
 
     /**
-     * This method returns a description of the file extensions which are currently accepted
+     * This method returns a description of the file extensions which are currently accepted.
      * @return "images (*.jpg, *.bmp, *.gif, *.png)"
      */
     @Override
