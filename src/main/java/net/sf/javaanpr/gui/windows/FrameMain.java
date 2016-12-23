@@ -61,19 +61,19 @@ public class FrameMain extends JFrame {
      * Creates new form MainFrame.
      */
     public FrameMain() {
-        this.initComponents();
+        initComponents();
 
-        this.fileChooser = new JFileChooser();
-        this.fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        this.fileChooser.setMultiSelectionEnabled(true);
-        this.fileChooser.setDialogTitle("Load snapshots");
-        // this.fileChooser.setFileFilter(new ImageFileFilter()); // TODO why not???
+        fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fileChooser.setMultiSelectionEnabled(true);
+        fileChooser.setDialogTitle("Load snapshots");
+        // fileChooser.setFileFilter(new ImageFileFilter()); // TODO why not???
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = this.getWidth();
-        int height = this.getHeight();
-        this.setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
-        this.setVisible(true);
+        int width = getWidth();
+        int height = getHeight();
+        setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
+        setVisible(true);
     }
 
     /**
@@ -82,134 +82,134 @@ public class FrameMain extends JFrame {
      */
     private void initComponents() {
         Font arial11 = new Font("Arial", 0, 11);
-        this.recognitionLabel = new JLabel();
-        this.panelCar = new JPanel() {
+        recognitionLabel = new JLabel();
+        panelCar = new JPanel() {
 
             private static final long serialVersionUID = 0L;
 
             @Override
             public void paint(Graphics g) {
                 super.paint(g);
-                g.drawImage(FrameMain.this.panelCarContent, 0, 0, null);
+                g.drawImage(panelCarContent, 0, 0, null);
             }
         };
-        this.fileListScrollPane = new JScrollPane();
-        this.fileList = new JList<FileListModelEntry>();
-        this.recognizeButton = new JButton();
-        this.bottomLine = new JLabel();
-        this.menuBar = new JMenuBar();
-        this.imageMenu = new JMenu();
-        this.openItem = new JMenuItem();
-        this.exitItem = new JMenuItem();
-        this.helpMenu = new JMenu();
-        this.aboutItem = new JMenuItem();
-        this.helpItem = new JMenuItem();
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setTitle("JavaANPR");
-        this.setResizable(false);
-        this.recognitionLabel.setBackground(new Color(0, 0, 0));
-        this.recognitionLabel.setFont(new Font("Arial", 0, 24));
-        this.recognitionLabel.setForeground(new Color(255, 204, 51));
-        this.recognitionLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        this.recognitionLabel.setText(null);
-        this.recognitionLabel.setBorder(BorderFactory.createEtchedBorder());
-        this.recognitionLabel.setOpaque(true);
-        this.panelCar.setBorder(BorderFactory.createEtchedBorder());
-        GroupLayout panelCarLayout = new GroupLayout(this.panelCar);
-        this.panelCar.setLayout(panelCarLayout);
+        fileListScrollPane = new JScrollPane();
+        fileList = new JList<FileListModelEntry>();
+        recognizeButton = new JButton();
+        bottomLine = new JLabel();
+        menuBar = new JMenuBar();
+        imageMenu = new JMenu();
+        openItem = new JMenuItem();
+        exitItem = new JMenuItem();
+        helpMenu = new JMenu();
+        aboutItem = new JMenuItem();
+        helpItem = new JMenuItem();
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("JavaANPR");
+        setResizable(false);
+        recognitionLabel.setBackground(new Color(0, 0, 0));
+        recognitionLabel.setFont(new Font("Arial", 0, 24));
+        recognitionLabel.setForeground(new Color(255, 204, 51));
+        recognitionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        recognitionLabel.setText(null);
+        recognitionLabel.setBorder(BorderFactory.createEtchedBorder());
+        recognitionLabel.setOpaque(true);
+        panelCar.setBorder(BorderFactory.createEtchedBorder());
+        GroupLayout panelCarLayout = new GroupLayout(panelCar);
+        panelCar.setLayout(panelCarLayout);
         panelCarLayout.setHorizontalGroup(
                 panelCarLayout.createParallelGroup(GroupLayout.LEADING).add(0, 585, Short.MAX_VALUE));
         panelCarLayout
                 .setVerticalGroup(panelCarLayout.createParallelGroup(GroupLayout.LEADING).add(0, 477, Short.MAX_VALUE));
-        this.fileListScrollPane.setBorder(BorderFactory.createEtchedBorder());
-        this.fileListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        this.fileList.setBackground(UIManager.getDefaults().getColor("Panel.background"));
-        this.fileList.setFont(arial11);
-        this.fileList.addListSelectionListener(new ListSelectionListener() {
+        fileListScrollPane.setBorder(BorderFactory.createEtchedBorder());
+        fileListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        fileList.setBackground(UIManager.getDefaults().getColor("Panel.background"));
+        fileList.setFont(arial11);
+        fileList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent evt) {
-                FrameMain.this.fileListValueChanged(evt);
+                fileListValueChanged(evt);
             }
         });
-        this.fileListScrollPane.setViewportView(this.fileList);
-        this.recognizeButton.setFont(arial11);
-        this.recognizeButton.setText("Recognize plate");
-        this.recognizeButton.addActionListener(new ActionListener() {
+        fileListScrollPane.setViewportView(fileList);
+        recognizeButton.setFont(arial11);
+        recognizeButton.setText("Recognize plate");
+        recognizeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                FrameMain.this.recognizeButtonActionPerformed(evt);
+                recognizeButtonActionPerformed(evt);
             }
         });
-        this.bottomLine.setFont(arial11);
-        this.menuBar.setFont(arial11);
-        this.imageMenu.setText("Image");
-        this.imageMenu.setFont(arial11);
-        this.openItem.setFont(arial11);
-        this.openItem.setText("Load snapshots");
-        this.openItem.addActionListener(new ActionListener() {
+        bottomLine.setFont(arial11);
+        menuBar.setFont(arial11);
+        imageMenu.setText("Image");
+        imageMenu.setFont(arial11);
+        openItem.setFont(arial11);
+        openItem.setText("Load snapshots");
+        openItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                FrameMain.this.openItemActionPerformed(evt);
+                openItemActionPerformed(evt);
             }
         });
-        this.imageMenu.add(this.openItem);
-        this.exitItem.setFont(arial11);
-        this.exitItem.setText("Exit");
-        this.exitItem.addActionListener(new ActionListener() {
+        imageMenu.add(openItem);
+        exitItem.setFont(arial11);
+        exitItem.setText("Exit");
+        exitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                FrameMain.this.exitItemActionPerformed(evt);
+                exitItemActionPerformed(evt);
             }
         });
-        this.imageMenu.add(this.exitItem);
-        this.menuBar.add(this.imageMenu);
-        this.helpMenu.setText("Help");
-        this.helpMenu.setFont(arial11);
-        this.aboutItem.setFont(arial11);
-        this.aboutItem.setText("About");
-        this.aboutItem.addActionListener(new ActionListener() {
+        imageMenu.add(exitItem);
+        menuBar.add(imageMenu);
+        helpMenu.setText("Help");
+        helpMenu.setFont(arial11);
+        aboutItem.setFont(arial11);
+        aboutItem.setText("About");
+        aboutItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                FrameMain.this.aboutItemActionPerformed(evt);
+                aboutItemActionPerformed(evt);
             }
         });
-        this.helpMenu.add(this.aboutItem);
-        this.helpItem.setFont(arial11);
-        this.helpItem.setText("Help");
-        this.helpItem.addActionListener(new ActionListener() {
+        helpMenu.add(aboutItem);
+        helpItem.setFont(arial11);
+        helpItem.setText("Help");
+        helpItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                FrameMain.this.helpItemActionPerformed(evt);
+                helpItemActionPerformed(evt);
             }
         });
-        this.helpMenu.add(this.helpItem);
-        this.menuBar.add(this.helpMenu);
-        this.setJMenuBar(this.menuBar);
-        GroupLayout layout = new GroupLayout(this.getContentPane());
-        this.getContentPane().setLayout(layout); // TODO refactor
+        helpMenu.add(helpItem);
+        menuBar.add(helpMenu);
+        setJMenuBar(menuBar);
+        GroupLayout layout = new GroupLayout(getContentPane());
+        getContentPane().setLayout(layout); // TODO refactor
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.LEADING)
                 .add(layout.createSequentialGroup().addContainerGap()
                         .add(layout.createParallelGroup(GroupLayout.TRAILING)
-                                .add(GroupLayout.LEADING, this.bottomLine, GroupLayout.DEFAULT_SIZE, 589,
+                                .add(GroupLayout.LEADING, bottomLine, GroupLayout.DEFAULT_SIZE, 589,
                                         Short.MAX_VALUE)
-                                .add(GroupLayout.LEADING, this.panelCar, GroupLayout.DEFAULT_SIZE,
+                                .add(GroupLayout.LEADING, panelCar, GroupLayout.DEFAULT_SIZE,
                                         GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)).addPreferredGap(LayoutStyle.RELATED)
                         .add(layout.createParallelGroup(GroupLayout.TRAILING)
-                                .add(this.fileListScrollPane, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                                .add(GroupLayout.LEADING, this.recognitionLabel, GroupLayout.DEFAULT_SIZE, 190,
+                                .add(fileListScrollPane, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                                .add(GroupLayout.LEADING, recognitionLabel, GroupLayout.DEFAULT_SIZE, 190,
                                         Short.MAX_VALUE)
-                                .add(this.recognizeButton, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
+                                .add(recognizeButton, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
                         .addContainerGap()));
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.LEADING)
                 .add(layout.createSequentialGroup().addContainerGap()
                         .add(layout.createParallelGroup(GroupLayout.LEADING).add(layout.createSequentialGroup()
-                                .add(this.fileListScrollPane, GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
-                                .addPreferredGap(LayoutStyle.RELATED).add(this.recognizeButton)
+                                .add(fileListScrollPane, GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.RELATED).add(recognizeButton)
                                 .addPreferredGap(LayoutStyle.RELATED)
-                                .add(this.recognitionLabel, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))
-                                .add(this.panelCar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-                                        Short.MAX_VALUE)).addPreferredGap(LayoutStyle.RELATED).add(this.bottomLine)));
-        this.pack();
+                                .add(recognitionLabel, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))
+                                .add(panelCar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+                                        Short.MAX_VALUE)).addPreferredGap(LayoutStyle.RELATED).add(bottomLine)));
+        pack();
     }
 
     private void helpItemActionPerformed(ActionEvent evt) {
@@ -233,11 +233,11 @@ public class FrameMain extends JFrame {
     }
 
     private void fileListValueChanged(ListSelectionEvent evt) {
-        int selectedNow = this.fileList.getSelectedIndex();
+        int selectedNow = fileList.getSelectedIndex();
         if ((selectedNow != -1)) {
-            this.recognitionLabel.setText(this.fileListModel.elementAt(selectedNow).recognizedPlate);
-            this.selectedIndex = selectedNow;
-            String path = this.fileListModel.getElementAt(selectedNow).fullPath;
+            recognitionLabel.setText(fileListModel.elementAt(selectedNow).recognizedPlate);
+            selectedIndex = selectedNow;
+            String path = fileListModel.getElementAt(selectedNow).fullPath;
             new LoadImageThread(this, path).start();
         }
     }
@@ -248,49 +248,56 @@ public class FrameMain extends JFrame {
 
     private void openItemActionPerformed(ActionEvent evt) {
         int returnValue;
-        returnValue = this.fileChooser.showOpenDialog((Component) evt.getSource());
+        returnValue = fileChooser.showOpenDialog((Component) evt.getSource());
         if (returnValue != JFileChooser.APPROVE_OPTION) {
             return;
         }
-        File[] selectedFiles = this.fileChooser.getSelectedFiles();
-        this.fileListModel = new DefaultListModel<FileListModelEntry>();
+        File[] selectedFiles = fileChooser.getSelectedFiles();
+        fileListModel = new DefaultListModel<FileListModelEntry>();
         for (File selectedFile : selectedFiles) {
             if (selectedFile.isFile()) {
-                this.fileListModel
+                fileListModel
                         .addElement(new FileListModelEntry(selectedFile.getName(), selectedFile.getAbsolutePath()));
             } else if (selectedFile.isDirectory()) {
                 for (String fileName : selectedFile.list()) {
                     if (ImageFileFilter.accept(fileName)) {
-                        this.fileListModel
+                        fileListModel
                                 .addElement(new FileListModelEntry(fileName, selectedFile + File.separator + fileName));
                     }
                 }
             }
         }
-        this.fileList.setModel(this.fileListModel);
+        fileList.setModel(fileListModel);
     }
 
     public class RecognizeThread extends Thread {
         private FrameMain parentFrame = null;
 
         public RecognizeThread(FrameMain parentFrame) {
-            this.parentFrame = parentFrame;
+            parentFrame = parentFrame;
+        }
+
+        private void setFailedAndPrintStackTrace(Exception exception) {
+            parentFrame.recognitionLabel.setText("failed");
+            exception.printStackTrace();
         }
 
         @Override
         public void run() {
             String recognizedText = "";
-            this.parentFrame.recognitionLabel.setText("processing...");
-            int index = this.parentFrame.selectedIndex;
+            parentFrame.recognitionLabel.setText("processing...");
+            int index = parentFrame.selectedIndex;
             try {
-                recognizedText = Main.systemLogic.recognize(this.parentFrame.car, false);
-            } catch (Exception ex) { // TODO exception
-                this.parentFrame.recognitionLabel.setText("failed");
-                ex.printStackTrace();
+                recognizedText = Main.systemLogic.recognize(parentFrame.car, false);
+            } catch (IllegalArgumentException exception) {
+                setFailedAndPrintStackTrace(exception);
+                return;
+            } catch (IOException exception) {
+                setFailedAndPrintStackTrace(exception);
                 return;
             }
-            this.parentFrame.recognitionLabel.setText(recognizedText);
-            this.parentFrame.fileListModel.elementAt(index).recognizedPlate = recognizedText;
+            parentFrame.recognitionLabel.setText(recognizedText);
+            parentFrame.fileListModel.elementAt(index).recognizedPlate = recognizedText;
         }
     }
 
@@ -306,12 +313,12 @@ public class FrameMain extends JFrame {
         @Override
         public void run() {
             try {
-                this.parentFrame.car = new CarSnapshot(this.url);
-                this.parentFrame.panelCarContent = this.parentFrame.car.duplicate().getImage();
-                this.parentFrame.panelCarContent =
-                        Photo.linearResizeBi(this.parentFrame.panelCarContent, this.parentFrame.panelCar.getWidth(),
-                                this.parentFrame.panelCar.getHeight());
-                this.parentFrame.panelCar.paint(this.parentFrame.panelCar.getGraphics());
+                parentFrame.car = new CarSnapshot(url);
+                parentFrame.panelCarContent = parentFrame.car.duplicate().getImage();
+                parentFrame.panelCarContent =
+                        Photo.linearResizeBi(parentFrame.panelCarContent, parentFrame.panelCar.getWidth(),
+                                parentFrame.panelCar.getHeight());
+                parentFrame.panelCar.paint(parentFrame.panelCar.getGraphics());
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -25,31 +25,26 @@ public class PlateHorizontalGraph extends Graph {
     private static int horizontalDetectionType =
             Configurator.getConfigurator().getIntProperty("platehorizontalgraph_detectionType");
 
-    private Plate handle;
-
-    public PlateHorizontalGraph(Plate handle) {
-        this.handle = handle;
-    }
-
     public float derivation(int index1, int index2) {
-        return this.yValues.elementAt(index1) - this.yValues.elementAt(index2);
+        return yValues.elementAt(index1) - yValues.elementAt(index2);
     }
 
-    public Vector<Peak> findPeak(int count) {
+    public Vector<Peak> findPeak() {
         if (PlateHorizontalGraph.horizontalDetectionType == 1) {
-            return this.findPeak_edgedetection(count);
+            return findPeakEdgedetection();
         }
-        return this.findPeak_derivative(count);
+        return findPeakDerivative();
     }
 
-    public Vector<Peak> findPeak_derivative(int count) {
-        int a, b;
-        float maxVal = this.getMaxValue();
-        for (a = 2; (-this.derivation(a, a + 4) < (maxVal * 0.2)) && (a < (this.yValues.size() - 2 - 2 - 4)); a++) {
-            // intentionally empty
+    public Vector<Peak> findPeakDerivative() {
+        int a = 2;
+        int b = yValues.size() - 1 - 2;
+        float maxVal = getMaxValue();
+        while ((-derivation(a, a + 4) < (maxVal * 0.2)) && (a < (yValues.size() - 2 - 2 - 4))) {
+            a++;
         }
-        for (b = this.yValues.size() - 1 - 2; (this.derivation(b - 4, b) < (maxVal * 0.2)) && (b > (a + 2)); b--) {
-            // intentionally empty
+        while ((derivation(b - 4, b) < (maxVal * 0.2)) && (b > (a + 2))) {
+            b--;
         }
         Vector<Peak> outPeaks = new Vector<Peak>();
         outPeaks.add(new Peak(a, b));
@@ -57,18 +52,19 @@ public class PlateHorizontalGraph extends Graph {
         return outPeaks;
     }
 
-    public Vector<Peak> findPeak_edgedetection(int count) {
-        float average = this.getAverageValue();
-        int a, b;
-        for (a = 0; this.yValues.elementAt(a) < average; a++) {
-            // intentionally empty
+    public Vector<Peak> findPeakEdgedetection() {
+        float average = getAverageValue();
+        int a = 0;
+        int b = yValues.size() - 1;
+        while (yValues.elementAt(a) < average) {
+            a++;
         }
-        for (b = this.yValues.size() - 1; this.yValues.elementAt(b) < average; b--) {
-            // intentionally empty
+        while (yValues.elementAt(b) < average) {
+            b--;
         }
         Vector<Peak> outPeaks = new Vector<Peak>();
         a = Math.max(a - 5, 0);
-        b = Math.min(b + 5, this.yValues.size());
+        b = Math.min(b + 5, yValues.size());
         outPeaks.add(new Peak(a, b));
         super.peaks = outPeaks;
         return outPeaks;
