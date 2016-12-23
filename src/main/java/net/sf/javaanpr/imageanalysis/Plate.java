@@ -47,7 +47,7 @@ public class Plate extends Photo {
         return this.graphHandle.renderHorizontally(this.getWidth(), 100);
     }
 
-    private Vector<Graph.Peak> computeGraph() {
+    private Vector<Peak> computeGraph() {
         if (this.graphHandle != null) {
             return this.graphHandle.peaks;
         }
@@ -59,12 +59,12 @@ public class Plate extends Photo {
 
     public Vector<Char> getChars() {
         Vector<Char> out = new Vector<Char>();
-        Vector<Graph.Peak> peaks = this.computeGraph();
+        Vector<Peak> peaks = this.computeGraph();
         for (int i = 0; i < peaks.size(); i++) {
             // Cut from the original image of the plate and save to a vector.
             // ATTENTION: Cutting from original,
             // we have to apply an inverse transformation to the coordinates calculated from imageCopy
-            Graph.Peak p = peaks.elementAt(i);
+            Peak p = peaks.elementAt(i);
             if (p.getDiff() <= 0) {
                 continue;
             }
@@ -121,15 +121,15 @@ public class Plate extends Photo {
 
     private BufferedImage cutTopBottom(BufferedImage origin, PlateVerticalGraph graph) {
         graph.applyProbabilityDistributor(new Graph.ProbabilityDistributor(0f, 0f, 2, 2));
-        Graph.Peak p = graph.findPeak(3).elementAt(0);
+        Peak p = graph.findPeak(3).elementAt(0);
         return origin.getSubimage(0, p.getLeft(), getImage().getWidth(), p.getDiff());
     }
 
     private BufferedImage cutLeftRight(BufferedImage origin, PlateHorizontalGraph graph) {
         graph.applyProbabilityDistributor(new Graph.ProbabilityDistributor(0f, 0f, 2, 2));
-        Vector<Graph.Peak> peaks = graph.findPeak();
+        Vector<Peak> peaks = graph.findPeak();
         if (peaks.size() != 0) {
-            Graph.Peak p = peaks.elementAt(0);
+            Peak p = peaks.elementAt(0);
             return origin.getSubimage(p.getLeft(), 0, p.getDiff(), getImage().getHeight());
         }
         return origin;
@@ -148,7 +148,7 @@ public class Plate extends Photo {
     }
 
     private PlateVerticalGraph histogramYaxis(BufferedImage bi) {
-        PlateVerticalGraph graph = new PlateVerticalGraph(this);
+        PlateVerticalGraph graph = new PlateVerticalGraph();
         int w = bi.getWidth();
         int h = bi.getHeight();
         for (int y = 0; y < h; y++) {

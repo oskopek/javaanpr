@@ -54,7 +54,7 @@ public class CarSnapshot extends Photo {
         return this.graphHandle.renderVertically(100, this.getHeight());
     }
 
-    private Vector<Graph.Peak> computeGraph() {
+    private Vector<Peak> computeGraph() {
         if (this.graphHandle != null) {
             return this.graphHandle.peaks;
         }
@@ -75,12 +75,12 @@ public class CarSnapshot extends Photo {
      */
     public Vector<Band> getBands() {
         Vector<Band> out = new Vector<Band>();
-        Vector<Graph.Peak> peaks = this.computeGraph();
+        Vector<Peak> peaks = this.computeGraph();
         for (int i = 0; i < peaks.size(); i++) {
             // Cut from the original image of the plate and save to a vector.
             // ATTENTION: Cutting from original,
             // we have to apply an inverse transformation to the coordinates calculated from imageCopy
-            Graph.Peak p = peaks.elementAt(i);
+            Peak p = peaks.elementAt(i);
             out.add(new Band(getImage().getSubimage(0, (p.getLeft()), getImage().getWidth(), (p.getDiff()))));
         }
         return out;
