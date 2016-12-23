@@ -28,30 +28,30 @@ public class PlateVerticalGraph extends Graph {
 
     public Vector<Peak> findPeak(int count) {
         // lower the peak
-        for (int i = 0; i < this.yValues.size(); i++) {
-            this.yValues.set(i, this.yValues.elementAt(i) - this.getMinValue());
+        for (int i = 0; i < yValues.size(); i++) {
+            yValues.set(i, yValues.elementAt(i) - getMinValue());
         }
         Vector<Peak> outPeaks = new Vector<Peak>();
         for (int c = 0; c < count; c++) {
             float maxValue = 0.0f;
             int maxIndex = 0;
-            for (int i = 0; i < this.yValues.size(); i++) { // left to right
-                if (this.allowedInterval(outPeaks, i)) {
-                    if (this.yValues.elementAt(i) >= maxValue) {
-                        maxValue = this.yValues.elementAt(i);
+            for (int i = 0; i < yValues.size(); i++) { // left to right
+                if (allowedInterval(outPeaks, i)) {
+                    if (yValues.elementAt(i) >= maxValue) {
+                        maxValue = yValues.elementAt(i);
                         maxIndex = i;
                     }
                 }
             }
             // we found the biggest peak
-            if (this.yValues.elementAt(maxIndex) < (0.05 * super.getMaxValue())) {
+            if (yValues.elementAt(maxIndex) < (0.05 * super.getMaxValue())) {
                 break; // 0.4
             }
-            int leftIndex = this.indexOfLeftPeakRel(maxIndex, PlateVerticalGraph.peakFootConstant);
-            int rightIndex = this.indexOfRightPeakRel(maxIndex, PlateVerticalGraph.peakFootConstant);
-            outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(this.yValues.size() - 1, rightIndex)));
+            int leftIndex = indexOfLeftPeakRel(maxIndex, PlateVerticalGraph.peakFootConstant);
+            int rightIndex = indexOfRightPeakRel(maxIndex, PlateVerticalGraph.peakFootConstant);
+            outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(yValues.size() - 1, rightIndex)));
         }
-        Collections.sort(outPeaks, new PeakComparator(this));
+        Collections.sort(outPeaks, new PeakComparator(yValues));
         super.peaks = outPeaks;
         return outPeaks;
     }

@@ -17,28 +17,29 @@
 package net.sf.javaanpr.imageanalysis;
 
 import java.util.Comparator;
+import java.util.Vector;
 
 public class PeakComparator implements Comparator<Peak> {
-    private PlateVerticalGraph graphHandle = null;
+    private Vector<Float> yValues;
 
-    public PeakComparator(PlateVerticalGraph graph) {
-        this.graphHandle = graph;
+    public PeakComparator(Vector<Float> yValues) {
+        this.yValues = yValues;
     }
 
     private float getPeakValue(Peak peak) {
         // heuristic: how high (wide on the graph) is the candidate character (prefer higher ones)
-        // return ((Peak)peak).getDiff();
+        // return peak.getDiff();
 
         // heuristic: height of the peak
-        return this.graphHandle.yValues.elementAt(peak.getCenter());
+        return yValues.elementAt(peak.getCenter());
 
         // heuristic: how far from the center is the candidate
-        // int peakCenter = ( ((Peak)peak).getRight() + ((Peak)peak).getLeft() )/2;
-        // return Math.abs(peakCenter - this.graphHandle.yValues.size()/2);
+        // int peakCenter = (peak.getRight() + (peak.getLeft() )/2;
+        // return Math.abs(peakCenter - yValues.size()/2);
     }
 
     @Override
     public int compare(Peak peak1, Peak peak2) {
-        return Double.compare(getPeakValue(peak1), getPeakValue(peak2));
+        return Double.compare(getPeakValue(peak2), getPeakValue(peak1));
     }
 }

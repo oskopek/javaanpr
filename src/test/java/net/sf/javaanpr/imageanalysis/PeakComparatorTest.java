@@ -34,10 +34,8 @@ public class PeakComparatorTest {
 
     @Before
     public void setup() {
-        PlateVerticalGraph plateVerticalGraph = mock(PlateVerticalGraph.class);
-        Vector<Float> yvalues = new Vector<Float>(Arrays.asList(new Float[] {1.0f, 2.0f}));
-        plateVerticalGraph.yValues = yvalues;
-        peakComparator = new PeakComparator(plateVerticalGraph);
+        Vector<Float> yValues = new Vector<Float>(Arrays.asList(new Float[] {1.0f, 2.0f}));
+        peakComparator = new PeakComparator(yValues);
         peak1 = mock(Peak.class);
         peak2 = mock(Peak.class);
     }
@@ -50,22 +48,22 @@ public class PeakComparatorTest {
     }
 
     @Test
-    public void testCompareFirstPeakSmallerReturnsResultLessThanZero() {
+    public void testCompareFirstPeakSmallerReturnsResultGreaterThanZero() {
         when(peak1.getCenter()).thenReturn(0);
         when(peak2.getCenter()).thenReturn(1);
-        int comparisonResult = peakComparator.compare(peak1, peak2);
-        assertTrue("Expecting a result which is less than 0 when comparing peak with centre " + peak1.getCenter()
-                + " to peak with centre " + peak2.getCenter() + ". Got result " + comparisonResult,
-                comparisonResult < 0);
-    }
-
-    @Test
-    public void testCompareFirstPeakLargerReturnsResultGreaterThanZero() {
-        when(peak1.getCenter()).thenReturn(1);
-        when(peak2.getCenter()).thenReturn(0);
         int comparisonResult = peakComparator.compare(peak1, peak2);
         assertTrue("Expecting a result which is greater than 0 when comparing peak with centre " + peak1.getCenter()
                 + " to peak with centre " + peak2.getCenter() + ". Got result " + comparisonResult,
                 comparisonResult > 0);
+    }
+
+    @Test
+    public void testCompareFirstPeakLargerReturnsResultLessThanZero() {
+        when(peak1.getCenter()).thenReturn(1);
+        when(peak2.getCenter()).thenReturn(0);
+        int comparisonResult = peakComparator.compare(peak1, peak2);
+        assertTrue("Expecting a result which is less than 0 when comparing peak with centre " + peak1.getCenter()
+                + " to peak with centre " + peak2.getCenter() + ". Got result " + comparisonResult,
+                comparisonResult < 0);
     }
 }
