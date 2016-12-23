@@ -26,24 +26,24 @@ public class PlateHorizontalGraph extends Graph {
             Configurator.getConfigurator().getIntProperty("platehorizontalgraph_detectionType");
 
     public float derivation(int index1, int index2) {
-        return this.yValues.elementAt(index1) - this.yValues.elementAt(index2);
+        return yValues.elementAt(index1) - yValues.elementAt(index2);
     }
 
     public Vector<Peak> findPeak() {
         if (PlateHorizontalGraph.horizontalDetectionType == 1) {
-            return this.findPeak_edgedetection();
+            return findPeakEdgedetection();
         }
-        return this.findPeak_derivative();
+        return findPeakDerivative();
     }
 
-    public Vector<Peak> findPeak_derivative() {
+    public Vector<Peak> findPeakDerivative() {
         int a = 2;
-        int b = this.yValues.size() - 1 - 2;
-        float maxVal = this.getMaxValue();
-        while ((-this.derivation(a, a + 4) < (maxVal * 0.2)) && (a < (this.yValues.size() - 2 - 2 - 4))) {
+        int b = yValues.size() - 1 - 2;
+        float maxVal = getMaxValue();
+        while ((-derivation(a, a + 4) < (maxVal * 0.2)) && (a < (yValues.size() - 2 - 2 - 4))) {
             a++;
         }
-        while ((this.derivation(b - 4, b) < (maxVal * 0.2)) && (b > (a + 2))) {
+        while ((derivation(b - 4, b) < (maxVal * 0.2)) && (b > (a + 2))) {
             b--;
         }
         Vector<Peak> outPeaks = new Vector<Peak>();
@@ -52,19 +52,19 @@ public class PlateHorizontalGraph extends Graph {
         return outPeaks;
     }
 
-    public Vector<Peak> findPeak_edgedetection() {
-        float average = this.getAverageValue();
+    public Vector<Peak> findPeakEdgedetection() {
+        float average = getAverageValue();
         int a = 0;
-        int b = this.yValues.size() - 1;
-        while (this.yValues.elementAt(a) < average) {
+        int b = yValues.size() - 1;
+        while (yValues.elementAt(a) < average) {
             a++;
         }
-        while (this.yValues.elementAt(b) < average) {
+        while (yValues.elementAt(b) < average) {
             b--;
         }
         Vector<Peak> outPeaks = new Vector<Peak>();
         a = Math.max(a - 5, 0);
-        b = Math.min(b + 5, this.yValues.size());
+        b = Math.min(b + 5, yValues.size());
         outPeaks.add(new Peak(a, b));
         super.peaks = outPeaks;
         return outPeaks;
