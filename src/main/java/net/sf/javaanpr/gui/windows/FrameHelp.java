@@ -47,57 +47,57 @@ public class FrameHelp extends JFrame {
      * @throws IOException in case the file to show in given mode failed to load
      */
     public FrameHelp(MODE mode) throws IOException { // TODO javadoc
-        this.initComponents();
+        initComponents();
         this.mode = mode;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = this.getWidth();
-        int height = this.getHeight();
-        this.setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
+        int width = getWidth();
+        int height = getHeight();
+        setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
         if (mode == MODE.SHOW_ABOUT) {
             URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_about"));
-            this.editorPane.setPage(url);
+            editorPane.setPage(url);
         } else if (mode == MODE.SHOW_HELP) {
             URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_help"));
-            this.editorPane.setPage(url);
+            editorPane.setPage(url);
         }
-        this.setVisible(true);
+        setVisible(true);
     }
 
     private void initComponents() {
-        this.jScrollPane1 = new JScrollPane();
-        this.editorPane = new JEditorPane();
-        this.helpWindowClose = new JButton();
+        jScrollPane1 = new JScrollPane();
+        editorPane = new JEditorPane();
+        helpWindowClose = new JButton();
 
-        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        this.setTitle("JavaANPR - Help");
-        this.setResizable(false);
-        this.jScrollPane1.setViewportView(this.editorPane);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("JavaANPR - Help");
+        setResizable(false);
+        jScrollPane1.setViewportView(editorPane);
 
-        this.helpWindowClose.setFont(new java.awt.Font("Arial", 0, 11));
-        this.helpWindowClose.setText("Close");
-        this.helpWindowClose.addActionListener(new java.awt.event.ActionListener() {
+        helpWindowClose.setFont(new java.awt.Font("Arial", 0, 11));
+        helpWindowClose.setText("Close");
+        helpWindowClose.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FrameHelp.this.helpWindowCloseActionPerformed(evt);
+                helpWindowCloseActionPerformed(evt);
             }
         });
 
-        GroupLayout layout = new GroupLayout(this.getContentPane());
-        this.getContentPane().setLayout(layout);
+        GroupLayout layout = new GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.LEADING)
                 .add(layout.createSequentialGroup().addContainerGap()
                         .add(layout.createParallelGroup(GroupLayout.LEADING)
-                                .add(GroupLayout.TRAILING, this.helpWindowClose)
-                                .add(this.jScrollPane1, GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE))
+                                .add(GroupLayout.TRAILING, helpWindowClose)
+                                .add(jScrollPane1, GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE))
                         .addContainerGap()));
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.LEADING).add(GroupLayout.TRAILING,
                 layout.createSequentialGroup().addContainerGap()
-                        .add(this.jScrollPane1, GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
-                        .addPreferredGap(LayoutStyle.RELATED).add(this.helpWindowClose).addContainerGap()));
-        this.pack();
+                        .add(jScrollPane1, GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+                        .addPreferredGap(LayoutStyle.RELATED).add(helpWindowClose).addContainerGap()));
+        pack();
     }
 
     private void helpWindowCloseActionPerformed(ActionEvent evt) {
-        this.dispose();
+        dispose();
     }
 }
