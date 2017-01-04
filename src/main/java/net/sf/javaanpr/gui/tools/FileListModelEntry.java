@@ -25,11 +25,11 @@ public class FileListModelEntry {
     public FileListModelEntry(String fileName, String fullPath) {
         this.fileName = fileName;
         this.fullPath = fullPath;
-        this.recognizedPlate = "?";
+        recognizedPlate = "?";
     }
 
     @Override
     public String toString() {
-        return this.fileName;
+        return fileName;
     }
 }
