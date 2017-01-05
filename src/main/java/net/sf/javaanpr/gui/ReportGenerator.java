@@ -38,38 +38,38 @@ public class ReportGenerator {
         if (!f.exists() && !f.mkdirs()) {
             throw new IOException("Report directory '" + directory + "' doesn't exist and couldn't be created");
         }
-        this.output = new StringBuilder();
-        this.output.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" + "<html>"
+        output = new StringBuilder();
+        output.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">" + "<html>"
                 + "<head><title>ANPR report</title>" + "</head>" + "<style type=\"text/css\">"
                 + "@import \"style.css\";" + "</style>");
     }
 
     public void insertText(String text) {
-        this.output.append(text + "\n");
+        output.append(text + "\n");
     }
 
     public void insertImage(BufferedImage image, String cls, int w, int h)
             throws IllegalArgumentException, IOException {
         String imageName = String.valueOf(image.hashCode()) + ".jpg";
-        this.saveImage(image, imageName);
+        saveImage(image, imageName);
         if ((w != 0) && (h != 0)) {
-            this.output.append("<img src='" + imageName + "' alt='' width='" + w + "' height='" + h + "' class='" + cls
+            output.append("<img src='" + imageName + "' alt='' width='" + w + "' height='" + h + "' class='" + cls
                     + "'>\n");
         } else {
-            this.output.append("<img src='" + imageName + "' alt='' class='" + cls + "'>\n");
+            output.append("<img src='" + imageName + "' alt='' class='" + cls + "'>\n");
         }
     }
 
     public void finish() throws IOException {
-        this.output.append("</html>");
-        FileOutputStream os = new FileOutputStream(this.directory + File.separator + "index.html");
+        output.append("</html>");
+        FileOutputStream os = new FileOutputStream(directory + File.separator + "index.html");
         Writer writer = new OutputStreamWriter(os);
-        writer.write(this.output.toString());
+        writer.write(output.toString());
         writer.flush();
         writer.close();
         String cssPath = Configurator.getConfigurator().getPathProperty("reportgeneratorcss");
         InputStream inStream = Configurator.getConfigurator().getResourceAsStream(cssPath);
-        this.saveStreamToFile(inStream, new File(this.directory + File.separator + "style.css"));
+        saveStreamToFile(inStream, new File(directory + File.separator + "style.css"));
     }
 
     public void saveStreamToFile(InputStream inStream, File out) throws IOException {
@@ -88,7 +88,7 @@ public class ReportGenerator {
         if (!type.equals("bmp") && !type.equals("jpg") && !type.equals("jpeg") && !type.equals("png")) {
             throw new IllegalArgumentException("Unsupported file format");
         }
-        File destination = new File(this.directory + File.separator + filename);
+        File destination = new File(directory + File.separator + filename);
         try {
             ImageIO.write(bi, type, destination);
         } catch (IOException e) {
