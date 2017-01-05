@@ -23,10 +23,10 @@ public class TimeMeter {
     private long startTime;
 
     public TimeMeter() {
-        this.startTime = Calendar.getInstance().getTimeInMillis();
+        startTime = Calendar.getInstance().getTimeInMillis();
     }
 
     public long getTime() {
-        return Calendar.getInstance().getTimeInMillis() - this.startTime;
+        return Calendar.getInstance().getTimeInMillis() - startTime;
     }
 }
