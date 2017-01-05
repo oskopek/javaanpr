@@ -20,10 +20,7 @@ import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.gui.TimeMeter;
 import net.sf.javaanpr.imageanalysis.*;
 import net.sf.javaanpr.jar.Main;
-import net.sf.javaanpr.recognizer.CharacterRecognizer;
-import net.sf.javaanpr.recognizer.RecognizedChar;
-import net.sf.javaanpr.recognizer.KnnPatternClassificator;
-import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
+import net.sf.javaanpr.recognizer.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -164,6 +161,7 @@ public class Intelligence {
                 for (Char chr : chars) {
                     chr.normalize();
                 }
+                int errors = 0;
                 float averageHeight = plate.getAveragePieceHeight(chars);
                 float averageContrast = plate.getAveragePieceContrast(chars);
                 float averageBrightness = plate.getAveragePieceBrightness(chars);
@@ -280,14 +278,16 @@ public class Intelligence {
                     continue;
                 }
                 lastProcessDuration = time.getTime();
-                String parsedOutput = Intelligence.parser.parse(recognizedPlate, syntaxAnalysisMode);
+                Parser.FinalPlate outputPlate = Intelligence.parser.parseToPlate(recognizedPlate, syntaxAnalysisMode);
                 if (enableReportGeneration) {
                     Main.rg.insertText("<span class='recognized'>");
-                    Main.rg.insertText("Recognized plate : " + parsedOutput);
+                    Main.rg.insertText("Recognized plate : " + outputPlate.getPlate());
+                    Main.rg.insertText("Plate cost (confidence 0-n, 0 best): " + outputPlate.getCost());
                     Main.rg.insertText("</span>");
                     Main.rg.finish();
                 }
-                return parsedOutput;
+                System.out.println("Cost: " + outputPlate.getCost());
+                return outputPlate.getPlate();
             }
         }
         // TODO failed!

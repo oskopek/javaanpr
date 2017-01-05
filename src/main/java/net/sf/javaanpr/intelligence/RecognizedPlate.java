@@ -17,6 +17,7 @@
 package net.sf.javaanpr.intelligence;
 
 import net.sf.javaanpr.recognizer.RecognizedChar;
+import net.sf.javaanpr.recognizer.RecognizedPattern;
 
 import java.util.Vector;
 
@@ -66,6 +67,17 @@ public class RecognizedPlate {
             ret = ret + this.chars.elementAt(i).getPattern(0).getChar();
         }
         return ret;
+    }
+
+    public Parser.FinalPlate getFinalPlate() {
+        String plate = "";
+        float cost = 0;
+        for (RecognizedChar recognizedChar : chars) {
+            RecognizedPattern pattern = recognizedChar.getPattern(0);
+            plate += pattern.getChar();
+            cost += pattern.getCost();
+        }
+        return new Parser.FinalPlate(plate, cost);
     }
 
     /**

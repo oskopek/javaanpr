@@ -168,6 +168,10 @@ public class Parser {
      * @return the parsed recognized plate text
      */
     public String parse(RecognizedPlate recognizedPlate, SyntaxAnalysisMode syntaxAnalysisMode) {
+        return parseToPlate(recognizedPlate, syntaxAnalysisMode).getPlate();
+    }
+
+    public FinalPlate parseToPlate(RecognizedPlate recognizedPlate, SyntaxAnalysisMode syntaxAnalysisMode) {
         int length = recognizedPlate.getChars().size();
 
         switch (syntaxAnalysisMode) {
@@ -175,7 +179,7 @@ public class Parser {
                 Main.rg.insertText(
                         " result : " + recognizedPlate.getString() + " --> <font size=15>" + recognizedPlate.getString()
                                 + "</font><hr><br>");
-                return recognizedPlate.getString();
+                return recognizedPlate.getFinalPlate();
             case ONLY_EQUAL_LENGTH:
                 this.unFlagAll();
                 this.flagEqualLength(length);
@@ -200,15 +204,16 @@ public class Parser {
                 FinalPlate finalPlate = new FinalPlate();
                 for (int j = 0; j < form.length(); j++) { // all chars of the form
                     RecognizedChar rc = recognizedPlate.getChar(j + i);
-                    if (form.getPosition(j).isAllowed(rc.getPattern(0).getChar())) {
-                        finalPlate.addChar(rc.getPattern(0).getChar());
+                    RecognizedPattern pattern = rc.getPattern(0);
+                    if (form.getPosition(j).isAllowed(pattern.getChar())) {
+                        finalPlate.addChar(pattern.getChar(), pattern.getCost());
                     } else { // a swap needed
                         finalPlate.requiredChanges++; // +1 for every char
                         for (int x = 0; x < rc.getPatterns().size(); x++) {
                             if (form.getPosition(j).isAllowed(rc.getPattern(x).getChar())) {
                                 RecognizedPattern rp = rc.getPattern(x);
                                 finalPlate.requiredChanges += (rp.getCost() / 100); // +x for its cost
-                                finalPlate.addChar(rp.getChar());
+                                finalPlate.addChar(rp.getChar(), rp.getCost());
                                 break;
                             }
                         }
@@ -219,7 +224,7 @@ public class Parser {
             }
         }
         if (finalPlates.size() == 0) {
-            return recognizedPlate.getString();
+            return recognizedPlate.getFinalPlate();
         }
         // else: find the plate with lowest number of swaps
         float minimalChanges = Float.POSITIVE_INFINITY;
@@ -232,9 +237,9 @@ public class Parser {
                 minimalIndex = i;
             }
         }
-        String toReturn = recognizedPlate.getString();
+        FinalPlate toReturn = recognizedPlate.getFinalPlate();
         if (finalPlates.elementAt(minimalIndex).requiredChanges <= 2) {
-            toReturn = finalPlates.elementAt(minimalIndex).plate;
+            toReturn = finalPlates.elementAt(minimalIndex);
         }
         return toReturn;
     }
@@ -282,16 +287,35 @@ public class Parser {
         }
     }
 
-    public final class FinalPlate {
+    public static final class FinalPlate {
         private String plate;
+        private float cost = 0;
         private float requiredChanges = 0;
 
         private FinalPlate() {
             this.plate = "";
         }
 
-        public void addChar(char chr) {
+        public FinalPlate(String plate, float cost) {
+            this.plate = plate;
+            this.cost = cost;
+        }
+
+        public void addChar(char chr, float cost) {
             this.plate = this.plate + chr;
+            this.cost += cost;
+        }
+
+        public String getPlate() {
+            return plate;
+        }
+
+        public float getCost() {
+            return cost;
+        }
+
+        public float getRequiredChanges() {
+            return requiredChanges;
         }
     }
 }
