@@ -50,22 +50,22 @@ public class CarSnapshot extends Photo {
     }
 
     public BufferedImage renderGraph() {
-        this.computeGraph();
-        return this.graphHandle.renderVertically(100, this.getHeight());
+        computeGraph();
+        return graphHandle.renderVertically(100, getHeight());
     }
 
     private Vector<Peak> computeGraph() {
-        if (this.graphHandle != null) {
-            return this.graphHandle.peaks;
+        if (graphHandle != null) {
+            return graphHandle.peaks;
         }
         BufferedImage imageCopy = duplicateBufferedImage(getImage());
-        this.verticalEdgeBi(imageCopy);
+        verticalEdgeBi(imageCopy);
         Photo.thresholding(imageCopy);
-        this.graphHandle = this.histogram(imageCopy);
-        this.graphHandle.rankFilter(CarSnapshot.carsnapshot_graphrankfilter);
-        this.graphHandle.applyProbabilityDistributor(CarSnapshot.distributor);
-        this.graphHandle.findPeaks(CarSnapshot.numberOfCandidates); // sort by height
-        return this.graphHandle.peaks;
+        graphHandle = histogram(imageCopy);
+        graphHandle.rankFilter(CarSnapshot.carsnapshot_graphrankfilter);
+        graphHandle.applyProbabilityDistributor(CarSnapshot.distributor);
+        graphHandle.findPeaks(CarSnapshot.numberOfCandidates); // sort by height
+        return graphHandle.peaks;
     }
 
     /**
@@ -75,7 +75,7 @@ public class CarSnapshot extends Photo {
      */
     public Vector<Band> getBands() {
         Vector<Band> out = new Vector<Band>();
-        Vector<Peak> peaks = this.computeGraph();
+        Vector<Peak> peaks = computeGraph();
         for (int i = 0; i < peaks.size(); i++) {
             // Cut from the original image of the plate and save to a vector.
             // ATTENTION: Cutting from original,
