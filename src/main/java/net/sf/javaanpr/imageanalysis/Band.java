@@ -35,21 +35,21 @@ public class Band extends Photo {
     }
 
     public BufferedImage renderGraph() {
-        this.computeGraph();
-        return this.graphHandle.renderHorizontally(this.getWidth(), 100);
+        computeGraph();
+        return graphHandle.renderHorizontally(getWidth(), 100);
     }
 
     private Vector<Peak> computeGraph() {
-        if (this.graphHandle != null) {
-            return this.graphHandle.peaks;
+        if (graphHandle != null) {
+            return graphHandle.peaks;
         }
         BufferedImage imageCopy = Photo.duplicateBufferedImage(getImage());
-        this.fullEdgeDetector(imageCopy);
-        this.graphHandle = this.histogram(imageCopy);
-        this.graphHandle.rankFilter(getImage().getHeight());
-        this.graphHandle.applyProbabilityDistributor(Band.distributor);
-        this.graphHandle.findPeaks(Band.numberOfCandidates);
-        return this.graphHandle.peaks;
+        fullEdgeDetector(imageCopy);
+        graphHandle = histogram(imageCopy);
+        graphHandle.rankFilter(getImage().getHeight());
+        graphHandle.applyProbabilityDistributor(Band.distributor);
+        graphHandle.findPeaks(Band.numberOfCandidates);
+        return graphHandle.peaks;
     }
 
     /**
@@ -59,7 +59,7 @@ public class Band extends Photo {
      */
     public Vector<Plate> getPlates() {
         Vector<Plate> out = new Vector<Plate>();
-        Vector<Peak> peaks = this.computeGraph();
+        Vector<Peak> peaks = computeGraph();
         for (int i = 0; i < peaks.size(); i++) {
             // Cut from the original image of the plate and save to a vector.
             // ATTENTION: Cutting from original,
