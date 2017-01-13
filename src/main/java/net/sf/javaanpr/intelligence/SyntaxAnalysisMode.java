@@ -18,7 +18,7 @@ package net.sf.javaanpr.intelligence;
 
 /**
  * Enum to represent the three different syntax analysis modes used when parsing a recognized plate.
- * @see Parser
+ * @see net.sf.javaanpr.intelligence.parser.Parser
  */
 public enum SyntaxAnalysisMode {
     DO_NOT_PARSE,

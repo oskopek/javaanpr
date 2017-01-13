@@ -19,6 +19,7 @@ package net.sf.javaanpr.intelligence;
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.gui.TimeMeter;
 import net.sf.javaanpr.imageanalysis.*;
+import net.sf.javaanpr.intelligence.parser.Parser;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.CharacterRecognizer;
 import net.sf.javaanpr.recognizer.RecognizedChar;

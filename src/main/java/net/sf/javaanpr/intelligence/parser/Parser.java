@@ -14,9 +14,11 @@
  * permissions and limitations under the License.
  */
 
-package net.sf.javaanpr.intelligence;
+package net.sf.javaanpr.intelligence.parser;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.intelligence.RecognizedPlate;
+import net.sf.javaanpr.intelligence.SyntaxAnalysisMode;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.RecognizedChar;
 import net.sf.javaanpr.recognizer.RecognizedPattern;
@@ -114,7 +116,7 @@ public class Parser {
                     continue;
                 }
                 String content = ((Element) charNode).getAttribute("content");
-                form.addPosition(form.new Position(content.toUpperCase()));
+                form.addPosition(new Position(content.toUpperCase()));
             }
             plateForms.add(form);
         }
@@ -123,13 +125,13 @@ public class Parser {
 
     public void unFlagAll() {
         for (PlateForm form : this.plateForms) {
-            form.flagged = false;
+            form.setFlagged(false);
         }
     }
 
     /**
-     * For given {@code length}, finds a {@link net.sf.javaanpr.intelligence.Parser.PlateForm} of the same length. If
-     * no such {@link net.sf.javaanpr.intelligence.Parser.PlateForm} is found, tries to find one with less characters.
+     * For given {@code length}, finds a {@link PlateForm} of the same length. If
+     * no such {@link PlateForm} is found, tries to find one with less characters.
      *
      * @param length the number of characters of the PlateForm
      */
@@ -138,7 +140,7 @@ public class Parser {
         for (int i = length; (i >= 1) && !found; i--) {
             for (PlateForm form : this.plateForms) {
                 if (form.length() == i) {
-                    form.flagged = true;
+                    form.setFlagged(true);
                     found = true;
                 }
             }
@@ -148,14 +150,14 @@ public class Parser {
     public void flagEqualLength(int length) {
         for (PlateForm form : this.plateForms) {
             if (form.length() == length) {
-                form.flagged = true;
+                form.setFlagged(true);
             }
         }
     }
 
     public void invertFlags() {
         for (PlateForm form : this.plateForms) {
-            form.flagged = !form.flagged;
+            form.setFlagged(!form.isFlagged());
         }
     }
 
@@ -192,11 +194,11 @@ public class Parser {
         Vector<FinalPlate> finalPlates = new Vector<FinalPlate>();
 
         for (PlateForm form : this.plateForms) {
-            if (!form.flagged) {
+            if (!form.isFlagged()) {
                 continue;
             }
             for (int i = 0; i <= (length - form.length()); i++) { // moving the form on the plate
-                logger.debug("Comparing {} with form {} and offset {}.", recognizedPlate, form.name, i);
+                logger.debug("Comparing {} with form {} and offset {}.", recognizedPlate, form.getName(), i);
                 FinalPlate finalPlate = new FinalPlate();
                 for (int j = 0; j < form.length(); j++) { // all chars of the form
                     RecognizedChar rc = recognizedPlate.getChar(j + i);
@@ -239,50 +241,7 @@ public class Parser {
         return toReturn;
     }
 
-    private class PlateForm {
-
-        private boolean flagged = false;
-        private final Vector<Position> positions;
-        private final String name;
-
-        public PlateForm(String name) {
-            this.name = name;
-            this.positions = new Vector<Position>();
-        }
-
-        public void addPosition(Position p) {
-            this.positions.add(p);
-        }
-
-        public Position getPosition(int index) {
-            return this.positions.elementAt(index);
-        }
-
-        public int length() {
-            return this.positions.size();
-        }
-
-        public class Position {
-
-            public final char[] allowedChars;
-
-            public Position(String data) {
-                this.allowedChars = data.toCharArray();
-            }
-
-            public boolean isAllowed(char chr) {
-                boolean ret = false;
-                for (int i = 0; i < this.allowedChars.length; i++) {
-                    if (this.allowedChars[i] == chr) {
-                        ret = true;
-                    }
-                }
-                return ret;
-            }
-        }
-    }
-
-    public final class FinalPlate {
+    private static final class FinalPlate {
         private String plate;
         private float requiredChanges = 0;
 
