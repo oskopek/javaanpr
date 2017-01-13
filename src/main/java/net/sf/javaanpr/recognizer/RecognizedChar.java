@@ -80,7 +80,7 @@ public class RecognizedChar {
         int left, top;
         for (int ay = 0; ay <= 100; ay += 10) {
             int y = 15 + (int) (((100 - ay) / 100.0f) * (height - 20));
-            graphic.drawString(new Integer(ay).toString(), 3, y + 11);
+            graphic.drawString(Integer.toString(ay), 3, y + 11);
             graphic.drawLine(25, y + 5, 35, y + 5);
         }
         graphic.drawLine(35, 19, 35, height);

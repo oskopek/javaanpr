@@ -45,7 +45,7 @@ public class ReportGenerator {
     }
 
     public void insertText(String text) {
-        output.append(text + "\n");
+        output.append(text).append("\n");
     }
 
     public void insertImage(BufferedImage image, String cls, int w, int h)
@@ -53,10 +53,10 @@ public class ReportGenerator {
         String imageName = String.valueOf(image.hashCode()) + ".jpg";
         saveImage(image, imageName);
         if ((w != 0) && (h != 0)) {
-            output.append("<img src='" + imageName + "' alt='' width='" + w + "' height='" + h + "' class='" + cls
-                    + "'>\n");
+            output.append("<img src='").append(imageName).append("' alt='' width='").append(w).append("' height='")
+                    .append(h).append("' class='").append(cls).append("'>\n");
         } else {
-            output.append("<img src='" + imageName + "' alt='' class='" + cls + "'>\n");
+            output.append("<img src='").append(imageName).append("' alt='' class='").append(cls).append("'>\n");
         }
     }
 
