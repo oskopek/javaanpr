@@ -274,7 +274,7 @@ public class FrameMain extends JFrame {
         private FrameMain parentFrame = null;
 
         public RecognizeThread(FrameMain parentFrame) {
-            parentFrame = parentFrame;
+            this.parentFrame = parentFrame;
         }
 
         private void setFailedAndPrintStackTrace(Exception exception) {
