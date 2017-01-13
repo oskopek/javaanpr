@@ -1,0 +1,23 @@
+{
+  "revapi": {
+    "semver": {
+      "ignore": {
+        "enabled": true,
+        "versionIncreaseAllows": {
+          "major": "breaking",
+          "minor": "nonBreaking",
+          "patch": "equivalent"
+        },
+        "passThroughDifferences": [
+          "java.class.nonPublicPartOfAPI"
+        ]
+      }
+    },
+    "reporter": {
+      "text": {
+        "output": "out",
+        "append": false
+      }
+    }
+  }
+}
