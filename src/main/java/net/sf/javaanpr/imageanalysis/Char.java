@@ -85,10 +85,10 @@ public class Char extends Photo {
     public Char(InputStream is) throws IOException { // TODO javadoc
         super(is);
         BufferedImage origin = Photo.duplicateBufferedImage(getImage());
-        this.adaptiveThresholding(); // act on this.image // TODO deprecated
-        this.thresholdedImage = getImage();
-        this.setImage(origin);
-        this.init();
+        adaptiveThresholding(); // act on this.image // TODO deprecated
+        thresholdedImage = getImage();
+        setImage(origin);
+        init();
     }
 
     private static String getSuffix(String directoryName) {
@@ -117,39 +117,39 @@ public class Char extends Photo {
     @Override
     public Char clone() throws CloneNotSupportedException {
         super.clone();
-        return new Char(duplicateBufferedImage(getImage()), duplicateBufferedImage(this.thresholdedImage),
-                this.positionInPlate);
+        return new Char(duplicateBufferedImage(getImage()), duplicateBufferedImage(thresholdedImage),
+                positionInPlate);
     }
 
     private void init() {
-        this.fullWidth = super.getWidth();
-        this.fullHeight = super.getHeight();
+        fullWidth = super.getWidth();
+        fullHeight = super.getHeight();
     }
 
     public void normalize() {
-        if (this.normalized) {
+        if (normalized) {
             return;
         }
-        BufferedImage colorImage = duplicateBufferedImage(this.getImage());
-        this.setImage(this.thresholdedImage);
-        PixelMap pixelMap = this.getPixelMap();
+        BufferedImage colorImage = duplicateBufferedImage(getImage());
+        setImage(thresholdedImage);
+        PixelMap pixelMap = getPixelMap();
         PixelMap.Piece bestPiece = pixelMap.getBestPiece();
-        colorImage = this.getBestPieceInFullColor(colorImage, bestPiece);
+        colorImage = getBestPieceInFullColor(colorImage, bestPiece);
 
         // Compute statistics
-        this.computeStatisticBrightness(colorImage);
-        this.computeStatisticContrast(colorImage);
-        this.computeStatisticHue(colorImage);
-        this.computeStatisticSaturation(colorImage);
+        computeStatisticBrightness(colorImage);
+        computeStatisticContrast(colorImage);
+        computeStatisticHue(colorImage);
+        computeStatisticSaturation(colorImage);
 
-        this.setImage(bestPiece.render());
+        setImage(bestPiece.render());
         if (getImage() == null) {
-            this.setImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB));
+            setImage(new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB));
         }
-        this.pieceWidth = super.getWidth();
-        this.pieceHeight = super.getHeight();
-        this.normalizeResizeOnly();
-        this.normalized = true;
+        pieceWidth = super.getWidth();
+        pieceHeight = super.getHeight();
+        normalizeResizeOnly();
+        normalized = true;
     }
 
     private BufferedImage getBestPieceInFullColor(BufferedImage bi, PixelMap.Piece piece) {
@@ -166,11 +166,11 @@ public class Char extends Photo {
             return;
         }
         if (Configurator.getConfigurator().getIntProperty("char_resizeMethod") == 0) {
-            this.linearResize(x, y); // do a weighted average
+            linearResize(x, y); // do a weighted average
         } else {
-            this.averageResize(x, y);
+            averageResize(x, y);
         }
-        this.normalizeBrightness(0.5f);
+        normalizeBrightness(0.5f);
     }
 
     private void computeStatisticContrast(BufferedImage bi) {
@@ -179,10 +179,10 @@ public class Char extends Photo {
         int h = bi.getHeight();
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
-                sum += Math.abs(this.statisticAverageBrightness - Photo.getBrightness(bi, x, y));
+                sum += Math.abs(statisticAverageBrightness - Photo.getBrightness(bi, x, y));
             }
         }
-        this.statisticContrast = sum / (w * h);
+        statisticContrast = sum / (w * h);
     }
 
     private void computeStatisticBrightness(BufferedImage bi) {
@@ -200,9 +200,9 @@ public class Char extends Photo {
                 max = Math.max(max, value);
             }
         }
-        this.statisticAverageBrightness = sum / (w * h);
-        this.statisticMinimumBrightness = min;
-        this.statisticMaximumBrightness = max;
+        statisticAverageBrightness = sum / (w * h);
+        statisticMinimumBrightness = min;
+        statisticMaximumBrightness = max;
     }
 
     private void computeStatisticHue(BufferedImage bi) {
@@ -214,7 +214,7 @@ public class Char extends Photo {
                 sum += Photo.getHue(bi, x, y);
             }
         }
-        this.statisticAverageHue = sum / (w * h);
+        statisticAverageHue = sum / (w * h);
     }
 
     private void computeStatisticSaturation(BufferedImage bi) {
@@ -226,7 +226,7 @@ public class Char extends Photo {
                 sum += Photo.getSaturation(bi, x, y);
             }
         }
-        this.statisticAverageSaturation = sum / (w * h);
+        statisticAverageSaturation = sum / (w * h);
     }
 
     public PixelMap getPixelMap() {
@@ -237,7 +237,7 @@ public class Char extends Photo {
         int width = getImage().getWidth();
         int height = getImage().getHeight();
         double featureMatch;
-        float[][] array = this.bufferedImageToArrayWithBounds(getImage(), width, height);
+        float[][] array = bufferedImageToArrayWithBounds(getImage(), width, height);
         width += 2; // add edges
         height += 2;
         float[][] features = CharacterRecognizer.FEATURES;
@@ -272,9 +272,9 @@ public class Char extends Photo {
 
     public Vector<Double> extractMapFeatures() {
         Vector<Double> vectorInput = new Vector<Double>();
-        for (int y = 0; y < this.getHeight(); y++) {
-            for (int x = 0; x < this.getWidth(); x++) {
-                vectorInput.add((double) this.getBrightness(x, y));
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                vectorInput.add((double) getBrightness(x, y));
             }
         }
         return vectorInput;
@@ -283,9 +283,9 @@ public class Char extends Photo {
     public Vector<Double> extractFeatures() {
         int featureExtractionMethod = Configurator.getConfigurator().getIntProperty("char_featuresExtractionMethod");
         if (featureExtractionMethod == 0) {
-            return this.extractMapFeatures();
+            return extractMapFeatures();
         } else {
-            return this.extractEdgeFeatures();
+            return extractEdgeFeatures();
         }
     }
 
