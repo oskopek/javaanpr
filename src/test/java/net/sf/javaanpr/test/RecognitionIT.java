@@ -37,7 +37,7 @@ import static org.junit.Assert.*;
 public class RecognitionIT {
 
     private static final int currentlyCorrectSnapshots = 53;
-    private static final Logger LOGGER = LoggerFactory.getLogger(RecognitionIT.class);
+    private static final Logger logger = LoggerFactory.getLogger(RecognitionIT.class);
     @Rule
     public ErrorCollector recognitionErrors = new ErrorCollector();
 
@@ -52,7 +52,7 @@ public class RecognitionIT {
         assertNotNull("carSnap.image is null", carSnap.getImage());
         Intelligence intel = new Intelligence();
         assertNotNull(intel);
-        String spz = intel.recognize(carSnap, false);
+        String spz = intel.recognize(carSnap);
         assertNotNull("The licence plate is null - are you sure the image has the correct color space?", spz);
         assertEquals("LM025BD", spz);
         carSnap.close();
@@ -111,10 +111,10 @@ public class RecognitionIT {
             }
             carSnap.close();
             counter++;
-            LOGGER.debug("Finished recognizing {} ({} of {})\t{}", snapName, counter, snapshots.length,
+            logger.debug("Finished recognizing {} ({} of {})\t{}", snapName, counter, snapshots.length,
                     correct ? "correct" : "incorrect");
         }
-        LOGGER.info("Correct images: {}, total images: {}, accuracy: {}%", correctCount, snapshots.length,
+        logger.info("Correct images: {}, total images: {}, accuracy: {}%", correctCount, snapshots.length,
                 (float) correctCount / (float) snapshots.length * 100f);
         assertEquals(currentlyCorrectSnapshots, correctCount);
     }

@@ -58,6 +58,10 @@ public class Intelligence {
         return lastProcessDuration;
     }
 
+    public String recognize(CarSnapshot carSnapshot) throws IllegalArgumentException, IOException  {
+        return recognize(carSnapshot, false);
+    }
+
     // TODO refactor with forms
     public String recognize(CarSnapshot carSnapshot, final boolean enableReportGeneration)
             throws IllegalArgumentException, IOException {
