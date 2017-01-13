@@ -43,19 +43,9 @@ public class FrameMain extends JFrame {
     private DefaultListModel<FileListModelEntry> fileListModel;
     private int selectedIndex = -1;
 
-    private JMenuItem aboutItem;
-    private JLabel bottomLine;
-    private JMenuItem exitItem;
     private JList<FileListModelEntry> fileList;
-    private JScrollPane fileListScrollPane;
-    private JMenuItem helpItem;
-    private JMenu helpMenu;
-    private JMenu imageMenu;
-    private JMenuBar menuBar;
-    private JMenuItem openItem;
     private JPanel panelCar;
     private JLabel recognitionLabel;
-    private JButton recognizeButton;
 
     /**
      * Creates new form MainFrame.
@@ -93,17 +83,17 @@ public class FrameMain extends JFrame {
                 g.drawImage(panelCarContent, 0, 0, null);
             }
         };
-        fileListScrollPane = new JScrollPane();
+        JScrollPane fileListScrollPane = new JScrollPane();
         fileList = new JList<FileListModelEntry>();
-        recognizeButton = new JButton();
-        bottomLine = new JLabel();
-        menuBar = new JMenuBar();
-        imageMenu = new JMenu();
-        openItem = new JMenuItem();
-        exitItem = new JMenuItem();
-        helpMenu = new JMenu();
-        aboutItem = new JMenuItem();
-        helpItem = new JMenuItem();
+        JButton recognizeButton = new JButton();
+        JLabel bottomLine = new JLabel();
+        JMenuBar menuBar = new JMenuBar();
+        JMenu imageMenu = new JMenu();
+        JMenuItem openItem = new JMenuItem();
+        JMenuItem exitItem = new JMenuItem();
+        JMenu helpMenu = new JMenu();
+        JMenuItem aboutItem = new JMenuItem();
+        JMenuItem helpItem = new JMenuItem();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("JavaANPR");
         setResizable(false);

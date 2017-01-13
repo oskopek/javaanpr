@@ -24,11 +24,6 @@ public class Statistics {
     private float minimum;
     private float average;
 
-    /**
-     * {@code dispersion = average of squares - square of average}.
-     */
-    private float dispersion;
-
     public Statistics(BufferedImage bi) {
         this(new Photo(bi));
     }
@@ -49,7 +44,6 @@ public class Statistics {
         }
         int count = (w * h);
         this.average = sum / count;
-        this.dispersion = (sum2 / count) - (this.average * this.average);
     }
 
     public float thresholdBrightness(float value, float coef) {

@@ -37,8 +37,6 @@ public class FrameHelp extends JFrame {
     public MODE mode;
 
     private JEditorPane editorPane;
-    private JButton helpWindowClose;
-    private JScrollPane jScrollPane1;
 
     /**
      * Creates new form FrameHelp.
@@ -64,9 +62,9 @@ public class FrameHelp extends JFrame {
     }
 
     private void initComponents() {
-        jScrollPane1 = new JScrollPane();
+        JScrollPane jScrollPane1 = new JScrollPane();
         editorPane = new JEditorPane();
-        helpWindowClose = new JButton();
+        JButton helpWindowClose = new JButton();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("JavaANPR - Help");

@@ -36,11 +36,6 @@ public final class Configurator {
     private String fileName = "config.xml";
 
     /**
-     * Configuration file's comment.
-     */
-    private String comment = "This is the global configuration file for JavaANPR";
-
-    /**
      * Primary property list containing values from the configuration file.
      */
     private Properties list;
@@ -183,7 +178,7 @@ public final class Configurator {
 
     public void saveConfiguration(String arg_file) throws IOException {
         FileOutputStream os = new FileOutputStream(arg_file);
-        list.storeToXML(os, comment);
+        list.storeToXML(os, null);
         os.close();
     }
 

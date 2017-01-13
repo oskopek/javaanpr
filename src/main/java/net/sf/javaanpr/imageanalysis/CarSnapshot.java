@@ -93,7 +93,7 @@ public class CarSnapshot extends Photo {
     }
 
     public CarSnapshotGraph histogram(BufferedImage bi) {
-        CarSnapshotGraph graph = new CarSnapshotGraph(this);
+        CarSnapshotGraph graph = new CarSnapshotGraph();
         for (int y = 0; y < bi.getHeight(); y++) {
             float counter = 0;
             for (int x = 0; x < bi.getWidth(); x++) {

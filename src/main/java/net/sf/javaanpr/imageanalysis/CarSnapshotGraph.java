@@ -30,11 +30,6 @@ public class CarSnapshotGraph extends Graph {
             Configurator.getConfigurator().getDoubleProperty("carsnapshotgraph_peakfootconstant"); // 0.55
     private static double peakDiffMultiplicationConstant =
             Configurator.getConfigurator().getDoubleProperty("carsnapshotgraph_peakDiffMultiplicationConstant"); // 0.1
-    private CarSnapshot handle;
-
-    public CarSnapshotGraph(CarSnapshot handle) {
-        this.handle = handle;
-    }
 
     public Vector<Peak> findPeaks(int count) {
         Vector<Peak> outPeaks = new Vector<Peak>();

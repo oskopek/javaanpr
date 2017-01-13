@@ -28,8 +28,6 @@ class SimpleImageViewer {
 
     private final JFrame frame;
     private final BufferedImage img;
-    private final int WIDTH = 800;
-    private final int HEIGHT = 600;
 
     public SimpleImageViewer(BufferedImage img) {
         this.img = img;
@@ -53,7 +51,7 @@ class SimpleImageViewer {
                 return;
             }
             Graphics g = bs.getDrawGraphics();
-            g.drawImage(this.img, 0, 0, this.WIDTH, this.HEIGHT, null);
+            g.drawImage(this.img, 0, 0, 800, 600, null);
             g.dispose();
             bs.show();
         }
