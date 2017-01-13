@@ -62,10 +62,7 @@ public class Parser {
         }
         try {
             this.plateForms = this.loadFromXml(inStream);
-        } catch (ParserConfigurationException e) { // TODO fix
-            logger.error("Failed to load from parser syntax description file");
-            throw e;
-        } catch (SAXException e) {
+        } catch (ParserConfigurationException | SAXException e) { // TODO fix
             logger.error("Failed to load from parser syntax description file");
             throw e;
         } catch (IOException e) {

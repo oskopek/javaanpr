@@ -282,10 +282,7 @@ public class FrameMain extends JFrame {
             int index = parentFrame.selectedIndex;
             try {
                 recognizedText = Main.systemLogic.recognize(parentFrame.car, false);
-            } catch (IllegalArgumentException exception) {
-                setFailedAndPrintStackTrace(exception);
-                return;
-            } catch (IOException exception) {
+            } catch (IllegalArgumentException | IOException exception) {
                 setFailedAndPrintStackTrace(exception);
                 return;
             }
