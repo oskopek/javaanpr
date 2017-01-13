@@ -47,7 +47,8 @@ public class RecognitionPerformanceIT {
     @Before
     public void setUp() throws Exception {
         // silence the logger
-        ch.qos.logback.classic.Logger rootLogger = (ch.qos.logback.classic.Logger)LoggerFactory.getLogger("net.sf.javaanpr");
+        ch.qos.logback.classic.Logger rootLogger =
+                (ch.qos.logback.classic.Logger) LoggerFactory.getLogger("net.sf.javaanpr");
         originalLogLevel = rootLogger.getLevel();
         rootLogger.setLevel(Level.INFO);
 
@@ -75,7 +76,7 @@ public class RecognitionPerformanceIT {
 
     @After
     public void tearDown() throws Exception {
-        ((ch.qos.logback.classic.Logger)LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME))
+        ((ch.qos.logback.classic.Logger) LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME))
                 .setLevel(originalLogLevel);
     }
 
