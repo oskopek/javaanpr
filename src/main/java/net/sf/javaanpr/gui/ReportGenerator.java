@@ -74,7 +74,7 @@ public class ReportGenerator {
 
     public void saveStreamToFile(InputStream inStream, File out) throws IOException {
         FileOutputStream outStream = new FileOutputStream(out);
-        int read = 0;
+        int read;
         byte[] bytes = new byte[1024];
         while ((read = inStream.read(bytes)) != -1) {
             outStream.write(bytes, 0, read);
@@ -84,7 +84,7 @@ public class ReportGenerator {
     }
 
     public void saveImage(BufferedImage bi, String filename) throws IOException, IllegalArgumentException {
-        String type = new String(filename.substring(filename.lastIndexOf('.') + 1, filename.length()).toLowerCase());
+        String type = filename.substring(filename.lastIndexOf('.') + 1, filename.length()).toLowerCase();
         if (!type.equals("bmp") && !type.equals("jpg") && !type.equals("jpeg") && !type.equals("png")) {
             throw new IllegalArgumentException("Unsupported file format");
         }

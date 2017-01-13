@@ -98,12 +98,8 @@ public class Intelligence {
                 BufferedImage renderedHoughTransform = null;
                 HoughTransformation hough = null;
                 // detection is done either: 1. because of the report generator 2. because of skew detection
-                if (enableReportGeneration) {
-                    try {
-                        notNormalizedCopy = plate.clone();
-                    } catch (CloneNotSupportedException e) {
-                        e.printStackTrace();
-                    }
+                if (enableReportGeneration || skewDetectionMode != 0) {
+                    notNormalizedCopy = plate.clone();
                     notNormalizedCopy.horizontalEdgeDetector(notNormalizedCopy.getImage());
                     hough = notNormalizedCopy.getHoughTransformation();
                     renderedHoughTransform = hough.render(HoughTransformation.RENDER_ALL, HoughTransformation.COLOR_BW);
@@ -140,12 +136,7 @@ public class Intelligence {
                     Main.rg.insertImage(b.getBiWithAxes(), "band", 0, 0);
                     Main.rg.insertImage(b.renderGraph(), "bandgraph", 0, 0);
                     Main.rg.insertText("<h2>Detected plate</h2>");
-                    Plate plateCopy = null;
-                    try {
-                        plateCopy = plate.clone();
-                    } catch (CloneNotSupportedException e) {
-                        e.printStackTrace();
-                    }
+                    Plate plateCopy = plate.clone();
                     plateCopy.linearResize(450, 90);
                     Main.rg.insertImage(plateCopy.getBiWithAxes(), "plate", 0, 0);
                     Main.rg.insertImage(plateCopy.renderGraph(), "plategraph", 0, 0);

@@ -125,11 +125,12 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
         NeuralNetwork.SetOfIOPairs train = new NeuralNetwork.SetOfIOPairs();
         List<String> fileList = Char.getAlphabetList(folder);
         for (String fileName : fileList) {
-            InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
-            Char imgChar = new Char(is);
+            Char imgChar;
+            try (InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName)) {
+                imgChar = new Char(is);
+            }
             imgChar.normalize();
             train.addIOPair(this.createNewPair(fileName.toUpperCase().charAt(0), imgChar));
-            is.close();
         }
         this.network.learn(train, Configurator.getConfigurator().getIntProperty("neural_maxk"),
                 Configurator.getConfigurator().getDoubleProperty("neural_eps"),

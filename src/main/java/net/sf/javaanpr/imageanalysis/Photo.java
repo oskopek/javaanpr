@@ -136,8 +136,7 @@ public class Photo implements AutoCloseable, Cloneable {
     }
 
     @Override
-    public Photo clone() throws CloneNotSupportedException {
-        super.clone();
+    public Photo clone() {
         return new Photo(duplicateBufferedImage(this.image));
     }
 

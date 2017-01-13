@@ -135,7 +135,7 @@ public final class Configurator {
     }
 
     public String getStrProperty(String name) {
-        return list.getProperty(name).toString();
+        return list.getProperty(name);
     }
 
     public String getPathProperty(String name) {
@@ -188,7 +188,9 @@ public final class Configurator {
     public void loadConfiguration(String arg_file) throws IOException {
         InputStream is = getResourceAsStream(arg_file);
         loadConfiguration(is);
-        is.close();
+        if (is != null) {
+            is.close();
+        }
     }
 
     public void loadConfiguration(InputStream arg_stream) throws IOException {

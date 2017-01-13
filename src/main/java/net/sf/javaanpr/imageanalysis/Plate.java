@@ -24,7 +24,7 @@ import java.awt.image.Kernel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Plate extends Photo {
+public class Plate extends Photo implements Cloneable {
 
     private static final Graph.ProbabilityDistributor distributor =
             new Graph.ProbabilityDistributor(0, 0, 0, 0);
@@ -80,7 +80,7 @@ public class Plate extends Photo {
     }
 
     @Override
-    public Plate clone() throws CloneNotSupportedException {
+    public Plate clone() {
         super.clone();
         return new Plate(duplicateBufferedImage(getImage()));
     }
@@ -99,22 +99,12 @@ public class Plate extends Photo {
      * vertical projections of the cloned image (which is thresholded).
      */
     public void normalize() {
-        Plate clone1 = null;
-        try {
-            clone1 = this.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
+        Plate clone1 = this.clone();
         clone1.verticalEdgeDetector(clone1.getImage());
         PlateVerticalGraph vertical = clone1.histogramYaxis(clone1.getImage());
         this.setImage(cutTopBottom(getImage(), vertical));
         plateCopy.setImage(cutTopBottom(this.plateCopy.getImage(), vertical));
-        Plate clone2 = null;
-        try {
-            clone2 = this.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
+        Plate clone2 = this.clone();
         if (Plate.horizontalDetectionType == 1) {
             clone2.horizontalEdgeDetector(clone2.getImage());
         }

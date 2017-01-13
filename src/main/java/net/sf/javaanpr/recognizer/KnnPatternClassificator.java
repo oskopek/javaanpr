@@ -36,12 +36,11 @@ public class KnnPatternClassificator extends CharacterRecognizer {
         this.learnLists = new ArrayList<>(36);
         List<String> filenames = Char.getAlphabetList(path);
         for (String fileName : filenames) {
-            InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
-            Char imgChar = null;
-            try {
+            Char imgChar;
+            try (InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName)) {
                 imgChar = new Char(is);
             } catch (IOException e) {
-                logger.error("Failed to load Char: {}", fileName, e);
+                throw new IllegalStateException("Failed to load Char: " + fileName, e);
             }
             imgChar.normalize();
             this.learnLists.add(imgChar.extractFeatures());

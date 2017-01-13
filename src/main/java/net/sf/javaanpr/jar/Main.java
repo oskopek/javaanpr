@@ -120,9 +120,11 @@ public final class Main {
     public static void learnAlphabet(String destinationFile) throws Exception {
         File f = new File(destinationFile);
         try {
-            f.createNewFile();
+            if (!f.createNewFile()) {
+                throw new IOException("File already exists.");
+            }
         } catch (Exception e) {
-            throw new IOException("Can't find the path specified");
+            throw new IOException("Can't find the path specified.", e);
         }
         NeuralPatternClassificator npc = new NeuralPatternClassificator(true);
         npc.getNetwork().saveToXml(destinationFile);

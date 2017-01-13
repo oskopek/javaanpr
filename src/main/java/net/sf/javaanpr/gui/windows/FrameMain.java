@@ -249,10 +249,13 @@ public class FrameMain extends JFrame {
                 fileListModel
                         .addElement(new FileListModelEntry(selectedFile.getName(), selectedFile.getAbsolutePath()));
             } else if (selectedFile.isDirectory()) {
-                for (String fileName : selectedFile.list()) {
-                    if (ImageFileFilter.accept(fileName)) {
-                        fileListModel
-                                .addElement(new FileListModelEntry(fileName, selectedFile + File.separator + fileName));
+                String[] fileNames = selectedFile.list();
+                if (fileNames != null) {
+                    for (String fileName : fileNames) {
+                        if (ImageFileFilter.accept(fileName)) {
+                            fileListModel.addElement(new FileListModelEntry(fileName,
+                                    selectedFile + File.separator + fileName));
+                        }
                     }
                 }
             }
@@ -274,7 +277,7 @@ public class FrameMain extends JFrame {
 
         @Override
         public void run() {
-            String recognizedText = "";
+            String recognizedText;
             parentFrame.recognitionLabel.setText("processing...");
             int index = parentFrame.selectedIndex;
             try {
