@@ -19,7 +19,6 @@ package net.sf.javaanpr.imageanalysis;
 import net.sf.javaanpr.configurator.Configurator;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Vector;
 
 /**
@@ -42,53 +41,24 @@ public class CarSnapshotGraph extends Graph {
         for (int c = 0; c < count; c++) {
             float maxValue = 0.0f;
             int maxIndex = 0;
-            for (int i = 0; i < this.yValues.size(); i++) { // left to right
-                if (this.allowedInterval(outPeaks, i)) {
-                    if (this.yValues.elementAt(i) >= maxValue) {
-                        maxValue = this.yValues.elementAt(i);
+            for (int i = 0; i < yValues.size(); i++) { // left to right
+                if (allowedInterval(outPeaks, i)) {
+                    if (yValues.elementAt(i) >= maxValue) {
+                        maxValue = yValues.elementAt(i);
                         maxIndex = i;
                     }
                 }
             }
             // we found the biggest peak
-            int leftIndex = this.indexOfLeftPeakRel(maxIndex, CarSnapshotGraph.peakFootConstant);
-            int rightIndex = this.indexOfRightPeakRel(maxIndex, CarSnapshotGraph.peakFootConstant);
+            int leftIndex = indexOfLeftPeakRel(maxIndex, CarSnapshotGraph.peakFootConstant);
+            int rightIndex = indexOfRightPeakRel(maxIndex, CarSnapshotGraph.peakFootConstant);
             int diff = rightIndex - leftIndex;
             leftIndex -= CarSnapshotGraph.peakDiffMultiplicationConstant * diff;
             rightIndex += CarSnapshotGraph.peakDiffMultiplicationConstant * diff;
-            outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(this.yValues.size() - 1, rightIndex)));
+            outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(yValues.size() - 1, rightIndex)));
         }
-        Collections.sort(outPeaks, new PeakComparer(this.yValues));
+        Collections.sort(outPeaks, new PeakComparator(yValues));
         super.peaks = outPeaks;
         return outPeaks;
-    }
-
-    public class PeakComparer implements Comparator<Object> {
-
-        private Vector<Float> yValues = null;
-
-        public PeakComparer(Vector<Float> yValues) {
-            this.yValues = yValues;
-        }
-
-        /**
-         * @param peak the peak
-         * @return its value according to intensity
-         */
-        private float getPeakValue(Object peak) {
-            return this.yValues.elementAt(((Peak) peak).getCenter());
-        }
-
-        @Override
-        public int compare(Object peak1, Object peak2) {
-            double comparison = this.getPeakValue(peak2) - this.getPeakValue(peak1);
-            if (comparison < 0) {
-                return -1;
-            }
-            if (comparison > 0) {
-                return 1;
-            }
-            return 0;
-        }
     }
 }

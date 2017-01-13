@@ -19,7 +19,6 @@ package net.sf.javaanpr.imageanalysis;
 import net.sf.javaanpr.configurator.Configurator;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Vector;
 
 /**
@@ -49,31 +48,31 @@ public class BandGraph extends Graph {
         for (int c = 0; c < count; c++) {
             float maxValue = 0.0f;
             int maxIndex = 0;
-            for (int i = 0; i < this.yValues.size(); i++) { // left to right
+            for (int i = 0; i < yValues.size(); i++) { // left to right
                 if (allowedInterval(outPeaks, i)) {
-                    if (this.yValues.elementAt(i) >= maxValue) {
-                        maxValue = this.yValues.elementAt(i);
+                    if (yValues.elementAt(i) >= maxValue) {
+                        maxValue = yValues.elementAt(i);
                         maxIndex = i;
                     }
                 }
             }
             // we found the biggest peak, let's do the first cut
-            int leftIndex = this.indexOfLeftPeakRel(maxIndex, BandGraph.peakFootConstant);
-            int rightIndex = this.indexOfRightPeakRel(maxIndex, BandGraph.peakFootConstant);
+            int leftIndex = indexOfLeftPeakRel(maxIndex, BandGraph.peakFootConstant);
+            int rightIndex = indexOfRightPeakRel(maxIndex, BandGraph.peakFootConstant);
             int diff = rightIndex - leftIndex;
             leftIndex -= BandGraph.peakDiffMultiplicationConstant * diff;
             rightIndex += BandGraph.peakDiffMultiplicationConstant * diff;
-            outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(this.yValues.size() - 1, rightIndex)));
+            outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(yValues.size() - 1, rightIndex)));
         }
         // filter the candidates that don't correspond with plate proportions
         Vector<Peak> outPeaksFiltered = new Vector<Peak>();
         for (Peak p : outPeaks) {
-            if ((p.getDiff() > (2 * this.handle.getHeight())) // plate too thin
-                    && (p.getDiff() < (15 * this.handle.getHeight()))) { // plate too wide
+            if ((p.getDiff() > (2 * handle.getHeight())) // plate too thin
+                    && (p.getDiff() < (15 * handle.getHeight()))) { // plate too wide
                 outPeaksFiltered.add(p);
             }
         }
-        Collections.sort(outPeaksFiltered, new PeakComparer(this.yValues));
+        Collections.sort(outPeaksFiltered, new PeakComparator(yValues));
         super.peaks = outPeaksFiltered;
         return outPeaksFiltered;
     }
@@ -82,7 +81,7 @@ public class BandGraph extends Graph {
         int index = peak;
         for (int i = peak; i >= 0; i--) {
             index = i;
-            if (this.yValues.elementAt(index) < peakFootConstantAbs) {
+            if (yValues.elementAt(index) < peakFootConstantAbs) {
                 break;
             }
         }
@@ -91,41 +90,12 @@ public class BandGraph extends Graph {
 
     public int indexOfRightPeakAbs(int peak, double peakFootConstantAbs) {
         int index = peak;
-        for (int i = peak; i < this.yValues.size(); i++) {
+        for (int i = peak; i < yValues.size(); i++) {
             index = i;
-            if (this.yValues.elementAt(index) < peakFootConstantAbs) {
+            if (yValues.elementAt(index) < peakFootConstantAbs) {
                 break;
             }
         }
-        return Math.min(this.yValues.size(), index);
-    }
-
-    public class PeakComparer implements Comparator<Object> {
-
-        private Vector<Float> yValues = null;
-
-        public PeakComparer(Vector<Float> yValues) {
-            this.yValues = yValues;
-        }
-
-        /**
-         * @param peak the peak
-         * @return the peak size
-         */
-        private float getPeakValue(Object peak) {
-            return this.yValues.elementAt(((Peak) peak).getCenter());
-        }
-
-        @Override
-        public int compare(Object peak1, Object peak2) {
-            double comparison = this.getPeakValue(peak2) - this.getPeakValue(peak1);
-            if (comparison < 0) {
-                return -1;
-            }
-            if (comparison > 0) {
-                return 1;
-            }
-            return 0;
-        }
+        return Math.min(yValues.size(), index);
     }
 }
