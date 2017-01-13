@@ -20,7 +20,7 @@ import java.util.Comparator;
 import java.util.Vector;
 
 public class PeakComparator implements Comparator<Peak> {
-    private Vector<Float> yValues;
+    private final Vector<Float> yValues;
 
     public PeakComparator(Vector<Float> yValues) {
         this.yValues = yValues;

@@ -28,33 +28,31 @@ import java.net.URL;
 
 public class FrameHelp extends JFrame {
 
-    public enum MODE {
+    public enum FrameHelpContent {
         SHOW_HELP,
         SHOW_ABOUT
     }
 
     private static final long serialVersionUID = 0L;
-    public MODE mode;
 
     private JEditorPane editorPane;
 
     /**
      * Creates new form FrameHelp.
      *
-     * @param mode the mode
-     * @throws IOException in case the file to show in given mode failed to load
+     * @param frameHelpContent the frameHelpContent
+     * @throws IOException in case the file to show in given frameHelpContent failed to load
      */
-    public FrameHelp(MODE mode) throws IOException { // TODO javadoc
+    public FrameHelp(FrameHelpContent frameHelpContent) throws IOException { // TODO javadoc
         initComponents();
-        this.mode = mode;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = getWidth();
         int height = getHeight();
         setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
-        if (mode == MODE.SHOW_ABOUT) {
+        if (frameHelpContent == FrameHelpContent.SHOW_ABOUT) {
             URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_about"));
             editorPane.setPage(url);
-        } else if (mode == MODE.SHOW_HELP) {
+        } else if (frameHelpContent == FrameHelpContent.SHOW_HELP) {
             URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_help"));
             editorPane.setPage(url);
         }

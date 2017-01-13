@@ -25,8 +25,8 @@ import java.util.Vector;
 
 public class Band extends Photo {
 
-    private static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 25, 25);
-    private static int numberOfCandidates =
+    private static final Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 25, 25);
+    private static final int numberOfCandidates =
             Configurator.getConfigurator().getIntProperty("intelligence_numberOfPlates");
     private BandGraph graphHandle = null;
 

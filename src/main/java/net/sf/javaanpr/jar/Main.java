@@ -61,7 +61,7 @@ public final class Main {
     /**
      * The help message.
      */
-    public static String helpText = "-----------------------------------------------------------\n"
+    public static final String helpText = "-----------------------------------------------------------\n"
             + "Automatic number plate recognition system\n" + "Copyright 2013 JavaANPR contributors\n"
             + "Copyright 2006 Ondrej Martinsky\n" + "\n"
             + "Licensed under the Educational Community License (ECL-2.0),\n" + "\n"

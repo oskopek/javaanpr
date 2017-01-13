@@ -22,7 +22,7 @@ import java.util.Vector;
 
 public class PlateHorizontalGraph extends Graph {
 
-    private static int horizontalDetectionType =
+    private static final int horizontalDetectionType =
             Configurator.getConfigurator().getIntProperty("platehorizontalgraph_detectionType");
 
     public float derivation(int index1, int index2) {

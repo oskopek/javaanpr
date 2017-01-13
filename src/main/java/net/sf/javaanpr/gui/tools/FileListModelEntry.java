@@ -18,14 +18,29 @@ package net.sf.javaanpr.gui.tools;
 
 public class FileListModelEntry {
 
-    public String fileName;
-    public String fullPath;
-    public String recognizedPlate;
+    private final String fileName;
+    private final String fullPath;
+    private String recognizedPlate = "?";
 
     public FileListModelEntry(String fileName, String fullPath) {
         this.fileName = fileName;
         this.fullPath = fullPath;
-        recognizedPlate = "?";
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public String getFullPath() {
+        return fullPath;
+    }
+
+    public String getRecognizedPlate() {
+        return recognizedPlate;
+    }
+
+    public void setRecognizedPlate(String recognizedPlate) {
+        this.recognizedPlate = recognizedPlate;
     }
 
     @Override

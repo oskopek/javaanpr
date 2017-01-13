@@ -28,7 +28,7 @@ import java.util.Vector;
 public final class TestStatistics {
 
     private static final transient Logger logger = LoggerFactory.getLogger(TestStatistics.class);
-    private static String helpText =
+    private static final String helpText =
             "-----------------------------------------------------------\n" + "ANPR Statistics Generator\n"
                     + "Copyright (c) Ondrej Martinsky, 2006-2007\n" + "\n"
                     + "Licensed under the Educational Community License,\n" + "\n" + "Command line arguments\n" + "\n"
@@ -69,7 +69,7 @@ public final class TestStatistics {
 
     private static final class TestReport {
 
-        private Vector<TestRecord> records;
+        private final Vector<TestRecord> records;
 
         private TestReport() {
             this.records = new Vector<TestRecord>();
@@ -105,7 +105,9 @@ public final class TestStatistics {
         }
 
         private final class TestRecord {
-            private String name, plate, recognizedPlate;
+            private final String name;
+            private final String plate;
+            private final String recognizedPlate;
             private int good;
             private int length;
 

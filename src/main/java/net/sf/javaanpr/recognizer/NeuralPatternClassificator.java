@@ -30,8 +30,8 @@ import java.util.Vector;
 public class NeuralPatternClassificator extends CharacterRecognizer {
 
     private static final transient Logger logger = LoggerFactory.getLogger(NeuralPatternClassificator.class);
-    private static int normalize_x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
-    private static int normalize_y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
+    private static final int normalize_x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
+    private static final int normalize_y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
     /**
      * Dimensions of an input character after transformation: 10 * 16 = 160 neurons.
      */

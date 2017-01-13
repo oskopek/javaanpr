@@ -26,9 +26,9 @@ import java.util.Vector;
  */
 public class CarSnapshotGraph extends Graph {
 
-    private static double peakFootConstant =
+    private static final double peakFootConstant =
             Configurator.getConfigurator().getDoubleProperty("carsnapshotgraph_peakfootconstant"); // 0.55
-    private static double peakDiffMultiplicationConstant =
+    private static final double peakDiffMultiplicationConstant =
             Configurator.getConfigurator().getDoubleProperty("carsnapshotgraph_peakDiffMultiplicationConstant"); // 0.1
 
     public Vector<Peak> findPeaks(int count) {

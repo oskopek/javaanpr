@@ -29,15 +29,15 @@ import java.util.Vector;
  */
 public class BandGraph extends Graph {
 
-    private static double peakFootConstant =
+    private static final double peakFootConstant =
             Configurator.getConfigurator().getDoubleProperty("bandgraph_peakfootconstant"); // 0.75
-    private static double peakDiffMultiplicationConstant =
+    private static final double peakDiffMultiplicationConstant =
             Configurator.getConfigurator().getDoubleProperty("bandgraph_peakDiffMultiplicationConstant"); // 0.2
 
     /**
      * The Band to which this Graph is related.
      */
-    private Band handle;
+    private final Band handle;
 
     public BandGraph(Band handle) {
         this.handle = handle;

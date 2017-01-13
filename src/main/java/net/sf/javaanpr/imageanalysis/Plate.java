@@ -25,12 +25,14 @@ import java.util.Vector;
 
 public class Plate extends Photo {
 
-    private static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 0, 0);
-    private static int numberOfCandidates = Configurator.getConfigurator().getIntProperty("intelligence_numberOfChars");
-    private static int horizontalDetectionType =
+    private static final Graph.ProbabilityDistributor distributor =
+            new Graph.ProbabilityDistributor(0, 0, 0, 0);
+    private static final int numberOfCandidates =
+            Configurator.getConfigurator().getIntProperty("intelligence_numberOfChars");
+    private static final int horizontalDetectionType =
             Configurator.getConfigurator().getIntProperty("platehorizontalgraph_detectionType");
-    private Plate plateCopy; // TODO refactor: remove this variable completely
-    private PlateGraph graphHandle = null;
+    private final Plate plateCopy; // TODO refactor: remove this variable completely
+    private PlateGraph graphHandle;
 
     public Plate(BufferedImage bi) {
         super(bi);
@@ -38,8 +40,9 @@ public class Plate extends Photo {
         this.plateCopy.adaptiveThresholding();
     }
 
-    public Plate(BufferedImage bi, boolean isCopy) {
+    private Plate(BufferedImage bi, boolean isCopy) { // TODO refactor: remove this, is only a copy constructor
         super(bi);
+        this.plateCopy = null;
     }
 
     public BufferedImage renderGraph() {

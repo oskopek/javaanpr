@@ -242,8 +242,8 @@ public class Parser {
     private class PlateForm {
 
         private boolean flagged = false;
-        private Vector<Position> positions;
-        private String name;
+        private final Vector<Position> positions;
+        private final String name;
 
         public PlateForm(String name) {
             this.name = name;
@@ -264,7 +264,7 @@ public class Parser {
 
         public class Position {
 
-            public char[] allowedChars;
+            public final char[] allowedChars;
 
             public Position(String data) {
                 this.allowedChars = data.toCharArray();

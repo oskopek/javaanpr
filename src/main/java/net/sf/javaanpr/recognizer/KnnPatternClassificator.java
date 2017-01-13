@@ -29,7 +29,7 @@ import java.util.Vector;
 public class KnnPatternClassificator extends CharacterRecognizer {
 
     private static final transient Logger logger = LoggerFactory.getLogger(KnnPatternClassificator.class);
-    private Vector<Vector<Double>> learnVectors;
+    private final Vector<Vector<Double>> learnVectors;
 
     public KnnPatternClassificator() {
         String path = Configurator.getConfigurator().getPathProperty("char_learnAlphabetPath");

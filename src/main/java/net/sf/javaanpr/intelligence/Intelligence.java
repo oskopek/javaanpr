@@ -38,7 +38,7 @@ public class Intelligence {
     private static Parser parser;
     private static long lastProcessDuration = 0L;
 
-    private static Configurator configurator = Configurator.getConfigurator();
+    private static final Configurator configurator = Configurator.getConfigurator();
 
     public Intelligence() throws ParserConfigurationException, SAXException, IOException {
         int classification_method = configurator.getIntProperty("intelligence_classification_method");

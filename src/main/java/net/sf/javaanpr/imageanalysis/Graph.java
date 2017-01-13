@@ -306,10 +306,10 @@ public class Graph {
     }
 
     public static class ProbabilityDistributor {
-        private float center;
-        private float power;
-        private int leftMargin;
-        private int rightMargin;
+        private final float center;
+        private final float power;
+        private final int leftMargin;
+        private final int rightMargin;
 
         public ProbabilityDistributor(float center, float power, int leftMargin, int rightMargin) {
             this.center = center;

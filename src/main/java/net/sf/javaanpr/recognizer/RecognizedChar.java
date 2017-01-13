@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.Vector;
 
 public class RecognizedChar {
-    private Vector<RecognizedPattern> patterns;
+    private final Vector<RecognizedPattern> patterns;
     private boolean isSorted;
 
     public RecognizedChar() {

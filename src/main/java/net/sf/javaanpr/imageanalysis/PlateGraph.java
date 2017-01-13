@@ -27,15 +27,15 @@ public class PlateGraph extends Graph {
     /**
      * 0.75: Smaller numbers have a tendency to cut characters, bigger have a tendency to incorrectly merge them.
      */
-    private static double plategraph_rel_minpeaksize =
+    private static final double plategraph_rel_minpeaksize =
             Configurator.getConfigurator().getDoubleProperty("plategraph_rel_minpeaksize");
-    private static double peakFootConstant =
+    private static final double peakFootConstant =
             Configurator.getConfigurator().getDoubleProperty("plategraph_peakfootconstant");
 
     /**
      * Reference to the {@link Plate} this graph refers to.
      */
-    private Plate handle;
+    private final Plate handle;
 
     public PlateGraph(Plate handle) {
         this.handle = handle;

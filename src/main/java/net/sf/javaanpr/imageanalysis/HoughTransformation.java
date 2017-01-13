@@ -27,10 +27,10 @@ public class HoughTransformation {
     private float angle = 0;
     private float dx = 0;
     private float dy = 0;
-    private float[][] bitmap;
+    private final float[][] bitmap;
     private Point maxPoint;
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
 
     public HoughTransformation(int width, int height) {
         maxPoint = null;

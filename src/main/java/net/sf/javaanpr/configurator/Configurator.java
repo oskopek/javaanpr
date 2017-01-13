@@ -120,8 +120,7 @@ public final class Configurator {
             try {
                 configurator = new Configurator();
             } catch (IOException e) {
-                e.printStackTrace();
-                return null;
+                throw new IllegalStateException("Configurator failed to initialize.");
             }
         }
         return configurator;

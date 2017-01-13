@@ -48,8 +48,8 @@ public class NeuralNetwork { // TODO: finish translation
     /**
      * Holds a list of layers.
      */
-    private Vector<NeuralLayer> listLayers = new Vector<NeuralLayer>();
-    private Random randomGenerator;
+    private final Vector<NeuralLayer> listLayers = new Vector<NeuralLayer>();
+    private final Random randomGenerator;
 
     /**
      * Dimensions are in order from the lowest (input) to highest (output) layer.
@@ -396,7 +396,7 @@ public class NeuralNetwork { // TODO: finish translation
 
     public static class SetOfIOPairs {
 
-        private Vector<IOPair> pairs;
+        private final Vector<IOPair> pairs;
 
         public SetOfIOPairs() {
             this.pairs = new Vector<IOPair>();
@@ -415,8 +415,8 @@ public class NeuralNetwork { // TODO: finish translation
         }
 
         public static class IOPair {
-            private Vector<Double> inputs;
-            private Vector<Double> outputs;
+            private final Vector<Double> inputs;
+            private final Vector<Double> outputs;
 
             public IOPair(Vector<Double> inputs, Vector<Double> outputs) {
                 this.inputs = new Vector<Double>(inputs);
@@ -427,8 +427,8 @@ public class NeuralNetwork { // TODO: finish translation
 
     private final class NeuralInput {
         private double weight;
-        private int index;
-        private Neuron neuron;
+        private final int index;
+        private final Neuron neuron;
 
         private NeuralInput(double weight, Neuron neuron) {
             this.neuron = neuron;
@@ -441,9 +441,9 @@ public class NeuralNetwork { // TODO: finish translation
     private final class Neuron {
         private double threshold;
         private double output;
-        private int index;
-        private NeuralLayer neuralLayer;
-        private Vector<NeuralInput> listInputs = new Vector<NeuralInput>();
+        private final int index;
+        private final NeuralLayer neuralLayer;
+        private final Vector<NeuralInput> listInputs = new Vector<NeuralInput>();
 
         private Neuron(double threshold, NeuralLayer neuralLayer) {
             this.threshold = threshold;
@@ -478,9 +478,9 @@ public class NeuralNetwork { // TODO: finish translation
     }
 
     private final class NeuralLayer {
-        private int index;
-        private NeuralNetwork neuralNetwork;
-        private Vector<Neuron> listNeurons = new Vector<Neuron>();
+        private final int index;
+        private final NeuralNetwork neuralNetwork;
+        private final Vector<Neuron> listNeurons = new Vector<Neuron>();
 
         private NeuralLayer(NeuralNetwork neuralNetwork) {
             this.neuralNetwork = neuralNetwork;
@@ -546,7 +546,7 @@ public class NeuralNetwork { // TODO: finish translation
     private final class Gradients {
         private Vector<Vector<Double>> thresholds;
         private Vector<Vector<Vector<Double>>> weights;
-        private NeuralNetwork neuralNetwork;
+        private final NeuralNetwork neuralNetwork;
 
         private Gradients(NeuralNetwork network) {
             this.neuralNetwork = network;

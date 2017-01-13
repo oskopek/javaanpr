@@ -27,13 +27,14 @@ import java.util.Vector;
 
 public class CarSnapshot extends Photo {
 
-    private static int distributor_margins =
+    private static final int distributor_margins =
             Configurator.getConfigurator().getIntProperty("carsnapshot_distributormargins");
-    public static Graph.ProbabilityDistributor distributor =
+    public static final Graph.ProbabilityDistributor distributor =
             new Graph.ProbabilityDistributor(0, 0, CarSnapshot.distributor_margins, CarSnapshot.distributor_margins);
-    private static int carsnapshot_graphrankfilter =
+    private static final int carsnapshot_graphrankfilter =
             Configurator.getConfigurator().getIntProperty("carsnapshot_graphrankfilter");
-    private static int numberOfCandidates = Configurator.getConfigurator().getIntProperty("intelligence_numberOfBands");
+    private static final int numberOfCandidates =
+            Configurator.getConfigurator().getIntProperty("intelligence_numberOfBands");
     private CarSnapshotGraph graphHandle = null;
 
     public CarSnapshot(String filename) throws IOException {

@@ -26,7 +26,7 @@ import java.util.Vector;
  */
 public class RecognizedPlate {
 
-    private Vector<RecognizedChar> chars;
+    private final Vector<RecognizedChar> chars;
 
     /**
      * Constructs a new {@code RecognizedPlate} with no {@code RecognizedChar}s.

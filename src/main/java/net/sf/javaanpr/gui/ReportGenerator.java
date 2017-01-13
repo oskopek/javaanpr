@@ -29,8 +29,8 @@ import java.io.Writer;
 
 public class ReportGenerator {
 
-    private String directory;
-    private StringBuilder output; // TODO refactor into a form
+    private final String directory;
+    private final StringBuilder output; // TODO refactor into a form
 
     public ReportGenerator(String directory) throws IOException {
         this.directory = directory;

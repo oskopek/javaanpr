@@ -39,7 +39,7 @@ public class FrameMain extends JFrame {
 
     private CarSnapshot car;
     private BufferedImage panelCarContent;
-    private JFileChooser fileChooser;
+    private final JFileChooser fileChooser;
     private DefaultListModel<FileListModelEntry> fileListModel;
     private int selectedIndex = -1;
 
@@ -204,7 +204,7 @@ public class FrameMain extends JFrame {
 
     private void helpItemActionPerformed(ActionEvent evt) {
         try {
-            new FrameHelp(FrameHelp.MODE.SHOW_HELP);
+            new FrameHelp(FrameHelp.FrameHelpContent.SHOW_HELP);
         } catch (IOException e) {
             e.printStackTrace(); // TODO exception
         }
@@ -212,7 +212,7 @@ public class FrameMain extends JFrame {
 
     private void aboutItemActionPerformed(ActionEvent evt) {
         try {
-            new FrameHelp(FrameHelp.MODE.SHOW_ABOUT);
+            new FrameHelp(FrameHelp.FrameHelpContent.SHOW_ABOUT);
         } catch (IOException e) {
             e.printStackTrace(); // TODO exception
         }
@@ -225,9 +225,9 @@ public class FrameMain extends JFrame {
     private void fileListValueChanged(ListSelectionEvent evt) {
         int selectedNow = fileList.getSelectedIndex();
         if ((selectedNow != -1)) {
-            recognitionLabel.setText(fileListModel.elementAt(selectedNow).recognizedPlate);
+            recognitionLabel.setText(fileListModel.elementAt(selectedNow).getRecognizedPlate());
             selectedIndex = selectedNow;
-            String path = fileListModel.getElementAt(selectedNow).fullPath;
+            String path = fileListModel.getElementAt(selectedNow).getFullPath();
             new LoadImageThread(this, path).start();
         }
     }
@@ -287,7 +287,7 @@ public class FrameMain extends JFrame {
                 return;
             }
             parentFrame.recognitionLabel.setText(recognizedText);
-            parentFrame.fileListModel.elementAt(index).recognizedPlate = recognizedText;
+            parentFrame.fileListModel.elementAt(index).setRecognizedPlate(recognizedText);
         }
     }
 
