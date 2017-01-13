@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 JavaANPR contributors
+ * Copyright 2016 JavaANPR contributors
  * Copyright 2006 Ondrej Martinsky
  * Licensed under the Educational Community License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ public class RecognizedPlate {
      * Constructs a new {@code RecognizedPlate} with no {@code RecognizedChar}s.
      */
     public RecognizedPlate() {
-        this.chars = new Vector<RecognizedChar>();
+        chars = new Vector<RecognizedChar>();
     }
 
     /**
@@ -41,7 +41,7 @@ public class RecognizedPlate {
      * @param chr The new {@link RecognizedChar} to be added
      */
     public void addChar(RecognizedChar chr) {
-        this.chars.add(chr);
+        chars.add(chr);
     }
 
     /**
@@ -52,7 +52,7 @@ public class RecognizedPlate {
      * - 1 or {@code i} is less than 0.
      */
     public RecognizedChar getChar(int i) {
-        return this.chars.elementAt(i);
+        return chars.elementAt(i);
     }
 
     /**
@@ -61,11 +61,11 @@ public class RecognizedPlate {
      * a space in between each one.
      */
     public String getString() {
-        String ret = new String("");
-        for (int i = 0; i < this.chars.size(); i++) {
-            ret = ret + this.chars.elementAt(i).getPattern(0).getChar();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < chars.size(); i++) {
+            sb.append(chars.elementAt(i).getPattern(0).getChar());
         }
-        return ret;
+        return sb.toString();
     }
 
     /**

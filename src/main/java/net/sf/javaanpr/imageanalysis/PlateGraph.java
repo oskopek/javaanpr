@@ -52,7 +52,7 @@ public class PlateGraph extends Graph {
      * </ol>
      *
      * @param count number of peaks
-     * @return a {@link Vector} of {@link net.sf.javaanpr.imageanalysis.Graph.Peak}s
+     * @return a {@link Vector} of {@link net.sf.javaanpr.imageanalysis.Peak}s
      */
     public Vector<Peak> findPeaks(int count) {
         Vector<Peak> spacesTemp = new Vector<Peak>();

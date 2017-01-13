@@ -36,17 +36,12 @@ public class Photo implements AutoCloseable, Cloneable {
 
     private BufferedImage image;
 
-    private Photo() {
-        // intentionally empty
-        this.image = null;
-    }
-
     public Photo(BufferedImage bi) {
         this.image = bi;
     }
 
     public Photo(InputStream is) throws IOException {
-        this.loadImage(is);
+        loadImage(is);
     }
 
     public static void setBrightness(BufferedImage image, int x, int y, float value) {
