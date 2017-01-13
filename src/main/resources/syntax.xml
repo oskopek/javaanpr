@@ -15,8 +15,7 @@
   ~ permissions and limitations under the License.
   -->
 
-<!DOCTYPE structure SYSTEM "https://raw.githubusercontent.com/oskopek/javaanpr/master/src/main/resources/dtd/syntax.dtd">
-<!-- TODO: Host DTD in a proper place -->
+<!DOCTYPE structure SYSTEM "src/main/resources/dtd/syntax.dtd">
 
 <structure>
     <type name="germany">
