@@ -59,7 +59,7 @@ public class PlateGraph extends Graph {
         float diffGVal = (2 * this.getAverageValue()) - this.getMaxValue();
         Vector<Float> yValuesNew = new Vector<Float>();
         for (Float f : this.yValues) {
-            yValuesNew.add(f.floatValue() - diffGVal);
+            yValuesNew.add(f - diffGVal);
         }
         this.yValues = yValuesNew;
         this.deActualizeFlags();
