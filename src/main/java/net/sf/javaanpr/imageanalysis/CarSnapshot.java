@@ -23,7 +23,8 @@ import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CarSnapshot extends Photo {
 
@@ -55,7 +56,7 @@ public class CarSnapshot extends Photo {
         return graphHandle.renderVertically(100, getHeight());
     }
 
-    private Vector<Peak> computeGraph() {
+    private List<Peak> computeGraph() {
         if (graphHandle != null) {
             return graphHandle.peaks;
         }
@@ -74,14 +75,14 @@ public class CarSnapshot extends Photo {
      *
      * @return bands
      */
-    public Vector<Band> getBands() {
-        Vector<Band> out = new Vector<Band>();
-        Vector<Peak> peaks = computeGraph();
+    public List<Band> getBands() {
+        List<Band> out = new ArrayList<Band>();
+        List<Peak> peaks = computeGraph();
         for (int i = 0; i < peaks.size(); i++) {
             // Cut from the original image of the plate and save to a vector.
             // ATTENTION: Cutting from original,
             // we have to apply an inverse transformation to the coordinates calculated from imageCopy
-            Peak p = peaks.elementAt(i);
+            Peak p = peaks.get(i);
             out.add(new Band(getImage().getSubimage(0, (p.getLeft()), getImage().getWidth(), (p.getDiff()))));
         }
         return out;

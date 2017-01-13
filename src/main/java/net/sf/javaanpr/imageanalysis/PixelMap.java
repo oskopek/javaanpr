@@ -18,8 +18,8 @@ package net.sf.javaanpr.imageanalysis;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Stack;
-import java.util.Vector;
 
 public class PixelMap {
 
@@ -348,19 +348,19 @@ public class PixelMap {
         int maxIndex = 0;
         // find the best cost
         for (int i = 0; i < pieces.size(); i++) {
-            if (pieces.elementAt(i).cost() > maxCost) {
-                maxCost = pieces.elementAt(i).cost();
+            if (pieces.get(i).cost() > maxCost) {
+                maxCost = pieces.get(i).cost();
                 maxIndex = i;
             }
         }
         // delete the others
         for (int i = 0; i < pieces.size(); i++) {
             if (i != maxIndex) {
-                pieces.elementAt(i).bleachPiece();
+                pieces.get(i).bleachPiece();
             }
         }
         if (pieces.size() != 0) {
-            this.bestPiece = pieces.elementAt(maxIndex);
+            this.bestPiece = pieces.get(maxIndex);
         }
     }
 
@@ -392,7 +392,7 @@ public class PixelMap {
         }
     }
 
-    public class PieceSet extends Vector<Piece> {
+    public class PieceSet extends ArrayList<Piece> {
         private static final long serialVersionUID = 0;
     }
 

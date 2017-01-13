@@ -35,12 +35,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Parser {
 
     private static final transient Logger logger = LoggerFactory.getLogger(Parser.class);
-    private Vector<PlateForm> plateForms;
+    private List<PlateForm> plateForms;
 
     /**
      * Creates a new instance of Parser.
@@ -50,7 +51,7 @@ public class Parser {
      * @throws IOException an IOException
      */
     public Parser() throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
-        this.plateForms = new Vector<PlateForm>();
+        this.plateForms = new ArrayList<PlateForm>();
         String fileName = Configurator.getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
         if (fileName == null || fileName.isEmpty()) {
             throw new IOException("Failed to get syntax description file from Configurator");
@@ -82,7 +83,7 @@ public class Parser {
      * @deprecated use {@link Parser#loadFromXml(InputStream)}
      */
     @Deprecated
-    public Vector<PlateForm> loadFromXml(String fileName)
+    public List<PlateForm> loadFromXml(String fileName)
             throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
         InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
         return this.loadFromXml(inStream);
@@ -90,14 +91,14 @@ public class Parser {
 
     /**
      * @param inStream input stream from the xml file
-     * @return {@link Vector} of loaded {@link PlateForm}s
+     * @return {@link List} of loaded {@link PlateForm}s
      * @throws ParserConfigurationException a ParserConfigurationException
      * @throws SAXException a SAXException
      * @throws IOException an IOException
      */
-    public Vector<PlateForm> loadFromXml(InputStream inStream)
+    public List<PlateForm> loadFromXml(InputStream inStream)
             throws ParserConfigurationException, SAXException, IOException {  // TODO javadoc
-        Vector<PlateForm> plateForms = new Vector<PlateForm>();
+        List<PlateForm> plateForms = new ArrayList<PlateForm>();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder parser = factory.newDocumentBuilder();
         Document doc = parser.parse(inStream);
@@ -191,7 +192,7 @@ public class Parser {
                         + "SyntaxAnalysisMode.ONLY_EQUAL_LENGTH or SyntaxAnalysisMode.EQUAL_OR_SHORTER_LENGTH.");
         }
 
-        Vector<FinalPlate> finalPlates = new Vector<FinalPlate>();
+        List<FinalPlate> finalPlates = new ArrayList<FinalPlate>();
 
         for (PlateForm form : this.plateForms) {
             if (!form.isFlagged()) {
@@ -227,16 +228,16 @@ public class Parser {
         float minimalChanges = Float.POSITIVE_INFINITY;
         int minimalIndex = 0;
         for (int i = 0; i < finalPlates.size(); i++) {
-            logger.debug("Plate {} : {} with required changes {}.", i, finalPlates.elementAt(i).plate,
-                    finalPlates.elementAt(i).requiredChanges);
-            if (finalPlates.elementAt(i).requiredChanges <= minimalChanges) {
-                minimalChanges = finalPlates.elementAt(i).requiredChanges;
+            logger.debug("Plate {} : {} with required changes {}.", i, finalPlates.get(i).plate,
+                    finalPlates.get(i).requiredChanges);
+            if (finalPlates.get(i).requiredChanges <= minimalChanges) {
+                minimalChanges = finalPlates.get(i).requiredChanges;
                 minimalIndex = i;
             }
         }
         String toReturn = recognizedPlate.getString();
-        if (finalPlates.elementAt(minimalIndex).requiredChanges <= 2) {
-            toReturn = finalPlates.elementAt(minimalIndex).plate;
+        if (finalPlates.get(minimalIndex).requiredChanges <= 2) {
+            toReturn = finalPlates.get(minimalIndex).plate;
         }
         return toReturn;
     }

@@ -225,7 +225,7 @@ public class FrameMain extends JFrame {
     private void fileListValueChanged(ListSelectionEvent evt) {
         int selectedNow = fileList.getSelectedIndex();
         if ((selectedNow != -1)) {
-            recognitionLabel.setText(fileListModel.elementAt(selectedNow).getRecognizedPlate());
+            recognitionLabel.setText(fileListModel.get(selectedNow).getRecognizedPlate());
             selectedIndex = selectedNow;
             String path = fileListModel.getElementAt(selectedNow).getFullPath();
             new LoadImageThread(this, path).start();
@@ -287,7 +287,7 @@ public class FrameMain extends JFrame {
                 return;
             }
             parentFrame.recognitionLabel.setText(recognizedText);
-            parentFrame.fileListModel.elementAt(index).setRecognizedPlate(recognizedText);
+            parentFrame.fileListModel.get(index).setRecognizedPlate(recognizedText);
         }
     }
 

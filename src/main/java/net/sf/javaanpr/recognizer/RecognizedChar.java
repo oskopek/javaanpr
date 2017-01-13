@@ -16,17 +16,19 @@
 
 package net.sf.javaanpr.recognizer;
 
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Collections;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecognizedChar {
-    private final Vector<RecognizedPattern> patterns;
+    private final List<RecognizedPattern> patterns;
     private boolean isSorted;
 
     public RecognizedChar() {
-        this.patterns = new Vector<RecognizedPattern>();
+        this.patterns = new ArrayList<RecognizedPattern>();
         this.isSorted = false;
     }
 
@@ -49,7 +51,7 @@ public class RecognizedChar {
     /**
      * @return null if not sorted
      */
-    public Vector<RecognizedPattern> getPatterns() {
+    public List<RecognizedPattern> getPatterns() {
         if (this.isSorted) {
             return this.patterns;
         }
@@ -58,7 +60,7 @@ public class RecognizedChar {
 
     public RecognizedPattern getPattern(int i) {
         if (this.isSorted) {
-            return this.patterns.elementAt(i);
+            return this.patterns.get(i);
         }
         return null;
     }
@@ -85,9 +87,9 @@ public class RecognizedChar {
         graphic.setColor(Color.BLUE);
         for (int i = 0; i < this.patterns.size(); i++) {
             left = (i * colWidth) + 42;
-            top = height - (int) (this.patterns.elementAt(i).getCost() * (height - 20));
+            top = height - (int) (this.patterns.get(i).getCost() * (height - 20));
             graphic.drawRect(left, top, colWidth - 2, height - top);
-            graphic.drawString(this.patterns.elementAt(i).getChar() + " ", left + 2, top - 8);
+            graphic.drawString(this.patterns.get(i).getChar() + " ", left + 2, top - 8);
         }
         return histogram;
     }

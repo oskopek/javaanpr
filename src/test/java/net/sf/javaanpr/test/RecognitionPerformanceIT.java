@@ -41,7 +41,7 @@ public class RecognitionPerformanceIT {
     private static final Logger logger = LoggerFactory.getLogger(RecognitionPerformanceIT.class);
     private Level originalLogLevel;
 
-    private ArrayList<CarSnapshot> carSnapshots;
+    private List<CarSnapshot> carSnapshots;
     private Intelligence intelligence;
 
     @Before

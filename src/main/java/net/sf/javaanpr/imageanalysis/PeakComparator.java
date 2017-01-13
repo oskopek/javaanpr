@@ -17,12 +17,12 @@
 package net.sf.javaanpr.imageanalysis;
 
 import java.util.Comparator;
-import java.util.Vector;
+import java.util.List;
 
 public class PeakComparator implements Comparator<Peak> {
-    private final Vector<Float> yValues;
+    private final List<Float> yValues;
 
-    public PeakComparator(Vector<Float> yValues) {
+    public PeakComparator(List<Float> yValues) {
         this.yValues = yValues;
     }
 
@@ -31,7 +31,7 @@ public class PeakComparator implements Comparator<Peak> {
         // return peak.getDiff();
 
         // heuristic: height of the peak
-        return yValues.elementAt(peak.getCenter());
+        return yValues.get(peak.getCenter());
 
         // heuristic: how far from the center is the candidate
         // int peakCenter = (peak.getRight() + (peak.getLeft() )/2;

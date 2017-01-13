@@ -18,7 +18,8 @@ package net.sf.javaanpr.intelligence;
 
 import net.sf.javaanpr.recognizer.RecognizedChar;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represents a number plate being recognized. As each character (represented by {@link RecognizedChar})
@@ -26,13 +27,13 @@ import java.util.Vector;
  */
 public class RecognizedPlate {
 
-    private final Vector<RecognizedChar> chars;
+    private final List<RecognizedChar> chars;
 
     /**
      * Constructs a new {@code RecognizedPlate} with no {@code RecognizedChar}s.
      */
     public RecognizedPlate() {
-        chars = new Vector<RecognizedChar>();
+        chars = new ArrayList<RecognizedChar>();
     }
 
     /**
@@ -52,7 +53,7 @@ public class RecognizedPlate {
      * - 1 or {@code i} is less than 0.
      */
     public RecognizedChar getChar(int i) {
-        return chars.elementAt(i);
+        return chars.get(i);
     }
 
     /**
@@ -63,7 +64,7 @@ public class RecognizedPlate {
     public String getString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < chars.size(); i++) {
-            sb.append(chars.elementAt(i).getPattern(0).getChar());
+            sb.append(chars.get(i).getPattern(0).getChar());
         }
         return sb.toString();
     }
@@ -71,7 +72,7 @@ public class RecognizedPlate {
     /**
      * @return All the {@code RecognizedChar}s added to this plate
      */
-    public Vector<RecognizedChar> getChars() {
+    public List<RecognizedChar> getChars() {
         return chars;
     }
 }

@@ -23,7 +23,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class TestStatistics {
 
@@ -69,10 +70,10 @@ public final class TestStatistics {
 
     private static final class TestReport {
 
-        private final Vector<TestRecord> records;
+        private final List<TestRecord> records;
 
         private TestReport() {
-            this.records = new Vector<TestRecord>();
+            this.records = new ArrayList<TestRecord>();
         }
 
         private void addRecord(TestRecord testRecord) {

@@ -18,12 +18,13 @@ package net.sf.javaanpr.imageanalysis;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Graph {
 
-    public Vector<Peak> peaks = null;
-    public Vector<Float> yValues = new Vector<Float>();
+    public List<Peak> peaks = null;
+    public List<Float> yValues = new ArrayList<Float>();
 
     // statistical information
     private boolean actualAverageValue = false; // are values up-to-date?
@@ -46,7 +47,7 @@ public class Graph {
      * @param xPosition the position to check
      * @return true if {@code xPosition} is in an allowed range
      */
-    public boolean allowedInterval(Vector<Peak> peaks, int xPosition) {
+    public boolean allowedInterval(List<Peak> peaks, int xPosition) {
         for (Peak peak : peaks) {
             if ((peak.getLeft() <= xPosition) && (xPosition <= peak.getRight())) {
                 return false;
@@ -68,7 +69,7 @@ public class Graph {
     public void negate() {
         float max = getMaxValue();
         for (int i = 0; i < yValues.size(); i++) {
-            yValues.setElementAt(max - yValues.elementAt(i), i);
+            yValues.set(i, max - yValues.get(i));
         }
         deActualizeFlags();
     }
@@ -84,7 +85,7 @@ public class Graph {
     public float getAverageValue(int a, int b) {
         float sum = 0.0f;
         for (int i = a; i < b; i++) {
-            sum += yValues.elementAt(i).doubleValue();
+            sum += yValues.get(i).doubleValue();
         }
         return sum / yValues.size();
     }
@@ -100,7 +101,7 @@ public class Graph {
     public float getMaxValue(int a, int b) {
         float maxValue = 0.0f;
         for (int i = a; i < b; i++) {
-            maxValue = Math.max(maxValue, yValues.elementAt(i));
+            maxValue = Math.max(maxValue, yValues.get(i));
         }
         return maxValue;
     }
@@ -115,8 +116,8 @@ public class Graph {
         float maxValue = 0.0f;
         int maxIndex = a;
         for (int i = a; i < b; i++) {
-            if (yValues.elementAt(i) >= maxValue) {
-                maxValue = yValues.elementAt(i);
+            if (yValues.get(i) >= maxValue) {
+                maxValue = yValues.get(i);
                 maxIndex = i;
             }
         }
@@ -134,7 +135,7 @@ public class Graph {
     public float getMinValue(int a, int b) {
         float minValue = Float.POSITIVE_INFINITY;
         for (int i = a; i < b; i++) {
-            minValue = Math.min(minValue, yValues.elementAt(i));
+            minValue = Math.min(minValue, yValues.get(i));
         }
         return minValue;
     }
@@ -149,8 +150,8 @@ public class Graph {
         float minValue = Float.POSITIVE_INFINITY;
         int minIndex = b;
         for (int i = a; i < b; i++) {
-            if (yValues.elementAt(i) <= minValue) {
-                minValue = yValues.elementAt(i);
+            if (yValues.get(i) <= minValue) {
+                minValue = yValues.get(i);
                 minIndex = i;
             }
         }
@@ -177,7 +178,7 @@ public class Graph {
             int x0 = x;
             int y0 = y;
             x = (int) (((float) i / yValues.size()) * width);
-            y = (int) ((1 - (yValues.elementAt(i) / getMaxValue())) * height);
+            y = (int) ((1 - (yValues.get(i) / getMaxValue())) * height);
             graphicContent.drawLine(x0, y0, x, y);
         }
         if (peaks != null) { // peaks were already discovered, render them too
@@ -229,7 +230,7 @@ public class Graph {
             int x0 = x;
             int y0 = y;
             y = (int) (((float) i / yValues.size()) * height);
-            x = (int) ((yValues.elementAt(i) / getMaxValue()) * width);
+            x = (int) ((yValues.get(i) / getMaxValue()) * width);
             graphicContent.drawLine(x0, y0, x, y);
         }
         if (peaks != null) { // peaks were already discovered, render them too
@@ -257,20 +258,20 @@ public class Graph {
 
     public void rankFilter(int size) {
         int halfSize = size / 2;
-        Vector<Float> clone = new Vector<Float>(yValues);
+        List<Float> clone = new ArrayList<Float>(yValues);
         for (int i = halfSize; i < (yValues.size() - halfSize); i++) {
             float sum = 0;
             for (int ii = i - halfSize; ii < (i + halfSize); ii++) {
-                sum += clone.elementAt(ii);
+                sum += clone.get(ii);
             }
-            yValues.setElementAt(sum / size, i);
+            yValues.set(i, sum / size);
         }
     }
 
     public int indexOfLeftPeakRel(int peak, double peakFootConstantRel) {
         int index = peak;
         while (index >= 0) {
-            if (yValues.elementAt(index) < (peakFootConstantRel * yValues.elementAt(peak))) {
+            if (yValues.get(index) < (peakFootConstantRel * yValues.get(peak))) {
                 break;
             }
             index--;
@@ -281,7 +282,7 @@ public class Graph {
     public int indexOfRightPeakRel(int peak, double peakFootConstantRel) {
         int index = peak;
         while (index < yValues.size()) {
-            if (yValues.elementAt(index) < (peakFootConstantRel * yValues.elementAt(peak))) {
+            if (yValues.get(index) < (peakFootConstantRel * yValues.get(peak))) {
                 break;
             }
             index++;
@@ -289,7 +290,7 @@ public class Graph {
         return Math.min(yValues.size(), index);
     }
 
-    public float averagePeakDiff(Vector<Peak> peaks) {
+    public float averagePeakDiff(List<Peak> peaks) {
         float sum = 0;
         for (Peak p : peaks) {
             sum += p.getDiff();
@@ -297,10 +298,10 @@ public class Graph {
         return sum / peaks.size();
     }
 
-    public float maximumPeakDiff(Vector<Peak> peaks, int from, int to) {
+    public float maximumPeakDiff(List<Peak> peaks, int from, int to) {
         float max = 0;
         for (int i = from; i <= to; i++) {
-            max = Math.max(max, peaks.elementAt(i).getDiff());
+            max = Math.max(max, peaks.get(i).getDiff());
         }
         return max;
     }
@@ -322,13 +323,13 @@ public class Graph {
             return value * (1 - (power * Math.abs(positionPercentage - center)));
         }
 
-        public Vector<Float> distribute(Vector<Float> peaks) {
-            Vector<Float> distributedPeaks = new Vector<Float>();
+        public List<Float> distribute(List<Float> peaks) {
+            List<Float> distributedPeaks = new ArrayList<Float>();
             for (int i = 0; i < peaks.size(); i++) {
                 if ((i < leftMargin) || (i > (peaks.size() - rightMargin))) {
                     distributedPeaks.add(0f);
                 } else {
-                    distributedPeaks.add(distributionFunction(peaks.elementAt(i), ((float) i / peaks.size())));
+                    distributedPeaks.add(distributionFunction(peaks.get(i), ((float) i / peaks.size())));
                 }
             }
             return distributedPeaks;

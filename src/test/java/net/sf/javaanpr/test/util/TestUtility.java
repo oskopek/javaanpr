@@ -27,6 +27,10 @@ import java.util.List;
 public final class TestUtility {
     public static final double epsilon = 5.96e-08;
 
+    private TestUtility() {
+        // intentionally empty
+    }
+
     public static StringBuilder readFile(final String filename) throws IOException {
         final BufferedReader br = new BufferedReader(new FileReader(filename));
         final StringBuilder sb = new StringBuilder();
@@ -41,7 +45,7 @@ public final class TestUtility {
         if (list == null || list.size() == 0) {
             throw new IllegalStateException("Cannot average null or empty list.");
         }
-        return list.stream().mapToDouble(Number::doubleValue).sum()/ (double) list.size();
+        return list.stream().mapToDouble(Number::doubleValue).sum() / (double) list.size();
     }
 
 }

@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
 
 public class NeuralPatternClassificator extends CharacterRecognizer {
 
@@ -46,7 +46,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
 
     public NeuralPatternClassificator(boolean learn) {
         Configurator configurator = Configurator.getConfigurator();
-        Vector<Integer> dimensions = new Vector<Integer>();
+        List<Integer> dimensions = new ArrayList<Integer>();
         // determine size of input layer according to chosen feature extraction method
         int inputLayerSize;
         if (configurator.getIntProperty("char_featuresExtractionMethod") == 0) {
@@ -87,10 +87,10 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
     @Override
     public RecognizedChar recognize(Char imgChar) {
         imgChar.normalize();
-        Vector<Double> output = this.network.test(imgChar.extractFeatures());
+        List<Double> output = this.network.test(imgChar.extractFeatures());
         RecognizedChar recognized = new RecognizedChar();
         for (int i = 0; i < output.size(); i++) {
-            recognized.addPattern(new RecognizedPattern(ALPHABET[i], output.elementAt(i).floatValue()));
+            recognized.addPattern(new RecognizedPattern(ALPHABET[i], output.get(i).floatValue()));
         }
         recognized.render();
         recognized.sort(true);
@@ -103,8 +103,8 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
      * @return an {@link net.sf.javaanpr.neuralnetwork.NeuralNetwork.SetOfIOPairs.IOPair}
      */
     public NeuralNetwork.SetOfIOPairs.IOPair createNewPair(char chr, Char imgChar) {
-        Vector<Double> vectorInput = imgChar.extractFeatures();
-        Vector<Double> vectorOutput = new Vector<Double>();
+        List<Double> vectorInput = imgChar.extractFeatures();
+        List<Double> vectorOutput = new ArrayList<Double>();
         for (int i = 0; i < ALPHABET.length; i++) {
             if (chr == ALPHABET[i]) {
                 vectorOutput.add(1.0);
@@ -123,7 +123,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
      */
     public void learnAlphabet(String folder) throws IOException {
         NeuralNetwork.SetOfIOPairs train = new NeuralNetwork.SetOfIOPairs();
-        ArrayList<String> fileList = (ArrayList<String>) Char.getAlphabetList(folder);
+        List<String> fileList = Char.getAlphabetList(folder);
         for (String fileName : fileList) {
             InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
             Char imgChar = new Char(is);

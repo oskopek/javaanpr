@@ -1,16 +1,17 @@
 package net.sf.javaanpr.intelligence.parser;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlateForm {
 
     private boolean flagged = false;
-    private final Vector<Position> positions;
+    private final List<Position> positions;
     private final String name;
 
     public PlateForm(String name) {
         this.name = name;
-        this.positions = new Vector<>();
+        this.positions = new ArrayList<>();
     }
 
     public void addPosition(Position p) {
@@ -18,7 +19,7 @@ public class PlateForm {
     }
 
     public Position getPosition(int index) {
-        return this.positions.elementAt(index);
+        return this.positions.get(index);
     }
 
     public int length() {
@@ -33,7 +34,7 @@ public class PlateForm {
         this.flagged = flagged;
     }
 
-    public Vector<Position> getPositions() {
+    public List<Position> getPositions() {
         return positions;
     }
 

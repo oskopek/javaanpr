@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class Char extends Photo {
 
@@ -104,7 +103,7 @@ public class Char extends Photo {
         if (directory.endsWith("/")) {
             directory = directory.substring(0, directory.length() - 1);
         }
-        ArrayList<String> filenames = new ArrayList<String>();
+        List<String> filenames = new ArrayList<String>();
         for (int i = 0; i < alphaString.length(); i++) {
             String s = directory + File.separator + alphaString.charAt(i) + suffix + ".jpg";
             if (Configurator.getConfigurator().getResourceAsStream(s) != null) {
@@ -233,7 +232,7 @@ public class Char extends Photo {
         return new PixelMap(this);
     }
 
-    public Vector<Double> extractEdgeFeatures() {
+    public List<Double> extractEdgeFeatures() {
         int width = getImage().getWidth();
         int height = getImage().getHeight();
         double featureMatch;
@@ -263,15 +262,15 @@ public class Char extends Photo {
                 }
             }
         }
-        Vector<Double> outputVector = new Vector<Double>();
+        List<Double> outputList = new ArrayList<Double>();
         for (Double value : output) {
-            outputVector.add(value);
+            outputList.add(value);
         }
-        return outputVector;
+        return outputList;
     }
 
-    public Vector<Double> extractMapFeatures() {
-        Vector<Double> vectorInput = new Vector<Double>();
+    public List<Double> extractMapFeatures() {
+        List<Double> vectorInput = new ArrayList<Double>();
         for (int y = 0; y < getHeight(); y++) {
             for (int x = 0; x < getWidth(); x++) {
                 vectorInput.add((double) getBrightness(x, y));
@@ -280,7 +279,7 @@ public class Char extends Photo {
         return vectorInput;
     }
 
-    public Vector<Double> extractFeatures() {
+    public List<Double> extractFeatures() {
         int featureExtractionMethod = Configurator.getConfigurator().getIntProperty("char_featuresExtractionMethod");
         if (featureExtractionMethod == 0) {
             return extractMapFeatures();

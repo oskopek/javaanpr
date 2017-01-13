@@ -31,7 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
 
 public class Intelligence {
 
@@ -122,7 +122,7 @@ public class Intelligence {
                         plateWHratio > configurator.getDoubleProperty("intelligence_maxPlateWidthHeightRatio"))) {
                     continue;
                 }
-                Vector<Char> chars = plate.getChars();
+                List<Char> chars = plate.getChars();
 
                 // heuristic analysis of the plate (uniformity and character count)
                 if ((chars.size() < configurator.getIntProperty("intelligence_minimumChars")) || (chars.size()
@@ -242,7 +242,7 @@ public class Intelligence {
                     RecognizedChar rc = null;
                     if (ok) {
                         rc = chrRecog.recognize(chr);
-                        similarityCost = rc.getPatterns().elementAt(0).getCost();
+                        similarityCost = rc.getPatterns().get(0).getCost();
                         if (similarityCost > configurator
                                 .getDoubleProperty("intelligence_maxSimilarityCostDispersion")) {
                             errorFlags += "NEU ";

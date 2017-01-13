@@ -19,32 +19,33 @@ package net.sf.javaanpr.imageanalysis;
 import net.sf.javaanpr.configurator.Configurator;
 
 import java.util.Collections;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlateVerticalGraph extends Graph {
 
     private static final double peakFootConstant =
             Configurator.getConfigurator().getDoubleProperty("plateverticalgraph_peakfootconstant"); // 0.42
 
-    public Vector<Peak> findPeak(int count) {
+    public List<Peak> findPeak(int count) {
         // lower the peak
         for (int i = 0; i < yValues.size(); i++) {
-            yValues.set(i, yValues.elementAt(i) - getMinValue());
+            yValues.set(i, yValues.get(i) - getMinValue());
         }
-        Vector<Peak> outPeaks = new Vector<Peak>();
+        List<Peak> outPeaks = new ArrayList<Peak>();
         for (int c = 0; c < count; c++) {
             float maxValue = 0.0f;
             int maxIndex = 0;
             for (int i = 0; i < yValues.size(); i++) { // left to right
                 if (allowedInterval(outPeaks, i)) {
-                    if (yValues.elementAt(i) >= maxValue) {
-                        maxValue = yValues.elementAt(i);
+                    if (yValues.get(i) >= maxValue) {
+                        maxValue = yValues.get(i);
                         maxIndex = i;
                     }
                 }
             }
             // we found the biggest peak
-            if (yValues.elementAt(maxIndex) < (0.05 * super.getMaxValue())) {
+            if (yValues.get(maxIndex) < (0.05 * super.getMaxValue())) {
                 break; // 0.4
             }
             int leftIndex = indexOfLeftPeakRel(maxIndex, PlateVerticalGraph.peakFootConstant);
