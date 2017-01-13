@@ -34,9 +34,9 @@ public class Graph {
     private float minimumValue;
 
     public void deActualizeFlags() {
-        this.actualAverageValue = false;
-        this.actualMaximumValue = false;
-        this.actualMinimumValue = false;
+        actualAverageValue = false;
+        actualMaximumValue = false;
+        actualMinimumValue = false;
     }
 
     /**
@@ -56,67 +56,67 @@ public class Graph {
     }
 
     public void addPeak(float value) {
-        this.yValues.add(value);
-        this.deActualizeFlags();
+        yValues.add(value);
+        deActualizeFlags();
     }
 
     public void applyProbabilityDistributor(Graph.ProbabilityDistributor probability) {
-        this.yValues = probability.distribute(this.yValues);
-        this.deActualizeFlags();
+        yValues = probability.distribute(yValues);
+        deActualizeFlags();
     }
 
     public void negate() {
-        float max = this.getMaxValue();
-        for (int i = 0; i < this.yValues.size(); i++) {
-            this.yValues.setElementAt(max - this.yValues.elementAt(i), i);
+        float max = getMaxValue();
+        for (int i = 0; i < yValues.size(); i++) {
+            yValues.setElementAt(max - yValues.elementAt(i), i);
         }
-        this.deActualizeFlags();
+        deActualizeFlags();
     }
 
     public float getAverageValue() {
-        if (!this.actualAverageValue) {
-            this.averageValue = this.getAverageValue(0, this.yValues.size());
-            this.actualAverageValue = true;
+        if (!actualAverageValue) {
+            averageValue = getAverageValue(0, yValues.size());
+            actualAverageValue = true;
         }
-        return this.averageValue;
+        return averageValue;
     }
 
     public float getAverageValue(int a, int b) {
         float sum = 0.0f;
         for (int i = a; i < b; i++) {
-            sum += this.yValues.elementAt(i).doubleValue();
+            sum += yValues.elementAt(i).doubleValue();
         }
-        return sum / this.yValues.size();
+        return sum / yValues.size();
     }
 
     public float getMaxValue() {
-        if (!this.actualMaximumValue) {
-            this.maximumValue = this.getMaxValue(0, this.yValues.size());
-            this.actualMaximumValue = true;
+        if (!actualMaximumValue) {
+            maximumValue = getMaxValue(0, yValues.size());
+            actualMaximumValue = true;
         }
-        return this.maximumValue;
+        return maximumValue;
     }
 
     public float getMaxValue(int a, int b) {
         float maxValue = 0.0f;
         for (int i = a; i < b; i++) {
-            maxValue = Math.max(maxValue, this.yValues.elementAt(i));
+            maxValue = Math.max(maxValue, yValues.elementAt(i));
         }
         return maxValue;
     }
 
     public float getMaxValue(float a, float b) {
-        int ia = (int) (a * this.yValues.size());
-        int ib = (int) (b * this.yValues.size());
-        return this.getMaxValue(ia, ib);
+        int ia = (int) (a * yValues.size());
+        int ib = (int) (b * yValues.size());
+        return getMaxValue(ia, ib);
     }
 
     public int getMaxValueIndex(int a, int b) {
         float maxValue = 0.0f;
         int maxIndex = a;
         for (int i = a; i < b; i++) {
-            if (this.yValues.elementAt(i) >= maxValue) {
-                maxValue = this.yValues.elementAt(i);
+            if (yValues.elementAt(i) >= maxValue) {
+                maxValue = yValues.elementAt(i);
                 maxIndex = i;
             }
         }
@@ -124,33 +124,33 @@ public class Graph {
     }
 
     public float getMinValue() {
-        if (!this.actualMinimumValue) {
-            this.minimumValue = this.getMinValue(0, this.yValues.size());
-            this.actualMinimumValue = true;
+        if (!actualMinimumValue) {
+            minimumValue = getMinValue(0, yValues.size());
+            actualMinimumValue = true;
         }
-        return this.minimumValue;
+        return minimumValue;
     }
 
     public float getMinValue(int a, int b) {
         float minValue = Float.POSITIVE_INFINITY;
         for (int i = a; i < b; i++) {
-            minValue = Math.min(minValue, this.yValues.elementAt(i));
+            minValue = Math.min(minValue, yValues.elementAt(i));
         }
         return minValue;
     }
 
     public float getMinValue(float a, float b) {
-        int ia = (int) (a * this.yValues.size());
-        int ib = (int) (b * this.yValues.size());
-        return this.getMinValue(ia, ib);
+        int ia = (int) (a * yValues.size());
+        int ib = (int) (b * yValues.size());
+        return getMinValue(ia, ib);
     }
 
     public int getMinValueIndex(int a, int b) {
         float minValue = Float.POSITIVE_INFINITY;
         int minIndex = b;
         for (int i = a; i < b; i++) {
-            if (this.yValues.elementAt(i) <= minValue) {
-                minValue = this.yValues.elementAt(i);
+            if (yValues.elementAt(i) <= minValue) {
+                minValue = yValues.elementAt(i);
                 minIndex = i;
             }
         }
@@ -173,18 +173,18 @@ public class Graph {
         graphicContent.setColor(Color.GREEN);
         int x = 0;
         int y = 0;
-        for (int i = 0; i < this.yValues.size(); i++) {
+        for (int i = 0; i < yValues.size(); i++) {
             int x0 = x;
             int y0 = y;
-            x = (int) (((float) i / this.yValues.size()) * width);
-            y = (int) ((1 - (this.yValues.elementAt(i) / this.getMaxValue())) * height);
+            x = (int) (((float) i / yValues.size()) * width);
+            y = (int) ((1 - (yValues.elementAt(i) / getMaxValue())) * height);
             graphicContent.drawLine(x0, y0, x, y);
         }
-        if (this.peaks != null) { // peaks were already discovered, render them too
+        if (peaks != null) { // peaks were already discovered, render them too
             graphicContent.setColor(Color.RED);
-            final double multConst = (double) width / this.yValues.size();
+            final double multConst = (double) width / yValues.size();
             int i = 0;
-            for (Peak p : this.peaks) {
+            for (Peak p : peaks) {
                 graphicContent.drawLine((int) (p.getLeft() * multConst), 0, (int) (p.getCenter() * multConst), 30);
                 graphicContent.drawLine((int) (p.getCenter() * multConst), 30, (int) (p.getRight() * multConst), 0);
                 graphicContent.drawString(i + ".", (int) (p.getCenter() * multConst) - 5, 42);
@@ -195,12 +195,12 @@ public class Graph {
         graphicAxis.setColor(Color.BLACK);
         graphicAxis.drawRect(35, 5, content.getWidth(), content.getHeight());
         for (int ax = 0; ax < content.getWidth(); ax += 50) {
-            graphicAxis.drawString(new Integer(ax).toString(), ax + 35, axis.getHeight() - 10);
+            graphicAxis.drawString(Integer.toString(ax), ax + 35, axis.getHeight() - 10);
             graphicAxis.drawLine(ax + 35, content.getHeight() + 5, ax + 35, content.getHeight() + 15);
         }
         for (int ay = 0; ay < content.getHeight(); ay += 20) {
             graphicAxis.drawString(
-                    new Integer(new Float((1 - ((float) ay / content.getHeight())) * 100).intValue()).toString() + "%",
+                    Integer.toString(new Float((1 - ((float) ay / content.getHeight())) * 100).intValue()) + "%",
                     1, ay + 15);
             graphicAxis.drawLine(25, ay + 5, 35, ay + 5);
         }
@@ -225,18 +225,18 @@ public class Graph {
         int x = width;
         int y = 0;
         graphicContent.setColor(Color.GREEN);
-        for (int i = 0; i < this.yValues.size(); i++) {
+        for (int i = 0; i < yValues.size(); i++) {
             int x0 = x;
             int y0 = y;
-            y = (int) (((float) i / this.yValues.size()) * height);
-            x = (int) ((this.yValues.elementAt(i) / this.getMaxValue()) * width);
+            y = (int) (((float) i / yValues.size()) * height);
+            x = (int) ((yValues.elementAt(i) / getMaxValue()) * width);
             graphicContent.drawLine(x0, y0, x, y);
         }
-        if (this.peaks != null) { // peaks were already discovered, render them too
+        if (peaks != null) { // peaks were already discovered, render them too
             graphicContent.setColor(Color.RED);
             int i = 0;
-            double multConst = (double) height / this.yValues.size();
-            for (Peak p : this.peaks) {
+            double multConst = (double) height / yValues.size();
+            for (Peak p : peaks) {
                 graphicContent.drawLine(width,
                         (int) (p.getLeft() * multConst),
                         width - 30, (int) (p.getCenter() * multConst));
@@ -257,20 +257,20 @@ public class Graph {
 
     public void rankFilter(int size) {
         int halfSize = size / 2;
-        Vector<Float> clone = new Vector<Float>(this.yValues);
-        for (int i = halfSize; i < (this.yValues.size() - halfSize); i++) {
+        Vector<Float> clone = new Vector<Float>(yValues);
+        for (int i = halfSize; i < (yValues.size() - halfSize); i++) {
             float sum = 0;
             for (int ii = i - halfSize; ii < (i + halfSize); ii++) {
                 sum += clone.elementAt(ii);
             }
-            this.yValues.setElementAt(sum / size, i);
+            yValues.setElementAt(sum / size, i);
         }
     }
 
     public int indexOfLeftPeakRel(int peak, double peakFootConstantRel) {
         int index = peak;
         while (index >= 0) {
-            if (this.yValues.elementAt(index) < (peakFootConstantRel * this.yValues.elementAt(peak))) {
+            if (yValues.elementAt(index) < (peakFootConstantRel * yValues.elementAt(peak))) {
                 break;
             }
             index--;
@@ -280,13 +280,13 @@ public class Graph {
 
     public int indexOfRightPeakRel(int peak, double peakFootConstantRel) {
         int index = peak;
-        while (index < this.yValues.size()) {
-            if (this.yValues.elementAt(index) < (peakFootConstantRel * this.yValues.elementAt(peak))) {
+        while (index < yValues.size()) {
+            if (yValues.elementAt(index) < (peakFootConstantRel * yValues.elementAt(peak))) {
                 break;
             }
             index++;
         }
-        return Math.min(this.yValues.size(), index);
+        return Math.min(yValues.size(), index);
     }
 
     public float averagePeakDiff(Vector<Peak> peaks) {
@@ -319,16 +319,16 @@ public class Graph {
         }
 
         private float distributionFunction(float value, float positionPercentage) {
-            return value * (1 - (this.power * Math.abs(positionPercentage - this.center)));
+            return value * (1 - (power * Math.abs(positionPercentage - center)));
         }
 
         public Vector<Float> distribute(Vector<Float> peaks) {
             Vector<Float> distributedPeaks = new Vector<Float>();
             for (int i = 0; i < peaks.size(); i++) {
-                if ((i < this.leftMargin) || (i > (peaks.size() - this.rightMargin))) {
+                if ((i < leftMargin) || (i > (peaks.size() - rightMargin))) {
                     distributedPeaks.add(0f);
                 } else {
-                    distributedPeaks.add(this.distributionFunction(peaks.elementAt(i), ((float) i / peaks.size())));
+                    distributedPeaks.add(distributionFunction(peaks.elementAt(i), ((float) i / peaks.size())));
                 }
             }
             return distributedPeaks;
