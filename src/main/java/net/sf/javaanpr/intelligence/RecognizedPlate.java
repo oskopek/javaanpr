@@ -33,7 +33,7 @@ public class RecognizedPlate {
      * Constructs a new {@code RecognizedPlate} with no {@code RecognizedChar}s.
      */
     public RecognizedPlate() {
-        chars = new ArrayList<RecognizedChar>();
+        chars = new ArrayList<>();
     }
 
     /**
@@ -63,8 +63,8 @@ public class RecognizedPlate {
      */
     public String getString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < chars.size(); i++) {
-            sb.append(chars.get(i).getPattern(0).getChar());
+        for (RecognizedChar aChar : chars) {
+            sb.append(aChar.getPattern(0).getChar());
         }
         return sb.toString();
     }

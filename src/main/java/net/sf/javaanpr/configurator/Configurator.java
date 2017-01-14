@@ -96,6 +96,7 @@ public final class Configurator {
         setIntProperty("intelligence_syntaxanalysis", 2);
         setStrProperty("intelligence_syntaxDescriptionFile", "/syntax.xml");
 
+        // TODO: finish translation
         setIntProperty("neural_maxk", 8000); // maximum K - maximalny pocet iteracii
         setDoubleProperty("neural_eps", 0.07); // epsilon - pozadovana presnost
         setDoubleProperty("neural_lambda", 0.05); // lambda factor - rychlost ucenia, velkost gradientu

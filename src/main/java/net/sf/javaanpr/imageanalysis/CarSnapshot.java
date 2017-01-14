@@ -76,13 +76,12 @@ public class CarSnapshot extends Photo {
      * @return bands
      */
     public List<Band> getBands() {
-        List<Band> out = new ArrayList<Band>();
+        List<Band> out = new ArrayList<>();
         List<Peak> peaks = computeGraph();
-        for (int i = 0; i < peaks.size(); i++) {
+        for (Peak p : peaks) {
             // Cut from the original image of the plate and save to a vector.
             // ATTENTION: Cutting from original,
             // we have to apply an inverse transformation to the coordinates calculated from imageCopy
-            Peak p = peaks.get(i);
             out.add(new Band(getImage().getSubimage(0, (p.getLeft()), getImage().getWidth(), (p.getDiff()))));
         }
         return out;

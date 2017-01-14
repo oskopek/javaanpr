@@ -59,13 +59,12 @@ public class Band extends Photo {
      * @return plates
      */
     public List<Plate> getPlates() {
-        List<Plate> out = new ArrayList<Plate>();
+        List<Plate> out = new ArrayList<>();
         List<Peak> peaks = computeGraph();
-        for (int i = 0; i < peaks.size(); i++) {
+        for (Peak p : peaks) {
             // Cut from the original image of the plate and save to a vector.
             // ATTENTION: Cutting from original,
             // we have to apply an inverse transformation to the coordinates calculated from imageCopy
-            Peak p = peaks.get(i);
             out.add(new Plate(getImage().getSubimage(p.getLeft(), 0, p.getDiff(), getImage().getHeight())));
         }
         return out;

@@ -71,12 +71,7 @@ public class FrameHelp extends JFrame {
 
         helpWindowClose.setFont(new java.awt.Font("Arial", 0, 11));
         helpWindowClose.setText("Close");
-        helpWindowClose.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                helpWindowCloseActionPerformed(evt);
-            }
-        });
+        helpWindowClose.addActionListener(this::helpWindowCloseActionPerformed);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

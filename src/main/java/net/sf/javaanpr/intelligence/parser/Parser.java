@@ -51,7 +51,7 @@ public class Parser {
      * @throws IOException an IOException
      */
     public Parser() throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
-        plateForms = new ArrayList<PlateForm>();
+        plateForms = new ArrayList<>();
         String fileName = Configurator.getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
         if (fileName == null || fileName.isEmpty()) {
             throw new IOException("Failed to get syntax description file from Configurator");
@@ -62,10 +62,7 @@ public class Parser {
         }
         try {
             plateForms = loadFromXml(inStream);
-        } catch (ParserConfigurationException | SAXException e) { // TODO fix
-            logger.error("Failed to load from parser syntax description file");
-            throw e;
-        } catch (IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) { // TODO fix
             logger.error("Failed to load from parser syntax description file");
             throw e;
         }
@@ -95,7 +92,7 @@ public class Parser {
      */
     public List<PlateForm> loadFromXml(InputStream inStream)
             throws ParserConfigurationException, SAXException, IOException {  // TODO javadoc
-        List<PlateForm> plateForms = new ArrayList<PlateForm>();
+        List<PlateForm> plateForms = new ArrayList<>();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder parser = factory.newDocumentBuilder();
         Document doc = parser.parse(inStream);
@@ -189,7 +186,7 @@ public class Parser {
                         + "SyntaxAnalysisMode.ONLY_EQUAL_LENGTH or SyntaxAnalysisMode.EQUAL_OR_SHORTER_LENGTH.");
         }
 
-        List<FinalPlate> finalPlates = new ArrayList<FinalPlate>();
+        List<FinalPlate> finalPlates = new ArrayList<>();
 
         for (PlateForm form : plateForms) {
             if (!form.isFlagged()) {

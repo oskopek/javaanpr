@@ -19,7 +19,6 @@ package net.sf.javaanpr.recognizer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class RecognizedChar {
     private boolean isSorted;
 
     public RecognizedChar() {
-        patterns = new ArrayList<RecognizedPattern>();
+        patterns = new ArrayList<>();
         isSorted = false;
     }
 
@@ -45,7 +44,7 @@ public class RecognizedChar {
             return;
         }
         isSorted = true;
-        Collections.sort(patterns, new PatternComparator(shouldSortDescending));
+        patterns.sort(new PatternComparator(shouldSortDescending));
     }
 
     /**

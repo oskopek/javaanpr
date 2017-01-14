@@ -18,7 +18,6 @@ package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +55,9 @@ public class PlateGraph extends Graph {
      * @return a {@link List} of {@link net.sf.javaanpr.imageanalysis.Peak}s
      */
     public List<Peak> findPeaks(int count) {
-        List<Peak> spacesTemp = new ArrayList<Peak>();
+        List<Peak> spacesTemp = new ArrayList<>();
         float diffGVal = (2 * getAverageValue()) - getMaxValue();
-        List<Float> yValuesNew = new ArrayList<Float>();
+        List<Float> yValuesNew = new ArrayList<>();
         for (Float f : yValues) {
             yValuesNew.add(f - diffGVal);
         }
@@ -85,15 +84,15 @@ public class PlateGraph extends Graph {
             spacesTemp.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(yValues.size() - 1, rightIndex)));
         }
         // we need to filter candidates that don't have the right proportions
-        List<Peak> spaces = new ArrayList<Peak>();
+        List<Peak> spaces = new ArrayList<>();
         for (Peak p : spacesTemp) {
             if (p.getDiff() < handle.getHeight()) { // space can't be too wide
                 spaces.add(p);
             }
         }
         // List<Peak> spaces contains spaces, sort them left to right
-        Collections.sort(spaces, new SpaceComparator(yValues));
-        List<Peak> chars = new ArrayList<Peak>();
+        spaces.sort(new SpaceComparator(yValues));
+        List<Peak> chars = new ArrayList<>();
         // + + +++ +++ + + +++ + + + + + + + + + + + ++ + + + ++ +++ +++ | | 1 | 2 .... | +--> 1. local minimum
         // count the char to the left of the space
         if (spaces.size() != 0) {

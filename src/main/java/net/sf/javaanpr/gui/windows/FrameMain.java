@@ -25,10 +25,8 @@ import org.jdesktop.layout.LayoutStyle;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -84,7 +82,7 @@ public class FrameMain extends JFrame {
             }
         };
         JScrollPane fileListScrollPane = new JScrollPane();
-        fileList = new JList<FileListModelEntry>();
+        fileList = new JList<>();
         JButton recognizeButton = new JButton();
         JLabel bottomLine = new JLabel();
         JMenuBar menuBar = new JMenuBar();
@@ -115,63 +113,33 @@ public class FrameMain extends JFrame {
         fileListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         fileList.setBackground(UIManager.getDefaults().getColor("Panel.background"));
         fileList.setFont(arial11);
-        fileList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                fileListValueChanged(evt);
-            }
-        });
+        fileList.addListSelectionListener(this::fileListValueChanged);
         fileListScrollPane.setViewportView(fileList);
         recognizeButton.setFont(arial11);
         recognizeButton.setText("Recognize plate");
-        recognizeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                recognizeButtonActionPerformed(evt);
-            }
-        });
+        recognizeButton.addActionListener(this::recognizeButtonActionPerformed);
         bottomLine.setFont(arial11);
         menuBar.setFont(arial11);
         imageMenu.setText("Image");
         imageMenu.setFont(arial11);
         openItem.setFont(arial11);
         openItem.setText("Load snapshots");
-        openItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                openItemActionPerformed(evt);
-            }
-        });
+        openItem.addActionListener(this::openItemActionPerformed);
         imageMenu.add(openItem);
         exitItem.setFont(arial11);
         exitItem.setText("Exit");
-        exitItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                exitItemActionPerformed(evt);
-            }
-        });
+        exitItem.addActionListener(this::exitItemActionPerformed);
         imageMenu.add(exitItem);
         menuBar.add(imageMenu);
         helpMenu.setText("Help");
         helpMenu.setFont(arial11);
         aboutItem.setFont(arial11);
         aboutItem.setText("About");
-        aboutItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                aboutItemActionPerformed(evt);
-            }
-        });
+        aboutItem.addActionListener(this::aboutItemActionPerformed);
         helpMenu.add(aboutItem);
         helpItem.setFont(arial11);
         helpItem.setText("Help");
-        helpItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                helpItemActionPerformed(evt);
-            }
-        });
+        helpItem.addActionListener(this::helpItemActionPerformed);
         helpMenu.add(helpItem);
         menuBar.add(helpMenu);
         setJMenuBar(menuBar);
@@ -243,7 +211,7 @@ public class FrameMain extends JFrame {
             return;
         }
         File[] selectedFiles = fileChooser.getSelectedFiles();
-        fileListModel = new DefaultListModel<FileListModelEntry>();
+        fileListModel = new DefaultListModel<>();
         for (File selectedFile : selectedFiles) {
             if (selectedFile.isFile()) {
                 fileListModel

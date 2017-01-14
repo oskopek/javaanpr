@@ -23,8 +23,8 @@ import net.sf.javaanpr.intelligence.parser.Parser;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.CharacterRecognizer;
 import net.sf.javaanpr.recognizer.RecognizedChar;
-import net.sf.javaanpr.recognizer.KnnPatternClassificator;
-import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
+import net.sf.javaanpr.recognizer.KnnPatternClassifier;
+import net.sf.javaanpr.recognizer.NeuralPatternClassifier;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -44,9 +44,9 @@ public class Intelligence {
     public Intelligence() throws ParserConfigurationException, SAXException, IOException {
         int classification_method = configurator.getIntProperty("intelligence_classification_method");
         if (classification_method == 0) {
-            chrRecog = new KnnPatternClassificator();
+            chrRecog = new KnnPatternClassifier();
         } else {
-            chrRecog = new NeuralPatternClassificator();
+            chrRecog = new NeuralPatternClassifier();
         }
         parser = new Parser();
     }

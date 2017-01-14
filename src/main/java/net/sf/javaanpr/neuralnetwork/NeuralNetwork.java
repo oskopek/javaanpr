@@ -49,7 +49,7 @@ public class NeuralNetwork { // TODO: finish translation
     /**
      * Holds a list of layers.
      */
-    private final List<NeuralLayer> listLayers = new ArrayList<NeuralLayer>();
+    private final List<NeuralLayer> listLayers = new ArrayList<>();
     private final Random randomGenerator;
 
     /**
@@ -58,8 +58,8 @@ public class NeuralNetwork { // TODO: finish translation
      * @param dimensions number of neurons in each layer
      */
     public NeuralNetwork(List<Integer> dimensions) {
-        for (int i = 0; i < dimensions.size(); i++) {
-            listLayers.add(new NeuralLayer(dimensions.get(i), this));
+        for (Integer dimension : dimensions) {
+            listLayers.add(new NeuralLayer(dimension, this));
         }
         randomGenerator = new Random();
         logger.info("Created neural network with " + dimensions.size() + " layers");
@@ -357,13 +357,14 @@ public class NeuralNetwork { // TODO: finish translation
                         sum += getLayer(layerIndex).getNeuron(neuronIndex).getInput(inputIndex).weight * inputs
                                 .get(neuronIndex);
                     } else { // na hornych vrstvach nasobime vahy s vystupmi nizsej vrstvy
-                        sum += getLayer(layerIndex).getNeuron(neuronIndex).getInput(inputIndex).weight * getLayer(layerIndex - 1).getNeuron(inputIndex).output;
+                        sum += getLayer(layerIndex).getNeuron(neuronIndex).getInput(inputIndex)
+                                .weight * getLayer(layerIndex - 1).getNeuron(inputIndex).output;
                     }
                 }
                 getLayer(layerIndex).getNeuron(neuronIndex).output = gainFunction(sum);
             }
         }
-        List<Double> output = new ArrayList<Double>();
+        List<Double> output = new ArrayList<>();
         for (int i = 0; i < getLayer(numberOfLayers() - 1).numberOfNeurons(); i++) {
             output.add(getLayer(numberOfLayers() - 1).getNeuron(i).output);
         }
@@ -399,7 +400,7 @@ public class NeuralNetwork { // TODO: finish translation
         private final List<IOPair> pairs;
 
         public SetOfIOPairs() {
-            pairs = new ArrayList<IOPair>();
+            pairs = new ArrayList<>();
         }
 
         public void addIOPair(List<Double> inputs, List<Double> outputs) {
@@ -419,8 +420,8 @@ public class NeuralNetwork { // TODO: finish translation
             private final List<Double> outputs;
 
             public IOPair(List<Double> inputs, List<Double> outputs) {
-                this.inputs = new ArrayList<Double>(inputs);
-                this.outputs = new ArrayList<Double>(outputs);
+                this.inputs = new ArrayList<>(inputs);
+                this.outputs = new ArrayList<>(outputs);
             }
         }
     }
@@ -443,7 +444,7 @@ public class NeuralNetwork { // TODO: finish translation
         private double output;
         private final int index;
         private final NeuralLayer neuralLayer;
-        private final List<NeuralInput> listInputs = new ArrayList<NeuralInput>();
+        private final List<NeuralInput> listInputs = new ArrayList<>();
 
         private Neuron(double threshold, NeuralLayer neuralLayer) {
             this.threshold = threshold;
@@ -480,7 +481,7 @@ public class NeuralNetwork { // TODO: finish translation
     private final class NeuralLayer {
         private final int index;
         private final NeuralNetwork neuralNetwork;
-        private final List<Neuron> listNeurons = new ArrayList<Neuron>();
+        private final List<Neuron> listNeurons = new ArrayList<>();
 
         private NeuralLayer(NeuralNetwork neuralNetwork) {
             this.neuralNetwork = neuralNetwork;
@@ -558,12 +559,12 @@ public class NeuralNetwork { // TODO: finish translation
             weights = new ArrayList<>();
             logger.debug("Init for threshold gradient: {} ", this);
             for (int layerIndex = 0; layerIndex < neuralNetwork.numberOfLayers(); layerIndex++) {
-                thresholds.add(new ArrayList<Double>());
+                thresholds.add(new ArrayList<>());
                 weights.add(new ArrayList<>());
                 for (int neuronIndex = 0; neuronIndex < neuralNetwork.getLayer(layerIndex).numberOfNeurons();
                         neuronIndex++) {
                     thresholds.get(layerIndex).add(0.0);
-                    weights.get(layerIndex).add(new ArrayList<Double>());
+                    weights.get(layerIndex).add(new ArrayList<>());
                     for (int inputIndex = 0; inputIndex < neuralNetwork.getLayer(layerIndex).getNeuron(neuronIndex)
                             .numberOfInputs(); inputIndex++) {
                         weights.get(layerIndex).get(neuronIndex).add(0.0);

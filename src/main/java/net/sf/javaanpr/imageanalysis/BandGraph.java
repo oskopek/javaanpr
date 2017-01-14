@@ -18,7 +18,6 @@ package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
 
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class BandGraph extends Graph {
     }
 
     public List<Peak> findPeaks(int count) {
-        List<Peak> outPeaks = new ArrayList<Peak>();
+        List<Peak> outPeaks = new ArrayList<>();
         for (int c = 0; c < count; c++) {
             float maxValue = 0.0f;
             int maxIndex = 0;
@@ -66,14 +65,14 @@ public class BandGraph extends Graph {
             outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(yValues.size() - 1, rightIndex)));
         }
         // filter the candidates that don't correspond with plate proportions
-        List<Peak> outPeaksFiltered = new ArrayList<Peak>();
+        List<Peak> outPeaksFiltered = new ArrayList<>();
         for (Peak p : outPeaks) {
             if ((p.getDiff() > (2 * handle.getHeight())) // plate too thin
                     && (p.getDiff() < (15 * handle.getHeight()))) { // plate too wide
                 outPeaksFiltered.add(p);
             }
         }
-        Collections.sort(outPeaksFiltered, new PeakComparator(yValues));
+        outPeaksFiltered.sort(new PeakComparator(yValues));
         super.peaks = outPeaksFiltered;
         return outPeaksFiltered;
     }

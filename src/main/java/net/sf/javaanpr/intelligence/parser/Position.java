@@ -10,8 +10,8 @@ public class Position {
 
     public boolean isAllowed(char chr) {
         boolean ret = false;
-        for (int i = 0; i < allowedChars.length; i++) {
-            if (allowedChars[i] == chr) {
+        for (char allowedChar : allowedChars) {
+            if (allowedChar == chr) {
                 ret = true;
             }
         }

@@ -24,7 +24,7 @@ import java.util.List;
 public class Graph {
 
     public List<Peak> peaks = null;
-    public List<Float> yValues = new ArrayList<Float>();
+    public List<Float> yValues = new ArrayList<>();
 
     // statistical information
     private boolean actualAverageValue = false; // are values up-to-date?
@@ -258,7 +258,7 @@ public class Graph {
 
     public void rankFilter(int size) {
         int halfSize = size / 2;
-        List<Float> clone = new ArrayList<Float>(yValues);
+        List<Float> clone = new ArrayList<>(yValues);
         for (int i = halfSize; i < (yValues.size() - halfSize); i++) {
             float sum = 0;
             for (int ii = i - halfSize; ii < (i + halfSize); ii++) {
@@ -324,7 +324,7 @@ public class Graph {
         }
 
         public List<Float> distribute(List<Float> peaks) {
-            List<Float> distributedPeaks = new ArrayList<Float>();
+            List<Float> distributedPeaks = new ArrayList<>();
             for (int i = 0; i < peaks.size(); i++) {
                 if ((i < leftMargin) || (i > (peaks.size() - rightMargin))) {
                     distributedPeaks.add(0f);

@@ -89,8 +89,9 @@ public class PixelMap {
             return false;
         }
         // a boundary point must have at least one neighbor point that's white
-        return !getPointValue(x - 1, y - 1) || !getPointValue(x - 1, y + 1) || !getPointValue(x + 1, y - 1) || !getPointValue(x + 1, y + 1) || !getPointValue(x, y + 1)
-                || !getPointValue(x, y - 1) || !getPointValue(x + 1, y) || !getPointValue(x - 1, y);
+        return !getPointValue(x - 1, y - 1) || !getPointValue(x - 1, y + 1) || !getPointValue(x + 1, y - 1)
+                || !getPointValue(x + 1, y + 1) || !getPointValue(x, y + 1) || !getPointValue(x, y - 1)
+                || !getPointValue(x + 1, y) || !getPointValue(x - 1, y);
     }
 
     private int n(int x, int y) { // number of black points in the neighborhood
@@ -187,12 +188,14 @@ public class PixelMap {
 
     private boolean step1passed(int x, int y) {
         int n = n(x, y);
-        return (((2 <= n) && (n <= 6)) && (t(x, y) == 1) && (!p(2, x, y) || !p(4, x, y) || !p(6, x, y)) && (!p(4, x, y) || !p(6, x, y) || !p(8, x, y)));
+        return (((2 <= n) && (n <= 6)) && (t(x, y) == 1) && (!p(2, x, y) || !p(4, x, y) || !p(6, x, y))
+                && (!p(4, x, y) || !p(6, x, y) || !p(8, x, y)));
     }
 
     private boolean step2passed(int x, int y) {
         int n = n(x, y);
-        return (((2 <= n) && (n <= 6)) && (t(x, y) == 1) && (!p(2, x, y) || !p(4, x, y) || !p(8, x, y)) && (!p(2, x, y) || !p(6, x, y) || !p(8, x, y)));
+        return (((2 <= n) && (n <= 6)) && (t(x, y) == 1) && (!p(2, x, y) || !p(4, x, y) || !p(8, x, y))
+                && (!p(2, x, y) || !p(6, x, y) || !p(8, x, y)));
     }
 
     private void findBoundaryPoints(PointSet set) {

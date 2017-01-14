@@ -18,7 +18,6 @@ package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
 
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class CarSnapshotGraph extends Graph {
             Configurator.getConfigurator().getDoubleProperty("carsnapshotgraph_peakDiffMultiplicationConstant"); // 0.1
 
     public List<Peak> findPeaks(int count) {
-        List<Peak> outPeaks = new ArrayList<Peak>();
+        List<Peak> outPeaks = new ArrayList<>();
         for (int c = 0; c < count; c++) {
             float maxValue = 0.0f;
             int maxIndex = 0;
@@ -53,7 +52,7 @@ public class CarSnapshotGraph extends Graph {
             rightIndex += CarSnapshotGraph.peakDiffMultiplicationConstant * diff;
             outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(yValues.size() - 1, rightIndex)));
         }
-        Collections.sort(outPeaks, new PeakComparator(yValues));
+        outPeaks.sort(new PeakComparator(yValues));
         super.peaks = outPeaks;
         return outPeaks;
     }

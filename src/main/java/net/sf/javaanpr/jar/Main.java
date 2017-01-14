@@ -23,7 +23,7 @@ import net.sf.javaanpr.gui.windows.FrameMain;
 import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.imageanalysis.Char;
 import net.sf.javaanpr.intelligence.Intelligence;
-import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
+import net.sf.javaanpr.recognizer.NeuralPatternClassifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,7 +126,7 @@ public final class Main {
         } catch (Exception e) {
             throw new IOException("Can't find the path specified.", e);
         }
-        NeuralPatternClassificator npc = new NeuralPatternClassificator(true);
+        NeuralPatternClassifier npc = new NeuralPatternClassifier(true);
         npc.getNetwork().saveToXml(destinationFile);
     }
 

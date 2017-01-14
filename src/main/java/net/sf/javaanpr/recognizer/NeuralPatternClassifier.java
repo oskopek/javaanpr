@@ -27,9 +27,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NeuralPatternClassificator extends CharacterRecognizer {
+public class NeuralPatternClassifier extends CharacterRecognizer {
 
-    private static final transient Logger logger = LoggerFactory.getLogger(NeuralPatternClassificator.class);
+    private static final transient Logger logger = LoggerFactory.getLogger(NeuralPatternClassifier.class);
     private static final int normalize_x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
     private static final int normalize_y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
     /**
@@ -40,17 +40,17 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
     /**
      * Do not learn network, but load it from file (default).
      */
-    public NeuralPatternClassificator() {
+    public NeuralPatternClassifier() {
         this(false);
     }
 
-    public NeuralPatternClassificator(boolean learn) {
+    public NeuralPatternClassifier(boolean learn) {
         Configurator configurator = Configurator.getConfigurator();
-        List<Integer> dimensions = new ArrayList<Integer>();
+        List<Integer> dimensions = new ArrayList<>();
         // determine size of input layer according to chosen feature extraction method
         int inputLayerSize;
         if (configurator.getIntProperty("char_featuresExtractionMethod") == 0) {
-            inputLayerSize = NeuralPatternClassificator.normalize_x * NeuralPatternClassificator.normalize_y;
+            inputLayerSize = NeuralPatternClassifier.normalize_x * NeuralPatternClassifier.normalize_y;
         } else {
             inputLayerSize = CharacterRecognizer.FEATURES.length * 4;
         }
@@ -104,9 +104,9 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
      */
     public NeuralNetwork.SetOfIOPairs.IOPair createNewPair(char chr, Char imgChar) {
         List<Double> vectorInput = imgChar.extractFeatures();
-        List<Double> vectorOutput = new ArrayList<Double>();
-        for (int i = 0; i < ALPHABET.length; i++) {
-            if (chr == ALPHABET[i]) {
+        List<Double> vectorOutput = new ArrayList<>();
+        for (char aALPHABET : ALPHABET) {
+            if (chr == aALPHABET) {
                 vectorOutput.add(1.0);
             } else {
                 vectorOutput.add(0.0);

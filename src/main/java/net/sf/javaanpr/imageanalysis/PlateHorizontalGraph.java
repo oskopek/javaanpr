@@ -47,7 +47,7 @@ public class PlateHorizontalGraph extends Graph {
         while ((derivation(b - 4, b) < (maxVal * 0.2)) && (b > (a + 2))) {
             b--;
         }
-        List<Peak> outPeaks = new ArrayList<Peak>();
+        List<Peak> outPeaks = new ArrayList<>();
         outPeaks.add(new Peak(a, b));
         super.peaks = outPeaks;
         return outPeaks;
@@ -63,7 +63,7 @@ public class PlateHorizontalGraph extends Graph {
         while (yValues.get(b) < average) {
             b--;
         }
-        List<Peak> outPeaks = new ArrayList<Peak>();
+        List<Peak> outPeaks = new ArrayList<>();
         a = Math.max(a - 5, 0);
         b = Math.min(b + 5, yValues.size());
         outPeaks.add(new Peak(a, b));

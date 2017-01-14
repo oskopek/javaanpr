@@ -73,7 +73,7 @@ public final class TestStatistics {
         private final List<TestRecord> records;
 
         private TestReport() {
-            records = new ArrayList<TestRecord>();
+            records = new ArrayList<>();
         }
 
         private void addRecord(TestRecord testRecord) {

@@ -103,7 +103,7 @@ public class Char extends Photo {
         if (directory.endsWith("/")) {
             directory = directory.substring(0, directory.length() - 1);
         }
-        List<String> filenames = new ArrayList<String>();
+        List<String> filenames = new ArrayList<>();
         for (int i = 0; i < alphaString.length(); i++) {
             String s = directory + File.separator + alphaString.charAt(i) + suffix + ".jpg";
             if (Configurator.getConfigurator().getResourceAsStream(s) != null) {
@@ -262,7 +262,7 @@ public class Char extends Photo {
                 }
             }
         }
-        List<Double> outputList = new ArrayList<Double>();
+        List<Double> outputList = new ArrayList<>();
         for (Double value : output) {
             outputList.add(value);
         }
@@ -270,7 +270,7 @@ public class Char extends Photo {
     }
 
     public List<Double> extractMapFeatures() {
-        List<Double> vectorInput = new ArrayList<Double>();
+        List<Double> vectorInput = new ArrayList<>();
         for (int y = 0; y < getHeight(); y++) {
             for (int x = 0; x < getWidth(); x++) {
                 vectorInput.add((double) getBrightness(x, y));

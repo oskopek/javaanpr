@@ -26,12 +26,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KnnPatternClassificator extends CharacterRecognizer {
+public class KnnPatternClassifier extends CharacterRecognizer {
 
-    private static final transient Logger logger = LoggerFactory.getLogger(KnnPatternClassificator.class);
+    private static final transient Logger logger = LoggerFactory.getLogger(KnnPatternClassifier.class);
     private final List<List<Double>> learnLists;
 
-    public KnnPatternClassificator() {
+    public KnnPatternClassifier() {
         String path = Configurator.getConfigurator().getPathProperty("char_learnAlphabetPath");
         learnLists = new ArrayList<>(36);
         List<String> filenames = Char.getAlphabetList(path);
@@ -46,8 +46,8 @@ public class KnnPatternClassificator extends CharacterRecognizer {
             learnLists.add(imgChar.extractFeatures());
         }
         // check vector elements
-        for (int i = 0; i < learnLists.size(); i++) {
-            if (learnLists.get(i) == null) {
+        for (List<Double> learnList : learnLists) {
+            if (learnList == null) {
                 logger.warn("Alphabet in {} is not complete", path);
             }
         }

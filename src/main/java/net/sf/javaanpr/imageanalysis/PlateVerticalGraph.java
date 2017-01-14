@@ -18,7 +18,6 @@ package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
 
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class PlateVerticalGraph extends Graph {
         for (int i = 0; i < yValues.size(); i++) {
             yValues.set(i, yValues.get(i) - getMinValue());
         }
-        List<Peak> outPeaks = new ArrayList<Peak>();
+        List<Peak> outPeaks = new ArrayList<>();
         for (int c = 0; c < count; c++) {
             float maxValue = 0.0f;
             int maxIndex = 0;
@@ -52,7 +51,7 @@ public class PlateVerticalGraph extends Graph {
             int rightIndex = indexOfRightPeakRel(maxIndex, PlateVerticalGraph.peakFootConstant);
             outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(yValues.size() - 1, rightIndex)));
         }
-        Collections.sort(outPeaks, new PeakComparator(yValues));
+        outPeaks.sort(new PeakComparator(yValues));
         super.peaks = outPeaks;
         return outPeaks;
     }

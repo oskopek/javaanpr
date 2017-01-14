@@ -62,13 +62,12 @@ public class Plate extends Photo implements Cloneable {
     }
 
     public List<Char> getChars() {
-        List<Char> out = new ArrayList<Char>();
+        List<Char> out = new ArrayList<>();
         List<Peak> peaks = computeGraph();
-        for (int i = 0; i < peaks.size(); i++) {
+        for (Peak p : peaks) {
             // Cut from the original image of the plate and save to a vector.
             // ATTENTION: Cutting from original,
             // we have to apply an inverse transformation to the coordinates calculated from imageCopy
-            Peak p = peaks.get(i);
             if (p.getDiff() <= 0) {
                 continue;
             }
