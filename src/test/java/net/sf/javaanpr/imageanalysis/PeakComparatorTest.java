@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Vector;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,7 +34,7 @@ public class PeakComparatorTest {
 
     @Before
     public void setup() {
-        Vector<Float> yValues = new Vector<Float>(Arrays.asList(new Float[] {1.0f, 2.0f}));
+        List<Float> yValues = Arrays.asList(1.0f, 2.0f);
         peakComparator = new PeakComparator(yValues);
         peak1 = mock(Peak.class);
         peak2 = mock(Peak.class);

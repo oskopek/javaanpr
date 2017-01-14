@@ -23,7 +23,7 @@ import net.sf.javaanpr.gui.windows.FrameMain;
 import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.imageanalysis.Char;
 import net.sf.javaanpr.intelligence.Intelligence;
-import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
+import net.sf.javaanpr.recognizer.NeuralPatternClassifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +61,7 @@ public final class Main {
     /**
      * The help message.
      */
-    public static String helpText = "-----------------------------------------------------------\n"
+    public static final String helpText = "-----------------------------------------------------------\n"
             + "Automatic number plate recognition system\n" + "Copyright 2013 JavaANPR contributors\n"
             + "Copyright 2006 Ondrej Martinsky\n" + "\n"
             + "Licensed under the Educational Community License (ECL-2.0),\n" + "\n"
@@ -120,11 +120,13 @@ public final class Main {
     public static void learnAlphabet(String destinationFile) throws Exception {
         File f = new File(destinationFile);
         try {
-            f.createNewFile();
+            if (!f.createNewFile()) {
+                throw new IOException("File already exists.");
+            }
         } catch (Exception e) {
-            throw new IOException("Can't find the path specified");
+            throw new IOException("Can't find the path specified.", e);
         }
-        NeuralPatternClassificator npc = new NeuralPatternClassificator(true);
+        NeuralPatternClassifier npc = new NeuralPatternClassifier(true);
         npc.getNetwork().saveToXml(destinationFile);
     }
 

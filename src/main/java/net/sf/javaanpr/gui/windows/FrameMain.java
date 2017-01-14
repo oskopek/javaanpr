@@ -25,10 +25,8 @@ import org.jdesktop.layout.LayoutStyle;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,23 +37,13 @@ public class FrameMain extends JFrame {
 
     private CarSnapshot car;
     private BufferedImage panelCarContent;
-    private JFileChooser fileChooser;
+    private final JFileChooser fileChooser;
     private DefaultListModel<FileListModelEntry> fileListModel;
     private int selectedIndex = -1;
 
-    private JMenuItem aboutItem;
-    private JLabel bottomLine;
-    private JMenuItem exitItem;
     private JList<FileListModelEntry> fileList;
-    private JScrollPane fileListScrollPane;
-    private JMenuItem helpItem;
-    private JMenu helpMenu;
-    private JMenu imageMenu;
-    private JMenuBar menuBar;
-    private JMenuItem openItem;
     private JPanel panelCar;
     private JLabel recognitionLabel;
-    private JButton recognizeButton;
 
     /**
      * Creates new form MainFrame.
@@ -93,17 +81,17 @@ public class FrameMain extends JFrame {
                 g.drawImage(panelCarContent, 0, 0, null);
             }
         };
-        fileListScrollPane = new JScrollPane();
-        fileList = new JList<FileListModelEntry>();
-        recognizeButton = new JButton();
-        bottomLine = new JLabel();
-        menuBar = new JMenuBar();
-        imageMenu = new JMenu();
-        openItem = new JMenuItem();
-        exitItem = new JMenuItem();
-        helpMenu = new JMenu();
-        aboutItem = new JMenuItem();
-        helpItem = new JMenuItem();
+        JScrollPane fileListScrollPane = new JScrollPane();
+        fileList = new JList<>();
+        JButton recognizeButton = new JButton();
+        JLabel bottomLine = new JLabel();
+        JMenuBar menuBar = new JMenuBar();
+        JMenu imageMenu = new JMenu();
+        JMenuItem openItem = new JMenuItem();
+        JMenuItem exitItem = new JMenuItem();
+        JMenu helpMenu = new JMenu();
+        JMenuItem aboutItem = new JMenuItem();
+        JMenuItem helpItem = new JMenuItem();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("JavaANPR");
         setResizable(false);
@@ -125,63 +113,33 @@ public class FrameMain extends JFrame {
         fileListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         fileList.setBackground(UIManager.getDefaults().getColor("Panel.background"));
         fileList.setFont(arial11);
-        fileList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent evt) {
-                fileListValueChanged(evt);
-            }
-        });
+        fileList.addListSelectionListener(this::fileListValueChanged);
         fileListScrollPane.setViewportView(fileList);
         recognizeButton.setFont(arial11);
         recognizeButton.setText("Recognize plate");
-        recognizeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                recognizeButtonActionPerformed(evt);
-            }
-        });
+        recognizeButton.addActionListener(this::recognizeButtonActionPerformed);
         bottomLine.setFont(arial11);
         menuBar.setFont(arial11);
         imageMenu.setText("Image");
         imageMenu.setFont(arial11);
         openItem.setFont(arial11);
         openItem.setText("Load snapshots");
-        openItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                openItemActionPerformed(evt);
-            }
-        });
+        openItem.addActionListener(this::openItemActionPerformed);
         imageMenu.add(openItem);
         exitItem.setFont(arial11);
         exitItem.setText("Exit");
-        exitItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                exitItemActionPerformed(evt);
-            }
-        });
+        exitItem.addActionListener(this::exitItemActionPerformed);
         imageMenu.add(exitItem);
         menuBar.add(imageMenu);
         helpMenu.setText("Help");
         helpMenu.setFont(arial11);
         aboutItem.setFont(arial11);
         aboutItem.setText("About");
-        aboutItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                aboutItemActionPerformed(evt);
-            }
-        });
+        aboutItem.addActionListener(this::aboutItemActionPerformed);
         helpMenu.add(aboutItem);
         helpItem.setFont(arial11);
         helpItem.setText("Help");
-        helpItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                helpItemActionPerformed(evt);
-            }
-        });
+        helpItem.addActionListener(this::helpItemActionPerformed);
         helpMenu.add(helpItem);
         menuBar.add(helpMenu);
         setJMenuBar(menuBar);
@@ -214,7 +172,7 @@ public class FrameMain extends JFrame {
 
     private void helpItemActionPerformed(ActionEvent evt) {
         try {
-            new FrameHelp(FrameHelp.MODE.SHOW_HELP);
+            new FrameHelp(FrameHelp.FrameHelpContent.SHOW_HELP);
         } catch (IOException e) {
             e.printStackTrace(); // TODO exception
         }
@@ -222,7 +180,7 @@ public class FrameMain extends JFrame {
 
     private void aboutItemActionPerformed(ActionEvent evt) {
         try {
-            new FrameHelp(FrameHelp.MODE.SHOW_ABOUT);
+            new FrameHelp(FrameHelp.FrameHelpContent.SHOW_ABOUT);
         } catch (IOException e) {
             e.printStackTrace(); // TODO exception
         }
@@ -235,9 +193,9 @@ public class FrameMain extends JFrame {
     private void fileListValueChanged(ListSelectionEvent evt) {
         int selectedNow = fileList.getSelectedIndex();
         if ((selectedNow != -1)) {
-            recognitionLabel.setText(fileListModel.elementAt(selectedNow).recognizedPlate);
+            recognitionLabel.setText(fileListModel.get(selectedNow).getRecognizedPlate());
             selectedIndex = selectedNow;
-            String path = fileListModel.getElementAt(selectedNow).fullPath;
+            String path = fileListModel.getElementAt(selectedNow).getFullPath();
             new LoadImageThread(this, path).start();
         }
     }
@@ -253,16 +211,19 @@ public class FrameMain extends JFrame {
             return;
         }
         File[] selectedFiles = fileChooser.getSelectedFiles();
-        fileListModel = new DefaultListModel<FileListModelEntry>();
+        fileListModel = new DefaultListModel<>();
         for (File selectedFile : selectedFiles) {
             if (selectedFile.isFile()) {
                 fileListModel
                         .addElement(new FileListModelEntry(selectedFile.getName(), selectedFile.getAbsolutePath()));
             } else if (selectedFile.isDirectory()) {
-                for (String fileName : selectedFile.list()) {
-                    if (ImageFileFilter.accept(fileName)) {
-                        fileListModel
-                                .addElement(new FileListModelEntry(fileName, selectedFile + File.separator + fileName));
+                String[] fileNames = selectedFile.list();
+                if (fileNames != null) {
+                    for (String fileName : fileNames) {
+                        if (ImageFileFilter.accept(fileName)) {
+                            fileListModel.addElement(new FileListModelEntry(fileName,
+                                    selectedFile + File.separator + fileName));
+                        }
                     }
                 }
             }
@@ -284,20 +245,17 @@ public class FrameMain extends JFrame {
 
         @Override
         public void run() {
-            String recognizedText = "";
+            String recognizedText;
             parentFrame.recognitionLabel.setText("processing...");
             int index = parentFrame.selectedIndex;
             try {
                 recognizedText = Main.systemLogic.recognize(parentFrame.car, false);
-            } catch (IllegalArgumentException exception) {
-                setFailedAndPrintStackTrace(exception);
-                return;
-            } catch (IOException exception) {
+            } catch (IllegalArgumentException | IOException exception) {
                 setFailedAndPrintStackTrace(exception);
                 return;
             }
             parentFrame.recognitionLabel.setText(recognizedText);
-            parentFrame.fileListModel.elementAt(index).recognizedPlate = recognizedText;
+            parentFrame.fileListModel.get(index).setRecognizedPlate(recognizedText);
         }
     }
 

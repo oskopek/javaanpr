@@ -23,17 +23,19 @@ import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CarSnapshot extends Photo {
 
-    private static int distributor_margins =
+    private static final int distributor_margins =
             Configurator.getConfigurator().getIntProperty("carsnapshot_distributormargins");
-    public static Graph.ProbabilityDistributor distributor =
+    public static final Graph.ProbabilityDistributor distributor =
             new Graph.ProbabilityDistributor(0, 0, CarSnapshot.distributor_margins, CarSnapshot.distributor_margins);
-    private static int carsnapshot_graphrankfilter =
+    private static final int carsnapshot_graphrankfilter =
             Configurator.getConfigurator().getIntProperty("carsnapshot_graphrankfilter");
-    private static int numberOfCandidates = Configurator.getConfigurator().getIntProperty("intelligence_numberOfBands");
+    private static final int numberOfCandidates =
+            Configurator.getConfigurator().getIntProperty("intelligence_numberOfBands");
     private CarSnapshotGraph graphHandle = null;
 
     public CarSnapshot(String filename) throws IOException {
@@ -54,7 +56,7 @@ public class CarSnapshot extends Photo {
         return graphHandle.renderVertically(100, getHeight());
     }
 
-    private Vector<Peak> computeGraph() {
+    private List<Peak> computeGraph() {
         if (graphHandle != null) {
             return graphHandle.peaks;
         }
@@ -73,14 +75,13 @@ public class CarSnapshot extends Photo {
      *
      * @return bands
      */
-    public Vector<Band> getBands() {
-        Vector<Band> out = new Vector<Band>();
-        Vector<Peak> peaks = computeGraph();
-        for (int i = 0; i < peaks.size(); i++) {
+    public List<Band> getBands() {
+        List<Band> out = new ArrayList<>();
+        List<Peak> peaks = computeGraph();
+        for (Peak p : peaks) {
             // Cut from the original image of the plate and save to a vector.
             // ATTENTION: Cutting from original,
             // we have to apply an inverse transformation to the coordinates calculated from imageCopy
-            Peak p = peaks.elementAt(i);
             out.add(new Band(getImage().getSubimage(0, (p.getLeft()), getImage().getWidth(), (p.getDiff()))));
         }
         return out;
@@ -93,7 +94,7 @@ public class CarSnapshot extends Photo {
     }
 
     public CarSnapshotGraph histogram(BufferedImage bi) {
-        CarSnapshotGraph graph = new CarSnapshotGraph(this);
+        CarSnapshotGraph graph = new CarSnapshotGraph();
         for (int y = 0; y < bi.getHeight(); y++) {
             float counter = 0;
             for (int x = 0; x < bi.getWidth(); x++) {

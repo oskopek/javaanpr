@@ -29,8 +29,8 @@ import java.io.Writer;
 
 public class ReportGenerator {
 
-    private String directory;
-    private StringBuilder output; // TODO refactor into a form
+    private final String directory;
+    private final StringBuilder output; // TODO refactor into a form
 
     public ReportGenerator(String directory) throws IOException {
         this.directory = directory;
@@ -45,7 +45,7 @@ public class ReportGenerator {
     }
 
     public void insertText(String text) {
-        output.append(text + "\n");
+        output.append(text).append("\n");
     }
 
     public void insertImage(BufferedImage image, String cls, int w, int h)
@@ -53,10 +53,10 @@ public class ReportGenerator {
         String imageName = String.valueOf(image.hashCode()) + ".jpg";
         saveImage(image, imageName);
         if ((w != 0) && (h != 0)) {
-            output.append("<img src='" + imageName + "' alt='' width='" + w + "' height='" + h + "' class='" + cls
-                    + "'>\n");
+            output.append("<img src='").append(imageName).append("' alt='' width='").append(w).append("' height='")
+                    .append(h).append("' class='").append(cls).append("'>\n");
         } else {
-            output.append("<img src='" + imageName + "' alt='' class='" + cls + "'>\n");
+            output.append("<img src='").append(imageName).append("' alt='' class='").append(cls).append("'>\n");
         }
     }
 
@@ -74,7 +74,7 @@ public class ReportGenerator {
 
     public void saveStreamToFile(InputStream inStream, File out) throws IOException {
         FileOutputStream outStream = new FileOutputStream(out);
-        int read = 0;
+        int read;
         byte[] bytes = new byte[1024];
         while ((read = inStream.read(bytes)) != -1) {
             outStream.write(bytes, 0, read);
@@ -84,7 +84,7 @@ public class ReportGenerator {
     }
 
     public void saveImage(BufferedImage bi, String filename) throws IOException, IllegalArgumentException {
-        String type = new String(filename.substring(filename.lastIndexOf('.') + 1, filename.length()).toLowerCase());
+        String type = filename.substring(filename.lastIndexOf('.') + 1, filename.length()).toLowerCase();
         if (!type.equals("bmp") && !type.equals("jpg") && !type.equals("jpeg") && !type.equals("png")) {
             throw new IllegalArgumentException("Unsupported file format");
         }

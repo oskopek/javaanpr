@@ -18,8 +18,8 @@ package net.sf.javaanpr.imageanalysis;
 
 import net.sf.javaanpr.configurator.Configurator;
 
-import java.util.Collections;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Processing of the horizontal projection of the detected region of the plate.
@@ -29,29 +29,29 @@ import java.util.Vector;
  */
 public class BandGraph extends Graph {
 
-    private static double peakFootConstant =
+    private static final double peakFootConstant =
             Configurator.getConfigurator().getDoubleProperty("bandgraph_peakfootconstant"); // 0.75
-    private static double peakDiffMultiplicationConstant =
+    private static final double peakDiffMultiplicationConstant =
             Configurator.getConfigurator().getDoubleProperty("bandgraph_peakDiffMultiplicationConstant"); // 0.2
 
     /**
      * The Band to which this Graph is related.
      */
-    private Band handle;
+    private final Band handle;
 
     public BandGraph(Band handle) {
         this.handle = handle;
     }
 
-    public Vector<Peak> findPeaks(int count) {
-        Vector<Peak> outPeaks = new Vector<Peak>();
+    public List<Peak> findPeaks(int count) {
+        List<Peak> outPeaks = new ArrayList<>();
         for (int c = 0; c < count; c++) {
             float maxValue = 0.0f;
             int maxIndex = 0;
             for (int i = 0; i < yValues.size(); i++) { // left to right
                 if (allowedInterval(outPeaks, i)) {
-                    if (yValues.elementAt(i) >= maxValue) {
-                        maxValue = yValues.elementAt(i);
+                    if (yValues.get(i) >= maxValue) {
+                        maxValue = yValues.get(i);
                         maxIndex = i;
                     }
                 }
@@ -65,14 +65,14 @@ public class BandGraph extends Graph {
             outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(yValues.size() - 1, rightIndex)));
         }
         // filter the candidates that don't correspond with plate proportions
-        Vector<Peak> outPeaksFiltered = new Vector<Peak>();
+        List<Peak> outPeaksFiltered = new ArrayList<>();
         for (Peak p : outPeaks) {
             if ((p.getDiff() > (2 * handle.getHeight())) // plate too thin
                     && (p.getDiff() < (15 * handle.getHeight()))) { // plate too wide
                 outPeaksFiltered.add(p);
             }
         }
-        Collections.sort(outPeaksFiltered, new PeakComparator(yValues));
+        outPeaksFiltered.sort(new PeakComparator(yValues));
         super.peaks = outPeaksFiltered;
         return outPeaksFiltered;
     }
@@ -81,7 +81,7 @@ public class BandGraph extends Graph {
         int index = peak;
         for (int i = peak; i >= 0; i--) {
             index = i;
-            if (yValues.elementAt(index) < peakFootConstantAbs) {
+            if (yValues.get(index) < peakFootConstantAbs) {
                 break;
             }
         }
@@ -92,7 +92,7 @@ public class BandGraph extends Graph {
         int index = peak;
         for (int i = peak; i < yValues.size(); i++) {
             index = i;
-            if (yValues.elementAt(index) < peakFootConstantAbs) {
+            if (yValues.get(index) < peakFootConstantAbs) {
                 break;
             }
         }

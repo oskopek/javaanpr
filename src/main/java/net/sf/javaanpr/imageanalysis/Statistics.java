@@ -16,48 +16,38 @@
 
 package net.sf.javaanpr.imageanalysis;
 
-import java.awt.image.BufferedImage;
-
 public class Statistics {
 
-    private float maximum;
-    private float minimum;
-    private float average;
-
-    /**
-     * {@code dispersion = average of squares - square of average}.
-     */
-    private float dispersion;
-
-    public Statistics(BufferedImage bi) {
-        this(new Photo(bi));
-    }
+    private final float maximum;
+    private final float minimum;
+    private final float average;
 
     public Statistics(Photo photo) {
         float sum = 0;
-        float sum2 = 0;
         int w = photo.getWidth();
         int h = photo.getHeight();
+        float maximum = 0;
+        float minimum = 0;
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
                 float pixelValue = photo.getBrightness(x, y);
-                this.maximum = Math.max(pixelValue, this.maximum);
-                this.minimum = Math.min(pixelValue, this.minimum);
+                maximum = Math.max(pixelValue, maximum);
+                minimum = Math.min(pixelValue, minimum);
                 sum += pixelValue;
-                sum2 += (pixelValue * pixelValue);
             }
         }
         int count = (w * h);
-        this.average = sum / count;
-        this.dispersion = (sum2 / count) - (this.average * this.average);
+        this.maximum = maximum;
+        this.minimum = minimum;
+        average = sum / count;
     }
 
     public float thresholdBrightness(float value, float coef) {
         float out;
-        if (value > this.average) {
-            out = coef + (((1 - coef) * (value - this.average)) / (this.maximum - this.average));
+        if (value > average) {
+            out = coef + (((1 - coef) * (value - average)) / (maximum - average));
         } else {
-            out = ((1 - coef) * (value - this.minimum)) / (this.average - this.minimum);
+            out = ((1 - coef) * (value - minimum)) / (average - minimum);
         }
         return out;
     }

@@ -24,12 +24,12 @@ public class PositionInPlate { // TODO refactor
     /**
      * Left X coordinate.
      */
-    public int x1;
+    public final int x1;
 
     /**
      * Right X coordinate.
      */
-    public int x2;
+    public final int x2;
 
     public PositionInPlate(int x1, int x2) {
         this.x1 = x1;

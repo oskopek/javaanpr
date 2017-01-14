@@ -14,9 +14,11 @@
  * permissions and limitations under the License.
  */
 
-package net.sf.javaanpr.intelligence;
+package net.sf.javaanpr.intelligence.parser;
 
 import net.sf.javaanpr.configurator.Configurator;
+import net.sf.javaanpr.intelligence.RecognizedPlate;
+import net.sf.javaanpr.intelligence.SyntaxAnalysisMode;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.RecognizedChar;
 import net.sf.javaanpr.recognizer.RecognizedPattern;
@@ -33,12 +35,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Parser {
 
     private static final transient Logger logger = LoggerFactory.getLogger(Parser.class);
-    private Vector<PlateForm> plateForms;
+    private List<PlateForm> plateForms;
 
     /**
      * Creates a new instance of Parser.
@@ -48,7 +51,7 @@ public class Parser {
      * @throws IOException an IOException
      */
     public Parser() throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
-        this.plateForms = new Vector<PlateForm>();
+        plateForms = new ArrayList<>();
         String fileName = Configurator.getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
         if (fileName == null || fileName.isEmpty()) {
             throw new IOException("Failed to get syntax description file from Configurator");
@@ -58,14 +61,8 @@ public class Parser {
             throw new IOException("Couldn't find parser syntax description file");
         }
         try {
-            this.plateForms = this.loadFromXml(inStream);
-        } catch (ParserConfigurationException e) { // TODO fix
-            logger.error("Failed to load from parser syntax description file");
-            throw e;
-        } catch (SAXException e) {
-            logger.error("Failed to load from parser syntax description file");
-            throw e;
-        } catch (IOException e) {
+            plateForms = loadFromXml(inStream);
+        } catch (ParserConfigurationException | SAXException | IOException e) { // TODO fix
             logger.error("Failed to load from parser syntax description file");
             throw e;
         }
@@ -80,22 +77,22 @@ public class Parser {
      * @deprecated use {@link Parser#loadFromXml(InputStream)}
      */
     @Deprecated
-    public Vector<PlateForm> loadFromXml(String fileName)
+    public List<PlateForm> loadFromXml(String fileName)
             throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
         InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
-        return this.loadFromXml(inStream);
+        return loadFromXml(inStream);
     }
 
     /**
      * @param inStream input stream from the xml file
-     * @return {@link Vector} of loaded {@link PlateForm}s
+     * @return {@link List} of loaded {@link PlateForm}s
      * @throws ParserConfigurationException a ParserConfigurationException
      * @throws SAXException a SAXException
      * @throws IOException an IOException
      */
-    public Vector<PlateForm> loadFromXml(InputStream inStream)
+    public List<PlateForm> loadFromXml(InputStream inStream)
             throws ParserConfigurationException, SAXException, IOException {  // TODO javadoc
-        Vector<PlateForm> plateForms = new Vector<PlateForm>();
+        List<PlateForm> plateForms = new ArrayList<>();
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder parser = factory.newDocumentBuilder();
         Document doc = parser.parse(inStream);
@@ -114,7 +111,7 @@ public class Parser {
                     continue;
                 }
                 String content = ((Element) charNode).getAttribute("content");
-                form.addPosition(form.new Position(content.toUpperCase()));
+                form.addPosition(new Position(content.toUpperCase()));
             }
             plateForms.add(form);
         }
@@ -122,23 +119,23 @@ public class Parser {
     }
 
     public void unFlagAll() {
-        for (PlateForm form : this.plateForms) {
-            form.flagged = false;
+        for (PlateForm form : plateForms) {
+            form.setFlagged(false);
         }
     }
 
     /**
-     * For given {@code length}, finds a {@link net.sf.javaanpr.intelligence.Parser.PlateForm} of the same length. If
-     * no such {@link net.sf.javaanpr.intelligence.Parser.PlateForm} is found, tries to find one with less characters.
+     * For given {@code length}, finds a {@link PlateForm} of the same length. If
+     * no such {@link PlateForm} is found, tries to find one with less characters.
      *
      * @param length the number of characters of the PlateForm
      */
     public void flagEqualOrShorterLength(int length) {
         boolean found = false;
         for (int i = length; (i >= 1) && !found; i--) {
-            for (PlateForm form : this.plateForms) {
+            for (PlateForm form : plateForms) {
                 if (form.length() == i) {
-                    form.flagged = true;
+                    form.setFlagged(true);
                     found = true;
                 }
             }
@@ -146,16 +143,16 @@ public class Parser {
     }
 
     public void flagEqualLength(int length) {
-        for (PlateForm form : this.plateForms) {
+        for (PlateForm form : plateForms) {
             if (form.length() == length) {
-                form.flagged = true;
+                form.setFlagged(true);
             }
         }
     }
 
     public void invertFlags() {
-        for (PlateForm form : this.plateForms) {
-            form.flagged = !form.flagged;
+        for (PlateForm form : plateForms) {
+            form.setFlagged(!form.isFlagged());
         }
     }
 
@@ -177,26 +174,26 @@ public class Parser {
                                 + "</font><hr><br>");
                 return recognizedPlate.getString();
             case ONLY_EQUAL_LENGTH:
-                this.unFlagAll();
-                this.flagEqualLength(length);
+                unFlagAll();
+                flagEqualLength(length);
                 break;
             case EQUAL_OR_SHORTER_LENGTH:
-                this.unFlagAll();
-                this.flagEqualOrShorterLength(length);
+                unFlagAll();
+                flagEqualOrShorterLength(length);
                 break;
             default:
                 throw new IllegalArgumentException("Expected SyntaxAnalysisMode.DO_NOT_PARSE, "
                         + "SyntaxAnalysisMode.ONLY_EQUAL_LENGTH or SyntaxAnalysisMode.EQUAL_OR_SHORTER_LENGTH.");
         }
 
-        Vector<FinalPlate> finalPlates = new Vector<FinalPlate>();
+        List<FinalPlate> finalPlates = new ArrayList<>();
 
-        for (PlateForm form : this.plateForms) {
-            if (!form.flagged) {
+        for (PlateForm form : plateForms) {
+            if (!form.isFlagged()) {
                 continue;
             }
             for (int i = 0; i <= (length - form.length()); i++) { // moving the form on the plate
-                logger.debug("Comparing {} with form {} and offset {}.", recognizedPlate, form.name, i);
+                logger.debug("Comparing {} with form {} and offset {}.", recognizedPlate, form.getName(), i);
                 FinalPlate finalPlate = new FinalPlate();
                 for (int j = 0; j < form.length(); j++) { // all chars of the form
                     RecognizedChar rc = recognizedPlate.getChar(j + i);
@@ -225,73 +222,30 @@ public class Parser {
         float minimalChanges = Float.POSITIVE_INFINITY;
         int minimalIndex = 0;
         for (int i = 0; i < finalPlates.size(); i++) {
-            logger.debug("Plate {} : {} with required changes {}.", i, finalPlates.elementAt(i).plate,
-                    finalPlates.elementAt(i).requiredChanges);
-            if (finalPlates.elementAt(i).requiredChanges <= minimalChanges) {
-                minimalChanges = finalPlates.elementAt(i).requiredChanges;
+            logger.debug("Plate {} : {} with required changes {}.", i, finalPlates.get(i).plate,
+                    finalPlates.get(i).requiredChanges);
+            if (finalPlates.get(i).requiredChanges <= minimalChanges) {
+                minimalChanges = finalPlates.get(i).requiredChanges;
                 minimalIndex = i;
             }
         }
         String toReturn = recognizedPlate.getString();
-        if (finalPlates.elementAt(minimalIndex).requiredChanges <= 2) {
-            toReturn = finalPlates.elementAt(minimalIndex).plate;
+        if (finalPlates.get(minimalIndex).requiredChanges <= 2) {
+            toReturn = finalPlates.get(minimalIndex).plate;
         }
         return toReturn;
     }
 
-    private class PlateForm {
-
-        private boolean flagged = false;
-        private Vector<Position> positions;
-        private String name;
-
-        public PlateForm(String name) {
-            this.name = name;
-            this.positions = new Vector<Position>();
-        }
-
-        public void addPosition(Position p) {
-            this.positions.add(p);
-        }
-
-        public Position getPosition(int index) {
-            return this.positions.elementAt(index);
-        }
-
-        public int length() {
-            return this.positions.size();
-        }
-
-        public class Position {
-
-            public char[] allowedChars;
-
-            public Position(String data) {
-                this.allowedChars = data.toCharArray();
-            }
-
-            public boolean isAllowed(char chr) {
-                boolean ret = false;
-                for (int i = 0; i < this.allowedChars.length; i++) {
-                    if (this.allowedChars[i] == chr) {
-                        ret = true;
-                    }
-                }
-                return ret;
-            }
-        }
-    }
-
-    public final class FinalPlate {
+    private static final class FinalPlate {
         private String plate;
         private float requiredChanges = 0;
 
         private FinalPlate() {
-            this.plate = "";
+            plate = "";
         }
 
         public void addChar(char chr) {
-            this.plate = this.plate + chr;
+            plate = plate + chr;
         }
     }
 }

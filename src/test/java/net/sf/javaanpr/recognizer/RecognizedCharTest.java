@@ -20,7 +20,7 @@ import net.sf.javaanpr.test.util.TestUtility;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Vector;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -40,7 +40,7 @@ public class RecognizedCharTest {
         assertFalse(recognizedChar.isSorted());
         recognizedChar.sort(false);
         assertTrue(recognizedChar.isSorted());
-        Vector<RecognizedPattern> patterns = recognizedChar.getPatterns();
+        List<RecognizedPattern> patterns = recognizedChar.getPatterns();
         assertEquals(patterns.get(0).getCost(), 1.0f, TestUtility.epsilon);
         assertEquals(patterns.get(1).getCost(), 3.0f, TestUtility.epsilon);
         assertEquals(patterns.get(2).getCost(), 4.0f, TestUtility.epsilon);
@@ -51,7 +51,7 @@ public class RecognizedCharTest {
         assertFalse(recognizedChar.isSorted());
         recognizedChar.sort(true);
         assertTrue(recognizedChar.isSorted());
-        Vector<RecognizedPattern> patterns = recognizedChar.getPatterns();
+        List<RecognizedPattern> patterns = recognizedChar.getPatterns();
         assertEquals(patterns.get(0).getCost(), 4.0f, TestUtility.epsilon);
         assertEquals(patterns.get(1).getCost(), 3.0f, TestUtility.epsilon);
         assertEquals(patterns.get(2).getCost(), 1.0f, TestUtility.epsilon);

@@ -16,49 +16,50 @@
 
 package net.sf.javaanpr.recognizer;
 
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Collections;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecognizedChar {
-    private Vector<RecognizedPattern> patterns;
+    private final List<RecognizedPattern> patterns;
     private boolean isSorted;
 
     public RecognizedChar() {
-        this.patterns = new Vector<RecognizedPattern>();
-        this.isSorted = false;
+        patterns = new ArrayList<>();
+        isSorted = false;
     }
 
     public void addPattern(RecognizedPattern pattern) {
-        this.patterns.add(pattern);
+        patterns.add(pattern);
     }
 
     public boolean isSorted() {
-        return this.isSorted;
+        return isSorted;
     }
 
     public void sort(boolean shouldSortDescending) {
-        if (this.isSorted) {
+        if (isSorted) {
             return;
         }
-        this.isSorted = true;
-        Collections.sort(this.patterns, new PatternComparator(shouldSortDescending));
+        isSorted = true;
+        patterns.sort(new PatternComparator(shouldSortDescending));
     }
 
     /**
      * @return null if not sorted
      */
-    public Vector<RecognizedPattern> getPatterns() {
-        if (this.isSorted) {
-            return this.patterns;
+    public List<RecognizedPattern> getPatterns() {
+        if (isSorted) {
+            return patterns;
         }
         return null;
     }
 
     public RecognizedPattern getPattern(int i) {
-        if (this.isSorted) {
-            return this.patterns.elementAt(i);
+        if (isSorted) {
+            return patterns.get(i);
         }
         return null;
     }
@@ -74,20 +75,20 @@ public class RecognizedChar {
         graphic.draw(backRect);
         graphic.setColor(Color.BLACK);
 
-        int colWidth = width / this.patterns.size();
+        int colWidth = width / patterns.size();
         int left, top;
         for (int ay = 0; ay <= 100; ay += 10) {
             int y = 15 + (int) (((100 - ay) / 100.0f) * (height - 20));
-            graphic.drawString(new Integer(ay).toString(), 3, y + 11);
+            graphic.drawString(Integer.toString(ay), 3, y + 11);
             graphic.drawLine(25, y + 5, 35, y + 5);
         }
         graphic.drawLine(35, 19, 35, height);
         graphic.setColor(Color.BLUE);
-        for (int i = 0; i < this.patterns.size(); i++) {
+        for (int i = 0; i < patterns.size(); i++) {
             left = (i * colWidth) + 42;
-            top = height - (int) (this.patterns.elementAt(i).getCost() * (height - 20));
+            top = height - (int) (patterns.get(i).getCost() * (height - 20));
             graphic.drawRect(left, top, colWidth - 2, height - top);
-            graphic.drawString(this.patterns.elementAt(i).getChar() + " ", left + 2, top - 8);
+            graphic.drawString(patterns.get(i).getChar() + " ", left + 2, top - 8);
         }
         return histogram;
     }

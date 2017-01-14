@@ -36,11 +36,6 @@ public final class Configurator {
     private String fileName = "config.xml";
 
     /**
-     * Configuration file's comment.
-     */
-    private String comment = "This is the global configuration file for JavaANPR";
-
-    /**
      * Primary property list containing values from the configuration file.
      */
     private Properties list;
@@ -101,6 +96,7 @@ public final class Configurator {
         setIntProperty("intelligence_syntaxanalysis", 2);
         setStrProperty("intelligence_syntaxDescriptionFile", "/syntax.xml");
 
+        // TODO: finish translation
         setIntProperty("neural_maxk", 8000); // maximum K - maximalny pocet iteracii
         setDoubleProperty("neural_eps", 0.07); // epsilon - pozadovana presnost
         setDoubleProperty("neural_lambda", 0.05); // lambda factor - rychlost ucenia, velkost gradientu
@@ -125,8 +121,7 @@ public final class Configurator {
             try {
                 configurator = new Configurator();
             } catch (IOException e) {
-                e.printStackTrace();
-                return null;
+                throw new IllegalStateException("Configurator failed to initialize.");
             }
         }
         return configurator;
@@ -141,7 +136,7 @@ public final class Configurator {
     }
 
     public String getStrProperty(String name) {
-        return list.getProperty(name).toString();
+        return list.getProperty(name);
     }
 
     public String getPathProperty(String name) {
@@ -183,7 +178,7 @@ public final class Configurator {
 
     public void saveConfiguration(String arg_file) throws IOException {
         FileOutputStream os = new FileOutputStream(arg_file);
-        list.storeToXML(os, comment);
+        list.storeToXML(os, null);
         os.close();
     }
 
@@ -194,7 +189,9 @@ public final class Configurator {
     public void loadConfiguration(String arg_file) throws IOException {
         InputStream is = getResourceAsStream(arg_file);
         loadConfiguration(is);
-        is.close();
+        if (is != null) {
+            is.close();
+        }
     }
 
     public void loadConfiguration(InputStream arg_stream) throws IOException {

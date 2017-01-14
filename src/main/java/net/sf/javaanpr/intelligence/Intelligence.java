@@ -19,18 +19,19 @@ package net.sf.javaanpr.intelligence;
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.gui.TimeMeter;
 import net.sf.javaanpr.imageanalysis.*;
+import net.sf.javaanpr.intelligence.parser.Parser;
 import net.sf.javaanpr.jar.Main;
 import net.sf.javaanpr.recognizer.CharacterRecognizer;
 import net.sf.javaanpr.recognizer.RecognizedChar;
-import net.sf.javaanpr.recognizer.KnnPatternClassificator;
-import net.sf.javaanpr.recognizer.NeuralPatternClassificator;
+import net.sf.javaanpr.recognizer.KnnPatternClassifier;
+import net.sf.javaanpr.recognizer.NeuralPatternClassifier;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Vector;
+import java.util.List;
 
 public class Intelligence {
 
@@ -38,14 +39,14 @@ public class Intelligence {
     private static Parser parser;
     private static long lastProcessDuration = 0L;
 
-    private static Configurator configurator = Configurator.getConfigurator();
+    private static final Configurator configurator = Configurator.getConfigurator();
 
     public Intelligence() throws ParserConfigurationException, SAXException, IOException {
         int classification_method = configurator.getIntProperty("intelligence_classification_method");
         if (classification_method == 0) {
-            chrRecog = new KnnPatternClassificator();
+            chrRecog = new KnnPatternClassifier();
         } else {
-            chrRecog = new NeuralPatternClassificator();
+            chrRecog = new NeuralPatternClassifier();
         }
         parser = new Parser();
     }
@@ -55,6 +56,10 @@ public class Intelligence {
      */
     public long getLastProcessDuration() {
         return lastProcessDuration;
+    }
+
+    public String recognize(CarSnapshot carSnapshot) throws IllegalArgumentException, IOException  {
+        return recognize(carSnapshot, false);
     }
 
     // TODO refactor with forms
@@ -93,12 +98,8 @@ public class Intelligence {
                 BufferedImage renderedHoughTransform = null;
                 HoughTransformation hough = null;
                 // detection is done either: 1. because of the report generator 2. because of skew detection
-                if (enableReportGeneration) {
-                    try {
-                        notNormalizedCopy = plate.clone();
-                    } catch (CloneNotSupportedException e) {
-                        e.printStackTrace();
-                    }
+                if (enableReportGeneration || skewDetectionMode != 0) {
+                    notNormalizedCopy = plate.clone();
                     notNormalizedCopy.horizontalEdgeDetector(notNormalizedCopy.getImage());
                     hough = notNormalizedCopy.getHoughTransformation();
                     renderedHoughTransform = hough.render(HoughTransformation.RENDER_ALL, HoughTransformation.COLOR_BW);
@@ -117,7 +118,7 @@ public class Intelligence {
                         plateWHratio > configurator.getDoubleProperty("intelligence_maxPlateWidthHeightRatio"))) {
                     continue;
                 }
-                Vector<Char> chars = plate.getChars();
+                List<Char> chars = plate.getChars();
 
                 // heuristic analysis of the plate (uniformity and character count)
                 if ((chars.size() < configurator.getIntProperty("intelligence_minimumChars")) || (chars.size()
@@ -135,12 +136,7 @@ public class Intelligence {
                     Main.rg.insertImage(b.getBiWithAxes(), "band", 0, 0);
                     Main.rg.insertImage(b.renderGraph(), "bandgraph", 0, 0);
                     Main.rg.insertText("<h2>Detected plate</h2>");
-                    Plate plateCopy = null;
-                    try {
-                        plateCopy = plate.clone();
-                    } catch (CloneNotSupportedException e) {
-                        e.printStackTrace();
-                    }
+                    Plate plateCopy = plate.clone();
                     plateCopy.linearResize(450, 90);
                     Main.rg.insertImage(plateCopy.getBiWithAxes(), "plate", 0, 0);
                     Main.rg.insertImage(plateCopy.renderGraph(), "plategraph", 0, 0);
@@ -237,7 +233,7 @@ public class Intelligence {
                     RecognizedChar rc = null;
                     if (ok) {
                         rc = chrRecog.recognize(chr);
-                        similarityCost = rc.getPatterns().elementAt(0).getCost();
+                        similarityCost = rc.getPatterns().get(0).getCost();
                         if (similarityCost > configurator
                                 .getDoubleProperty("intelligence_maxSimilarityCostDispersion")) {
                             errorFlags += "NEU ";

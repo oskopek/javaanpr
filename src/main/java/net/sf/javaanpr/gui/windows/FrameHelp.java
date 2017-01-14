@@ -28,35 +28,31 @@ import java.net.URL;
 
 public class FrameHelp extends JFrame {
 
-    public enum MODE {
+    public enum FrameHelpContent {
         SHOW_HELP,
         SHOW_ABOUT
     }
 
     private static final long serialVersionUID = 0L;
-    public MODE mode;
 
     private JEditorPane editorPane;
-    private JButton helpWindowClose;
-    private JScrollPane jScrollPane1;
 
     /**
      * Creates new form FrameHelp.
      *
-     * @param mode the mode
-     * @throws IOException in case the file to show in given mode failed to load
+     * @param frameHelpContent the frameHelpContent
+     * @throws IOException in case the file to show in given frameHelpContent failed to load
      */
-    public FrameHelp(MODE mode) throws IOException { // TODO javadoc
+    public FrameHelp(FrameHelpContent frameHelpContent) throws IOException { // TODO javadoc
         initComponents();
-        this.mode = mode;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = getWidth();
         int height = getHeight();
         setLocation((screenSize.width - width) / 2, (screenSize.height - height) / 2);
-        if (mode == MODE.SHOW_ABOUT) {
+        if (frameHelpContent == FrameHelpContent.SHOW_ABOUT) {
             URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_about"));
             editorPane.setPage(url);
-        } else if (mode == MODE.SHOW_HELP) {
+        } else if (frameHelpContent == FrameHelpContent.SHOW_HELP) {
             URL url = getClass().getResource(Configurator.getConfigurator().getPathProperty("help_file_help"));
             editorPane.setPage(url);
         }
@@ -64,9 +60,9 @@ public class FrameHelp extends JFrame {
     }
 
     private void initComponents() {
-        jScrollPane1 = new JScrollPane();
+        JScrollPane jScrollPane1 = new JScrollPane();
         editorPane = new JEditorPane();
-        helpWindowClose = new JButton();
+        JButton helpWindowClose = new JButton();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("JavaANPR - Help");
@@ -75,12 +71,7 @@ public class FrameHelp extends JFrame {
 
         helpWindowClose.setFont(new java.awt.Font("Arial", 0, 11));
         helpWindowClose.setText("Close");
-        helpWindowClose.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                helpWindowCloseActionPerformed(evt);
-            }
-        });
+        helpWindowClose.addActionListener(this::helpWindowCloseActionPerformed);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

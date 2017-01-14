@@ -20,7 +20,7 @@ import net.sf.javaanpr.recognizer.RecognizedChar;
 import net.sf.javaanpr.recognizer.RecognizedPattern;
 import org.junit.Test;
 
-import java.util.Vector;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -56,7 +56,7 @@ public class RecognizedPlateTest {
     @Test
     public void testCanAddAndGetAllChars() {
         RecognizedPlate recognizedPlate = getRecognizedPlateWithThreeRecognizedChars();
-        Vector<RecognizedChar> recognizedChars = recognizedPlate.getChars();
+        List<RecognizedChar> recognizedChars = recognizedPlate.getChars();
         assertEquals(recognizedChars.get(0).getPattern(0).getChar(), 'A');
         assertEquals(recognizedChars.get(1).getPattern(0).getChar(), 'B');
         assertEquals(recognizedChars.get(1).getPattern(1).getChar(), 'C');

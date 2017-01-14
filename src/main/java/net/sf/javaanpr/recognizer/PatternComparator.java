@@ -22,7 +22,7 @@ import java.util.Comparator;
  * Comparator for comparing {@link RecognizedPattern}.
  */
 public class PatternComparator implements Comparator<RecognizedPattern> {
-    private boolean shouldSortDescending;
+    private final boolean shouldSortDescending;
 
     /**
      * Constructs a new PatternComparator which will compare instances of {@link RecognizedPattern}.

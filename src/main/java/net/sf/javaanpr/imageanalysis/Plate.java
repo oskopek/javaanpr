@@ -21,62 +21,65 @@ import net.sf.javaanpr.configurator.Configurator;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Plate extends Photo {
+public class Plate extends Photo implements Cloneable {
 
-    private static Graph.ProbabilityDistributor distributor = new Graph.ProbabilityDistributor(0, 0, 0, 0);
-    private static int numberOfCandidates = Configurator.getConfigurator().getIntProperty("intelligence_numberOfChars");
-    private static int horizontalDetectionType =
+    private static final Graph.ProbabilityDistributor distributor =
+            new Graph.ProbabilityDistributor(0, 0, 0, 0);
+    private static final int numberOfCandidates =
+            Configurator.getConfigurator().getIntProperty("intelligence_numberOfChars");
+    private static final int horizontalDetectionType =
             Configurator.getConfigurator().getIntProperty("platehorizontalgraph_detectionType");
-    private Plate plateCopy; // TODO refactor: remove this variable completely
-    private PlateGraph graphHandle = null;
+    private final Plate plateCopy; // TODO refactor: remove this variable completely
+    private PlateGraph graphHandle;
 
     public Plate(BufferedImage bi) {
         super(bi);
-        this.plateCopy = new Plate(Photo.duplicateBufferedImage(getImage()), true);
-        this.plateCopy.adaptiveThresholding();
+        plateCopy = new Plate(Photo.duplicateBufferedImage(getImage()), true);
+        plateCopy.adaptiveThresholding();
     }
 
-    public Plate(BufferedImage bi, boolean isCopy) {
+    private Plate(BufferedImage bi, boolean isCopy) { // TODO refactor: remove this, is only a copy constructor
         super(bi);
+        plateCopy = null;
     }
 
     public BufferedImage renderGraph() {
-        this.computeGraph();
-        return this.graphHandle.renderHorizontally(this.getWidth(), 100);
+        computeGraph();
+        return graphHandle.renderHorizontally(getWidth(), 100);
     }
 
-    private Vector<Peak> computeGraph() {
-        if (this.graphHandle != null) {
-            return this.graphHandle.peaks;
+    private List<Peak> computeGraph() {
+        if (graphHandle != null) {
+            return graphHandle.peaks;
         }
-        this.graphHandle = this.histogram(this.plateCopy.getImage());
-        this.graphHandle.applyProbabilityDistributor(Plate.distributor);
-        this.graphHandle.findPeaks(Plate.numberOfCandidates);
-        return this.graphHandle.peaks;
+        graphHandle = histogram(plateCopy.getImage());
+        graphHandle.applyProbabilityDistributor(Plate.distributor);
+        graphHandle.findPeaks(Plate.numberOfCandidates);
+        return graphHandle.peaks;
     }
 
-    public Vector<Char> getChars() {
-        Vector<Char> out = new Vector<Char>();
-        Vector<Peak> peaks = this.computeGraph();
-        for (int i = 0; i < peaks.size(); i++) {
+    public List<Char> getChars() {
+        List<Char> out = new ArrayList<>();
+        List<Peak> peaks = computeGraph();
+        for (Peak p : peaks) {
             // Cut from the original image of the plate and save to a vector.
             // ATTENTION: Cutting from original,
             // we have to apply an inverse transformation to the coordinates calculated from imageCopy
-            Peak p = peaks.elementAt(i);
             if (p.getDiff() <= 0) {
                 continue;
             }
             out.add(new Char(getImage().getSubimage(p.getLeft(), 0, p.getDiff(), getImage().getHeight()),
-                    this.plateCopy.getImage().getSubimage(p.getLeft(), 0, p.getDiff(), getImage().getHeight()),
+                    plateCopy.getImage().getSubimage(p.getLeft(), 0, p.getDiff(), getImage().getHeight()),
                     new PositionInPlate(p.getLeft(), p.getRight())));
         }
         return out;
     }
 
     @Override
-    public Plate clone() throws CloneNotSupportedException {
+    public Plate clone() {
         super.clone();
         return new Plate(duplicateBufferedImage(getImage()));
     }
@@ -95,41 +98,31 @@ public class Plate extends Photo {
      * vertical projections of the cloned image (which is thresholded).
      */
     public void normalize() {
-        Plate clone1 = null;
-        try {
-            clone1 = this.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
+        Plate clone1 = clone();
         clone1.verticalEdgeDetector(clone1.getImage());
         PlateVerticalGraph vertical = clone1.histogramYaxis(clone1.getImage());
-        this.setImage(cutTopBottom(getImage(), vertical));
-        plateCopy.setImage(cutTopBottom(this.plateCopy.getImage(), vertical));
-        Plate clone2 = null;
-        try {
-            clone2 = this.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
+        setImage(cutTopBottom(getImage(), vertical));
+        plateCopy.setImage(cutTopBottom(plateCopy.getImage(), vertical));
+        Plate clone2 = clone();
         if (Plate.horizontalDetectionType == 1) {
             clone2.horizontalEdgeDetector(clone2.getImage());
         }
         PlateHorizontalGraph horizontal = clone1.histogramXaxis(clone2.getImage());
-        this.setImage(cutLeftRight(getImage(), horizontal));
+        setImage(cutLeftRight(getImage(), horizontal));
         plateCopy.setImage(cutLeftRight(plateCopy.getImage(), horizontal));
     }
 
     private BufferedImage cutTopBottom(BufferedImage origin, PlateVerticalGraph graph) {
         graph.applyProbabilityDistributor(new Graph.ProbabilityDistributor(0f, 0f, 2, 2));
-        Peak p = graph.findPeak(3).elementAt(0);
+        Peak p = graph.findPeak(3).get(0);
         return origin.getSubimage(0, p.getLeft(), getImage().getWidth(), p.getDiff());
     }
 
     private BufferedImage cutLeftRight(BufferedImage origin, PlateHorizontalGraph graph) {
         graph.applyProbabilityDistributor(new Graph.ProbabilityDistributor(0f, 0f, 2, 2));
-        Vector<Peak> peaks = graph.findPeak();
+        List<Peak> peaks = graph.findPeak();
         if (peaks.size() != 0) {
-            Peak p = peaks.elementAt(0);
+            Peak p = peaks.get(0);
             return origin.getSubimage(p.getLeft(), 0, p.getDiff(), getImage().getHeight());
         }
         return origin;
@@ -188,9 +181,9 @@ public class Plate extends Photo {
         new ConvolveOp(new Kernel(3, 3, matrix), ConvolveOp.EDGE_NO_OP, null).filter(destination, source);
     }
 
-    public float getCharsWidthDispersion(Vector<Char> chars) {
+    public float getCharsWidthDispersion(List<Char> chars) {
         float averageDispersion = 0;
-        float averageWidth = this.getAverageCharWidth(chars);
+        float averageWidth = getAverageCharWidth(chars);
         for (Char chr : chars) {
             averageDispersion += (Math.abs(averageWidth - chr.fullWidth));
         }
@@ -198,9 +191,9 @@ public class Plate extends Photo {
         return averageDispersion / averageWidth;
     }
 
-    public float getPiecesWidthDispersion(Vector<Char> chars) {
+    public float getPiecesWidthDispersion(List<Char> chars) {
         float averageDispersion = 0;
-        float averageWidth = this.getAveragePieceWidth(chars);
+        float averageWidth = getAveragePieceWidth(chars);
         for (Char chr : chars) {
             averageDispersion += (Math.abs(averageWidth - chr.pieceWidth));
         }
@@ -208,7 +201,7 @@ public class Plate extends Photo {
         return averageDispersion / averageWidth;
     }
 
-    public float getAverageCharWidth(Vector<Char> chars) {
+    public float getAverageCharWidth(List<Char> chars) {
         float averageWidth = 0;
         for (Char chr : chars) {
             averageWidth += chr.fullWidth;
@@ -217,7 +210,7 @@ public class Plate extends Photo {
         return averageWidth;
     }
 
-    public float getAveragePieceWidth(Vector<Char> chars) {
+    public float getAveragePieceWidth(List<Char> chars) {
         float averageWidth = 0;
         for (Char chr : chars) {
             averageWidth += chr.pieceWidth;
@@ -226,7 +219,7 @@ public class Plate extends Photo {
         return averageWidth;
     }
 
-    public float getAveragePieceHue(Vector<Char> chars) {
+    public float getAveragePieceHue(List<Char> chars) {
         float averageHue = 0;
         for (Char chr : chars) {
             averageHue += chr.statisticAverageHue;
@@ -235,7 +228,7 @@ public class Plate extends Photo {
         return averageHue;
     }
 
-    public float getAveragePieceContrast(Vector<Char> chars) {
+    public float getAveragePieceContrast(List<Char> chars) {
         float averageContrast = 0;
         for (Char chr : chars) {
             averageContrast += chr.statisticContrast;
@@ -244,7 +237,7 @@ public class Plate extends Photo {
         return averageContrast;
     }
 
-    public float getAveragePieceBrightness(Vector<Char> chars) {
+    public float getAveragePieceBrightness(List<Char> chars) {
         float averageBrightness = 0;
         for (Char chr : chars) {
             averageBrightness += chr.statisticAverageBrightness;
@@ -253,7 +246,7 @@ public class Plate extends Photo {
         return averageBrightness;
     }
 
-    public float getAveragePieceMinBrightness(Vector<Char> chars) {
+    public float getAveragePieceMinBrightness(List<Char> chars) {
         float averageMinBrightness = 0;
         for (Char chr : chars) {
             averageMinBrightness += chr.statisticMinimumBrightness;
@@ -262,7 +255,7 @@ public class Plate extends Photo {
         return averageMinBrightness;
     }
 
-    public float getAveragePieceMaxBrightness(Vector<Char> chars) {
+    public float getAveragePieceMaxBrightness(List<Char> chars) {
         float averageMaxBrightness = 0;
         for (Char chr : chars) {
             averageMaxBrightness += chr.statisticMaximumBrightness;
@@ -271,7 +264,7 @@ public class Plate extends Photo {
         return averageMaxBrightness;
     }
 
-    public float getAveragePieceSaturation(Vector<Char> chars) {
+    public float getAveragePieceSaturation(List<Char> chars) {
         float averageSaturation = 0;
         for (Char chr : chars) {
             averageSaturation += chr.statisticAverageSaturation;
@@ -280,7 +273,7 @@ public class Plate extends Photo {
         return averageSaturation;
     }
 
-    public float getAverageCharHeight(Vector<Char> chars) {
+    public float getAverageCharHeight(List<Char> chars) {
         float averageHeight = 0;
         for (Char chr : chars) {
             averageHeight += chr.fullHeight;
@@ -289,7 +282,7 @@ public class Plate extends Photo {
         return averageHeight;
     }
 
-    public float getAveragePieceHeight(Vector<Char> chars) {
+    public float getAveragePieceHeight(List<Char> chars) {
         float averageHeight = 0;
         for (Char chr : chars) {
             averageHeight += chr.pieceHeight;

@@ -19,7 +19,7 @@ As to what you can do about it generally (without cropping)
 normalizing the picture, etc...
 For example, using a threshold filter for brightness 250-255,
 I got the correct result:
-(not saying this is what you want to do in general, it depends on the camera, lighning, ...)
+(not saying this is what you want to do in general, it depends on the camera, lighting, ...)
 
 image:https://cloud.githubusercontent.com/assets/1811716/12033015/c92fe13a-ae1e-11e5-8d70-3351097d67af.png[screenshot from 2015-12-29 11-24-45]
 

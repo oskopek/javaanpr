@@ -25,13 +25,13 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
 
-public class NeuralPatternClassificator extends CharacterRecognizer {
+public class NeuralPatternClassifier extends CharacterRecognizer {
 
-    private static final transient Logger logger = LoggerFactory.getLogger(NeuralPatternClassificator.class);
-    private static int normalize_x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
-    private static int normalize_y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
+    private static final transient Logger logger = LoggerFactory.getLogger(NeuralPatternClassifier.class);
+    private static final int normalize_x = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_x");
+    private static final int normalize_y = Configurator.getConfigurator().getIntProperty("char_normalizeddimensions_y");
     /**
      * Dimensions of an input character after transformation: 10 * 16 = 160 neurons.
      */
@@ -40,17 +40,17 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
     /**
      * Do not learn network, but load it from file (default).
      */
-    public NeuralPatternClassificator() {
+    public NeuralPatternClassifier() {
         this(false);
     }
 
-    public NeuralPatternClassificator(boolean learn) {
+    public NeuralPatternClassifier(boolean learn) {
         Configurator configurator = Configurator.getConfigurator();
-        Vector<Integer> dimensions = new Vector<Integer>();
+        List<Integer> dimensions = new ArrayList<>();
         // determine size of input layer according to chosen feature extraction method
         int inputLayerSize;
         if (configurator.getIntProperty("char_featuresExtractionMethod") == 0) {
-            inputLayerSize = NeuralPatternClassificator.normalize_x * NeuralPatternClassificator.normalize_y;
+            inputLayerSize = NeuralPatternClassifier.normalize_x * NeuralPatternClassifier.normalize_y;
         } else {
             inputLayerSize = CharacterRecognizer.FEATURES.length * 4;
         }
@@ -58,11 +58,11 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
         dimensions.add(inputLayerSize);
         dimensions.add(configurator.getIntProperty("neural_topology"));
         dimensions.add(CharacterRecognizer.ALPHABET.length);
-        this.network = new NeuralNetwork(dimensions);
+        network = new NeuralNetwork(dimensions);
         if (learn) {
             String learnAlphabetPath = configurator.getStrProperty("char_learnAlphabetPath");
             try {
-                this.learnAlphabet(learnAlphabetPath);
+                learnAlphabet(learnAlphabetPath);
             } catch (IOException e) {
                 logger.error("Failed to load alphabet: {}", learnAlphabetPath);
             }
@@ -70,7 +70,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
             // or load network from xml
             String neuralNetPath = configurator.getPathProperty("char_neuralNetworkPath");
             InputStream is = configurator.getResourceAsStream(neuralNetPath);
-            this.network = new NeuralNetwork(is);
+            network = new NeuralNetwork(is);
         }
     }
 
@@ -87,10 +87,10 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
     @Override
     public RecognizedChar recognize(Char imgChar) {
         imgChar.normalize();
-        Vector<Double> output = this.network.test(imgChar.extractFeatures());
+        List<Double> output = network.test(imgChar.extractFeatures());
         RecognizedChar recognized = new RecognizedChar();
         for (int i = 0; i < output.size(); i++) {
-            recognized.addPattern(new RecognizedPattern(ALPHABET[i], output.elementAt(i).floatValue()));
+            recognized.addPattern(new RecognizedPattern(ALPHABET[i], output.get(i).floatValue()));
         }
         recognized.render();
         recognized.sort(true);
@@ -103,10 +103,10 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
      * @return an {@link net.sf.javaanpr.neuralnetwork.NeuralNetwork.SetOfIOPairs.IOPair}
      */
     public NeuralNetwork.SetOfIOPairs.IOPair createNewPair(char chr, Char imgChar) {
-        Vector<Double> vectorInput = imgChar.extractFeatures();
-        Vector<Double> vectorOutput = new Vector<Double>();
-        for (int i = 0; i < ALPHABET.length; i++) {
-            if (chr == ALPHABET[i]) {
+        List<Double> vectorInput = imgChar.extractFeatures();
+        List<Double> vectorOutput = new ArrayList<>();
+        for (char aALPHABET : ALPHABET) {
+            if (chr == aALPHABET) {
                 vectorOutput.add(1.0);
             } else {
                 vectorOutput.add(0.0);
@@ -123,15 +123,16 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
      */
     public void learnAlphabet(String folder) throws IOException {
         NeuralNetwork.SetOfIOPairs train = new NeuralNetwork.SetOfIOPairs();
-        ArrayList<String> fileList = (ArrayList<String>) Char.getAlphabetList(folder);
+        List<String> fileList = Char.getAlphabetList(folder);
         for (String fileName : fileList) {
-            InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
-            Char imgChar = new Char(is);
+            Char imgChar;
+            try (InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName)) {
+                imgChar = new Char(is);
+            }
             imgChar.normalize();
-            train.addIOPair(this.createNewPair(fileName.toUpperCase().charAt(0), imgChar));
-            is.close();
+            train.addIOPair(createNewPair(fileName.toUpperCase().charAt(0), imgChar));
         }
-        this.network.learn(train, Configurator.getConfigurator().getIntProperty("neural_maxk"),
+        network.learn(train, Configurator.getConfigurator().getIntProperty("neural_maxk"),
                 Configurator.getConfigurator().getDoubleProperty("neural_eps"),
                 Configurator.getConfigurator().getDoubleProperty("neural_lambda"),
                 Configurator.getConfigurator().getDoubleProperty("neural_micro"));

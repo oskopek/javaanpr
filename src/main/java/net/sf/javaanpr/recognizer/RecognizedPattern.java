@@ -17,19 +17,19 @@
 package net.sf.javaanpr.recognizer;
 
 public final class RecognizedPattern {
-    private char chr;
-    private float cost;
+    private final char chr;
+    private final float cost;
 
     public RecognizedPattern(char chr, float value) {
         this.chr = chr;
-        this.cost = value;
+        cost = value;
     }
 
     public char getChar() {
-        return this.chr;
+        return chr;
     }
 
     public float getCost() {
-        return this.cost;
+        return cost;
     }
 }

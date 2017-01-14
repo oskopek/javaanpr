@@ -33,8 +33,6 @@ import static org.junit.Assert.*;
  */
 public class ReportGeneratorTest {
 
-    private final TestUtility testUtility = new TestUtility();
-
     /**
      * Tests {@link ReportGenerator#insertImage(BufferedImage, String, int, int)} with valid inputs.
      *
@@ -158,7 +156,7 @@ public class ReportGeneratorTest {
         final InputStream inStream = new FileInputStream("src/test/resources/snapshots/test_001.jpg");
         final File io = new File("target/test-classes/out.txt");
         reportGenerator.saveStreamToFile(inStream, io);
-        StringBuilder sb = testUtility.readFile("target/test-classes/out.txt");
+        StringBuilder sb = TestUtility.readFile("target/test-classes/out.txt");
         assertEquals(true, sb.toString().contains("Hewlett-Packard"));
     }
 

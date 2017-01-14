@@ -20,7 +20,7 @@ import java.util.Calendar;
 
 public class TimeMeter {
 
-    private long startTime;
+    private final long startTime;
 
     public TimeMeter() {
         startTime = Calendar.getInstance().getTimeInMillis();

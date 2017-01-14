@@ -24,31 +24,30 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Vector;
+import java.util.List;
 
-public class KnnPatternClassificator extends CharacterRecognizer {
+public class KnnPatternClassifier extends CharacterRecognizer {
 
-    private static final transient Logger logger = LoggerFactory.getLogger(KnnPatternClassificator.class);
-    private Vector<Vector<Double>> learnVectors;
+    private static final transient Logger logger = LoggerFactory.getLogger(KnnPatternClassifier.class);
+    private final List<List<Double>> learnLists;
 
-    public KnnPatternClassificator() {
+    public KnnPatternClassifier() {
         String path = Configurator.getConfigurator().getPathProperty("char_learnAlphabetPath");
-        this.learnVectors = new Vector<Vector<Double>>(36);
-        ArrayList<String> filenames = (ArrayList<String>) Char.getAlphabetList(path);
+        learnLists = new ArrayList<>(36);
+        List<String> filenames = Char.getAlphabetList(path);
         for (String fileName : filenames) {
-            InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName);
-            Char imgChar = null;
-            try {
+            Char imgChar;
+            try (InputStream is = Configurator.getConfigurator().getResourceAsStream(fileName)) {
                 imgChar = new Char(is);
             } catch (IOException e) {
-                logger.error("Failed to load Char: {}", fileName, e);
+                throw new IllegalStateException("Failed to load Char: " + fileName, e);
             }
             imgChar.normalize();
-            this.learnVectors.add(imgChar.extractFeatures());
+            learnLists.add(imgChar.extractFeatures());
         }
         // check vector elements
-        for (int i = 0; i < this.learnVectors.size(); i++) {
-            if (this.learnVectors.elementAt(i) == null) {
+        for (List<Double> learnList : learnLists) {
+            if (learnList == null) {
                 logger.warn("Alphabet in {} is not complete", path);
             }
         }
@@ -56,10 +55,10 @@ public class KnnPatternClassificator extends CharacterRecognizer {
 
     @Override
     public RecognizedChar recognize(Char chr) {
-        Vector<Double> tested = chr.extractFeatures();
+        List<Double> tested = chr.extractFeatures();
         RecognizedChar recognized = new RecognizedChar();
-        for (int x = 0; x < this.learnVectors.size(); x++) {
-            float fx = this.simplifiedEuclideanDistance(tested, this.learnVectors.elementAt(x));
+        for (int x = 0; x < learnLists.size(); x++) {
+            float fx = simplifiedEuclideanDistance(tested, learnLists.get(x));
             recognized.addPattern(new RecognizedPattern(ALPHABET[x], fx));
         }
         recognized.sort(false);
@@ -72,12 +71,12 @@ public class KnnPatternClassificator extends CharacterRecognizer {
      * @param vectorA vector A
      * @param vectorB vector B
      * @return their simple distance
-     * @deprecated Use {@link #simplifiedEuclideanDistance(Vector, Vector)}, works better.
+     * @deprecated Use {@link #simplifiedEuclideanDistance(List, List)}, works better.
      */
-    private float difference(Vector<Double> vectorA, Vector<Double> vectorB) {
+    private float difference(List<Double> vectorA, List<Double> vectorB) {
         float diff = 0;
         for (int x = 0; x < vectorA.size(); x++) {
-            diff += Math.abs(vectorA.elementAt(x) - vectorB.elementAt(x));
+            diff += Math.abs(vectorA.get(x) - vectorB.get(x));
         }
         return diff;
     }
@@ -89,11 +88,11 @@ public class KnnPatternClassificator extends CharacterRecognizer {
      * @param vectorB vector B
      * @return the euclidean distance of A and B
      */
-    private float simplifiedEuclideanDistance(Vector<Double> vectorA, Vector<Double> vectorB) {
+    private float simplifiedEuclideanDistance(List<Double> vectorA, List<Double> vectorB) {
         float diff = 0;
         float partialDiff;
         for (int x = 0; x < vectorA.size(); x++) {
-            partialDiff = (float) Math.abs(vectorA.elementAt(x) - vectorB.elementAt(x));
+            partialDiff = (float) Math.abs(vectorA.get(x) - vectorB.get(x));
             diff += partialDiff * partialDiff;
         }
         return diff;
