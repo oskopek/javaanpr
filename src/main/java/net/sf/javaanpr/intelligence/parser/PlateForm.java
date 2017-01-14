@@ -11,19 +11,19 @@ public class PlateForm {
 
     public PlateForm(String name) {
         this.name = name;
-        this.positions = new ArrayList<>();
+        positions = new ArrayList<>();
     }
 
     public void addPosition(Position p) {
-        this.positions.add(p);
+        positions.add(p);
     }
 
     public Position getPosition(int index) {
-        return this.positions.get(index);
+        return positions.get(index);
     }
 
     public int length() {
-        return this.positions.size();
+        return positions.size();
     }
 
     public boolean isFlagged() {

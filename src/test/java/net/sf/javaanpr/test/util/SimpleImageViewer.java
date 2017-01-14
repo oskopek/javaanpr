@@ -31,27 +31,27 @@ class SimpleImageViewer {
 
     public SimpleImageViewer(BufferedImage img) {
         this.img = img;
-        this.frame = new JFrame("WINDOW");
-        this.frame.setVisible(true);
-        this.start();
-        this.frame.add(new JLabel(new ImageIcon(this.getImage())));
-        this.frame.pack();
-        this.frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame = new JFrame("WINDOW");
+        frame.setVisible(true);
+        start();
+        frame.add(new JLabel(new ImageIcon(getImage())));
+        frame.pack();
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private Image getImage() {
-        return this.img;
+        return img;
     }
 
     private void start() {
         while (true) {
-            BufferStrategy bs = this.frame.getBufferStrategy();
+            BufferStrategy bs = frame.getBufferStrategy();
             if (bs == null) {
-                this.frame.createBufferStrategy(4);
+                frame.createBufferStrategy(4);
                 return;
             }
             Graphics g = bs.getDrawGraphics();
-            g.drawImage(this.img, 0, 0, 800, 600, null);
+            g.drawImage(img, 0, 0, 800, 600, null);
             g.dispose();
             bs.show();
         }

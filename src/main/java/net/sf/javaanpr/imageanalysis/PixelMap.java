@@ -29,16 +29,16 @@ public class PixelMap {
     private int height;
 
     public PixelMap(Photo bi) {
-        this.matrixInit(bi);
+        matrixInit(bi);
     }
 
     private void matrixInit(Photo bi) {
-        this.width = bi.getWidth();
-        this.height = bi.getHeight();
-        this.matrix = new boolean[this.width][this.height];
-        for (int x = 0; x < this.width; x++) {
-            for (int y = 0; y < this.height; y++) {
-                this.matrix[x][y] = bi.getBrightness(x, y) < 0.5;
+        width = bi.getWidth();
+        height = bi.getHeight();
+        matrix = new boolean[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                matrix[x][y] = bi.getBrightness(x, y) < 0.5;
             }
         }
     }
@@ -49,10 +49,10 @@ public class PixelMap {
      * @return the rendered matrix
      */
     public BufferedImage render() {
-        BufferedImage image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
-        for (int x = 0; x < this.width; x++) {
-            for (int y = 0; y < this.height; y++) {
-                if (this.matrix[x][y]) {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (matrix[x][y]) {
                     image.setRGB(x, y, Color.BLACK.getRGB());
                 } else {
                     image.setRGB(x, y, Color.WHITE.getRGB());
@@ -63,11 +63,11 @@ public class PixelMap {
     }
 
     public Piece getBestPiece() {
-        this.reduceOtherPieces();
-        if (this.bestPiece == null) {
+        reduceOtherPieces();
+        if (bestPiece == null) {
             return new Piece();
         }
-        return this.bestPiece;
+        return bestPiece;
     }
 
     /**
@@ -78,46 +78,45 @@ public class PixelMap {
      * @return false if point is outside the matrix, the value otherwise
      */
     private boolean getPointValue(int x, int y) {
-        if ((x < 0) || (y < 0) || (x >= this.width) || (y >= this.height)) {
+        if ((x < 0) || (y < 0) || (x >= width) || (y >= height)) {
             return false;
         }
-        return this.matrix[x][y];
+        return matrix[x][y];
     }
 
     private boolean isBoundaryPoint(int x, int y) {
-        if (!this.getPointValue(x, y)) { // if it's white (outside points are automatically white)
+        if (!getPointValue(x, y)) { // if it's white (outside points are automatically white)
             return false;
         }
         // a boundary point must have at least one neighbor point that's white
-        return !this.getPointValue(x - 1, y - 1) || !this.getPointValue(x - 1, y + 1) || !this
-                .getPointValue(x + 1, y - 1) || !this.getPointValue(x + 1, y + 1) || !this.getPointValue(x, y + 1)
-                || !this.getPointValue(x, y - 1) || !this.getPointValue(x + 1, y) || !this.getPointValue(x - 1, y);
+        return !getPointValue(x - 1, y - 1) || !getPointValue(x - 1, y + 1) || !getPointValue(x + 1, y - 1) || !getPointValue(x + 1, y + 1) || !getPointValue(x, y + 1)
+                || !getPointValue(x, y - 1) || !getPointValue(x + 1, y) || !getPointValue(x - 1, y);
     }
 
     private int n(int x, int y) { // number of black points in the neighborhood
         int n = 0;
-        if (this.getPointValue(x - 1, y - 1)) {
+        if (getPointValue(x - 1, y - 1)) {
             n++;
         }
-        if (this.getPointValue(x - 1, y + 1)) {
+        if (getPointValue(x - 1, y + 1)) {
             n++;
         }
-        if (this.getPointValue(x + 1, y - 1)) {
+        if (getPointValue(x + 1, y - 1)) {
             n++;
         }
-        if (this.getPointValue(x + 1, y + 1)) {
+        if (getPointValue(x + 1, y + 1)) {
             n++;
         }
-        if (this.getPointValue(x, y + 1)) {
+        if (getPointValue(x, y + 1)) {
             n++;
         }
-        if (this.getPointValue(x, y - 1)) {
+        if (getPointValue(x, y - 1)) {
             n++;
         }
-        if (this.getPointValue(x + 1, y)) {
+        if (getPointValue(x + 1, y)) {
             n++;
         }
-        if (this.getPointValue(x - 1, y)) {
+        if (getPointValue(x - 1, y)) {
             n++;
         }
         return n;
@@ -135,11 +134,11 @@ public class PixelMap {
     private int t(int x, int y) {
         int n = 0;
         for (int i = 2; i <= 8; i++) {
-            if (!this.p(i, x, y) && this.p(i + 1, x, y)) {
+            if (!p(i, x, y) && p(i + 1, x, y)) {
                 n++;
             }
         }
-        if (!this.p(9, x, y) && this.p(2, x, y)) {
+        if (!p(9, x, y) && p(2, x, y)) {
             n++;
         }
         return n;
@@ -164,47 +163,45 @@ public class PixelMap {
     private boolean p(int i, int x, int y) {
         switch (i) {
             case 1:
-                return this.getPointValue(x, y);
+                return getPointValue(x, y);
             case 2:
-                return this.getPointValue(x, y - 1);
+                return getPointValue(x, y - 1);
             case 3:
-                return this.getPointValue(x + 1, y - 1);
+                return getPointValue(x + 1, y - 1);
             case 4:
-                return this.getPointValue(x + 1, y);
+                return getPointValue(x + 1, y);
             case 5:
-                return this.getPointValue(x + 1, y + 1);
+                return getPointValue(x + 1, y + 1);
             case 6:
-                return this.getPointValue(x, y + 1);
+                return getPointValue(x, y + 1);
             case 7:
-                return this.getPointValue(x - 1, y + 1);
+                return getPointValue(x - 1, y + 1);
             case 8:
-                return this.getPointValue(x - 1, y);
+                return getPointValue(x - 1, y);
             case 9:
-                return this.getPointValue(x - 1, y - 1);
+                return getPointValue(x - 1, y - 1);
             default:
                 return false;
         }
     }
 
     private boolean step1passed(int x, int y) {
-        int n = this.n(x, y);
-        return (((2 <= n) && (n <= 6)) && (this.t(x, y) == 1) && (!this.p(2, x, y) || !this.p(4, x, y) || !this
-                .p(6, x, y)) && (!this.p(4, x, y) || !this.p(6, x, y) || !this.p(8, x, y)));
+        int n = n(x, y);
+        return (((2 <= n) && (n <= 6)) && (t(x, y) == 1) && (!p(2, x, y) || !p(4, x, y) || !p(6, x, y)) && (!p(4, x, y) || !p(6, x, y) || !p(8, x, y)));
     }
 
     private boolean step2passed(int x, int y) {
-        int n = this.n(x, y);
-        return (((2 <= n) && (n <= 6)) && (this.t(x, y) == 1) && (!this.p(2, x, y) || !this.p(4, x, y) || !this
-                .p(8, x, y)) && (!this.p(2, x, y) || !this.p(6, x, y) || !this.p(8, x, y)));
+        int n = n(x, y);
+        return (((2 <= n) && (n <= 6)) && (t(x, y) == 1) && (!p(2, x, y) || !p(4, x, y) || !p(8, x, y)) && (!p(2, x, y) || !p(6, x, y) || !p(8, x, y)));
     }
 
     private void findBoundaryPoints(PointSet set) {
         if (!set.isEmpty()) {
             set.clear();
         }
-        for (int x = 0; x < this.width; x++) {
-            for (int y = 0; y < this.height; y++) {
-                if (this.isBoundaryPoint(x, y)) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (isBoundaryPoint(x, y)) {
                     set.add(new Point(x, y));
                 }
             }
@@ -222,10 +219,10 @@ public class PixelMap {
         boolean cont;
         do {
             cont = false;
-            this.findBoundaryPoints(boundaryPoints);
+            findBoundaryPoints(boundaryPoints);
             // apply step 1 to flag boundary points for deletion
             for (Point p : boundaryPoints) {
-                if (this.step1passed(p.x, p.y)) {
+                if (step1passed(p.x, p.y)) {
                     flaggedPoints.add(p);
                 }
             }
@@ -234,13 +231,13 @@ public class PixelMap {
                 cont = true;
             }
             for (Point p : flaggedPoints) {
-                this.matrix[p.x][p.y] = false;
+                matrix[p.x][p.y] = false;
                 boundaryPoints.remove(p);
             }
             flaggedPoints.clear();
             // apply step 2 to flag remaining points
             for (Point p : boundaryPoints) {
-                if (this.step2passed(p.x, p.y)) {
+                if (step2passed(p.x, p.y)) {
                     flaggedPoints.add(p);
                 }
             }
@@ -249,7 +246,7 @@ public class PixelMap {
                 cont = true;
             }
             for (Point p : flaggedPoints) {
-                this.matrix[p.x][p.y] = false;
+                matrix[p.x][p.y] = false;
             }
             boundaryPoints.clear();
             flaggedPoints.clear();
@@ -259,27 +256,27 @@ public class PixelMap {
 
     public PixelMap reduceNoise() {
         PointSet pointsToReduce = new PointSet();
-        for (int x = 0; x < this.width; x++) {
-            for (int y = 0; y < this.height; y++) {
-                if (this.n(x, y) < 4) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (n(x, y) < 4) {
                     pointsToReduce.add(new Point(x, y)); // recommended 4
                 }
             }
         }
         // remove marked points
         for (Point p : pointsToReduce) {
-            this.matrix[p.x][p.y] = false;
+            matrix[p.x][p.y] = false;
         }
         return (this);
     }
 
     private boolean seedShouldBeAdded(Piece piece, Point p) {
         // if it's not out of bounds
-        if ((p.x < 0) || (p.y < 0) || (p.x >= this.width) || (p.y >= this.height)) {
+        if ((p.x < 0) || (p.y < 0) || (p.x >= width) || (p.y >= height)) {
             return false;
         }
         // if it's black
-        if (!this.matrix[p.x][p.y]) {
+        if (!matrix[p.x][p.y]) {
             return false;
         }
         // if it's not part of the piece yet
@@ -304,7 +301,7 @@ public class PixelMap {
         stack.push(unsorted.lastElement());
         while (!stack.isEmpty()) {
             Point p = stack.pop();
-            if (this.seedShouldBeAdded(piece, p)) {
+            if (seedShouldBeAdded(piece, p)) {
                 piece.add(p);
                 unsorted.removePoint(p);
                 stack.push(new Point(p.x + 1, p.y));
@@ -321,15 +318,15 @@ public class PixelMap {
         PieceSet pieces = new PieceSet();
         // put all black points into a set
         PointSet unsorted = new PointSet();
-        for (int x = 0; x < this.width; x++) {
-            for (int y = 0; y < this.height; y++) {
-                if (this.matrix[x][y]) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (matrix[x][y]) {
                     unsorted.add(new Point(x, y));
                 }
             }
         }
         while (!unsorted.isEmpty()) {
-            pieces.add(this.createPiece(unsorted));
+            pieces.add(createPiece(unsorted));
         }
         return pieces;
     }
@@ -340,10 +337,10 @@ public class PixelMap {
      * @see PixelMap#getBestPiece()
      */
     public void reduceOtherPieces() {
-        if (this.bestPiece != null) {
+        if (bestPiece != null) {
             return; // we've got a best piece already
         }
-        PieceSet pieces = this.findPieces();
+        PieceSet pieces = findPieces();
         int maxCost = 0;
         int maxIndex = 0;
         // find the best cost
@@ -360,7 +357,7 @@ public class PixelMap {
             }
         }
         if (pieces.size() != 0) {
-            this.bestPiece = pieces.get(maxIndex);
+            bestPiece = pieces.get(maxIndex);
         }
     }
 
@@ -374,7 +371,7 @@ public class PixelMap {
         }
 
         boolean equals(Point p2) {
-            return (p2.x == this.x) && (p2.y == this.y);
+            return (p2.x == x) && (p2.y == y);
         }
     }
 
@@ -388,7 +385,7 @@ public class PixelMap {
                     toRemove = px;
                 }
             }
-            this.remove(toRemove);
+            remove(toRemove);
         }
     }
 
@@ -411,16 +408,16 @@ public class PixelMap {
         private int numberOfAllPoints;
 
         public BufferedImage render() {
-            if (this.numberOfAllPoints == 0) {
+            if (numberOfAllPoints == 0) {
                 return null;
             }
-            BufferedImage image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
-            for (int x = this.mostLeftPoint; x <= this.mostRightPoint; x++) {
-                for (int y = this.mostTopPoint; y <= this.mostBottomPoint; y++) {
-                    if (PixelMap.this.matrix[x][y]) {
-                        image.setRGB(x - this.mostLeftPoint, y - this.mostTopPoint, Color.BLACK.getRGB());
+            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            for (int x = mostLeftPoint; x <= mostRightPoint; x++) {
+                for (int y = mostTopPoint; y <= mostBottomPoint; y++) {
+                    if (matrix[x][y]) {
+                        image.setRGB(x - mostLeftPoint, y - mostTopPoint, Color.BLACK.getRGB());
                     } else {
-                        image.setRGB(x - this.mostLeftPoint, y - this.mostTopPoint, Color.WHITE.getRGB());
+                        image.setRGB(x - mostLeftPoint, y - mostTopPoint, Color.WHITE.getRGB());
                     }
                 }
             }
@@ -428,17 +425,17 @@ public class PixelMap {
         }
 
         public void createStatistics() {
-            this.mostLeftPoint = this.mostLeftPoint();
-            this.mostRightPoint = this.mostRightPoint();
-            this.mostTopPoint = this.mostTopPoint();
-            this.mostBottomPoint = this.mostBottomPoint();
-            this.width = (this.mostRightPoint - this.mostLeftPoint) + 1;
-            this.height = (this.mostBottomPoint - this.mostTopPoint) + 1;
-            this.centerX = (this.mostLeftPoint + this.mostRightPoint) / 2;
-            this.centerY = (this.mostTopPoint + this.mostBottomPoint) / 2;
-            this.numberOfBlackPoints = this.numberOfBlackPoints();
-            this.numberOfAllPoints = this.numberOfAllPoints();
-            this.magnitude = this.magnitude();
+            mostLeftPoint = mostLeftPoint();
+            mostRightPoint = mostRightPoint();
+            mostTopPoint = mostTopPoint();
+            mostBottomPoint = mostBottomPoint();
+            width = (mostRightPoint - mostLeftPoint) + 1;
+            height = (mostBottomPoint - mostTopPoint) + 1;
+            centerX = (mostLeftPoint + mostRightPoint) / 2;
+            centerY = (mostTopPoint + mostBottomPoint) / 2;
+            numberOfBlackPoints = numberOfBlackPoints();
+            numberOfAllPoints = numberOfAllPoints();
+            magnitude = magnitude();
         }
 
         /**
@@ -447,25 +444,25 @@ public class PixelMap {
          * @return the cost
          */
         public int cost() {
-            return this.numberOfAllPoints - this.numberOfBlackPoints();
+            return numberOfAllPoints - numberOfBlackPoints();
         }
 
         public void bleachPiece() {
             for (Point p : this) {
-                PixelMap.this.matrix[p.x][p.y] = false;
+                matrix[p.x][p.y] = false;
             }
         }
 
         private float magnitude() {
-            return ((float) this.numberOfBlackPoints / this.numberOfAllPoints);
+            return ((float) numberOfBlackPoints / numberOfAllPoints);
         }
 
         private int numberOfBlackPoints() {
-            return this.size();
+            return size();
         }
 
         private int numberOfAllPoints() {
-            return this.width * this.height;
+            return width * height;
         }
 
         private int mostLeftPoint() {

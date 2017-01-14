@@ -73,11 +73,11 @@ public final class TestStatistics {
         private final List<TestRecord> records;
 
         private TestReport() {
-            this.records = new ArrayList<TestRecord>();
+            records = new ArrayList<TestRecord>();
         }
 
         private void addRecord(TestRecord testRecord) {
-            this.records.add(testRecord);
+            records.add(testRecord);
         }
 
         private void printStatistics() {
@@ -87,7 +87,7 @@ public final class TestStatistics {
             System.out.println("----------------------------------------------");
             System.out.println("Defective plates\n");
 
-            for (TestRecord record : this.records) {
+            for (TestRecord record : records) {
                 characterCount += record.getLength();
                 weightedScoreCount += record.getGoodCount();
                 binaryScoreCount += (record.isOk() ? 1 : 0);
@@ -98,10 +98,10 @@ public final class TestStatistics {
             }
             System.out.println("\n----------------------------------------------");
             System.out.println("Test report statistics\n");
-            System.out.println("Total number of plates     : " + this.records.size());
+            System.out.println("Total number of plates     : " + records.size());
             System.out.println("Total number of characters : " + characterCount);
             System.out.println(
-                    "Binary score               : " + (((float) binaryScoreCount / this.records.size()) * 100));
+                    "Binary score               : " + (((float) binaryScoreCount / records.size()) * 100));
             System.out.println("Weighted score             : " + (((float) weightedScoreCount / characterCount) * 100));
         }
 
@@ -116,25 +116,24 @@ public final class TestStatistics {
                 this.name = name.trim();
                 this.plate = plate.trim();
                 this.recognizedPlate = recognizedPlate.trim();
-                this.compute();
+                compute();
             }
 
             private void compute() {
-                this.length = Math.max(this.plate.length(), this.recognizedPlate.length());
+                length = Math.max(plate.length(), recognizedPlate.length());
                 int g1 = 0;
                 int g2 = 0;
-                for (int i = 0; i < this.length; i++) { // Compare from the beginning (f.e. BA123AB vs. BA123ABX)
-                    if (this.getChar(this.plate, i) == this.getChar(this.recognizedPlate, i)) {
+                for (int i = 0; i < length; i++) { // Compare from the beginning (f.e. BA123AB vs. BA123ABX)
+                    if (getChar(plate, i) == getChar(recognizedPlate, i)) {
                         g1++;
                     }
                 }
-                for (int i = 0; i < this.length; i++) { // Compare from the back (f.e. BA123AB vs. XBA123AB)
-                    if (this.getChar(this.plate, this.length - i - 1) == this
-                            .getChar(this.recognizedPlate, this.length - i - 1)) {
+                for (int i = 0; i < length; i++) { // Compare from the back (f.e. BA123AB vs. XBA123AB)
+                    if (getChar(plate, length - i - 1) == getChar(recognizedPlate, length - i - 1)) {
                         g2++;
                     }
                 }
-                this.good = Math.max(g1, g2);
+                good = Math.max(g1, g2);
             }
 
             private char getChar(String string, int position) {
@@ -148,15 +147,15 @@ public final class TestStatistics {
             }
 
             public int getGoodCount() {
-                return this.good;
+                return good;
             }
 
             public int getLength() {
-                return this.length;
+                return length;
             }
 
             public boolean isOk() {
-                return this.length == this.good;
+                return length == good;
             }
         }
     }

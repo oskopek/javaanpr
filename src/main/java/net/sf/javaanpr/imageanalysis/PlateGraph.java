@@ -57,42 +57,42 @@ public class PlateGraph extends Graph {
      */
     public List<Peak> findPeaks(int count) {
         List<Peak> spacesTemp = new ArrayList<Peak>();
-        float diffGVal = (2 * this.getAverageValue()) - this.getMaxValue();
+        float diffGVal = (2 * getAverageValue()) - getMaxValue();
         List<Float> yValuesNew = new ArrayList<Float>();
-        for (Float f : this.yValues) {
+        for (Float f : yValues) {
             yValuesNew.add(f - diffGVal);
         }
-        this.yValues = yValuesNew;
-        this.deActualizeFlags();
+        yValues = yValuesNew;
+        deActualizeFlags();
         for (int c = 0; c < count; c++) {
             float maxValue = 0.0f;
             int maxIndex = 0;
-            for (int i = 0; i < this.yValues.size(); i++) { // left to right
-                if (this.allowedInterval(spacesTemp, i)) {
-                    if (this.yValues.get(i) >= maxValue) {
-                        maxValue = this.yValues.get(i);
+            for (int i = 0; i < yValues.size(); i++) { // left to right
+                if (allowedInterval(spacesTemp, i)) {
+                    if (yValues.get(i) >= maxValue) {
+                        maxValue = yValues.get(i);
                         maxIndex = i;
                     }
                 }
             }
             // we found the biggest peak
-            if (this.yValues.get(maxIndex) < (PlateGraph.plategraph_rel_minpeaksize * this.getMaxValue())) {
+            if (yValues.get(maxIndex) < (PlateGraph.plategraph_rel_minpeaksize * getMaxValue())) {
                 break;
             }
             // width of the detected space
-            int leftIndex = this.indexOfLeftPeakRel(maxIndex, PlateGraph.peakFootConstant);
-            int rightIndex = this.indexOfRightPeakRel(maxIndex, PlateGraph.peakFootConstant);
-            spacesTemp.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(this.yValues.size() - 1, rightIndex)));
+            int leftIndex = indexOfLeftPeakRel(maxIndex, PlateGraph.peakFootConstant);
+            int rightIndex = indexOfRightPeakRel(maxIndex, PlateGraph.peakFootConstant);
+            spacesTemp.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(yValues.size() - 1, rightIndex)));
         }
         // we need to filter candidates that don't have the right proportions
         List<Peak> spaces = new ArrayList<Peak>();
         for (Peak p : spacesTemp) {
-            if (p.getDiff() < this.handle.getHeight()) { // space can't be too wide
+            if (p.getDiff() < handle.getHeight()) { // space can't be too wide
                 spaces.add(p);
             }
         }
         // List<Peak> spaces contains spaces, sort them left to right
-        Collections.sort(spaces, new SpaceComparator(this.yValues));
+        Collections.sort(spaces, new SpaceComparator(yValues));
         List<Peak> chars = new ArrayList<Peak>();
         // + + +++ +++ + + +++ + + + + + + + + + + + ++ + + + ++ +++ +++ | | 1 | 2 .... | +--> 1. local minimum
         // count the char to the left of the space
@@ -111,7 +111,7 @@ public class PlateGraph extends Graph {
         }
         // character to the right of last space
         if (spaces.size() != 0) {
-            Peak last = new Peak(spaces.get(spaces.size() - 1).getCenter(), this.yValues.size() - 1);
+            Peak last = new Peak(spaces.get(spaces.size() - 1).getCenter(), yValues.size() - 1);
             if (last.getDiff() > 0) {
                 chars.add(last);
             }
@@ -133,7 +133,7 @@ public class PlateGraph extends Graph {
 
         @Override
         public int compare(Object peak1, Object peak2) {
-            double comparison = this.getPeakValue(peak2) - this.getPeakValue(peak1);
+            double comparison = getPeakValue(peak2) - getPeakValue(peak1);
             if (comparison < 0) {
                 return 1;
             }

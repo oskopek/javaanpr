@@ -27,12 +27,12 @@ public class Peak {
 
     public Peak(int left, int right) {
         this.left = left;
-        this.center = (left + right) / 2;
+        center = (left + right) / 2;
         this.right = right;
     }
 
     public int getLeft() {
-        return this.left;
+        return left;
     }
 
     public void setLeft(int left) {
@@ -40,7 +40,7 @@ public class Peak {
     }
 
     public int getRight() {
-        return this.right;
+        return right;
     }
 
     public void setRight(int right) {
@@ -48,7 +48,7 @@ public class Peak {
     }
 
     public int getCenter() {
-        return this.center;
+        return center;
     }
 
     public void setCenter(int center) {
@@ -56,6 +56,6 @@ public class Peak {
     }
 
     public int getDiff() {
-        return this.right - this.left;
+        return right - left;
     }
 }

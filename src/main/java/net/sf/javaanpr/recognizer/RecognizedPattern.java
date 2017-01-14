@@ -22,14 +22,14 @@ public final class RecognizedPattern {
 
     public RecognizedPattern(char chr, float value) {
         this.chr = chr;
-        this.cost = value;
+        cost = value;
     }
 
     public char getChar() {
-        return this.chr;
+        return chr;
     }
 
     public float getCost() {
-        return this.cost;
+        return cost;
     }
 }

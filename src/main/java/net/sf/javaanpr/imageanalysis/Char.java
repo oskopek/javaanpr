@@ -46,12 +46,12 @@ public class Char extends Photo {
         super(bi);
         this.thresholdedImage = thresholdedImage;
         this.positionInPlate = positionInPlate;
-        this.init();
+        init();
     }
 
     public Char(BufferedImage bi) {
         this(bi, bi, null);
-        this.init();
+        init();
     }
 
     /**
@@ -66,10 +66,10 @@ public class Char extends Photo {
     public Char(String fileName) throws IOException {
         super(Configurator.getConfigurator().getResourceAsStream(fileName));
         BufferedImage origin = Photo.duplicateBufferedImage(getImage());
-        this.adaptiveThresholding(); // act on this.image // TODO deprecated
-        this.thresholdedImage = getImage();
-        this.setImage(origin);
-        this.init();
+        adaptiveThresholding(); // act on this.image // TODO deprecated
+        thresholdedImage = getImage();
+        setImage(origin);
+        init();
     }
 
     /**

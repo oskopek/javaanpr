@@ -5,13 +5,13 @@ public class Position {
     public final char[] allowedChars;
 
     public Position(String data) {
-        this.allowedChars = data.toCharArray();
+        allowedChars = data.toCharArray();
     }
 
     public boolean isAllowed(char chr) {
         boolean ret = false;
-        for (int i = 0; i < this.allowedChars.length; i++) {
-            if (this.allowedChars[i] == chr) {
+        for (int i = 0; i < allowedChars.length; i++) {
+            if (allowedChars[i] == chr) {
                 ret = true;
             }
         }

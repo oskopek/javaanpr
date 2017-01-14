@@ -33,7 +33,7 @@ public class KnnPatternClassificator extends CharacterRecognizer {
 
     public KnnPatternClassificator() {
         String path = Configurator.getConfigurator().getPathProperty("char_learnAlphabetPath");
-        this.learnLists = new ArrayList<>(36);
+        learnLists = new ArrayList<>(36);
         List<String> filenames = Char.getAlphabetList(path);
         for (String fileName : filenames) {
             Char imgChar;
@@ -43,11 +43,11 @@ public class KnnPatternClassificator extends CharacterRecognizer {
                 throw new IllegalStateException("Failed to load Char: " + fileName, e);
             }
             imgChar.normalize();
-            this.learnLists.add(imgChar.extractFeatures());
+            learnLists.add(imgChar.extractFeatures());
         }
         // check vector elements
-        for (int i = 0; i < this.learnLists.size(); i++) {
-            if (this.learnLists.get(i) == null) {
+        for (int i = 0; i < learnLists.size(); i++) {
+            if (learnLists.get(i) == null) {
                 logger.warn("Alphabet in {} is not complete", path);
             }
         }
@@ -57,8 +57,8 @@ public class KnnPatternClassificator extends CharacterRecognizer {
     public RecognizedChar recognize(Char chr) {
         List<Double> tested = chr.extractFeatures();
         RecognizedChar recognized = new RecognizedChar();
-        for (int x = 0; x < this.learnLists.size(); x++) {
-            float fx = this.simplifiedEuclideanDistance(tested, this.learnLists.get(x));
+        for (int x = 0; x < learnLists.size(); x++) {
+            float fx = simplifiedEuclideanDistance(tested, learnLists.get(x));
             recognized.addPattern(new RecognizedPattern(ALPHABET[x], fx));
         }
         recognized.sort(false);

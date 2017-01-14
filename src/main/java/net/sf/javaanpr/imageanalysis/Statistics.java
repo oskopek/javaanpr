@@ -39,15 +39,15 @@ public class Statistics {
         int count = (w * h);
         this.maximum = maximum;
         this.minimum = minimum;
-        this.average = sum / count;
+        average = sum / count;
     }
 
     public float thresholdBrightness(float value, float coef) {
         float out;
-        if (value > this.average) {
-            out = coef + (((1 - coef) * (value - this.average)) / (this.maximum - this.average));
+        if (value > average) {
+            out = coef + (((1 - coef) * (value - average)) / (maximum - average));
         } else {
-            out = ((1 - coef) * (value - this.minimum)) / (this.average - this.minimum);
+            out = ((1 - coef) * (value - minimum)) / (average - minimum);
         }
         return out;
     }

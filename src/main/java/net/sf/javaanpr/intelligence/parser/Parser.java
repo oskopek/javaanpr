@@ -51,7 +51,7 @@ public class Parser {
      * @throws IOException an IOException
      */
     public Parser() throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
-        this.plateForms = new ArrayList<PlateForm>();
+        plateForms = new ArrayList<PlateForm>();
         String fileName = Configurator.getConfigurator().getPathProperty("intelligence_syntaxDescriptionFile");
         if (fileName == null || fileName.isEmpty()) {
             throw new IOException("Failed to get syntax description file from Configurator");
@@ -61,7 +61,7 @@ public class Parser {
             throw new IOException("Couldn't find parser syntax description file");
         }
         try {
-            this.plateForms = this.loadFromXml(inStream);
+            plateForms = loadFromXml(inStream);
         } catch (ParserConfigurationException | SAXException e) { // TODO fix
             logger.error("Failed to load from parser syntax description file");
             throw e;
@@ -83,7 +83,7 @@ public class Parser {
     public List<PlateForm> loadFromXml(String fileName)
             throws ParserConfigurationException, SAXException, IOException { // TODO javadoc
         InputStream inStream = Configurator.getConfigurator().getResourceAsStream(fileName);
-        return this.loadFromXml(inStream);
+        return loadFromXml(inStream);
     }
 
     /**
@@ -122,7 +122,7 @@ public class Parser {
     }
 
     public void unFlagAll() {
-        for (PlateForm form : this.plateForms) {
+        for (PlateForm form : plateForms) {
             form.setFlagged(false);
         }
     }
@@ -136,7 +136,7 @@ public class Parser {
     public void flagEqualOrShorterLength(int length) {
         boolean found = false;
         for (int i = length; (i >= 1) && !found; i--) {
-            for (PlateForm form : this.plateForms) {
+            for (PlateForm form : plateForms) {
                 if (form.length() == i) {
                     form.setFlagged(true);
                     found = true;
@@ -146,7 +146,7 @@ public class Parser {
     }
 
     public void flagEqualLength(int length) {
-        for (PlateForm form : this.plateForms) {
+        for (PlateForm form : plateForms) {
             if (form.length() == length) {
                 form.setFlagged(true);
             }
@@ -154,7 +154,7 @@ public class Parser {
     }
 
     public void invertFlags() {
-        for (PlateForm form : this.plateForms) {
+        for (PlateForm form : plateForms) {
             form.setFlagged(!form.isFlagged());
         }
     }
@@ -177,12 +177,12 @@ public class Parser {
                                 + "</font><hr><br>");
                 return recognizedPlate.getString();
             case ONLY_EQUAL_LENGTH:
-                this.unFlagAll();
-                this.flagEqualLength(length);
+                unFlagAll();
+                flagEqualLength(length);
                 break;
             case EQUAL_OR_SHORTER_LENGTH:
-                this.unFlagAll();
-                this.flagEqualOrShorterLength(length);
+                unFlagAll();
+                flagEqualOrShorterLength(length);
                 break;
             default:
                 throw new IllegalArgumentException("Expected SyntaxAnalysisMode.DO_NOT_PARSE, "
@@ -191,7 +191,7 @@ public class Parser {
 
         List<FinalPlate> finalPlates = new ArrayList<FinalPlate>();
 
-        for (PlateForm form : this.plateForms) {
+        for (PlateForm form : plateForms) {
             if (!form.isFlagged()) {
                 continue;
             }
@@ -244,11 +244,11 @@ public class Parser {
         private float requiredChanges = 0;
 
         private FinalPlate() {
-            this.plate = "";
+            plate = "";
         }
 
         public void addChar(char chr) {
-            this.plate = this.plate + chr;
+            plate = plate + chr;
         }
     }
 }

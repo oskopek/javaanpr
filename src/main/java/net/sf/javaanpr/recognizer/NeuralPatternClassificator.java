@@ -58,11 +58,11 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
         dimensions.add(inputLayerSize);
         dimensions.add(configurator.getIntProperty("neural_topology"));
         dimensions.add(CharacterRecognizer.ALPHABET.length);
-        this.network = new NeuralNetwork(dimensions);
+        network = new NeuralNetwork(dimensions);
         if (learn) {
             String learnAlphabetPath = configurator.getStrProperty("char_learnAlphabetPath");
             try {
-                this.learnAlphabet(learnAlphabetPath);
+                learnAlphabet(learnAlphabetPath);
             } catch (IOException e) {
                 logger.error("Failed to load alphabet: {}", learnAlphabetPath);
             }
@@ -70,7 +70,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
             // or load network from xml
             String neuralNetPath = configurator.getPathProperty("char_neuralNetworkPath");
             InputStream is = configurator.getResourceAsStream(neuralNetPath);
-            this.network = new NeuralNetwork(is);
+            network = new NeuralNetwork(is);
         }
     }
 
@@ -87,7 +87,7 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
     @Override
     public RecognizedChar recognize(Char imgChar) {
         imgChar.normalize();
-        List<Double> output = this.network.test(imgChar.extractFeatures());
+        List<Double> output = network.test(imgChar.extractFeatures());
         RecognizedChar recognized = new RecognizedChar();
         for (int i = 0; i < output.size(); i++) {
             recognized.addPattern(new RecognizedPattern(ALPHABET[i], output.get(i).floatValue()));
@@ -130,9 +130,9 @@ public class NeuralPatternClassificator extends CharacterRecognizer {
                 imgChar = new Char(is);
             }
             imgChar.normalize();
-            train.addIOPair(this.createNewPair(fileName.toUpperCase().charAt(0), imgChar));
+            train.addIOPair(createNewPair(fileName.toUpperCase().charAt(0), imgChar));
         }
-        this.network.learn(train, Configurator.getConfigurator().getIntProperty("neural_maxk"),
+        network.learn(train, Configurator.getConfigurator().getIntProperty("neural_maxk"),
                 Configurator.getConfigurator().getDoubleProperty("neural_eps"),
                 Configurator.getConfigurator().getDoubleProperty("neural_lambda"),
                 Configurator.getConfigurator().getDoubleProperty("neural_micro"));

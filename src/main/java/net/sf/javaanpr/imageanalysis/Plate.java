@@ -37,33 +37,33 @@ public class Plate extends Photo implements Cloneable {
 
     public Plate(BufferedImage bi) {
         super(bi);
-        this.plateCopy = new Plate(Photo.duplicateBufferedImage(getImage()), true);
-        this.plateCopy.adaptiveThresholding();
+        plateCopy = new Plate(Photo.duplicateBufferedImage(getImage()), true);
+        plateCopy.adaptiveThresholding();
     }
 
     private Plate(BufferedImage bi, boolean isCopy) { // TODO refactor: remove this, is only a copy constructor
         super(bi);
-        this.plateCopy = null;
+        plateCopy = null;
     }
 
     public BufferedImage renderGraph() {
-        this.computeGraph();
-        return this.graphHandle.renderHorizontally(this.getWidth(), 100);
+        computeGraph();
+        return graphHandle.renderHorizontally(getWidth(), 100);
     }
 
     private List<Peak> computeGraph() {
-        if (this.graphHandle != null) {
-            return this.graphHandle.peaks;
+        if (graphHandle != null) {
+            return graphHandle.peaks;
         }
-        this.graphHandle = this.histogram(this.plateCopy.getImage());
-        this.graphHandle.applyProbabilityDistributor(Plate.distributor);
-        this.graphHandle.findPeaks(Plate.numberOfCandidates);
-        return this.graphHandle.peaks;
+        graphHandle = histogram(plateCopy.getImage());
+        graphHandle.applyProbabilityDistributor(Plate.distributor);
+        graphHandle.findPeaks(Plate.numberOfCandidates);
+        return graphHandle.peaks;
     }
 
     public List<Char> getChars() {
         List<Char> out = new ArrayList<Char>();
-        List<Peak> peaks = this.computeGraph();
+        List<Peak> peaks = computeGraph();
         for (int i = 0; i < peaks.size(); i++) {
             // Cut from the original image of the plate and save to a vector.
             // ATTENTION: Cutting from original,
@@ -73,7 +73,7 @@ public class Plate extends Photo implements Cloneable {
                 continue;
             }
             out.add(new Char(getImage().getSubimage(p.getLeft(), 0, p.getDiff(), getImage().getHeight()),
-                    this.plateCopy.getImage().getSubimage(p.getLeft(), 0, p.getDiff(), getImage().getHeight()),
+                    plateCopy.getImage().getSubimage(p.getLeft(), 0, p.getDiff(), getImage().getHeight()),
                     new PositionInPlate(p.getLeft(), p.getRight())));
         }
         return out;
@@ -99,17 +99,17 @@ public class Plate extends Photo implements Cloneable {
      * vertical projections of the cloned image (which is thresholded).
      */
     public void normalize() {
-        Plate clone1 = this.clone();
+        Plate clone1 = clone();
         clone1.verticalEdgeDetector(clone1.getImage());
         PlateVerticalGraph vertical = clone1.histogramYaxis(clone1.getImage());
-        this.setImage(cutTopBottom(getImage(), vertical));
-        plateCopy.setImage(cutTopBottom(this.plateCopy.getImage(), vertical));
-        Plate clone2 = this.clone();
+        setImage(cutTopBottom(getImage(), vertical));
+        plateCopy.setImage(cutTopBottom(plateCopy.getImage(), vertical));
+        Plate clone2 = clone();
         if (Plate.horizontalDetectionType == 1) {
             clone2.horizontalEdgeDetector(clone2.getImage());
         }
         PlateHorizontalGraph horizontal = clone1.histogramXaxis(clone2.getImage());
-        this.setImage(cutLeftRight(getImage(), horizontal));
+        setImage(cutLeftRight(getImage(), horizontal));
         plateCopy.setImage(cutLeftRight(plateCopy.getImage(), horizontal));
     }
 
@@ -184,7 +184,7 @@ public class Plate extends Photo implements Cloneable {
 
     public float getCharsWidthDispersion(List<Char> chars) {
         float averageDispersion = 0;
-        float averageWidth = this.getAverageCharWidth(chars);
+        float averageWidth = getAverageCharWidth(chars);
         for (Char chr : chars) {
             averageDispersion += (Math.abs(averageWidth - chr.fullWidth));
         }
@@ -194,7 +194,7 @@ public class Plate extends Photo implements Cloneable {
 
     public float getPiecesWidthDispersion(List<Char> chars) {
         float averageDispersion = 0;
-        float averageWidth = this.getAveragePieceWidth(chars);
+        float averageWidth = getAveragePieceWidth(chars);
         for (Char chr : chars) {
             averageDispersion += (Math.abs(averageWidth - chr.pieceWidth));
         }

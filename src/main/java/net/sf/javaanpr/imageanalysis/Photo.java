@@ -37,7 +37,7 @@ public class Photo implements AutoCloseable, Cloneable {
     private BufferedImage image;
 
     public Photo(BufferedImage bi) {
-        this.image = bi;
+        image = bi;
     }
 
     public Photo(InputStream is) throws IOException {
@@ -137,23 +137,23 @@ public class Photo implements AutoCloseable, Cloneable {
 
     @Override
     public Photo clone() {
-        return new Photo(duplicateBufferedImage(this.image));
+        return new Photo(duplicateBufferedImage(image));
     }
 
     public int getWidth() {
-        return this.image.getWidth();
+        return image.getWidth();
     }
 
     public int getHeight() {
-        return this.image.getHeight();
+        return image.getHeight();
     }
 
     public int getRGB(int x, int y) {
-        return this.image.getRGB(x, y);
+        return image.getRGB(x, y);
     }
 
     public BufferedImage getImage() {
-        return this.image;
+        return image;
     }
 
     /**
@@ -169,20 +169,20 @@ public class Photo implements AutoCloseable, Cloneable {
 
     public BufferedImage getBiWithAxes() {
         BufferedImage axis =
-                new BufferedImage(this.image.getWidth() + 40, this.image.getHeight() + 40, BufferedImage.TYPE_INT_RGB);
+                new BufferedImage(image.getWidth() + 40, image.getHeight() + 40, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphicAxis = axis.createGraphics();
         graphicAxis.setColor(Color.LIGHT_GRAY);
-        Rectangle backRect = new Rectangle(0, 0, this.image.getWidth() + 40, this.image.getHeight() + 40);
+        Rectangle backRect = new Rectangle(0, 0, image.getWidth() + 40, image.getHeight() + 40);
         graphicAxis.fill(backRect);
         graphicAxis.draw(backRect);
-        graphicAxis.drawImage(this.image, 35, 5, null);
+        graphicAxis.drawImage(image, 35, 5, null);
         graphicAxis.setColor(Color.BLACK);
-        graphicAxis.drawRect(35, 5, this.image.getWidth(), this.image.getHeight());
-        for (int ax = 0; ax < this.image.getWidth(); ax += 50) {
+        graphicAxis.drawRect(35, 5, image.getWidth(), image.getHeight());
+        for (int ax = 0; ax < image.getWidth(); ax += 50) {
             graphicAxis.drawString(Integer.toString(ax), ax + 35, axis.getHeight() - 10);
-            graphicAxis.drawLine(ax + 35, this.image.getHeight() + 5, ax + 35, this.image.getHeight() + 15);
+            graphicAxis.drawLine(ax + 35, image.getHeight() + 5, ax + 35, image.getHeight() + 15);
         }
-        for (int ay = 0; ay < this.image.getHeight(); ay += 50) {
+        for (int ay = 0; ay < image.getHeight(); ay += 50) {
             graphicAxis.drawString(Integer.toString(ay), 3, ay + 15);
             graphicAxis.drawLine(25, ay + 5, 35, ay + 5);
         }
@@ -191,19 +191,19 @@ public class Photo implements AutoCloseable, Cloneable {
     }
 
     public void setBrightness(int x, int y, float value) {
-        this.image.setRGB(x, y, new Color(value, value, value).getRGB());
+        image.setRGB(x, y, new Color(value, value, value).getRGB());
     }
 
     public float getBrightness(int x, int y) {
-        return Photo.getBrightness(this.image, x, y);
+        return Photo.getBrightness(image, x, y);
     }
 
     public float getSaturation(int x, int y) {
-        return Photo.getSaturation(this.image, x, y);
+        return Photo.getSaturation(image, x, y);
     }
 
     public float getHue(int x, int y) {
-        return Photo.getHue(this.image, x, y);
+        return Photo.getHue(image, x, y);
     }
 
     public void loadImage(InputStream is) throws IOException {
@@ -221,26 +221,26 @@ public class Photo implements AutoCloseable, Cloneable {
             throw new IOException("Unsupported file format");
         }
         File destination = new File(filepath);
-        ImageIO.write(this.image, type, destination);
+        ImageIO.write(image, type, destination);
     }
 
     public void normalizeBrightness(float coef) {
         Statistics stats = new Statistics(this);
-        for (int x = 0; x < this.getWidth(); x++) {
-            for (int y = 0; y < this.getHeight(); y++) {
-                Photo.setBrightness(this.image, x, y,
-                        stats.thresholdBrightness(Photo.getBrightness(this.image, x, y), coef));
+        for (int x = 0; x < getWidth(); x++) {
+            for (int y = 0; y < getHeight(); y++) {
+                Photo.setBrightness(image, x, y,
+                        stats.thresholdBrightness(Photo.getBrightness(image, x, y), coef));
             }
         }
     }
 
     // FILTERS
     public void linearResize(int width, int height) {
-        this.image = Photo.linearResizeBi(this.image, width, height);
+        image = Photo.linearResizeBi(image, width, height);
     }
 
     public void averageResize(int width, int height) {
-        this.image = this.averageResizeBi(this.image, width, height);
+        image = averageResizeBi(image, width, height);
     }
 
     public BufferedImage averageResizeBi(BufferedImage origin, int width, int height) {
@@ -279,7 +279,7 @@ public class Photo implements AutoCloseable, Cloneable {
     }
 
     public Photo duplicate() {
-        return new Photo(Photo.duplicateBufferedImage(this.image));
+        return new Photo(Photo.duplicateBufferedImage(image));
     }
 
     public void verticalEdgeDetector(BufferedImage source) {
@@ -341,11 +341,11 @@ public class Photo implements AutoCloseable, Cloneable {
     }
 
     public void plainThresholding(Statistics stat) {
-        int width = this.getWidth();
-        int height = this.getHeight();
+        int width = getWidth();
+        int height = getHeight();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                this.setBrightness(x, y, stat.thresholdBrightness(this.getBrightness(x, y), 1.0f));
+                setBrightness(x, y, stat.thresholdBrightness(getBrightness(x, y), 1.0f));
             }
         }
     }
@@ -359,13 +359,13 @@ public class Photo implements AutoCloseable, Cloneable {
         Statistics stat = new Statistics(this);
         int radius = Configurator.getConfigurator().getIntProperty("photo_adaptivethresholdingradius");
         if (radius == 0) {
-            this.plainThresholding(stat);
+            plainThresholding(stat);
             return;
         }
-        int width = this.getWidth();
-        int height = this.getHeight();
-        float[][] sourceArray = this.bufferedImageToArray(this.image, width, height);
-        float[][] destinationArray = this.bufferedImageToArray(this.image, width, height);
+        int width = getWidth();
+        int height = getHeight();
+        float[][] sourceArray = bufferedImageToArray(image, width, height);
+        float[][] destinationArray = bufferedImageToArray(image, width, height);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 // compute neighborhood
@@ -387,14 +387,14 @@ public class Photo implements AutoCloseable, Cloneable {
                 }
             }
         }
-        this.image = Photo.arrayToBufferedImage(destinationArray, width, height);
+        image = Photo.arrayToBufferedImage(destinationArray, width, height);
     }
 
     public HoughTransformation getHoughTransformation() {
-        HoughTransformation hough = new HoughTransformation(this.getWidth(), this.getHeight());
-        for (int x = 0; x < this.getWidth(); x++) {
-            for (int y = 0; y < this.getHeight(); y++) {
-                hough.addLine(x, y, this.getBrightness(x, y));
+        HoughTransformation hough = new HoughTransformation(getWidth(), getHeight());
+        for (int x = 0; x < getWidth(); x++) {
+            for (int y = 0; y < getHeight(); y++) {
+                hough.addLine(x, y, getBrightness(x, y));
             }
         }
         return hough;
@@ -402,7 +402,7 @@ public class Photo implements AutoCloseable, Cloneable {
 
     @Override
     public void close() {
-        this.image.flush();
+        image.flush();
     }
 
     @Override
@@ -414,12 +414,12 @@ public class Photo implements AutoCloseable, Cloneable {
             return false;
         }
         Photo photo = (Photo) o;
-        if (this.getWidth() != photo.getWidth() || this.getHeight() != photo.getHeight()) {
+        if (getWidth() != photo.getWidth() || getHeight() != photo.getHeight()) {
             return false;
         }
         for (int i = 0; i < getWidth(); i++) {
             for (int j = 0; j < getHeight(); j++) {
-                if (this.getRGB(i, j) != this.getRGB(i, j)) {
+                if (getRGB(i, j) != getRGB(i, j)) {
                     return false;
                 }
             }
