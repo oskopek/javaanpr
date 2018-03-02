@@ -16,6 +16,7 @@
 
 package net.sf.javaanpr.jar;
 
+import com.github.sarxos.webcam.Webcam;
 import net.sf.javaanpr.configurator.Configurator;
 import net.sf.javaanpr.gui.ReportGenerator;
 import net.sf.javaanpr.gui.windows.FrameComponentInit;
@@ -28,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -136,7 +138,7 @@ public final class Main {
      * @param args the input parameters
      * @throws Exception an Exception
      */
-    public static void main(String[] args) throws Exception { // TODO refactor
+    public static void main2(String[] args) throws Exception { // TODO refactor
         if ((args.length == 0) || ((args.length == 1) && args[0].equals("-gui"))) { // gui
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             FrameComponentInit frameComponentInit = new FrameComponentInit(); // show wait
@@ -163,6 +165,25 @@ public final class Main {
             Main.newAlphabet(args[2], args[4]);
         } else { // display help
             System.out.println(Main.helpText);
+        }
+    }
+
+    public static void main(String[] args) throws Exception { // TODO refactor
+        Intelligence intel = new Intelligence();
+        Webcam webcam = Webcam.getDefault();
+        webcam.open();
+
+        BufferedImage last = null;
+        while (true) {
+            BufferedImage img = webcam.getImage();
+            if (img.equals(last)) {
+                System.err.println("Equals!");
+            }
+            CarSnapshot carSnap = new CarSnapshot(img);
+            String numberPlate = intel.recognize(carSnap);
+            System.out.println("Plate: " + numberPlate);
+            last = img;
+            Thread.sleep(1000);
         }
     }
 }
