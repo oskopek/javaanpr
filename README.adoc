@@ -61,9 +61,9 @@ the bug, including your Java version and operating system.
 
 === Submitting a Pull Request
 1. http://help.github.com/fork-a-repo/[Fork the repository.]
-2. http://learn.github.com/p/branching.html[Create a topic branch.]
+2. https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/[Create a topic branch.]
 3. Implement your feature or bug fix.
 4. Run +mvn clean install+. If the tests fail, return to step 3.
 5. If applicable, add tests for your feature or bug fix.
 6. Add, commit, and push your changes.
-7. http://help.github.com/send-pull-requests/[Submit a pull request.]
+7. https://help.github.com/articles/creating-a-pull-request/[Submit a pull request.]
