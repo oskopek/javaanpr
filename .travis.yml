@@ -3,7 +3,8 @@ language: java
 sudo: false
 
 jdk:
-  - oraclejdk8
+  - openjdk13
+  - oraclejdk13
 
 cache:
   directories:
