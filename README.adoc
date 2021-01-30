@@ -1,8 +1,6 @@
 == JavaANPR
 
-image:https://travis-ci.org/oskopek/javaanpr.svg?branch=master["Build Status", link="https://travis-ci.org/oskopek/javaanpr"]
-image:https://coveralls.io/repos/oskopek/javaanpr/badge.png?branch=master["Coverage Status", link="https://coveralls.io/r/oskopek/javaanpr?branch=master"]
-image:https://www.ohloh.net/p/javaanpr/widgets/project_thin_badge.gif["Ohloh widget", link="https://www.ohloh.net/p/javaanpr"]
+image:https://github.com/oskopek/javaanpr/workflows/Java%20CI%20with%20Maven/badge.svg["Build status", link="https://github.com/oskopek/javaanpr/actions?query=workflow%3A%22Java+CI+with+Maven%22"]
 
 *Original author*: Copyright (C) 2006-2007 Ondrej Martinsky. All rights reserved.
 
