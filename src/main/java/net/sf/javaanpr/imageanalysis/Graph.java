@@ -85,7 +85,7 @@ public class Graph {
     public float getAverageValue(int a, int b) {
         float sum = 0.0f;
         for (int i = a; i < b; i++) {
-            sum += yValues.get(i).doubleValue();
+            sum += yValues.get(i);
         }
         return sum / yValues.size();
     }

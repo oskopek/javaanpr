@@ -229,7 +229,7 @@ public class Intelligence {
                             continue;
                         }
                     }
-                    float similarityCost = 0;
+                    double similarityCost = 0;
                     RecognizedChar rc = null;
                     if (ok) {
                         rc = chrRecog.recognize(chr);

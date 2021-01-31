@@ -73,6 +73,9 @@ public class ReportGenerator {
     }
 
     public void saveStreamToFile(InputStream inStream, File out) throws IOException {
+        if (inStream == null) {
+            throw new IllegalArgumentException("inStream cannot be null");
+        }
         FileOutputStream outStream = new FileOutputStream(out);
         int read;
         byte[] bytes = new byte[1024];

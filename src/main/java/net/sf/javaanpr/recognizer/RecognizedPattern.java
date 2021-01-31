@@ -18,9 +18,9 @@ package net.sf.javaanpr.recognizer;
 
 public final class RecognizedPattern {
     private final char chr;
-    private final float cost;
+    private final double cost;
 
-    public RecognizedPattern(char chr, float value) {
+    public RecognizedPattern(char chr, double value) {
         this.chr = chr;
         cost = value;
     }
@@ -29,7 +29,7 @@ public final class RecognizedPattern {
         return chr;
     }
 
-    public float getCost() {
+    public double getCost() {
         return cost;
     }
 }

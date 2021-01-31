@@ -48,8 +48,8 @@ public class CarSnapshotGraph extends Graph {
             int leftIndex = indexOfLeftPeakRel(maxIndex, CarSnapshotGraph.peakFootConstant);
             int rightIndex = indexOfRightPeakRel(maxIndex, CarSnapshotGraph.peakFootConstant);
             int diff = rightIndex - leftIndex;
-            leftIndex -= CarSnapshotGraph.peakDiffMultiplicationConstant * diff;
-            rightIndex += CarSnapshotGraph.peakDiffMultiplicationConstant * diff;
+            leftIndex -= (int) Math.round(CarSnapshotGraph.peakDiffMultiplicationConstant * diff);
+            rightIndex += (int) Math.round(CarSnapshotGraph.peakDiffMultiplicationConstant * diff);
             outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(yValues.size() - 1, rightIndex)));
         }
         outPeaks.sort(new PeakComparator(yValues));

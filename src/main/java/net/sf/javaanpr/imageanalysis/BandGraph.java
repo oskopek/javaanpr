@@ -60,8 +60,8 @@ public class BandGraph extends Graph {
             int leftIndex = indexOfLeftPeakRel(maxIndex, BandGraph.peakFootConstant);
             int rightIndex = indexOfRightPeakRel(maxIndex, BandGraph.peakFootConstant);
             int diff = rightIndex - leftIndex;
-            leftIndex -= BandGraph.peakDiffMultiplicationConstant * diff;
-            rightIndex += BandGraph.peakDiffMultiplicationConstant * diff;
+            leftIndex -= (int) Math.round(BandGraph.peakDiffMultiplicationConstant * diff);
+            rightIndex += (int) Math.round(BandGraph.peakDiffMultiplicationConstant * diff);
             outPeaks.add(new Peak(Math.max(0, leftIndex), maxIndex, Math.min(yValues.size() - 1, rightIndex)));
         }
         // filter the candidates that don't correspond with plate proportions

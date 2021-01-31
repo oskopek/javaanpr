@@ -45,8 +45,8 @@ public class PatternComparator implements Comparator<RecognizedPattern> {
      */
     @Override
     public int compare(RecognizedPattern recognizedPattern1, RecognizedPattern recognizedPattern2) {
-        Float cost1 = recognizedPattern1.getCost();
-        Float cost2 = recognizedPattern2.getCost();
+        Double cost1 = recognizedPattern1.getCost();
+        Double cost2 = recognizedPattern2.getCost();
         return shouldSortDescending ? -1 * cost1.compareTo(cost2) : cost1.compareTo(cost2);
     }
 }

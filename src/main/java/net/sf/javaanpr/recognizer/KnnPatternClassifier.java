@@ -58,7 +58,7 @@ public class KnnPatternClassifier extends CharacterRecognizer {
         List<Double> tested = chr.extractFeatures();
         RecognizedChar recognized = new RecognizedChar();
         for (int x = 0; x < learnLists.size(); x++) {
-            float fx = simplifiedEuclideanDistance(tested, learnLists.get(x));
+            double fx = simplifiedEuclideanDistance(tested, learnLists.get(x));
             recognized.addPattern(new RecognizedPattern(ALPHABET[x], fx));
         }
         recognized.sort(false);
@@ -73,8 +73,8 @@ public class KnnPatternClassifier extends CharacterRecognizer {
      * @return their simple distance
      * @deprecated Use {@link #simplifiedEuclideanDistance(List, List)}, works better.
      */
-    private float difference(List<Double> vectorA, List<Double> vectorB) {
-        float diff = 0;
+    private double difference(List<Double> vectorA, List<Double> vectorB) {
+        double diff = 0;
         for (int x = 0; x < vectorA.size(); x++) {
             diff += Math.abs(vectorA.get(x) - vectorB.get(x));
         }
@@ -88,11 +88,11 @@ public class KnnPatternClassifier extends CharacterRecognizer {
      * @param vectorB vector B
      * @return the euclidean distance of A and B
      */
-    private float simplifiedEuclideanDistance(List<Double> vectorA, List<Double> vectorB) {
-        float diff = 0;
-        float partialDiff;
+    private double simplifiedEuclideanDistance(List<Double> vectorA, List<Double> vectorB) {
+        double diff = 0;
+        double partialDiff;
         for (int x = 0; x < vectorA.size(); x++) {
-            partialDiff = (float) Math.abs(vectorA.get(x) - vectorB.get(x));
+            partialDiff = Math.abs(vectorA.get(x) - vectorB.get(x));
             diff += partialDiff * partialDiff;
         }
         return diff;

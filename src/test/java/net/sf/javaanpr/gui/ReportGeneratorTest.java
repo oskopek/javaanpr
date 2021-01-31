@@ -37,7 +37,7 @@ public class ReportGeneratorTest {
      * Tests {@link ReportGenerator#insertImage(BufferedImage, String, int, int)} with valid inputs.
      *
      * @throws IllegalArgumentException the illegal argument exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException              Signals that an I/O exception has occurred.
      */
     @Test
     public void testInsertImage_Valid() throws IllegalArgumentException, IOException {
@@ -59,7 +59,7 @@ public class ReportGeneratorTest {
      * valid.
      *
      * @throws IllegalArgumentException the illegal argument exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException              Signals that an I/O exception has occurred.
      */
     @Test
     public void testInsertImage_BadInput() throws IllegalArgumentException, IOException {
@@ -80,7 +80,7 @@ public class ReportGeneratorTest {
      * Tests {@link ReportGenerator#insertText(String)} with null input.
      *
      * @throws IllegalArgumentException the illegal argument exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException              Signals that an I/O exception has occurred.
      */
     @Test
     public void testInsertText_NullInput() throws IllegalArgumentException, IOException {
@@ -96,7 +96,7 @@ public class ReportGeneratorTest {
      * Tests {@link ReportGenerator#insertText(String)} with empty string input.
      *
      * @throws IllegalArgumentException the illegal argument exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException              Signals that an I/O exception has occurred.
      */
     @Test
     public void testInsertText_EmptyInput() throws IllegalArgumentException, IOException {
@@ -111,26 +111,21 @@ public class ReportGeneratorTest {
     /**
      * Tests {@link ReportGenerator#saveStreamToFile(java.io.InputStream, java.io.File)} with null input stream.
      *
-     * @throws IllegalArgumentException the illegal argument exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws Exception if an error occurs
      */
-    @Test
-    public void testSaveStreamToFile_InvalidInput() throws IllegalArgumentException, IOException {
-        try {
-            final ReportGenerator reportGenerator = new ReportGenerator("target/test-classes/");
-            final InputStream inStream = null;
-            final File io = new File("target/test-classes/out.txt");
-            reportGenerator.saveStreamToFile(inStream, io);
-        } catch (final Exception e) {
-            assertEquals(null, e.getMessage());
-        }
+    @Test(expected = IllegalArgumentException.class)
+    public void testSaveStreamToFile_InvalidInput() throws Exception {
+        final ReportGenerator reportGenerator = new ReportGenerator("target/test-classes/");
+        final InputStream inStream = null;
+        final File io = new File("target/test-classes/out.txt");
+        reportGenerator.saveStreamToFile(inStream, io);
     }
 
     /**
      * Tests {@link ReportGenerator#saveStreamToFile(java.io.InputStream, java.io.File)} with null output stream input.
      *
      * @throws IllegalArgumentException the illegal argument exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException              Signals that an I/O exception has occurred.
      */
     @Test
     public void testSaveStreamToFile_InvalidOutput() throws IllegalArgumentException, IOException {
@@ -148,7 +143,7 @@ public class ReportGeneratorTest {
      * stream.
      *
      * @throws IllegalArgumentException the illegal argument exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException              Signals that an I/O exception has occurred.
      */
     @Test
     public void testSaveStreamToFile_Valid() throws IllegalArgumentException, IOException {
@@ -164,7 +159,7 @@ public class ReportGeneratorTest {
      * Tests {@link ReportGenerator#saveImage(BufferedImage, String)} with valid input.
      *
      * @throws IllegalArgumentException the illegal argument exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException              Signals that an I/O exception has occurred.
      */
     @Test
     public void testSaveImage_Valid() throws IllegalArgumentException, IOException {
@@ -183,7 +178,7 @@ public class ReportGeneratorTest {
      * input.
      *
      * @throws IllegalArgumentException the illegal argument exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException              Signals that an I/O exception has occurred.
      */
     @Test
     public void testSaveImage_InvalidInput() throws IllegalArgumentException, IOException {
