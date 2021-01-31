@@ -18,104 +18,132 @@ package net.sf.javaanpr.test;
 
 import net.sf.javaanpr.imageanalysis.CarSnapshot;
 import net.sf.javaanpr.intelligence.Intelligence;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ErrorCollector;
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
+@RunWith(Parameterized.class)
 public class RecognitionIT {
+    private static final long NUM_SNAPSHOTS = 97;
+    private static long NUM_ACTUAL_CORRECT = 0;
+    private static long NUM_GOLDEN_CORRECT = 0;
+    private static final double GOLDEN_ACC = 54.63;
 
-    private static final int currentlyCorrectSnapshots = 53;
-    private static final Logger logger = LoggerFactory.getLogger(RecognitionIT.class);
-    @Rule
-    public ErrorCollector recognitionErrors = new ErrorCollector();
+    private static final transient Logger logger = LoggerFactory.getLogger(RecognitionIT.class);
+
+    private static final String SNAPSHOT_DIR_PATH = "src/test/resources/snapshots";
+    // TODO: make `results_actual.properties` match `results.properties`.
+    private static final String RESULTS_PATH = "src/test/resources/results.properties";
+    private static final String RESULTS_ACTUAL_PATH = "src/test/resources/results_actual.properties";
+
+    @Parameterized.Parameters(name = "{0} -> {2} (golden: {1})")
+    public static List<Object[]> licensePlates() throws Exception {
+        List<Object[]> plates = new ArrayList<>();
+        try (InputStream resultsStream = new FileInputStream(RESULTS_PATH);
+             InputStream resultsActualStream = new FileInputStream(RESULTS_ACTUAL_PATH)) {
+            Properties properties = new Properties();
+            properties.load(resultsStream);
+            assertTrue(properties.size() > 0);
+
+            Properties propertiesActual = new Properties();
+            propertiesActual.load(resultsActualStream);
+            assertTrue(propertiesActual.size() > 0);
+
+            for (Object snapNameObj : properties.keySet()) {
+                String snapName = snapNameObj.toString();
+                String plateCorrect = properties.getProperty(snapName);
+                String plateActual = propertiesActual.getProperty(snapName);
+                assertNotNull(plateCorrect, plateActual);
+                if (plateActual.equals("null")) {
+                    plateActual = null;
+                }
+                plates.add(new Object[]{snapName, plateCorrect, plateActual});
+            }
+        }
+        plates.sort(Comparator.comparing(o -> String.valueOf(o[0])));
+        assertEquals(NUM_SNAPSHOTS, plates.size());
+        return plates;
+    }
+
+    private Intelligence intel;
+
+    @Parameterized.Parameter(0)
+    public String snapName;
+
+    @Parameterized.Parameter(1)
+    public String plateCorrect;
+
+    @Parameterized.Parameter(2)
+    public String plateActual;
+
+    @Before
+    public void setUp() throws Exception {
+        intel = new Intelligence();
+        assertNotNull(intel);
+    }
+
+    @BeforeClass
+    public static void setUpClass() {
+        NUM_ACTUAL_CORRECT = 0;
+        NUM_GOLDEN_CORRECT = 0;
+    }
+
+    @AfterClass
+    public static void tearDownClass() {
+        double actualAccuracy = NUM_ACTUAL_CORRECT / (double) NUM_SNAPSHOTS * 100.;
+        double goldenAccuracy = NUM_GOLDEN_CORRECT / (double) NUM_SNAPSHOTS * 100.;
+        logger.info("Accuracy:\tactual: {}\tgolden:{}",
+                String.format("%.2f", actualAccuracy),
+                String.format("%.2f", goldenAccuracy));
+        assertTrue(String.format("Actual accuracy: %.2f, expected at least 100.0", actualAccuracy),
+                actualAccuracy >= 100.0);
+        assertTrue(String.format("Golden accuracy: %.2f, expected at least %.2f", goldenAccuracy, GOLDEN_ACC),
+                goldenAccuracy >= GOLDEN_ACC);
+    }
+
+    private static CarSnapshot loadSnapshot(String path) throws Exception {
+        CarSnapshot carSnap = new CarSnapshot(new File(SNAPSHOT_DIR_PATH, path).getAbsolutePath());
+        assertNotNull("carSnap is null", carSnap);
+        assertNotNull("carSnap.image is null", carSnap.getImage());
+        return carSnap;
+    }
 
     //    TODO 3 Fix for some strange encodings of jpeg images - they don't always load correctly
     //    See: http://stackoverflow.com/questions/2408613/problem-reading-jpeg-image-using-imageio-readfile-file
     //    B/W images load without a problem: for now - using snapshots/test_041.jpg
     @Test
-    public void intelligenceSingleTest() throws IOException, ParserConfigurationException, SAXException {
-        final String image = "snapshots/test_041.jpg";
-        CarSnapshot carSnap = new CarSnapshot(image);
-        assertNotNull("carSnap is null", carSnap);
-        assertNotNull("carSnap.image is null", carSnap.getImage());
-        Intelligence intel = new Intelligence();
-        assertNotNull(intel);
-        String spz = intel.recognize(carSnap);
-        assertNotNull("The licence plate is null - are you sure the image has the correct color space?", spz);
-        assertEquals("LM025BD", spz);
-        carSnap.close();
+    public void testSnapshotWithReport() throws Exception {
+        try (CarSnapshot carSnap = loadSnapshot(snapName)) {
+            String numberPlate = intel.recognize(carSnap, true);
+
+            assertEquals(plateActual, numberPlate);
+        }
     }
 
     /**
      * Goes through all the test images and checks if they are correctly recognized.
-     * <p>
-     * This is only an information test right now, doesn't fail.
      *
-     * @throws Exception an Exception
+     * <p>If a recognition is null, check if the image has the correct color space.
+     *
+     * @throws Exception an exception
      */
     @Test
-    public void testAllSnapshots() throws Exception {
-        String snapshotDirPath = "src/test/resources/snapshots";
-        String resultsPath = "src/test/resources/results.properties";
-        InputStream resultsStream = new FileInputStream(new File(resultsPath));
-
-        Properties properties = new Properties();
-        properties.load(resultsStream);
-        resultsStream.close();
-        assertTrue(properties.size() > 0);
-
-        File snapshotDir = new File(snapshotDirPath);
-        File[] snapshots = snapshotDir.listFiles();
-        assertNotNull(snapshots);
-        assertTrue(snapshots.length > 0);
-
-        Intelligence intel = new Intelligence();
-        assertNotNull(intel);
-
-        int correctCount = 0;
-        int counter = 0;
-        boolean correct;
-        for (File snap : snapshots) {
-            correct = false;
-            CarSnapshot carSnap = new CarSnapshot(new FileInputStream(snap));
-            assertNotNull("carSnap is null", carSnap);
-            assertNotNull("carSnap.image is null", carSnap.getImage());
-
-            String snapName = snap.getName();
-            String plateCorrect = properties.getProperty(snapName);
-            assertNotNull(plateCorrect);
-
+    public void testSnapshot() throws Exception {
+        try (CarSnapshot carSnap = loadSnapshot(snapName)) {
             String numberPlate = intel.recognize(carSnap, false);
 
-            // TODO enable these checks once the test passes
-            // Are you sure the image has the correct color space?
-            // recognitionErrors.checkThat("The licence plate is null", numberPlate, is(notNullValue()));
-            // recognitionErrors.checkThat("The file \"" + snapName + "\" was incorrectly recognized.", numberPlate,
-            // is(plateCorrect));
-
-            if (numberPlate != null && numberPlate.equals(plateCorrect)) {
-                correctCount++;
-                correct = true;
-            }
-            carSnap.close();
-            counter++;
-            logger.debug("Finished recognizing {} ({} of {})\t{}", snapName, counter, snapshots.length,
-                    correct ? "correct" : "incorrect");
+            NUM_ACTUAL_CORRECT += Objects.equals(plateActual, numberPlate) ? 1 : 0;
+            NUM_GOLDEN_CORRECT += Objects.equals(plateCorrect, numberPlate) ? 1 : 0;
+            assertEquals(plateActual, numberPlate);
         }
-        logger.info("Correct images: {}, total images: {}, accuracy: {}%", correctCount, snapshots.length,
-                (float) correctCount / (float) snapshots.length * 100f);
-        assertEquals(currentlyCorrectSnapshots, correctCount);
     }
 }
