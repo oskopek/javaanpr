@@ -204,7 +204,7 @@ public class Parser {
                         for (int x = 0; x < rc.getPatterns().size(); x++) {
                             if (form.getPosition(j).isAllowed(rc.getPattern(x).getChar())) {
                                 RecognizedPattern rp = rc.getPattern(x);
-                                finalPlate.requiredChanges += (rp.getCost() / 100); // +x for its cost
+                                finalPlate.requiredChanges += (rp.getCost() / 100.0); // +x for its cost
                                 finalPlate.addChar(rp.getChar());
                                 break;
                             }
@@ -219,7 +219,7 @@ public class Parser {
             return recognizedPlate.getString();
         }
         // else: find the plate with lowest number of swaps
-        float minimalChanges = Float.POSITIVE_INFINITY;
+        double minimalChanges = Double.POSITIVE_INFINITY;
         int minimalIndex = 0;
         for (int i = 0; i < finalPlates.size(); i++) {
             logger.debug("Plate {} : {} with required changes {}.", i, finalPlates.get(i).plate,
@@ -238,7 +238,7 @@ public class Parser {
 
     private static final class FinalPlate {
         private String plate;
-        private float requiredChanges = 0;
+        private double requiredChanges = 0;
 
         private FinalPlate() {
             plate = "";
