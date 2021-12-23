@@ -65,4 +65,85 @@
         <char content="o0123456789"/>
         <char content="o0123456789"/>
     </type>
+
+    <!-- source https://en.wikipedia.org/wiki/Canadian_licence_plate_designs_and_serial_formats -->
+    <type name="canada_ab">
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+    </type>
+    <type name="canada_bc">
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+    </type>
+    <type name="canada_nb_nf_ns">
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+    </type>
+    <type name="canada_nwt_nv">
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+    </type>
+    <type name="canada_on">
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+    </type>
+    <type name="canada_pe">
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+    </type>
+    <type name="canada_qc">
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+    </type>
+    <type name="canada_sk">
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+    </type>
+    <type name="canada_yk">
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="abcdefghijklmno0pqrstuvwxyz"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+    </type>
+    <type name="canada_dnd">
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+        <char content="0123456789"/>
+    </type>
 </structure>
